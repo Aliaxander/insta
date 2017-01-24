@@ -1,0 +1,45 @@
+{
+  "name": "ox/oxinstall",
+  "description": "ox install example",
+  "require": {
+    "filp/whoops": "~2",
+    "symfony/http-kernel": "~3.1",
+    "twig/tracelytics": "@dev",
+    "symfony/console": "~3.1",
+    "doctrine/migrations": "1.*",
+    "symfony/filesystem": "~3.1",
+    "mtdowling/cron-expression": "@dev",
+    "symfony/finder": "~3.1",
+    "twig/extensions": "1.4.*",
+    "ox/ox-framework": "@dev",
+    "ox/router": "@dev",
+    "ox/fixer": "@dev",
+    "ox/database": "@dev"
+  },
+  "repositories": [
+    {
+      "type": "git",
+      "url": "git@github.com:OxGroup/OX-Framework.git"
+    },
+    {
+      "type": "git",
+      "url": "git@github.com:OxGroup/DataBase.git"
+    },
+    {
+      "type": "git",
+      "url": "git@github.com:OxGroup/Router.git"
+    }
+  ],
+  "autoload": {
+    "psr-2": {
+      "OxApp": "OxApp/",
+      "OxApp\\controllers": "OxApp/controllers",
+      "OxApp\\models": "OxApp/models"
+    },
+    "classmap": [
+      "OxApp/",
+      "OxApp/controllers",
+      "OxApp/models"
+    ]
+  }
+}
