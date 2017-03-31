@@ -14,7 +14,9 @@
     "ox/ox-framework": "@dev",
     "ox/router": "@dev",
     "ox/fixer": "@dev",
-    "ox/database": "@dev"
+    "ox/database": "@dev",
+    "mgp25/instagram-php": "@dev",
+    "mintopia/uuid4key": "@dev"
   },
   "repositories": [
     {
