@@ -16,7 +16,8 @@
     "ox/fixer": "@dev",
     "ox/database": "@dev",
     "mgp25/instagram-php": "@dev",
-    "mintopia/uuid4key": "@dev"
+    "mintopia/uuid4key": "@dev",
+    "markenwerk/string-builder":"@dev"
   },
   "repositories": [
     {
