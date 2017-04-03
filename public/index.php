@@ -44,9 +44,9 @@ function gen_uuid()
     return $uuid;
 }
 
-$username = 'Boogomoloa34';
-$name = 'Bofgo molffof';
-$email = 'Boogomofglso343@gmail.com';
+$username = 'Boog'.rand(0,9999999999999);
+$name = 'Bofgo molff5of';
+$email = 'boog' . rand(0, 9999999999999).'@mail.ru';
 $password = "esg56egrssdfsd";
 
 $megaRandomHash = md5(number_format(microtime(true), 7, '', ''));
@@ -132,6 +132,22 @@ $hash = 'signed_body=' . $hash . '.' . urlencode($data) . '&ig_sig_key_version='
 
 $result = requestGet('accounts/username_suggestions/', $hash, $username);
 print_r($result);
+
+sleep(rand(2, 4));
+
+$token = requestGet("si/fetch_headers/?guid=" . mb_strtolower(str_replace("-", "", $guid)) . "&challenge_type=singup",
+    null,
+    $username);
+echo "1:\n";
+print_r($token[0]);
+echo "2:\n";
+print_r($token[1]);
+$tokenResult = "";
+
+if (preg_match('#Set-Cookie: csrftoken=([^;]+)#', $token[0], $token)) {
+    $tokenResult = $token[1];
+}
+echo "Result: " . $tokenResult;
 
 sleep(rand(2, 4));
 $usernameTmp = substr($username, 0, -round(1, mb_strlen($username) - 3));
@@ -227,8 +243,8 @@ function requestGet($endpoint, $post = null, $username)
     curl_setopt($ch, CURLOPT_VERBOSE, false);
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
     curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-    //curl_setopt($ch, CURLOPT_COOKIEFILE, "$username-cookies.dat");
-    //curl_setopt($ch, CURLOPT_COOKIEJAR, "$username-cookies.dat");
+    curl_setopt($ch, CURLOPT_COOKIEFILE, "$username-cookies.dat");
+    curl_setopt($ch, CURLOPT_COOKIEJAR, "$username-cookies.dat");
     
     curl_setopt($ch, CURLOPT_HTTPHEADER, [
     
@@ -238,7 +254,7 @@ function requestGet($endpoint, $post = null, $username)
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
     }
-    //curl_setopt($ch, CURLOPT_PROXY, "88.198.24.108:1080");
+    //curl_setopt($ch, CURLOPT_PROXY, "46.105.124.207:5012");
     //curl_setopt($ch, CURLOPT_PROXYUSERPWD, $this->proxyAuth);
     //    if ($this->proxy) {
     //        curl_setopt($ch, CURLOPT_PROXY, $this->proxyHost);
