@@ -44,19 +44,19 @@ function gen_uuid()
     return $uuid;
 }
 
-$username = 'Boog'.rand(0,9999999999999);
-$name = 'Bofgo molff5of';
-$email = 'boog' . rand(0, 9999999999999).'@mail.ru';
-$password = "esg56egrssdfsd";
+$username = 'doorg' . rand(0, 999999);
+$name = 'doorg doorgd';
+$email = 'doorg' . rand(0, 999999) . '@gmail.com';
+$password = "f3546h7rtj6rhgrfeds";
 
 $megaRandomHash = md5(number_format(microtime(true), 7, '', ''));
-$device_id = 'android-' . substr($megaRandomHash, 16);
+$device_id = 'android-' . strtolower(substr($megaRandomHash, 16));
 
-$phone_id = strtoupper(gen_uuid());
-$waterfall_id = strtoupper(gen_uuid());
-$guid = strtoupper(gen_uuid());
+$phone_id = strtolower(gen_uuid());
+$waterfall_id = strtolower(gen_uuid());
+$guid = strtolower(gen_uuid());
 
-$uuid = strtoupper(gen_uuid());
+$uuid = strtolower(gen_uuid());
 
 $igKey = '2f6dcdf76deb0d3fd008886d032162a79b88052b5f50538c1ee93c4fe7d02e60';
 $igV = '4';
@@ -72,7 +72,7 @@ ig_android_contact_point_triage,ig_android_remove_ci_option_for_fb_reg,ig_androi
 _android_show_fb_social_context_in_nux,ig_fbns_push,ig_android_background_phone_confirmation,ig_android_phoneid_sync_interval,ig_android_login_lan
 guage_picker'
 ]);
-$tokenResult="";
+$tokenResult = "";
 //Sync:
 $hash = hash_hmac('sha256', $syncData, $igKey);
 $sync = requestGet('qe/sync/', 'ig_sig_key_version=' . $igV . '&signed_body=' . $hash . '.' . urlencode($syncData),
@@ -87,7 +87,7 @@ print_r($tokenResult);
 
 
 //Check e-mail:
-sleep(rand(2, 4));
+sleep(rand(5, 10));
 
 $data = json_encode([
     '_csrftoken' => $tokenResult,
@@ -99,38 +99,6 @@ $data = json_encode([
 $hash = hash_hmac('sha256', $data, $igKey);
 $hash = 'signed_body=' . $hash . '.' . urlencode($data) . '&ig_sig_key_version=' . $igV;
 $result = requestGet('users/check_email/', $hash, $username);
-print_r($result);
-
-sleep(rand(2, 4));
-
-$token = requestGet("si/fetch_headers/?guid=" . mb_strtolower(str_replace("-", "", $guid)) . "&challenge_type=singup", null,
-    $username);
-echo "1:\n";
-print_r($token[0]);
-echo "2:\n";
-print_r($token[1]);
-$tokenResult = "";
-
-if (preg_match('#Set-Cookie: csrftoken=([^;]+)#', $token[0], $token)) {
-    $tokenResult = $token[1];
-}
-echo "Result: " . $tokenResult;
-
-sleep(rand(2, 4));
-$usernameTmp = substr($username, 0, -round(5,mb_strlen($username)-1));
-//Check username:
-$data = json_encode([
-    '_csrftoken' => $tokenResult,
-    'name' => $usernameTmp,
-    'email' => $email,
-    'waterfall_id' => $waterfall_id,
-
-]);
-$hash = hash_hmac('sha256', $data, $igKey);
-$hash = 'signed_body=' . $hash . '.' . urlencode($data) . '&ig_sig_key_version=' . $igV;
-
-
-$result = requestGet('accounts/username_suggestions/', $hash, $username);
 print_r($result);
 
 sleep(rand(2, 4));
@@ -149,7 +117,41 @@ if (preg_match('#Set-Cookie: csrftoken=([^;]+)#', $token[0], $token)) {
 }
 echo "Result: " . $tokenResult;
 
+sleep(rand(5, 10));
+$usernameTmp = substr($username, 0, -round(mb_strlen($username) - 5, mb_strlen($username) - 1));
+//Check username:
+$data = json_encode([
+    '_csrftoken' => $tokenResult,
+    'name' => $usernameTmp,
+    'email' => $email,
+    'waterfall_id' => $waterfall_id,
+
+]);
+$hash = hash_hmac('sha256', $data, $igKey);
+$hash = 'signed_body=' . $hash . '.' . urlencode($data) . '&ig_sig_key_version=' . $igV;
+
+
+$result = requestGet('accounts/username_suggestions/', $hash, $username);
+print_r($result);
+
+sleep(rand(1, 2));
+
+$token = requestGet("si/fetch_headers/?guid=" . mb_strtolower(str_replace("-", "", $guid)) . "&challenge_type=singup",
+    null,
+    $username);
+echo "1:\n";
+print_r($token[0]);
+echo "2:\n";
+print_r($token[1]);
+$tokenResult = "";
+
+if (preg_match('#Set-Cookie: csrftoken=([^;]+)#', $token[0], $token)) {
+    $tokenResult = $token[1];
+}
+echo "Result: " . $tokenResult;
+
 sleep(rand(2, 4));
+
 $usernameTmp = substr($username, 0, -round(1, mb_strlen($username) - 3));
 //Check username:
 $data = json_encode([
@@ -180,10 +182,10 @@ $hash = 'signed_body=' . $hash . '.' . urlencode($data) . '&ig_sig_key_version='
 $result = requestGet('accounts/username_suggestions/', $hash, $username);
 print_r($result);
 
-    sleep(rand(1, 2));
+sleep(rand(1, 2));
 //Register:
 $data = [
-    'allow_contacts_sync' => "true",
+    'allow_contacts_sync' => true,
     'phone_id' => $phone_id,
     '_csrftoken' => $tokenResult,
     'username' => $username,
@@ -196,7 +198,6 @@ $data = [
     'qs_stamp' => "",
     'password' => $password,
 ];
-$data['qs_stamp'] = "22,12,13|14,0,0";
 
 $data = json_encode($data);
 //17457ca87fa243a07a7c78e03085e42fd36f1e3c2bfe7217ab35b669cdca7cd2.{\"username\": \"newusername\", \"first_name\": \"Ivan\", \"waterfall_id\": \"dcd34a15bf244b9c8274d8031b06aea5\", \"_csrftoken\": \"yYmiLwiEhW8UIHVi1LmxLyS9pd7GRlZq\", \"password\": \"asdasd\", \"email\": \"newusername@gmail.com\", \"device_id\": \"CB8AF1A6-6ED0-4901-AF00-5B5AFD461E45\"}
@@ -228,14 +229,25 @@ function requestGet($endpoint, $post = null, $username)
     //
     //        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
     curl_setopt($ch, CURLOPT_USERAGENT, $userAgent);
-    $headers = [
-        //'X-IG-Connection-Speed: '. mt_rand(1000, 3700) . 'kbps',
-        "X-IG-Connection-Type: WIFI",
-        "X-IG-Capabilities: 3Ro=",
-        'Accept-Encoding: gzip, deflate',
-        'Content-Type: application/x-www-form-urlencoded; charset=utf-8;',
-    ];
-    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+//    if ($post != null && !empty($post)) {
+//        $headers = [
+//            "X-IG-Connection-Type: WIFI",
+//            "X-IG-Capabilities: 3Ro=",
+//            'Accept-Language: ru-RU, en-US',
+//            'Connection: keep-alive',
+//            //'Accept-Encoding: gzip, deflate',
+//            'Content-Type: application/x-www-form-urlencoded; charset=utf-8',
+//        ];
+//    } else {
+//        $headers = [
+//            "X-IG-Connection-Type: WIFI",
+//            "X-IG-Capabilities: 3Ro=",
+//           // 'Accept-Encoding: gzip, deflate, sdch',
+//            'Accept-Language: ru-RU, en-US',
+//            'Connection: keep-alive',
+//        ];
+//    }
+  //  curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
     
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
@@ -246,15 +258,12 @@ function requestGet($endpoint, $post = null, $username)
     curl_setopt($ch, CURLOPT_COOKIEFILE, "$username-cookies.dat");
     curl_setopt($ch, CURLOPT_COOKIEJAR, "$username-cookies.dat");
     
-    curl_setopt($ch, CURLOPT_HTTPHEADER, [
-    
-    ]);
     
     if ($post) {
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
     }
-    //curl_setopt($ch, CURLOPT_PROXY, "46.105.124.207:5012");
+    curl_setopt($ch, CURLOPT_PROXY, "46.105.124.207:5012");
     //curl_setopt($ch, CURLOPT_PROXYUSERPWD, $this->proxyAuth);
     //    if ($this->proxy) {
     //        curl_setopt($ch, CURLOPT_PROXY, $this->proxyHost);
