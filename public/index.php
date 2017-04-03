@@ -185,7 +185,7 @@ print_r($result);
 sleep(rand(1, 2));
 //Register:
 $data = [
-    'allow_contacts_sync' => true,
+    'allow_contacts_sync' => 'true',
     'phone_id' => $phone_id,
     '_csrftoken' => $tokenResult,
     'username' => $username,
