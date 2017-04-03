@@ -18,13 +18,13 @@ DbConfig::$dbuser = $config["user"];
 DbConfig::$dbuserpass = $config["password"];
 
 
-$proxy = Proxy::limit([0, 10])->find(['status' => 0]);
+$proxy = Proxy::limit([0=>4])->find(['status' => 0]);
 $api = new IgApi();
 if ($proxy->count > 0) {
     foreach ($proxy->rows as $row) {
+        Proxy::where(['id' => $row->id])->update(['status' => 1]);
         $api->proxy = $row->proxy;
         $api->create();
-        Proxy::where(['id' => $row->id])->update(['status' => 1]);
     }
 }
 
