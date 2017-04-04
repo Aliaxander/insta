@@ -1,20 +1,18 @@
 #!/usr/bin/env php
 <?php
 // application.php
+use Acme\Console\Command\Test;
+use Ox\DataBase\DbConfig;
+use Symfony\Component\Console\Application;
+
 
 require __DIR__ . '/vendor/autoload.php';
+$config = include("migrations-db.php");
+DbConfig::$dbhost = $config["host"];
+DbConfig::$dbname = $config["dbname"];
+DbConfig::$dbuser = $config["user"];
+DbConfig::$dbuserpass = $config["password"];
 
-use Acme\Console\Command\CronCommands;
-use Acme\Console\Command\InstallCommands;
-use Acme\Console\Command\InstallCourcesCommands;
-use Acme\Console\Command\InstallDocs;
-use Acme\Console\Command\InstallNewCourceActionsCommands;
-use Acme\Console\Command\InstallUsers;
-use Acme\Console\Command\OffersPhotosCommands;
-use Acme\Console\Command\Test;
-use Acme\Console\Command\TestDocs;
-use Acme\Console\Command\UserPhotosCommands;
-use Symfony\Component\Console\Application;
 
 $application = new Application();
 $application->add(new Test());
