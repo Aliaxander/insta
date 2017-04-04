@@ -162,7 +162,7 @@ class IgApi
         //$email = $faker->email;
         $email = explode("@", $faker->email);
         $email = implode(rand(1000, 9999) . "@", $email);
-        $this->password = strtolower(substr(md5(number_format(microtime(true), 7, '', '')), mt_rand(6, 9)));
+        $this->password = strtolower(substr(md5(number_format(microtime(true), 7, '', '')), mt_rand(15, 24)));
         
         $megaRandomHash = md5(number_format(microtime(true), 7, '', ''));
         $this->device_id = 'android-' . strtolower(substr($megaRandomHash, 16));
