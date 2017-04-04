@@ -226,7 +226,19 @@ class IgApi
             $singTokenResult = $token[1];
         }
         if (empty($singTokenResult)) {
-            die();
+            $token = $this->fetchHeadersSingUp();
+            if (preg_match('#Set-Cookie: csrftoken=([^;]+)#', $token[0], $token)) {
+                $singTokenResult = $token[1];
+            }
+            if (empty($singTokenResult)) {
+                $token = $this->fetchHeadersSingUp();
+                if (preg_match('#Set-Cookie: csrftoken=([^;]+)#', $token[0], $token)) {
+                    $singTokenResult = $token[1];
+                }
+                if (empty($singTokenResult)) {
+                    die("empry sign token");
+                }
+            }
         }
         $this->csrftoken = $singTokenResult;
         
@@ -235,11 +247,24 @@ class IgApi
         
         sleep(rand(1, 3));
         $token = $this->fetchHeadersSingUp();
+    
         if (preg_match('#Set-Cookie: csrftoken=([^;]+)#', $token[0], $token)) {
             $singTokenResult = $token[1];
         }
         if (empty($singTokenResult)) {
-            die();
+            $token = $this->fetchHeadersSingUp();
+            if (preg_match('#Set-Cookie: csrftoken=([^;]+)#', $token[0], $token)) {
+                $singTokenResult = $token[1];
+            }
+            if (empty($singTokenResult)) {
+                $token = $this->fetchHeadersSingUp();
+                if (preg_match('#Set-Cookie: csrftoken=([^;]+)#', $token[0], $token)) {
+                    $singTokenResult = $token[1];
+                }
+                if (empty($singTokenResult)) {
+                    die("empry sign token");
+                }
+            }
         }
         $this->csrftoken = $singTokenResult;
         
