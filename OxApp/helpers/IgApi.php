@@ -157,42 +157,7 @@ class IgApi
     
     public function create()
     {
-        $faker = Factory::create();
-        
-        $this->username = str_replace(".", "", $faker->userName);
-        $usernameTmp1 = substr($this->username, 0, -round(1, mb_strlen($this->username) - 3));
-        $usernameTmp2 = substr($usernameTmp1, 0, -round(1, mb_strlen($usernameTmp1) - 3));
-        $usernameTmp3 = substr($usernameTmp2, 0, -round(1, mb_strlen($usernameTmp2) - 3));
-        $usernameTmp4 = substr($usernameTmp3, 0, -round(1, mb_strlen($usernameTmp3) - 3));
-        
-        $this->name = $faker->firstNameFemale;// . " " . $faker->lastName;
-        //$email = $faker->email;
-        $email = explode("@", $faker->email);
-        $email = implode(rand(1000, 9999) . "@", $email);
-        $this->password = strtolower(substr(md5(number_format(microtime(true), 7, '', '')), mt_rand(15, 24)));
-        
-        $megaRandomHash = md5(number_format(microtime(true), 7, '', ''));
-        $this->device_id = 'android-' . strtolower(substr($megaRandomHash, 16));
-        $this->phone_id = strtolower($this->genUuid());
-        $waterfall_id = strtolower($this->genUuid());
-        $this->guid = strtolower($this->genUuid());
-        $qe_id = strtolower($this->genUuid());
-        
-        echo "Generate DATA:
-        uName: {$this->username}
-        name: {$this->name}
-        email: {$email}
-        pass: {$this->password}
-        
-        deviceId: {$this->device_id}
-        phoneId: {$this->phone_id}
-        waterfall_id: {$waterfall_id}
-        guid: $this->guid 
-        qeId: $qe_id
-        userAgent: {$this->userAgent}
-        proxy: {$this->proxy}
-        Start...
-        ";
+      
         $tokenResult = '';
         $sync = $this->sync();
         print_r($sync);
@@ -210,11 +175,48 @@ class IgApi
         }
         $this->csrftoken = $tokenResult;
         print_r($sync);
-        sleep(rand(4, 10));
+    
+        $faker = Factory::create();
+    
+        $this->username = str_replace(".", "", $faker->userName);
+        $usernameTmp1 = substr($this->username, 0, -round(1, mb_strlen($this->username) - 3));
+        $usernameTmp2 = substr($usernameTmp1, 0, -round(1, mb_strlen($usernameTmp1) - 3));
+        $usernameTmp3 = substr($usernameTmp2, 0, -round(1, mb_strlen($usernameTmp2) - 3));
+        $usernameTmp4 = substr($usernameTmp3, 0, -round(1, mb_strlen($usernameTmp3) - 3));
+    
+        $this->name = $faker->firstNameFemale;// . " " . $faker->lastName;
+        //$email = $faker->email;
+        $email = explode("@", $faker->email);
+        $email = implode(rand(1000, 9999) . "@", $email);
+        $this->password = strtolower(substr(md5(number_format(microtime(true), 7, '', '')), mt_rand(15, 24)));
+    
+        $megaRandomHash = md5(number_format(microtime(true), 7, '', ''));
+        $this->device_id = 'android-' . strtolower(substr($megaRandomHash, 16));
+        $this->phone_id = strtolower($this->genUuid());
+        $waterfall_id = strtolower($this->genUuid());
+        $this->guid = strtolower($this->genUuid());
+        $qe_id = strtolower($this->genUuid());
+    
+        echo "Generate DATA:
+        uName: {$this->username}
+        name: {$this->name}
+        email: {$email}
+        pass: {$this->password}
+        
+        deviceId: {$this->device_id}
+        phoneId: {$this->phone_id}
+        waterfall_id: {$waterfall_id}
+        guid: $this->guid 
+        qeId: $qe_id
+        userAgent: {$this->userAgent}
+        proxy: {$this->proxy}
+        Start...
+        ";
+        sleep(rand(5, 8));
         
         print_r($this->checkEmail($email, $qe_id, $waterfall_id));
         
-        sleep(rand(4, 10));
+        sleep(rand(1, 2));
         $token = $this->fetchHeadersSingUp();
         
         if (preg_match('#Set-Cookie: csrftoken=([^;]+)#', $token[0], $token)) {
@@ -225,10 +227,10 @@ class IgApi
         }
         $this->csrftoken = $singTokenResult;
         
-        sleep(rand(3, 10));
+        sleep(rand(3, 6));
         print_r($this->usernameSuggestions($usernameTmp4, $email, $waterfall_id));
         
-        sleep(rand(3, 9));
+        sleep(rand(1, 3));
         $token = $this->fetchHeadersSingUp();
         if (preg_match('#Set-Cookie: csrftoken=([^;]+)#', $token[0], $token)) {
             $singTokenResult = $token[1];
@@ -238,17 +240,17 @@ class IgApi
         }
         $this->csrftoken = $singTokenResult;
         
-        sleep(rand(3, 7));
+        sleep(rand(1, 3));
         print_r($this->usernameSuggestions($usernameTmp3, $email, $waterfall_id));
         
         sleep(rand(3, 7));
         print_r($this->usernameSuggestions($usernameTmp2, $email, $waterfall_id));
         
         if (rand(0, 1) == 1) {
-            sleep(rand(3, 7));
+            sleep(rand(1, 4));
             print_r($this->usernameSuggestions($usernameTmp1, $email, $waterfall_id));
         }
-        sleep(rand(3, 7));
+        sleep(rand(1, 4));
         $finalName = $this->usernameSuggestions($this->username, $email, $waterfall_id);
         print_r($finalName);
         //$this->username = $finalName[1]['suggestions'][rand(0, 11)];
