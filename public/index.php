@@ -23,7 +23,7 @@ DbConfig::$dbuserpass = $config["password"];
 
 //$proxy = Proxy::limit([0=>20])->find(['status' => 0]);
 $api = new IgApi();
-$api->proxy = "64.132.168.121:30007";
+$api->proxy = "164.132.168.121:30007";
 $api->create();
 //if ($proxy->count > 0) {
 //    foreach ($proxy->rows as $row) {
