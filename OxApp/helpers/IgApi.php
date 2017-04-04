@@ -398,7 +398,7 @@ guage_picker'
     {
         echo "Request: \n";
         print_r($data);
-        echo "Result: \n";
+        echo "\n\nResult: \n";
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, "https://i.instagram.com/api/v1/" . $method);
         curl_setopt($ch, CURLOPT_USERAGENT, $this->userAgent);
