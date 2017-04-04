@@ -195,6 +195,7 @@ class IgApi
         ";
         $tokenResult = '';
         $sync = $this->sync();
+        print_r($sync);
         if (preg_match('#Set-Cookie: csrftoken=([^;]+)#', $sync[0], $token)) {
             $tokenResult = $token[1];
         }
