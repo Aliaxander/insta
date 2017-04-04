@@ -199,7 +199,13 @@ class IgApi
             $tokenResult = $token[1];
         }
         if (empty($tokenResult)) {
-            die("Empty token");
+            $sync = $this->sync();
+            if (preg_match('#Set-Cookie: csrftoken=([^;]+)#', $sync[0], $token)) {
+                $tokenResult = $token[1];
+            }
+            if (empty($tokenResult)) {
+                die("Empty token");
+            }
         }
         $this->csrftoken = $tokenResult;
         print_r($sync);
