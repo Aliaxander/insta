@@ -15,8 +15,10 @@ use Doctrine\Common\Annotations\AnnotationRegistry;
 use Doctrine\Common\Annotations\DocParser;
 use Ox\Hash;
 use OxApp\controllers\api\AccessTokenController;
+use OxApp\helpers\IgApi;
 use OxApp\helpers\Login;
 use OxApp\models\CollectTables;
+use OxApp\models\Proxy;
 use OxApp\models\Users;
 use OxApp\modules\integration\Leadvertex;
 use Symfony\Component\Console\Command\Command;
@@ -53,7 +55,18 @@ class Test extends Command
     {
         //5 600 000
         require(__DIR__ . "/../../config.php");
-   
+        $proxy = Proxy::limit([0 => 1])->find(['status' => 0]);
+    
+        $api = new IgApi();
+    
+        if ($proxy->count > 0) {
+            foreach ($proxy->rows as $row) {
+                Proxy::where(['id' => $row->id])->update(['status' => 1]);
+                $api->proxy = $row->proxy;
+                $api->create();
+            }
+        }
+    
         return $output->writeln("Complite");
     }
 }
