@@ -238,6 +238,8 @@ class IgApi
         $finalName = $this->usernameSuggestions($this->username, $email, $waterfall_id);
         print_r($finalName);
         $this->username = $finalName[1]['suggestions'][rand(0, 11)];
+        $finalName = $this->usernameSuggestions($this->username, $email, $waterfall_id);
+        print_r($finalName);
         echo "SET name: " . $this->username . "\n";
         
         sleep(rand(1, 2));
