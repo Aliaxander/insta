@@ -157,24 +157,6 @@ class IgApi
     
     public function create()
     {
-      
-        $tokenResult = '';
-        $sync = $this->sync();
-        print_r($sync);
-        if (preg_match('#Set-Cookie: csrftoken=([^;]+)#', $sync[0], $token)) {
-            $tokenResult = $token[1];
-        }
-        if (empty($tokenResult)) {
-            $sync = $this->sync();
-            if (preg_match('#Set-Cookie: csrftoken=([^;]+)#', $sync[0], $token)) {
-                $tokenResult = $token[1];
-            }
-            if (empty($tokenResult)) {
-                die("Empty token");
-            }
-        }
-        $this->csrftoken = $tokenResult;
-        print_r($sync);
     
         $faker = Factory::create();
     
@@ -212,6 +194,27 @@ class IgApi
         proxy: {$this->proxy}
         Start...
         ";
+        
+        
+        $tokenResult = '';
+        $sync = $this->sync();
+        print_r($sync);
+        if (preg_match('#Set-Cookie: csrftoken=([^;]+)#', $sync[0], $token)) {
+            $tokenResult = $token[1];
+        }
+        if (empty($tokenResult)) {
+            $sync = $this->sync();
+            if (preg_match('#Set-Cookie: csrftoken=([^;]+)#', $sync[0], $token)) {
+                $tokenResult = $token[1];
+            }
+            if (empty($tokenResult)) {
+                die("Empty token");
+            }
+        }
+        $this->csrftoken = $tokenResult;
+        print_r($sync);
+    
+    
         sleep(rand(5, 8));
         
         print_r($this->checkEmail($email, $qe_id, $waterfall_id));
