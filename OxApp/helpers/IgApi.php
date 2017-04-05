@@ -46,7 +46,6 @@ class IgApi
             die("no token");
         }
         $this->csrftoken = $tokenResult;
-        //$this->username = 'vickyleuschke';
         $this->fetchHeadersSingUp();
         
         $data = [
