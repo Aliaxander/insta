@@ -50,10 +50,10 @@ class Likes extends Command
             $rows = $result[1]['items'];
             $like1 = $result[1]['items'][rand(0, count($rows) - 1)]['id'];
             $like2 = $result[1]['items'][rand(0, count($rows) - 1)]['id'];
-            $api->like($like1);
+            print_r($api->like($like1));
             sleep(rand(10, 20));
             if (rand(0, 1) == 1) {
-                $api->like($like2);
+                print_r($api->like($like2));
             }
         }
         
