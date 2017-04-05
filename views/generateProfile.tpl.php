@@ -11,10 +11,6 @@
                     <input type="text" class="form-control" name="domain" id="domain" placeholder="vk.com">
             </div>
             <div class="form-group">
-                <label for="macros" class="control-label">macros</label>
-                <input type="text" class="form-control" name="macros" id="macros" placeholder="{fuck_my_ass|fuck_my|fuck-my-ass}">
-            </div>
-            <div class="form-group">
                 <label for="count" class="control-label">count</label>
                 <input type="text" class="form-control" name="count" id="count" placeholder="100">
             </div>
