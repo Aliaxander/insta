@@ -41,54 +41,55 @@ class Likes extends Command
     {
         require(__DIR__ . "/../../config.php");
         $api = new IgApi();
-        $user = Users::find(['id' => 13])->rows[0];
-        $api->proxy = $user->proxy;
-        $api->username = $user->userName;
-        $api->accountId = $user->accountId;
-        $api->guid = $user->guid;
-        $api->csrftoken = $user->csrftoken;
-        if (empty($user->csrftoken)) {
-            $tokenResult = '';
-            $i = 0;
-            while ($tokenResult === '') {
-                $sync = $api->sync();
-                print_r($sync);
-                
-                if (preg_match('#Set-Cookie: csrftoken=([^;]+)#', $sync[0], $token)) {
-                    $tokenResult = $token[1];
+        $users = Users::limit([0 => 25])->find(['login' => 1, 'ban' => 0]);
+        foreach ($users->rows as $user) {
+            $api->proxy = $user->proxy;
+            $api->username = $user->userName;
+            $api->accountId = $user->accountId;
+            $api->guid = $user->guid;
+            $api->csrftoken = $user->csrftoken;
+            if (empty($user->csrftoken)) {
+                $tokenResult = '';
+                $i = 0;
+                while ($tokenResult === '') {
+                    $sync = $api->sync();
+                    print_r($sync);
+            
+                    if (preg_match('#Set-Cookie: csrftoken=([^;]+)#', $sync[0], $token)) {
+                        $tokenResult = $token[1];
+                    }
+                    if ($i == 10) {
+                        $tokenResult = false;
+                    }
+                    if ($sync[1]['message'] === 'checkpoint_required') {
+                        Users::where(['id' => $user->id])->update(['ban' => 1]);
+                        die("Account banned");
+                    }
+            
+                    $i++;
                 }
-                if ($i == 10) {
-                    $tokenResult = false;
+                if ($tokenResult == false || $tokenResult == '') {
+                    die('empty token');
                 }
-                if ($sync[1]['message'] === 'checkpoint_required') {
-                    Users::where(['id' => $user->id])->update(['ban' => 1]);
-                    die("Account banned");
-                }
-                
-                $i++;
+                $api->csrftoken = $tokenResult;
+                Users::where(['id' => $user->id])->update(['csrftoken' => $tokenResult]);
             }
-            if ($tokenResult == false || $tokenResult == '') {
-                die('empty token');
+            //$api->login($user->guid, $user->phoneId, $user->deviceId, $user->password);
+    
+            $result = $api->getFeed('3639014581');
+            if (isset($result[1]['items'])) {
+                $rows = $result[1]['items'];
+                $like1 = $result[1]['items'][rand(0, count($rows) - 1)]['id'];
+                $like2 = $result[1]['items'][rand(0, count($rows) - 1)]['id'];
+                print_r($api->like($like1));
+                sleep(rand(10, 20));
+                if (rand(0, 1) == 1) {
+                    print_r($api->like($like2));
+                }
             }
-            $api->csrftoken = $tokenResult;
-            Users::where(['id' => $user->id])->update(['csrftoken' => $tokenResult]);
-        }
-        //$api->login($user->guid, $user->phoneId, $user->deviceId, $user->password);
-        
-        $result = $api->getFeed('3639014581');
-        if (isset($result[1]['items'])) {
-            $rows = $result[1]['items'];
-            $like1 = $result[1]['items'][rand(0, count($rows) - 1)]['id'];
-            $like2 = $result[1]['items'][rand(0, count($rows) - 1)]['id'];
-            print_r($api->like($like1));
             sleep(rand(10, 20));
-            if (rand(0, 1) == 1) {
-                print_r($api->like($like2));
-            }
+            print_r($api->follow('3639014581'));
         }
-        sleep(rand(10, 20));
-        print_r($api->follow('3639014581'));
-        
         return $output->writeln("Complite");
     }
 }
