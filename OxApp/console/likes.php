@@ -877,26 +877,29 @@ class Likes extends Command
             foreach ($accs as $acc) {
                 echo "Set acc $acc:\n";
                 $result = $api->getFeed($acc);
-                if (isset($result[1]['items'])) {
-                    $rows = $result[1]['items'];
-                    $like1 = @$result[1]['items'][rand(0, count($rows) - 1)]['id'];
-                    $like2 = @$result[1]['items'][rand(0, count($rows) - 1)]['id'];
+                if(rand(0,1)==1) {
+                    if (isset($result[1]['items'])) {
+                        $rows = $result[1]['items'];
+                        $like1 = @$result[1]['items'][rand(0, count($rows) - 1)]['id'];
+                        $like2 = @$result[1]['items'][rand(0, count($rows) - 1)]['id'];
+                        sleep(rand(10, 20));
+                        if (rand(0, 2) >= 1) {
+                            print_r($api->follow($acc));
+                        }
+                        sleep(rand(20, 30));
+                        if ($like1) {
+                            print_r($api->like($like1));
+                        }
+                        sleep(rand(20, 30));
+        
+                        if (rand(0, 1) == 1 && $like2) {
+                            print_r($api->like($like2));
+                        }
+                    }
+    
                     sleep(rand(10, 20));
-                    if (rand(0, 2) >= 1) {
-                        print_r($api->follow($acc));
-                    }
-                    sleep(rand(20, 30));
-                    if($like1) {
-                        print_r($api->like($like1));
-                    }
-                    sleep(rand(20, 30));
-                    
-                    if (rand(0, 1) == 1 && $like2) {
-                        print_r($api->like($like2));
-                    }
                 }
-                
-                sleep(rand(10, 20));
+                sleep(rand(1, 4));
             }
         }
         
