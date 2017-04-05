@@ -882,24 +882,24 @@ class Likes extends Command
                         $rows = $result[1]['items'];
                         $like1 = @$result[1]['items'][rand(0, count($rows) - 1)]['id'];
                         $like2 = @$result[1]['items'][rand(0, count($rows) - 1)]['id'];
-                        sleep(rand(10, 20));
-                        if (rand(0, 2) >= 1) {
+                        sleep(rand(15, 30));
+                        if (rand(0, 10) === 9) {
                             print_r($api->follow($acc));
                         }
-                        sleep(rand(20, 30));
+                        sleep(rand(20, 40));
                         if ($like1) {
                             print_r($api->like($like1));
                         }
-                        sleep(rand(20, 30));
+                        sleep(rand(20, 40));
         
                         if (rand(0, 1) == 1 && $like2) {
                             print_r($api->like($like2));
                         }
                     }
     
-                    sleep(rand(10, 20));
+                    sleep(rand(10, 30));
                 }
-                sleep(rand(1, 4));
+                sleep(rand(5, 20));
             }
         }
         
