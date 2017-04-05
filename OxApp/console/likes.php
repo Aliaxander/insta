@@ -48,6 +48,7 @@ class Likes extends Command
             $api->accountId = $user->accountId;
             $api->guid = $user->guid;
             $api->csrftoken = $user->csrftoken;
+            
             if (empty($user->csrftoken)) {
                 $tokenResult = '';
                 $i = 0;
@@ -75,13 +76,7 @@ class Likes extends Command
                 Users::where(['id' => $user->id])->update(['csrftoken' => $tokenResult]);
             }
             //$api->login($user->guid, $user->phoneId, $user->deviceId, $user->password);
-            $accs = "
-    1353112104
-1620183016
-4017633125
-269233778
-4273891266
-4977013535
+            $accs = "4977013535
 24635257
 1196766270
 2105351013
@@ -904,18 +899,23 @@ class Likes extends Command
                 $result = $api->getFeed($acc);
                 if (isset($result[1]['items'])) {
                     $rows = $result[1]['items'];
-                    $like1 = $result[1]['items'][rand(0, count($rows) - 1)]['id'];
-                    $like2 = $result[1]['items'][rand(0, count($rows) - 1)]['id'];
-                    print_r($api->like($like1));
-                    sleep(rand(9, 20));
-                    if (rand(0, 1) == 1) {
+                    $like1 = @$result[1]['items'][rand(0, count($rows) - 1)]['id'];
+                    $like2 = @$result[1]['items'][rand(0, count($rows) - 1)]['id'];
+                    sleep(rand(10, 20));
+                    if (rand(0, 2) >= 1) {
+                        print_r($api->follow($acc));
+                    }
+                    sleep(rand(20, 30));
+                    if($like1) {
+                        print_r($api->like($like1));
+                    }
+                    sleep(rand(20, 30));
+                    
+                    if (rand(0, 1) == 1 && $like2) {
                         print_r($api->like($like2));
                     }
                 }
-                sleep(rand(9, 20));
-                if (rand(0, 2) >= 1) {
-                    print_r($api->follow($acc));
-                }
+                
                 sleep(rand(10, 20));
             }
         }

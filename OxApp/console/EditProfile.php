@@ -67,7 +67,7 @@ class EditProfile extends Command
             $word = str_replace([' ', '.'], '', $word);
             $biography = $profiles->description;
             $url = mb_strtolower(str_replace('%username%', $word, $profiles->url));
-            $profile = $api->edit($biography, $url, $user->phoneId, $user->firstName, $user->email);
+            $profile = $api->edit($biography, 'dat1ng.ga/f-ck-my', $user->phoneId, $user->firstName, $user->email);
             print_r($profile);
     
             Users::where(['id' => $user->id])->update([
