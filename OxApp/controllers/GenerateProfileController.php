@@ -24,15 +24,16 @@ class GenerateProfileController extends App
     {
         $biography = $this->request->request->get('biography');
         $domain = $this->request->request->get('domain');
-        $macros = $this->request->request->get('macros');
         $count = $this->request->request->get('count');
         $generator = new TextTemplateGenerator($biography);
-        $generator1 = new TextTemplateGenerator($macros);
+        $generator1 = new TextTemplateGenerator($domain);
         $biography = $generator->generate($count);
-        $macros = $generator1->generate($count);
+        $domain = $generator1->generate($count);
+        $counts = count($domain);
         foreach ($biography as $key => $item) {
-            $url = 'http://' . $domain . '/' . $macros[$key];
-            ProfileGenerate::add(['`description`' => $item, '`url`' => $url, '`status`' => 1]);
+            $rand = mt_rand(0, $counts - 1);
+            $url = $domain[$rand];
+            ProfileGenerate::add(['description' => $item, 'url' => $url, 'status' => 1]);
         }
 
         header("Location: /showProfile");
