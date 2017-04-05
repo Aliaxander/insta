@@ -28,8 +28,8 @@ class IgApi
     
     public function __construct()
     {
-        $device = new Device('9.7.0', 'en_US');
-        $this->userAgent = UserAgent::buildUserAgent('9.7.0', 'en_US', $device);
+        $device = new Device('9.7.0', 'fr_FR');
+        $this->userAgent = UserAgent::buildUserAgent('9.7.0', 'fr_FR', $device);
     }
     
     public function login()
@@ -130,7 +130,14 @@ class IgApi
             $tokenResult = $token[1];
         }
         if (empty($tokenResult)) {
-            die("no token");
+            $sync = $this->sync();
+            print_r($sync);
+            if (preg_match('#Set-Cookie: csrftoken=([^;]+)#', $sync[0], $token)) {
+                $tokenResult = $token[1];
+            }
+            if (empty($tokenResult)) {
+                die("no token");
+            }
         }
         $this->csrftoken = $tokenResult;
         
@@ -150,19 +157,33 @@ class IgApi
     
     public function create()
     {
-        $faker = Factory::create();
         
-        $this->username = str_replace(".", "", $faker->userName);
+        $faker = Factory::create();
+        $uname = $faker->userName;
+        if (rand(0, 1) == 1) {
+            $this->username = str_replace(".", "", $faker->userName);
+        } else {
+            $this->username = $uname;
+        }
         $usernameTmp1 = substr($this->username, 0, -round(1, mb_strlen($this->username) - 3));
         $usernameTmp2 = substr($usernameTmp1, 0, -round(1, mb_strlen($usernameTmp1) - 3));
         $usernameTmp3 = substr($usernameTmp2, 0, -round(1, mb_strlen($usernameTmp2) - 3));
         $usernameTmp4 = substr($usernameTmp3, 0, -round(1, mb_strlen($usernameTmp3) - 3));
         
         $this->name = $faker->firstNameFemale;// . " " . $faker->lastName;
+        if (rand(0, 1) == 1) {
+            $this->name .= " " . $faker->lastName;
+        }
         //$email = $faker->email;
-        $email = explode("@", $faker->email);
-        $email = implode(rand(1000, 9999) . "@", $email);
-        $this->password = strtolower(substr(md5(number_format(microtime(true), 7, '', '')), mt_rand(6, 9)));
+        if (rand(0, 3) > 0) {
+            $email = explode("@", $faker->email);
+            $email = implode(rand(0, 99999) . "@", $email);
+        } elseif (rand(0, 1) == 0) {
+            $email = str_replace(" ", ".", $this->name) . rand(0, 1999) . "@gmail.com";
+        } else {
+            $email = $uname . "@gmail.com";
+        }
+        $this->password = strtolower(substr(md5(number_format(microtime(true), 7, '', '')), mt_rand(15, 24)));
         
         $megaRandomHash = md5(number_format(microtime(true), 7, '', ''));
         $this->device_id = 'android-' . strtolower(substr($megaRandomHash, 16));
@@ -186,63 +207,110 @@ class IgApi
         proxy: {$this->proxy}
         Start...
         ";
+        
+        
         $tokenResult = '';
         $sync = $this->sync();
+        print_r($sync);
         if (preg_match('#Set-Cookie: csrftoken=([^;]+)#', $sync[0], $token)) {
             $tokenResult = $token[1];
         }
         if (empty($tokenResult)) {
-            die("Empty token");
+            $sync = $this->sync();
+            if (preg_match('#Set-Cookie: csrftoken=([^;]+)#', $sync[0], $token)) {
+                $tokenResult = $token[1];
+            }
+            if (empty($tokenResult)) {
+                die("Empty token");
+            }
         }
         $this->csrftoken = $tokenResult;
         print_r($sync);
-        sleep(rand(4, 10));
+        
+        
+        sleep(rand(5, 8));
         
         print_r($this->checkEmail($email, $qe_id, $waterfall_id));
         
-        sleep(rand(4, 10));
+        sleep(rand(1, 2));
         $token = $this->fetchHeadersSingUp();
         
         if (preg_match('#Set-Cookie: csrftoken=([^;]+)#', $token[0], $token)) {
             $singTokenResult = $token[1];
         }
         if (empty($singTokenResult)) {
-            die();
+            $token = $this->fetchHeadersSingUp();
+            if (preg_match('#Set-Cookie: csrftoken=([^;]+)#', $token[0], $token)) {
+                $singTokenResult = $token[1];
+            }
+            if (empty($singTokenResult)) {
+                $token = $this->fetchHeadersSingUp();
+                if (preg_match('#Set-Cookie: csrftoken=([^;]+)#', $token[0], $token)) {
+                    $singTokenResult = $token[1];
+                }
+                if (empty($singTokenResult)) {
+                    die("empry sign token");
+                }
+            }
         }
         $this->csrftoken = $singTokenResult;
         
-        sleep(rand(3, 10));
+        sleep(rand(3, 6));
         print_r($this->usernameSuggestions($usernameTmp4, $email, $waterfall_id));
         
-        sleep(rand(3, 9));
+        sleep(rand(1, 3));
         $token = $this->fetchHeadersSingUp();
+        
         if (preg_match('#Set-Cookie: csrftoken=([^;]+)#', $token[0], $token)) {
             $singTokenResult = $token[1];
         }
         if (empty($singTokenResult)) {
-            die();
+            $token = $this->fetchHeadersSingUp();
+            if (preg_match('#Set-Cookie: csrftoken=([^;]+)#', $token[0], $token)) {
+                $singTokenResult = $token[1];
+            }
+            if (empty($singTokenResult)) {
+                $token = $this->fetchHeadersSingUp();
+                if (preg_match('#Set-Cookie: csrftoken=([^;]+)#', $token[0], $token)) {
+                    $singTokenResult = $token[1];
+                }
+                if (empty($singTokenResult)) {
+                    die("empry sign token");
+                }
+            }
         }
         $this->csrftoken = $singTokenResult;
         
-        sleep(rand(3, 7));
+        sleep(rand(1, 3));
         print_r($this->usernameSuggestions($usernameTmp3, $email, $waterfall_id));
         
         sleep(rand(3, 7));
         print_r($this->usernameSuggestions($usernameTmp2, $email, $waterfall_id));
         
         if (rand(0, 1) == 1) {
-            sleep(rand(3, 7));
+            sleep(rand(1, 4));
             print_r($this->usernameSuggestions($usernameTmp1, $email, $waterfall_id));
         }
-        sleep(rand(3, 7));
+        sleep(rand(1, 4));
         $finalName = $this->usernameSuggestions($this->username, $email, $waterfall_id);
         print_r($finalName);
-        $this->username = $finalName[1]['suggestions'][rand(0, 11)];
+        //$this->username = $finalName[1]['suggestions'][rand(0, 11)];
+        // $finalName = $this->usernameSuggestions($this->username, $email, $waterfall_id);
+        print_r($finalName);
         echo "SET name: " . $this->username . "\n";
         
         sleep(rand(1, 2));
         //register:
         $create = $this->createAccount($email, $waterfall_id);
+        if (empty($create[1])) {
+            $create = $this->createAccount($email, $waterfall_id);
+        } elseif (isset($create[1]['errors']['username'])) {
+            $this->username = $this->username . rand(0, 999999);
+            $finalName = $this->usernameSuggestions($this->username, $email, $waterfall_id);
+            print_r($finalName);
+            $create = $this->createAccount($email, $waterfall_id);
+        }
+        
         if (isset($create[1]['created_user']['pk'])) {
             Users::add([
                 'userName' => $this->username,
@@ -369,6 +437,9 @@ guage_picker'
      */
     protected function request($method, $data = null, $file = null)
     {
+        echo "Request: \n";
+        print_r($data);
+        echo "\n\nResult: \n";
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, "https://i.instagram.com/api/v1/" . $method);
         curl_setopt($ch, CURLOPT_USERAGENT, $this->userAgent);
