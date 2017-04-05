@@ -42,7 +42,7 @@ class EditProfile extends Command
     {
         require(__DIR__ . "/../../config.php");
     
-        $users = Users::limit([0=>25])->find(['login' => 0,'ban'=>0]);
+        $users = Users::limit([0=>1])->find(['login' => 0,'ban'=>0]);
         foreach ($users->rows as $user) {
             $dir = scandir('/home/photos');
             unset($dir[array_search('.', $dir)]);

@@ -181,7 +181,7 @@ class IgApi
             'email' => $email,
             'biography' => $biography,
             'gender' => 2,
-            'external_url' => 'https://goo.gl/IexwgB',
+            'external_url' => 'https://googl.com',
             'is_private' => true
         ];
         
