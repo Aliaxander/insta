@@ -133,7 +133,7 @@ class IgApi
     }
     
     
-    public function edit($biography, $url, $firstName, $email)
+    public function edit($biography, $url, $phoneId, $firstName, $email)
     {
         /*   uName: vickyleuschke
         name: Susan Zulauf
@@ -177,7 +177,7 @@ class IgApi
         $this->csrftoken = $tokenResult;
         
         $data = [
-            'phone_id' => $this->phone_id,
+            'phone_id' => $phoneId,
             '_csrftoken' => $this->csrftoken,
             'username' => $this->username,
             '_uid' => $this->accountId,

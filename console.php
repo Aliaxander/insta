@@ -1,6 +1,7 @@
 #!/usr/bin/env php
 <?php
 // application.php
+use Acme\Console\Command\EditProfile;
 use Acme\Console\Command\Likes;
 use Acme\Console\Command\Test;
 use Ox\DataBase\DbConfig;
@@ -18,6 +19,7 @@ DbConfig::$dbuserpass = $config["password"];
 $application = new Application();
 $application->add(new Test());
 $application->add(new Likes());
+$application->add(new EditProfile());
 $application->addCommands(
     array(
         // Migrations Commands

@@ -9,6 +9,7 @@
 namespace Acme\Console\Command;
 
 use OxApp\helpers\IgApi;
+use OxApp\models\ProfileGenerate;
 use OxApp\models\Users;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -45,9 +46,15 @@ class EditProfile extends Command
         $api->proxy = $user->proxy;
         $api->username = $user->userName;
         $api->login($user->guid, $user->phoneId, $user->deviceId, $user->password);
-        $biography = "";
-        $url = "";
+        $profiles = ProfileGenerate::limit([0 => 1])->find(['status' => 0])->rows[0];
+        ProfileGenerate::where(['id' => $profiles->id])->update(['status' => 1]);
+        $word = [$user->userName, $user->firstName, mt_rand(10000, 99999)];
+        $word = $word[mt_rand(0, 2)];
+        $word = str_replace([' ', '.'], '', $word);
+        $biography = $profiles->description;
+        $url = mb_strtolower(str_replace('%username%', $word, $profiles->url));
         $api->edit($biography, $url, $user->phoneId, $user->firstName, $user->email);
+        Users::where(['id' => $user->id])->update(['login' => 1]);
         
         //EditProfile
         return $output->writeln("Complite");
