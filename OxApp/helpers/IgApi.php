@@ -74,14 +74,29 @@ class IgApi
         $this->guid = $guid;
         // $this->guid = '466dafce-f3e3-492b-f7d9-245ca0d3115c';
         // $phoneId = '485591b1-9ca8-4ed6-a1ff-289980b7fa37';
-        $sync = $this->sync();
-        print_r($sync);
-        if (preg_match('#Set-Cookie: csrftoken=([^;]+)#', $sync[0], $token)) {
-            $tokenResult = $token[1];
+        $tokenResult = '';
+        $i = 0;
+        while ($tokenResult === '') {
+            $sync = $this->sync();
+            print_r($sync);
+            
+            if (preg_match('#Set-Cookie: csrftoken=([^;]+)#', $sync[0], $token)) {
+                $tokenResult = $token[1];
+            }
+            if ($i == 10) {
+                $tokenResult = false;
+            }
+            if ($sync[1]['message'] === 'checkpoint_required') {
+                Users::where(['guid' => $guid, 'phoneId' => $phoneId, 'deviceId' => $device_id])->update(['ban' => 1]);
+                die("Account banned");
+            }
+            
+            $i++;
         }
-        if (empty($tokenResult)) {
-            die("no token");
+        if ($tokenResult == false || $tokenResult == '') {
+            die('empty token');
         }
+        
         $this->csrftoken = $tokenResult;
         $this->fetchHeadersSingUp();
         
