@@ -56,6 +56,7 @@ class Likes extends Command
                 print_r($api->like($like2));
             }
         }
+        sleep(rand(10, 20));
         print_r($api->follow('3639014581'));
         
         return $output->writeln("Complite");
