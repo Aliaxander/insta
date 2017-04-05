@@ -186,7 +186,7 @@ class IgApi
             'biography' => $biography,
             'gender' => 2,
             'external_url' => $url,
-            'is_private' => 1
+            'is_private' => true
         ];
         
         $data = json_encode($data);
