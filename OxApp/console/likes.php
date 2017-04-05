@@ -54,7 +54,7 @@ class Likes extends Command
                 while ($tokenResult === '') {
                     $sync = $api->sync();
                     print_r($sync);
-            
+                    
                     if (preg_match('#Set-Cookie: csrftoken=([^;]+)#', $sync[0], $token)) {
                         $tokenResult = $token[1];
                     }
@@ -65,7 +65,7 @@ class Likes extends Command
                         Users::where(['id' => $user->id])->update(['ban' => 1]);
                         die("Account banned");
                     }
-            
+                    
                     $i++;
                 }
                 if ($tokenResult == false || $tokenResult == '') {
@@ -75,7 +75,7 @@ class Likes extends Command
                 Users::where(['id' => $user->id])->update(['csrftoken' => $tokenResult]);
             }
             //$api->login($user->guid, $user->phoneId, $user->deviceId, $user->password);
-    $accs="
+            $accs = "
     1353112104
 1620183016
 4017633125
@@ -898,8 +898,9 @@ class Likes extends Command
 253677420
 256895735
 258842750";
-            $accs=explode("\n", $accs);
+            $accs = explode("\n", $accs);
             foreach ($accs as $acc) {
+                echo "Set acc $acc:\n";
                 $result = $api->getFeed($acc);
                 if (isset($result[1]['items'])) {
                     $rows = $result[1]['items'];
@@ -912,12 +913,13 @@ class Likes extends Command
                     }
                 }
                 sleep(rand(9, 20));
-                if(rand(0,2)>=1) {
+                if (rand(0, 2) >= 1) {
                     print_r($api->follow($acc));
                 }
                 sleep(rand(10, 20));
             }
         }
+        
         return $output->writeln("Complite");
     }
 }
