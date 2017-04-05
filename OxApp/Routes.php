@@ -6,11 +6,8 @@
  * Time: 12:49
  */
 
-use Ox\Router\RouteMiddleware;
 use Ox\Router\Router;
 use OxApp\helpers\DefaultRequest;
-use OxApp\middleware\AuthTest;
-use OxApp\models\SystemSettings;
 
 Router::$requestDriver = DefaultRequest::getRequest();
 
@@ -18,6 +15,7 @@ Router::addMiddlewareGroup('Json', array(
     'ToJson' => [],
 ));
 
+Router::rout('/generateProfile')->app('GenerateProfile')->save();
 
 Router::setMiddlewareGroup('Json', function () {
     Router::rout('/users')->app('Users')->save();
