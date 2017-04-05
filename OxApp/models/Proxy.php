@@ -18,5 +18,4 @@ use Ox\DataBase\AbstractModel;
 class Proxy extends AbstractModel
 {
     protected static $from = 'proxy';
-    
 }
