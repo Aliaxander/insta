@@ -56,8 +56,8 @@ class EditProfile extends Command
             $api->login($user->guid, $user->phoneId, $user->deviceId, $user->password);
             
             //SetPhoto:
-            $api->changeProfilePicture($photo);
-            unlink($photo);
+         //   $api->changeProfilePicture($photo);
+           // unlink($photo);
             sleep(rand(3, 10));
             
             $profiles = ProfileGenerate::limit([0 => 1])->find(['status' => 0])->rows[0];
