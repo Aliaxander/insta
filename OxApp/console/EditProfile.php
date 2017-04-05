@@ -54,7 +54,7 @@ class EditProfile extends Command
         $biography = $profiles->description;
         $url = mb_strtolower(str_replace('%username%', $word, $profiles->url));
         $api->edit($biography, $url, $user->phoneId, $user->firstName, $user->email);
-        Users::where(['id' => $user->id])->update(['login' => 1]);
+        Users::where(['id' => $user->id])->update(['login' => 1, 'biography' => $biography, 'url' => $url]);
         
         //EditProfile
         return $output->writeln("Complite");
