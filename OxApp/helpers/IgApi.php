@@ -34,10 +34,26 @@ class IgApi
     
     public function getFeed($feedId)
     {
-        print_r($this->request('feed/user/' . $feedId . '/'));
+        $result = $this->request('feed/user/' . $feedId . '/');
+        print_r($result);
         print_r($this->request('feed/user/' . $feedId . '/info/'));
         print_r($this->request('feed/user/' . $feedId . '/story/'));
-       // print_r($this->request('feed/user/' . $feedId . '/story/'));
+        
+        // print_r($this->request('feed/user/' . $feedId . '/story/'));
+        return $result;
+    }
+    
+    public function like($mediaId)
+    {
+        $data = [
+            '_uid' => $this->accountId,
+            '_uuid' => $this->guid,
+            '_csrftoken' => $this->csrftoken,
+            'media_id' => $mediaId
+        ];
+        $data = json_encode($data);
+        
+        return $this->request('media/' . $mediaId . '/like/', $data);
     }
     
     public function login($guid, $phoneId, $device_id, $password)

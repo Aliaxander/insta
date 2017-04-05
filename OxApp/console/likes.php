@@ -45,7 +45,17 @@ class Likes extends Command
         $api->proxy = $user->proxy;
         $api->username = $user->userName;
         $api->login($user->guid, $user->phoneId, $user->deviceId, $user->password);
-        $api->getFeed('3639014581');
+        $result = $api->getFeed('3639014581');
+        if (isset($result[1]['items'])) {
+            $rows = $result[1]['items'];
+            $like1 = $result[1]['items'][rand(0, count($rows) - 1)]['id'];
+            $like2 = $result[1]['items'][rand(0, count($rows) - 1)]['id'];
+            $api->like($like1);
+            sleep(rand(10, 20));
+            if (rand(0, 1) == 1) {
+                $api->like($like2);
+            }
+        }
         
         return $output->writeln("Complite");
     }
