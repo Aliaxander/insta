@@ -41,10 +41,16 @@ class Likes extends Command
     {
         require(__DIR__ . "/../../config.php");
         $api = new IgApi();
-        $user = Users::find(['id' => 25])->rows[0];
+        $user = Users::find(['id' => 12])->rows[0];
+        
         $api->proxy = $user->proxy;
         $api->username = $user->userName;
+        $api->accountId = $user->accountId;
+        $api->guid = $user->guid;
+        $api->csrftoken = $user->csrftoken;
+        
         $api->login($user->guid, $user->phoneId, $user->deviceId, $user->password);
+        
         $result = $api->getFeed('3639014581');
         if (isset($result[1]['items'])) {
             $rows = $result[1]['items'];

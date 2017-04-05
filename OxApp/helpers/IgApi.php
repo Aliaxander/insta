@@ -18,13 +18,13 @@ class IgApi
     public $proxy = '46.105.124.207:5016';
     protected $phone_id;
     protected $name;
-    protected $guid;
-    protected $accountId;
+    public $guid;
+    public $accountId;
     protected $password;
     protected $device_id;
     protected $igKey = '2f6dcdf76deb0d3fd008886d032162a79b88052b5f50538c1ee93c4fe7d02e60';
     protected $igVersion = '4';
-    protected $csrftoken;
+    public $csrftoken;
     
     public function __construct()
     {
@@ -96,7 +96,11 @@ class IgApi
         if ($tokenResult == false || $tokenResult == '') {
             die('empty token');
         }
-        
+        Users::where([
+            'guid' => $guid,
+            'phoneId' => $phoneId,
+            'deviceId' => $device_id
+        ])->update(['csrftoken' => $tokenResult]);
         $this->csrftoken = $tokenResult;
         $this->fetchHeadersSingUp();
         
