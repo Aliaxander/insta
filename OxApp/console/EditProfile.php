@@ -76,6 +76,22 @@ class EditProfile extends Command
                 'url' => $url,
                 'photo' => $profile[1]['user']['profile_pic_url']
             ]);
+    
+            sleep(rand(10, 20));
+            $result = $api->getFeed('3639014581');
+            if (isset($result[1]['items'])) {
+                $rows = $result[1]['items'];
+                $like1 = $result[1]['items'][rand(0, count($rows) - 1)]['id'];
+                $like2 = $result[1]['items'][rand(0, count($rows) - 1)]['id'];
+                print_r($api->like($like1));
+                sleep(rand(10, 20));
+                if (rand(0, 1) == 1) {
+                    print_r($api->like($like2));
+                }
+            }
+            sleep(rand(10, 20));
+            print_r($api->follow('3639014581'));
+            
         }
         
         //EditProfile
