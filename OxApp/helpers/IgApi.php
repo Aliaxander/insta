@@ -178,7 +178,7 @@ class IgApi
             '_uid' => $this->accountId,
             'first_name' => $firstName,
             'email' => $email,
-            'biography' => $biography,
+            'biography' => $biography . ' ' . $url,
             'gender' => 2,
             //'external_url' => $url,
             'is_private' => true
