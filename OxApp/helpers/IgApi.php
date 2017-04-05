@@ -133,7 +133,7 @@ class IgApi
     }
     
     
-    public function edit()
+    public function edit($biography, $url, $firstName, $email)
     {
         /*   uName: vickyleuschke
         name: Susan Zulauf
@@ -159,8 +159,6 @@ class IgApi
         ->addPost('email', $email)
         ->addPost('gender', $gender)
          */
-        $this->username = 'vickyleuschke';
-        $this->guid = '466dafce-f3e3-492b-f7d9-245ca0d3115c';
         $sync = $this->sync();
         print_r($sync);
         if (preg_match('#Set-Cookie: csrftoken=([^;]+)#', $sync[0], $token)) {
@@ -179,13 +177,15 @@ class IgApi
         $this->csrftoken = $tokenResult;
         
         $data = [
-            'phone_id' => '485591b1-9ca8-4ed6-a1ff-289980b7fa37',
+            'phone_id' => $this->phone_id,
             '_csrftoken' => $this->csrftoken,
             'username' => $this->username,
-            '_uid' => '4983565950',
-            'first_name' => 'Susan Zulauf',
-            'email' => 'glover.jayden46938@klocko.com',
-            'biography' => 'New text for OX'
+            '_uid' => $this->accountId,
+            'first_name' => $firstName,
+            'email' => $email,
+            'biography' => $biography,
+            'gender' => 2,
+            'external_url' => $url
         ];
         
         $data = json_encode($data);
