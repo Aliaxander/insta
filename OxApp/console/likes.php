@@ -41,7 +41,7 @@ class Likes extends Command
     {
         require(__DIR__ . "/../../config.php");
         $api = new IgApi();
-        $user = Users::find(['id' => 12])->rows[0];
+        $user = Users::find(['id' => 13])->rows[0];
         $api->proxy = $user->proxy;
         $api->username = $user->userName;
         $api->accountId = $user->accountId;
