@@ -10,6 +10,7 @@ use OxApp\helpers\Device;
 use OxApp\helpers\IgApi;
 use OxApp\helpers\UserAgent;
 use OxApp\models\Proxy;
+use OxApp\models\Users;
 
 $loader = require __DIR__ . '/../vendor/autoload.php';
 
@@ -23,8 +24,13 @@ DbConfig::$dbuserpass = $config["password"];
 
 //$proxy = Proxy::limit([0=>20])->find(['status' => 0]);
 $api = new IgApi();
-$api->proxy = "164.132.168.121:30007";
-$api->create();
+//$api->proxy = "164.132.168.121:30963";
+//$api->create();
+$user = Users::find(['id' => 25])->rows[0];
+$api->proxy = $user->proxy;
+$api->username = $user->userName;
+$api->login($user->guid, $user->phoneId, $user->deviceId, $user->password);
+
 //if ($proxy->count > 0) {
 //    foreach ($proxy->rows as $row) {
 //        Proxy::where(['id' => $row->id])->update(['status' => 1]);
@@ -32,7 +38,6 @@ $api->create();
 //        $api->create();
 //    }
 //}
-
 
 //for($i=100;$i<1000;$i++){
 //     echo "ifconfig eth0 inet6 add 2001:41d0:0002:ebcf::$i/64\n";
