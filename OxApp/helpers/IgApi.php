@@ -56,6 +56,19 @@ class IgApi
         return $this->request('media/' . $mediaId . '/like/', $data);
     }
     
+    public function follow($followUserId)
+    {
+        $data = [
+            '_uid' => $this->accountId,
+            '_uuid' => $this->guid,
+            '_csrftoken' => $this->csrftoken,
+            'user_id' => $followUserId
+        ];
+        $data = json_encode($data);
+        
+        return $this->request('friendships/create/' . $followUserId . '/', $data);
+    }
+    
     public function login($guid, $phoneId, $device_id, $password)
     {
         $this->guid = $guid;
