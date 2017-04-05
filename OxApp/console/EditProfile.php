@@ -33,7 +33,7 @@ class EditProfile extends Command
     }
     
     /**
-     * @param InputInterface  $input
+     * @param InputInterface $input
      * @param OutputInterface $output
      *
      * @return mixed
@@ -41,11 +41,23 @@ class EditProfile extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         require(__DIR__ . "/../../config.php");
+        $dir = scandir('/home/photos');
+        unset($dir[array_search('.', $dir)]);
+        unset($dir[array_search('..', $dir)]);
+        $dir = array_values($dir);
+        $photo = '/home/photos/' . $dir[rand(0, count($dir) - 1)];
+        
         $api = new IgApi();
         $user = Users::find(['id' => 25])->rows[0];
         $api->proxy = $user->proxy;
         $api->username = $user->userName;
         $api->login($user->guid, $user->phoneId, $user->deviceId, $user->password);
+        
+        //SetPhoto:
+        $api->changeProfilePicture($photo);
+        unlink($photo);
+        sleep(rand(3, 10));
+        
         $profiles = ProfileGenerate::limit([0 => 1])->find(['status' => 0])->rows[0];
         ProfileGenerate::where(['id' => $profiles->id])->update(['status' => 1]);
         $word = [$user->userName, $user->firstName, mt_rand(10000, 99999)];
@@ -53,8 +65,15 @@ class EditProfile extends Command
         $word = str_replace([' ', '.'], '', $word);
         $biography = $profiles->description;
         $url = mb_strtolower(str_replace('%username%', $word, $profiles->url));
-        $api->edit($biography, $url, $user->phoneId, $user->firstName, $user->email);
-        Users::where(['id' => $user->id])->update(['login' => 1, 'biography' => $biography, 'url' => $url]);
+        $profile = $api->edit($biography, $url, $user->phoneId, $user->firstName, $user->email);
+        print_r($profile);
+        
+        Users::where(['id' => $user->id])->update([
+            'login' => 1,
+            'biography' => $biography,
+            'url' => $url,
+            'photo' => $profile[1]['user']['profile_pic_url']
+        ]);
         
         //EditProfile
         return $output->writeln("Complite");

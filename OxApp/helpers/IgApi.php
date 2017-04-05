@@ -175,7 +175,7 @@ class IgApi
             }
         }
         $this->csrftoken = $tokenResult;
-        
+        sleep(rand(0, 3));
         $data = [
             'phone_id' => $phoneId,
             '_csrftoken' => $this->csrftoken,
@@ -190,7 +190,8 @@ class IgApi
         ];
         
         $data = json_encode($data);
-        print_r($this->request('accounts/edit_profile/', $data));
+        
+        return $this->request('accounts/edit_profile/', $data);
     }
     
     public function create()
