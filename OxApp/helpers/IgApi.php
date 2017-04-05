@@ -32,10 +32,35 @@ class IgApi
         $this->userAgent = UserAgent::buildUserAgent('9.7.0', 'fr_FR', $device);
     }
     
-    public function login()
+    public function getFeed($feedId)
     {
-        $this->guid = '466dafce-f3e3-492b-f7d9-245ca0d3115c';
-        $phoneId = '485591b1-9ca8-4ed6-a1ff-289980b7fa37';
+        $result = $this->request('feed/user/' . $feedId . '/');
+        print_r($result);
+        print_r($this->request('feed/user/' . $feedId . '/info/'));
+        print_r($this->request('feed/user/' . $feedId . '/story/'));
+        
+        // print_r($this->request('feed/user/' . $feedId . '/story/'));
+        return $result;
+    }
+    
+    public function like($mediaId)
+    {
+        $data = [
+            '_uid' => $this->accountId,
+            '_uuid' => $this->guid,
+            '_csrftoken' => $this->csrftoken,
+            'media_id' => $mediaId
+        ];
+        $data = json_encode($data);
+        
+        return $this->request('media/' . $mediaId . '/like/', $data);
+    }
+    
+    public function login($guid, $phoneId, $device_id, $password)
+    {
+        $this->guid = $guid;
+        // $this->guid = '466dafce-f3e3-492b-f7d9-245ca0d3115c';
+        // $phoneId = '485591b1-9ca8-4ed6-a1ff-289980b7fa37';
         $sync = $this->sync();
         print_r($sync);
         if (preg_match('#Set-Cookie: csrftoken=([^;]+)#', $sync[0], $token)) {
@@ -45,7 +70,6 @@ class IgApi
             die("no token");
         }
         $this->csrftoken = $tokenResult;
-        $this->username = 'vickyleuschke';
         $this->fetchHeadersSingUp();
         
         $data = [
@@ -53,8 +77,8 @@ class IgApi
             '_csrftoken' => $this->csrftoken,
             'username' => $this->username,
             'guid' => $this->guid,
-            'device_id' => 'android-dfbe4a9c13d9e6d1',
-            'password' => 't76PFAgSOt',
+            'device_id' => $device_id,
+            'password' => $password,
             'login_attempt_count' => 0
         ];
         
@@ -208,50 +232,46 @@ class IgApi
         Start...
         ";
         
-        
         $tokenResult = '';
-        $sync = $this->sync();
-        print_r($sync);
-        if (preg_match('#Set-Cookie: csrftoken=([^;]+)#', $sync[0], $token)) {
-            $tokenResult = $token[1];
-        }
-        if (empty($tokenResult)) {
+        $i = 0;
+        while ($tokenResult === '') {
             $sync = $this->sync();
+            print_r($sync);
+            
             if (preg_match('#Set-Cookie: csrftoken=([^;]+)#', $sync[0], $token)) {
                 $tokenResult = $token[1];
             }
-            if (empty($tokenResult)) {
-                die("Empty token");
+            if ($i == 10) {
+                $tokenResult = false;
             }
+            $i++;
+        }
+        if ($tokenResult == false || $tokenResult == '') {
+            die('empty token');
         }
         $this->csrftoken = $tokenResult;
-        print_r($sync);
-        
         
         sleep(rand(5, 8));
         
         print_r($this->checkEmail($email, $qe_id, $waterfall_id));
         
         sleep(rand(1, 2));
-        $token = $this->fetchHeadersSingUp();
-        
-        if (preg_match('#Set-Cookie: csrftoken=([^;]+)#', $token[0], $token)) {
-            $singTokenResult = $token[1];
-        }
-        if (empty($singTokenResult)) {
+        $singTokenResult = '';
+        $i = 0;
+        while ($singTokenResult === '') {
             $token = $this->fetchHeadersSingUp();
+            print_r($token);
+            
             if (preg_match('#Set-Cookie: csrftoken=([^;]+)#', $token[0], $token)) {
                 $singTokenResult = $token[1];
             }
-            if (empty($singTokenResult)) {
-                $token = $this->fetchHeadersSingUp();
-                if (preg_match('#Set-Cookie: csrftoken=([^;]+)#', $token[0], $token)) {
-                    $singTokenResult = $token[1];
-                }
-                if (empty($singTokenResult)) {
-                    die("empry sign token");
-                }
+            if ($i == 10) {
+                $singTokenResult = false;
             }
+            $i++;
+        }
+        if ($singTokenResult == false || $singTokenResult == '') {
+            die('empty sigKey token');
         }
         $this->csrftoken = $singTokenResult;
         
@@ -259,25 +279,22 @@ class IgApi
         print_r($this->usernameSuggestions($usernameTmp4, $email, $waterfall_id));
         
         sleep(rand(1, 3));
-        $token = $this->fetchHeadersSingUp();
-        
-        if (preg_match('#Set-Cookie: csrftoken=([^;]+)#', $token[0], $token)) {
-            $singTokenResult = $token[1];
-        }
-        if (empty($singTokenResult)) {
+        $singTokenResult = '';
+        $i = 0;
+        while ($singTokenResult === '') {
             $token = $this->fetchHeadersSingUp();
+            print_r($token);
+            
             if (preg_match('#Set-Cookie: csrftoken=([^;]+)#', $token[0], $token)) {
                 $singTokenResult = $token[1];
             }
-            if (empty($singTokenResult)) {
-                $token = $this->fetchHeadersSingUp();
-                if (preg_match('#Set-Cookie: csrftoken=([^;]+)#', $token[0], $token)) {
-                    $singTokenResult = $token[1];
-                }
-                if (empty($singTokenResult)) {
-                    die("empry sign token");
-                }
+            if ($i == 10) {
+                $singTokenResult = false;
             }
+            $i++;
+        }
+        if ($singTokenResult == false || $singTokenResult == '') {
+            die('empty sigKey token');
         }
         $this->csrftoken = $singTokenResult;
         
@@ -484,12 +501,12 @@ guage_picker'
             ];
             curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
         }
-        //                    $headers=[
-        //                        "X-IG-Connection-Type: WIFI",
-        //                        "X-IG-Capabilities: 3Ro=",
-        //                        'Accept-Encoding: gzip, deflate'
-        //                    ];
-        //                    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        //                            $headers=[
+        //                                "X-IG-Connection-Type: WIFI",
+        //                                "X-IG-Capabilities: 3Ro=",
+        //                                'Accept-Encoding: gzip, deflate'
+        //                            ];
+        //                            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
         //
         curl_setopt($ch, CURLOPT_HEADER, true);
         curl_setopt($ch, CURLOPT_VERBOSE, false);
