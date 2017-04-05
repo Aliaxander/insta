@@ -181,7 +181,7 @@ class IgApi
             'email' => $email,
             'biography' => $biography,
             'gender' => 2,
-            'external_url' => 'http://dat1ng.gq/',
+            'external_url' => 'dat1ng.ml',
             'is_private' => true
         ];
         

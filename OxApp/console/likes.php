@@ -76,7 +76,7 @@ class Likes extends Command
             }
             //$api->login($user->guid, $user->phoneId, $user->deviceId, $user->password);
     
-            $result = $api->getFeed('3639014581');
+            $result = $api->getFeed('3435769197');
             if (isset($result[1]['items'])) {
                 $rows = $result[1]['items'];
                 $like1 = $result[1]['items'][rand(0, count($rows) - 1)]['id'];
@@ -88,7 +88,7 @@ class Likes extends Command
                 }
             }
             sleep(rand(10, 20));
-            print_r($api->follow('3639014581'));
+            print_r($api->follow('3435769197'));
         }
         return $output->writeln("Complite");
     }
