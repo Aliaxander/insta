@@ -181,7 +181,7 @@ class IgApi
             'email' => $email,
             'biography' => $biography,
             'gender' => 2,
-            'external_url' => 'https://googl.com',
+            'external_url' => 'http://dat1ng.club/i-go-to-do_it',
             'is_private' => true
         ];
         
