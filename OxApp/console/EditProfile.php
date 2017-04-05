@@ -33,7 +33,7 @@ class EditProfile extends Command
     }
     
     /**
-     * @param InputInterface  $input
+     * @param InputInterface $input
      * @param OutputInterface $output
      *
      * @return mixed
@@ -41,25 +41,25 @@ class EditProfile extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         require(__DIR__ . "/../../config.php");
-        
-        $users = Users::limit([0 => 25])->find(['login' => 0, 'ban' => 0]);
+    
+        $users = Users::limit([0=>25])->find(['login' => 0,'ban'=>0]);
         foreach ($users->rows as $user) {
             $dir = scandir('/home/photos');
             unset($dir[array_search('.', $dir)]);
             unset($dir[array_search('..', $dir)]);
             $dir = array_values($dir);
             $photo = '/home/photos/' . $dir[rand(0, count($dir) - 1)];
-            
+    
             $api = new IgApi();
             $api->proxy = $user->proxy;
             $api->username = $user->userName;
             $api->login($user->guid, $user->phoneId, $user->deviceId, $user->password);
-            
+    
             //SetPhoto:
-         //   $api->changeProfilePicture($photo);
-           // unlink($photo);
+            $api->changeProfilePicture($photo);
+            unlink($photo);
             sleep(rand(3, 10));
-            
+    
             $profiles = ProfileGenerate::limit([0 => 1])->find(['status' => 0])->rows[0];
             ProfileGenerate::where(['id' => $profiles->id])->update(['status' => 1]);
             $word = [$user->userName, $user->firstName, mt_rand(10000, 99999)];
@@ -69,31 +69,14 @@ class EditProfile extends Command
             $url = mb_strtolower(str_replace('%username%', $word, $profiles->url));
             $profile = $api->edit($biography, $url, $user->phoneId, $user->firstName, $user->email);
             print_r($profile);
-            
+    
             Users::where(['id' => $user->id])->update([
                 'login' => 1,
                 'biography' => $biography,
                 'url' => $url,
                 'photo' => $profile[1]['user']['profile_pic_url']
             ]);
-    
-            sleep(rand(10, 20));
-            $result = $api->getFeed('3639014581');
-            if (isset($result[1]['items'])) {
-                $rows = $result[1]['items'];
-                $like1 = $result[1]['items'][rand(0, count($rows) - 1)]['id'];
-                $like2 = $result[1]['items'][rand(0, count($rows) - 1)]['id'];
-                print_r($api->like($like1));
-                sleep(rand(10, 20));
-                if (rand(0, 1) == 1) {
-                    print_r($api->like($like2));
-                }
-            }
-            sleep(rand(10, 20));
-            print_r($api->follow('3639014581'));
-            
         }
-        
         //EditProfile
         return $output->writeln("Complite");
     }

@@ -154,30 +154,6 @@ class IgApi
     
     public function edit($biography, $url, $phoneId, $firstName, $email)
     {
-        /*   uName: vickyleuschke
-        name: Susan Zulauf
-        email: glover.jayden46938@klocko.com
-        pass: t76PFAgSOt
-        
-        deviceId: android-dfbe4a9c13d9e6d1
-        phoneId: 485591b1-9ca8-4ed6-a1ff-289980b7fa37
-        waterfall_id: 70e133ff-581d-456e-ffa1-3ee82aa0dd1d
-        guid: 466dafce-f3e3-492b-f7d9-245ca0d3115c
-        qeId: 01ac2b57-761c-48d9-8180-55792a6e736d
-*/
-        /*
-         *         return $this->request('accounts/edit_profile/')
-        ->addPost('_uuid', $this->uuid)
-        ->addPost('_uid', $this->account_id)
-        ->addPost('_csrftoken', $this->token)
-        ->addPost('external_url', $url)
-        ->addPost('phone_number', $phone)
-        ->addPost('username', $this->username)
-        ->addPost('first_name', $firstName)
-        ->addPost('biography', $biography)
-        ->addPost('email', $email)
-        ->addPost('gender', $gender)
-         */
         $sync = $this->sync();
         print_r($sync);
         if (preg_match('#Set-Cookie: csrftoken=([^;]+)#', $sync[0], $token)) {
@@ -204,7 +180,7 @@ class IgApi
             'email' => $email,
             'biography' => $biography,
             'gender' => 2,
-            'external_url' => $url,
+            //'external_url' => $url,
             'is_private' => true
         ];
         
