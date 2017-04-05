@@ -48,7 +48,7 @@ class EditProfile extends Command
         $photo = '/home/photos/' . $dir[rand(0, count($dir) - 1)];
         
         $api = new IgApi();
-        $user = Users::find(['id' => 25])->rows[0];
+        $user = Users::find(['id' => 24])->rows[0];
         $api->proxy = $user->proxy;
         $api->username = $user->userName;
         $api->login($user->guid, $user->phoneId, $user->deviceId, $user->password);
