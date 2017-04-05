@@ -157,28 +157,41 @@ class IgApi
     
     public function create()
     {
-    
+        
         $faker = Factory::create();
-    
-        $this->username = str_replace(".", "", $faker->userName);
+        $uname = $faker->userName;
+        if (rand(0, 1) == 1) {
+            $this->username = str_replace(".", "", $faker->userName);
+        } else {
+            $this->username = $uname;
+        }
         $usernameTmp1 = substr($this->username, 0, -round(1, mb_strlen($this->username) - 3));
         $usernameTmp2 = substr($usernameTmp1, 0, -round(1, mb_strlen($usernameTmp1) - 3));
         $usernameTmp3 = substr($usernameTmp2, 0, -round(1, mb_strlen($usernameTmp2) - 3));
         $usernameTmp4 = substr($usernameTmp3, 0, -round(1, mb_strlen($usernameTmp3) - 3));
-    
+        
         $this->name = $faker->firstNameFemale;// . " " . $faker->lastName;
+        if (rand(0, 1) == 1) {
+            $this->name .= " " . $faker->lastName;
+        }
         //$email = $faker->email;
-        $email = explode("@", $faker->email);
-        $email = implode(rand(1000, 9999) . "@", $email);
+        if (rand(0, 3) > 0) {
+            $email = explode("@", $faker->email);
+            $email = implode(rand(0, 99999) . "@", $email);
+        } elseif (rand(0, 1) == 0) {
+            $email = str_replace(" ", ".", $this->name) . rand(0, 1999) . "@gmail.com";
+        } else {
+            $email = $uname . "@gmail.com";
+        }
         $this->password = strtolower(substr(md5(number_format(microtime(true), 7, '', '')), mt_rand(15, 24)));
-    
+        
         $megaRandomHash = md5(number_format(microtime(true), 7, '', ''));
         $this->device_id = 'android-' . strtolower(substr($megaRandomHash, 16));
         $this->phone_id = strtolower($this->genUuid());
         $waterfall_id = strtolower($this->genUuid());
         $this->guid = strtolower($this->genUuid());
         $qe_id = strtolower($this->genUuid());
-    
+        
         echo "Generate DATA:
         uName: {$this->username}
         name: {$this->name}
@@ -213,8 +226,8 @@ class IgApi
         }
         $this->csrftoken = $tokenResult;
         print_r($sync);
-    
-    
+        
+        
         sleep(rand(5, 8));
         
         print_r($this->checkEmail($email, $qe_id, $waterfall_id));
@@ -247,7 +260,7 @@ class IgApi
         
         sleep(rand(1, 3));
         $token = $this->fetchHeadersSingUp();
-    
+        
         if (preg_match('#Set-Cookie: csrftoken=([^;]+)#', $token[0], $token)) {
             $singTokenResult = $token[1];
         }
@@ -291,13 +304,13 @@ class IgApi
         $create = $this->createAccount($email, $waterfall_id);
         if (empty($create[1])) {
             $create = $this->createAccount($email, $waterfall_id);
-        }elseif (isset($create[1]['errors']['username'])) {
+        } elseif (isset($create[1]['errors']['username'])) {
             $this->username = $this->username . rand(0, 999999);
             $finalName = $this->usernameSuggestions($this->username, $email, $waterfall_id);
             print_r($finalName);
             $create = $this->createAccount($email, $waterfall_id);
         }
-       
+        
         if (isset($create[1]['created_user']['pk'])) {
             Users::add([
                 'userName' => $this->username,
