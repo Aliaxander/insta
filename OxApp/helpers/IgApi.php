@@ -34,7 +34,10 @@ class IgApi
     
     public function getFeed($feedId)
     {
+        print_r($this->request('feed/user/' . $feedId . '/'));
+        print_r($this->request('feed/user/' . $feedId . '/info/'));
         print_r($this->request('feed/user/' . $feedId . '/story/'));
+       // print_r($this->request('feed/user/' . $feedId . '/story/'));
     }
     
     public function login($guid, $phoneId, $device_id, $password)
