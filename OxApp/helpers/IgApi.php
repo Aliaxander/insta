@@ -154,6 +154,7 @@ class IgApi
     
     public function edit($biography, $url, $phoneId, $firstName, $email)
     {
+     
         $sync = $this->sync();
         print_r($sync);
         if (preg_match('#Set-Cookie: csrftoken=([^;]+)#', $sync[0], $token)) {
@@ -178,9 +179,9 @@ class IgApi
             '_uid' => $this->accountId,
             'first_name' => $firstName,
             'email' => $email,
-            'biography' => $biography . ' ' . $url,
+            'biography' => $biography,
             'gender' => 2,
-            //'external_url' => $url,
+            'external_url' => $url,
             'is_private' => true
         ];
         
