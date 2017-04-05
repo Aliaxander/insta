@@ -32,6 +32,11 @@ class IgApi
         $this->userAgent = UserAgent::buildUserAgent('9.7.0', 'fr_FR', $device);
     }
     
+    public function getFeed($feedId)
+    {
+        print_r($this->request('feed/user/' . $feedId . '/story/'));
+    }
+    
     public function login($guid, $phoneId, $device_id, $password)
     {
         $this->guid = $guid;

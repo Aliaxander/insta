@@ -1,6 +1,7 @@
 #!/usr/bin/env php
 <?php
 // application.php
+use Acme\Console\Command\Likes;
 use Acme\Console\Command\Test;
 use Ox\DataBase\DbConfig;
 use Symfony\Component\Console\Application;
@@ -16,6 +17,7 @@ DbConfig::$dbuserpass = $config["password"];
 
 $application = new Application();
 $application->add(new Test());
+$application->add(new Likes());
 $application->addCommands(
     array(
         // Migrations Commands
