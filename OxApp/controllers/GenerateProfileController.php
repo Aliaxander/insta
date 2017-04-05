@@ -30,7 +30,6 @@ class GenerateProfileController extends App
         $generator1 = new TextTemplateGenerator($macros);
         $biography = $generator->generate($count);
         $macros = $generator1->generate($count);
-
         foreach ($biography as $key => $item) {
             $url = 'http://' . $domain . '/' . $macros[$key];
             ProfileGenerate::add(['description' => $item, 'url' => $url, 'status' => 1]);

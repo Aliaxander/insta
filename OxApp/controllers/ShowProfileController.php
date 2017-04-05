@@ -16,7 +16,7 @@ use OxApp\models\ProfileGenerate;
 class ShowProfileController extends App
 {
     public function get() {
-        $profiles = ProfileGenerate::find();
+        $profiles = ProfileGenerate::orderBy(['id'=> 'desc'])->find();
         return View::build("showProfile", ['profiles' => $profiles->rows]);
     }
 }
