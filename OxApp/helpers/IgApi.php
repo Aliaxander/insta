@@ -465,7 +465,7 @@ class IgApi
     /**
      * @return array
      */
-    protected function sync()
+    public function sync()
     {
         $syncData = json_encode([
             "id" => $this->guid,

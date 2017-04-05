@@ -42,14 +42,38 @@ class Likes extends Command
         require(__DIR__ . "/../../config.php");
         $api = new IgApi();
         $user = Users::find(['id' => 12])->rows[0];
-        
         $api->proxy = $user->proxy;
         $api->username = $user->userName;
         $api->accountId = $user->accountId;
         $api->guid = $user->guid;
         $api->csrftoken = $user->csrftoken;
-        
-        $api->login($user->guid, $user->phoneId, $user->deviceId, $user->password);
+        if (empty($user->csrftoken)) {
+            $tokenResult = '';
+            $i = 0;
+            while ($tokenResult === '') {
+                $sync = $api->sync();
+                print_r($sync);
+                
+                if (preg_match('#Set-Cookie: csrftoken=([^;]+)#', $sync[0], $token)) {
+                    $tokenResult = $token[1];
+                }
+                if ($i == 10) {
+                    $tokenResult = false;
+                }
+                if ($sync[1]['message'] === 'checkpoint_required') {
+                    Users::where(['id' => $user->id])->update(['ban' => 1]);
+                    die("Account banned");
+                }
+                
+                $i++;
+            }
+            if ($tokenResult == false || $tokenResult == '') {
+                die('empty token');
+            }
+            $api->csrftoken = $tokenResult;
+            Users::where(['id' => $user->id])->update(['csrftoken' => $tokenResult]);
+        }
+        //$api->login($user->guid, $user->phoneId, $user->deviceId, $user->password);
         
         $result = $api->getFeed('3639014581');
         if (isset($result[1]['items'])) {
