@@ -4,15 +4,19 @@
         <form method="post">
             <div class="form-group">
                 <label for="inputEmail3" class="control-label">Description</label>
-                    <textarea name="biography" class="form-control" rows="4"></textarea>
+                    <textarea name="biography" class="form-control" rows="4" placeholder="{Добрый день|Доброе утро}! Какая {на улице|за {окном|бортом}} {прекрасная|очаровательная|великолепная} погода!"></textarea>
             </div>
             <div class="form-group">
                 <label for="domains" class="control-label">domain</label>
-                    <input type="text" class="form-control" name="domain" id="domain">
+                    <input type="text" class="form-control" name="domain" id="domain" placeholder="vk.com">
+            </div>
+            <div class="form-group">
+                <label for="macros" class="control-label">macros</label>
+                <input type="text" class="form-control" name="macros" id="macros" placeholder="{fuck_my_ass|fuck_my|fuck-my-ass}">
             </div>
             <div class="form-group">
                 <label for="count" class="control-label">count</label>
-                <input type="text" class="form-control" name="count" id="count">
+                <input type="text" class="form-control" name="count" id="count" placeholder="100">
             </div>
             <div class="form-group">
                 <div>

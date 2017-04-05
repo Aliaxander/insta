@@ -16,6 +16,8 @@ Router::addMiddlewareGroup('Json', array(
 ));
 
 Router::rout('/generateProfile')->app('GenerateProfile')->save();
+Router::rout('/showProfile')->app('ShowProfile')->save();
+Router::rout('/deleteProfile/:num=>id')->app('DeleteProfile')->save();
 
 Router::setMiddlewareGroup('Json', function () {
     Router::rout('/users')->app('Users')->save();

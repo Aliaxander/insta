@@ -5,14 +5,16 @@
  * Date: 18.05.15
  * Time: 10:34
  */
-use Ox\DataBase\DbConfig;
 
+ini_set("allow_url_fopen", true);
 ini_set('display_errors', '1');
-require(__DIR__ . '/../OxApp/Routes.php');
+date_default_timezone_set('Europe/Moscow');
+header('Content-type: text/html; charset=utf-8');
+header('Access-Control-Allow-Credentials: true');
+$allowHeaders = "X-Requested-With, Content-Type, Origin, Authorization, Accept, Client-Security-Token, Accept-Encoding";
+header('Access-Control-Allow-Headers: ' . $allowHeaders);
+header('Access-Control-Allow-Methods: POST, GET, DELETE, PUT, OPTIONS');
+header('Access-Control-Allow-Origin: *');
 $loader = require __DIR__ . '/../vendor/autoload.php';
-
-$config = include("migrations-db.php");
-DbConfig::$dbhost = $config["host"];
-DbConfig::$dbname = $config["dbname"];
-DbConfig::$dbuser = $config["user"];
-DbConfig::$dbuserpass = $config["password"];
+require(__DIR__ . "/../config.php");
+require(__DIR__ . "/../OxApp/Routes.php");
