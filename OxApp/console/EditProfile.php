@@ -67,7 +67,7 @@ class EditProfile extends Command
             $word = str_replace([' ', '.'], '', $word);
             $biography = $profiles->description;
             $url = mb_strtolower(str_replace('%username%', $word, $profiles->url));
-            $profile = $api->edit($biography . " " . $url, '', $user->phoneId, $user->firstName,
+            $profile = $api->edit($biography, $url, $user->phoneId, $user->firstName,
                 $user->email);//dat1ng.cf/i-love-to-do-it
             print_r($profile);
             
