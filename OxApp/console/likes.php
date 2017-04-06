@@ -80,51 +80,7 @@ class Likes extends Command
                 Users::where(['id' => $user->id])->update(['csrftoken' => $tokenResult]);
             }
             //$api->login($user->guid, $user->phoneId, $user->deviceId, $user->password);
-            $accs = "2307470445
-3037365164
-3179098011
-3257307082
-4043396552
-4778573207
-4922685168
-35961528
-36988771
-227754022
-865071496
-1461676567
-2252202373
-2259870139
-2271582497
-3413866451
-3572768031
-3968773032
-4103799983
-4131407797
-4207787569
-4241493042
-4558525897
-4613907200
-4968362469
-396376377
-490307157
-603021090
-613131099
-691932168
-1329022344
-1394751513
-1468813211
-1547513052
-1551992557
-1682224260
-1689160654
-1738697637
-2061273905
-2086442488
-2241497629
-2244518496
-2389355119
-2695987348
-3169362944
+            $accs = "3169362944
 3228861749
 3249007104
 3403621908
@@ -850,30 +806,32 @@ class Likes extends Command
                 echo "Set acc $acc:\n";
                 $result = $api->getFeed($acc);
                 $requestCou += 3;
-                if (rand(0, 1) == 1) {
+                if (mt_rand(0, 1) == 1) {
                     if (isset($result[1]['items'])) {
                         $rows = $result[1]['items'];
-                        $like1 = @$result[1]['items'][rand(0, count($rows) - 1)]['id'];
-                        $like2 = @$result[1]['items'][rand(0, count($rows) - 1)]['id'];
-                     //   sleep(rand(15, 30));
-                        if (rand(0, 10) === 9) {
+                        $like1 = @$result[1]['items'][mt_rand(0, count($rows) - 1)]['id'];
+                        $like2 = @$result[1]['items'][mt_rand(0, count($rows) - 1)]['id'];
+                        sleep(rand(10, 30));
+                        if (mt_rand(0, 10) === 9) {
                             print_r($api->follow($acc));
                             $followCou++;
                             $requestCou++;
                         }
-                      //  sleep(rand(20, 40));
-//                        if ($like1) {
-//                           print_r($api->like($like1));
-//                            $likeCou++;
-//                            $requestCou++;
-//                        }
-                     //   sleep(rand(20, 40));
-                        
-//                        if (rand(0, 1) == 1 && $like2) {
-//                            print_r($api->like($like2));
-//                            $likeCou++;
-//                            $requestCou++;
-//                        }
+                        if (mt_rand(0, 9) == 1) {
+                            sleep(mt_rand(20, 40));
+                            if ($like1) {
+                                print_r($api->like($like1));
+                                $likeCou++;
+                                $requestCou++;
+                            }
+                            sleep(mt_rand(20, 40));
+    
+                            if (mt_rand(0, 1) == 1 && $like2) {
+                                print_r($api->like($like2));
+                                $likeCou++;
+                                $requestCou++;
+                            }
+                        }
                     }
                     echo "Requests: $requestCou | Likes: $likeCou | Follows: $followCou\n";
                     sleep(rand(10, 30));
