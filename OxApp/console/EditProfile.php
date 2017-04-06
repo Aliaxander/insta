@@ -56,26 +56,26 @@ class EditProfile extends Command
             $api->login($user->guid, $user->phoneId, $user->deviceId, $user->password);
     
 //            //SetPhoto:
-//            $api->changeProfilePicture($photo);
-//            unlink($photo);
-//            sleep(rand(3, 10));
+            $api->changeProfilePicture($photo);
+            unlink($photo);
+            sleep(rand(3, 10));
     
-//            $profiles = ProfileGenerate::limit([0 => 1])->find(['status' => 0])->rows[0];
-//            ProfileGenerate::where(['id' => $profiles->id])->update(['status' => 1]);
-//            $word = [$user->userName, $user->firstName, mt_rand(10000, 99999)];
-//            $word = $word[mt_rand(0, 2)];
-//            $word = str_replace([' ', '.'], '', $word);
-//            $biography = $profiles->description;
-//            $url = mb_strtolower(str_replace('%username%', $word, $profiles->url));
-//            $profile = $api->edit($biography, '', $user->phoneId, $user->firstName, $user->email);//dat1ng.cf/i-love-to-do-it
-//            print_r($profile);
+            $profiles = ProfileGenerate::limit([0 => 1])->find(['status' => 0])->rows[0];
+            ProfileGenerate::where(['id' => $profiles->id])->update(['status' => 1]);
+            $word = [$user->userName, $user->firstName, mt_rand(10000, 99999)];
+            $word = $word[mt_rand(0, 2)];
+            $word = str_replace([' ', '.'], '', $word);
+            $biography = $profiles->description;
+            $url = mb_strtolower(str_replace('%username%', $word, $profiles->url));
+            $profile = $api->edit($biography, '', $user->phoneId, $user->firstName, $user->email);//dat1ng.cf/i-love-to-do-it
+            print_r($profile);
     
-//            Users::where(['id' => $user->id])->update([
-//                'login' => 1,
-//                'biography' => $biography,
-//                'url' => $url,
-//                'photo' => $profile[1]['user']['profile_pic_url']
-//            ]);
+            Users::where(['id' => $user->id])->update([
+                'login' => 1,
+                'biography' => $biography,
+                'url' => $url,
+                'photo' => $profile[1]['user']['profile_pic_url']
+            ]);
         }
         //EditProfile
         return $output->writeln("Complite");
