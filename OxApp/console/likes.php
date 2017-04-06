@@ -39,12 +39,13 @@ class Likes extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         require(__DIR__ . "/../../config.php");
-        $requestCou = 0;
-        $likeCou = 0;
-        $followCou = 0;
         $api = new IgApi();
-        $users = Users::limit([0 => 1])->find(['login' => 1, 'ban' => 0]);
+        $users = Users::limit([0 => 1])->find(['login' => 1, 'ban' => 0, 'requests' => 0]);
         foreach ($users->rows as $user) {
+            $requestCou = $user->requests;
+            $likeCou = $user->likes;
+            $followCou = $user->follows;
+            Users::where(['id' => $user->id])->update(['requests' => round($requestCou + 1)]);
             $api->proxy = $user->proxy;
             $api->username = $user->userName;
             $api->accountId = $user->accountId;
@@ -80,19 +81,25 @@ class Likes extends Command
             }
             //$api->login($user->guid, $user->phoneId, $user->deviceId, $user->password);
             
-            $startMinRand = rand(10, 15);//10
-            $startMaxRand = rand(10, 20);//15
-            $stopMinRand = rand(20, 30);//20
-            $stopMaxRand = rand(40, 60);//40
-            while (0 < 1) {
-                $accRow = InstBase::find(['status' => 0]);
-                $acc = $accRow->rows[0]->account;
+            $startMinRand = rand(15, 20);//10
+            $startMaxRand = rand(20, 30);//15
+            $stopMinRand = rand(25, 40);//20
+            $stopMaxRand = rand(45, 65);//40
+            $status = true;
+            while ($status = true) {
+                $accRow = InstBase::limit([0 => 1])->find(['status' => 0]);
+                $acc = "{$accRow->rows[0]->account}";
                 InstBase::where(['id' => $accRow->rows[0]->id])->update(['status' => 1]);
+                
                 echo "Set acc $acc:\n";
                 if (rand(0, 20) == 10) {
                     $api->getRecentActivityAll();
                 }
                 $result = $api->getFeed($acc);
+                if (isset($result['1']['message']) && $result['1']['message'] === 'checkpoint_required') {
+                    Users::where(['id' => $user->id])->update(['ban' => 1]);
+                    die();
+                }
                 $requestCou += 3;
                 if (rand(0, 30) == 10) {
                     $api->getRecentActivityAll();
@@ -105,12 +112,15 @@ class Likes extends Command
                         sleep(rand($startMinRand, $stopMinRand));
                         if (mt_rand(0, 10) === 9) {
                             print_r($api->follow($acc));
+                            InstBase::where(['id' => $accRow->rows[0]->id])->update(['follow' => round($accRow->rows[0]->follow + 1)]);
+                            
                             $followCou++;
                             $requestCou++;
                         }
                         if (mt_rand(0, 9) == 1) {
                             sleep(mt_rand($startMaxRand, $stopMaxRand));
                             if ($like1) {
+                                InstBase::where(['id' => $accRow->rows[0]->id])->update(['likes' => round($accRow->rows[0]->likes + 1)]);
                                 print_r($api->like($like1));
                                 $api->getFeed($acc);
                                 $likeCou++;
@@ -119,12 +129,19 @@ class Likes extends Command
                             sleep(mt_rand($startMaxRand, $stopMaxRand));
                             
                             if (mt_rand(0, 1) == 1 && $like2) {
+                                InstBase::where(['id' => $accRow->rows[0]->id])->update(['likes' => round($accRow->rows[0]->likes + 1)]);
                                 print_r($api->like($like2));
                                 $likeCou++;
                                 $requestCou++;
                             }
                         }
                     }
+                    
+                    Users::where(['id' => $user->id])->update([
+                        'requests' => $requestCou,
+                        'follows' => $followCou,
+                        'likes' => $likeCou
+                    ]);
                     echo "Requests: $requestCou | Likes: $likeCou | Follows: $followCou\n";
                     sleep(rand($startMinRand, $stopMinRand));
                 }
