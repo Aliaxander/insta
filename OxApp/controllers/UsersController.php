@@ -25,6 +25,6 @@ class UsersController extends App
     public function get()
     {
         $users = Users::find();
-        return View::build("user", $users->rows);
+        return View::build("users", $users->rows);
     }
 }
