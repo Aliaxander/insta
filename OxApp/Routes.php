@@ -19,8 +19,6 @@ Router::rout('/generateProfile')->app('GenerateProfile')->save();
 Router::rout('/showProfile')->app('ShowProfile')->save();
 Router::rout('/deleteProfile/:num=>id')->app('DeleteProfile')->save();
 Router::rout('/')->app('Index')->save();
-
-
-Router::setMiddlewareGroup('Json', function () {
-    Router::rout('/users')->app('Users')->save();
-});
+Router::rout('/proxy')->app('Proxy')->save();
+Router::rout('/users')->app('Users')->save();
+Router::rout('/testMacros')->app('TestMacros')->save();
