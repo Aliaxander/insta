@@ -6,7 +6,7 @@
             <div class="form-group">
                 <label for="inputEmail3" class="control-label">Description</label>
                 <textarea name="macros" class="form-control" rows="4"
-                          placeholder="{Добрый день|Доброе утро}! Какая {на улице|за {окном|бортом}} {прекрасная|очаровательная|великолепная} погода!"></textarea>
+                          placeholder="{Добрый день|Доброе утро}! Какая {на улице|за {окном|бортом}} {прекрасная|очаровательная|великолепная} погода!">{{ macros }}</textarea>
             </div>
             <div class="form-group">
                 <div>
