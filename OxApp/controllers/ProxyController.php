@@ -8,16 +8,15 @@
 
 namespace OxApp\controllers;
 
-
 use Ox\App;
 use Ox\View;
-use OxApp\models\Users;
+use OxApp\models\Proxy;
 
 class ProxyController extends App
 {
     public function get()
     {
-        $proxy = Users::find();
-        return View::build("proxy", $proxy->rows);
+        $proxy = Proxy::find();
+        return View::build('proxy',['proxyes' => $proxy->rows]);
     }
 }
