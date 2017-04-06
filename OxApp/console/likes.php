@@ -85,8 +85,8 @@ class Likes extends Command
             $startMaxRand = rand(20, 30);//15
             $stopMinRand = rand(25, 40);//20
             $stopMaxRand = rand(45, 65);//40
-            $status = true;
-            while ($status = true) {
+//            $status = true;
+//            while ($status = true) {
                 $accRow = InstBase::find(['status' => 0]);
                 $acc = $accRow->rows[0]->account;
                 InstBase::where(['id' => $accRow->rows[0]->id])->update(['status' => 1]);
@@ -146,7 +146,7 @@ class Likes extends Command
                     sleep(rand($startMinRand, $stopMinRand));
                 }
                 sleep(rand($startMinRand, $stopMaxRand));
-            }
+        //    }
         }
         
         return $output->writeln("Complite");
