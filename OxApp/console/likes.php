@@ -40,6 +40,9 @@ class Likes extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         require(__DIR__ . "/../../config.php");
+        $requestCou = 0;
+        $likeCou = 0;
+        $followCou = 0;
         $api = new IgApi();
         $users = Users::limit([0 => 1])->find(['login' => 1, 'ban' => 0]);
         foreach ($users->rows as $user) {
@@ -54,6 +57,7 @@ class Likes extends Command
                 $i = 0;
                 while ($tokenResult === '') {
                     $sync = $api->sync();
+                    $requestCou++;
                     print_r($sync);
                     
                     if (preg_match('#Set-Cookie: csrftoken=([^;]+)#', $sync[0], $token)) {
@@ -877,7 +881,8 @@ class Likes extends Command
             foreach ($accs as $acc) {
                 echo "Set acc $acc:\n";
                 $result = $api->getFeed($acc);
-                if(rand(0,1)==1) {
+                $requestCou += 3;
+                if (rand(0, 1) == 1) {
                     if (isset($result[1]['items'])) {
                         $rows = $result[1]['items'];
                         $like1 = @$result[1]['items'][rand(0, count($rows) - 1)]['id'];
@@ -885,22 +890,27 @@ class Likes extends Command
                         sleep(rand(15, 30));
                         if (rand(0, 10) === 9) {
                             print_r($api->follow($acc));
+                            $followCou++;
                         }
                         sleep(rand(20, 40));
                         if ($like1) {
                             print_r($api->like($like1));
+                            $likeCou++;
                         }
                         sleep(rand(20, 40));
-        
+                        
                         if (rand(0, 1) == 1 && $like2) {
                             print_r($api->like($like2));
+                            $likeCou++;
                         }
                     }
-    
+                    
                     sleep(rand(10, 30));
                 }
                 sleep(rand(5, 20));
             }
+            echo "Requests: $requestCou | Likes: $likeCou | Follows: $followCou\n";
+            
         }
         
         return $output->writeln("Complite");
