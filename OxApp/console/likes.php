@@ -859,17 +859,20 @@ class Likes extends Command
                         if (rand(0, 10) === 9) {
                             print_r($api->follow($acc));
                             $followCou++;
+                            $requestCou++;
                         }
                         sleep(rand(20, 40));
                         if ($like1) {
                             print_r($api->like($like1));
                             $likeCou++;
+                            $requestCou++;
                         }
                         sleep(rand(20, 40));
                         
                         if (rand(0, 1) == 1 && $like2) {
                             print_r($api->like($like2));
                             $likeCou++;
+                            $requestCou++;
                         }
                     }
                     echo "Requests: $requestCou | Likes: $likeCou | Follows: $followCou\n";
