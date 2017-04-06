@@ -55,10 +55,10 @@ class EditProfile extends Command
             $api->username = $user->userName;
             $api->login($user->guid, $user->phoneId, $user->deviceId, $user->password);
     
-            //SetPhoto:
-            $api->changeProfilePicture($photo);
-            unlink($photo);
-            sleep(rand(3, 10));
+//            //SetPhoto:
+//            $api->changeProfilePicture($photo);
+//            unlink($photo);
+//            sleep(rand(3, 10));
     
 //            $profiles = ProfileGenerate::limit([0 => 1])->find(['status' => 0])->rows[0];
 //            ProfileGenerate::where(['id' => $profiles->id])->update(['status' => 1]);
@@ -70,12 +70,12 @@ class EditProfile extends Command
 //            $profile = $api->edit($biography, '', $user->phoneId, $user->firstName, $user->email);//dat1ng.cf/i-love-to-do-it
 //            print_r($profile);
     
-            Users::where(['id' => $user->id])->update([
-                'login' => 1,
-                'biography' => $biography,
-                'url' => $url,
-                'photo' => $profile[1]['user']['profile_pic_url']
-            ]);
+//            Users::where(['id' => $user->id])->update([
+//                'login' => 1,
+//                'biography' => $biography,
+//                'url' => $url,
+//                'photo' => $profile[1]['user']['profile_pic_url']
+//            ]);
         }
         //EditProfile
         return $output->writeln("Complite");
