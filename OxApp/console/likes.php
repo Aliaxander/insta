@@ -136,6 +136,7 @@ class Likes extends Command
                             }
                         }
                     }
+                    
                     Users::where(['id' => $user->id])->update([
                         'requests' => $requestCou,
                         'follows' => $followCou,
