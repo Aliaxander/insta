@@ -855,25 +855,25 @@ class Likes extends Command
                         $rows = $result[1]['items'];
                         $like1 = @$result[1]['items'][rand(0, count($rows) - 1)]['id'];
                         $like2 = @$result[1]['items'][rand(0, count($rows) - 1)]['id'];
-                        sleep(rand(15, 30));
+                     //   sleep(rand(15, 30));
                         if (rand(0, 10) === 9) {
                             print_r($api->follow($acc));
                             $followCou++;
                             $requestCou++;
                         }
-                        sleep(rand(20, 40));
-                        if ($like1) {
-                            print_r($api->like($like1));
-                            $likeCou++;
-                            $requestCou++;
-                        }
-                        sleep(rand(20, 40));
+                      //  sleep(rand(20, 40));
+//                        if ($like1) {
+//                           print_r($api->like($like1));
+//                            $likeCou++;
+//                            $requestCou++;
+//                        }
+                     //   sleep(rand(20, 40));
                         
-                        if (rand(0, 1) == 1 && $like2) {
-                            print_r($api->like($like2));
-                            $likeCou++;
-                            $requestCou++;
-                        }
+//                        if (rand(0, 1) == 1 && $like2) {
+//                            print_r($api->like($like2));
+//                            $likeCou++;
+//                            $requestCou++;
+//                        }
                     }
                     echo "Requests: $requestCou | Likes: $likeCou | Follows: $followCou\n";
                     sleep(rand(10, 30));
