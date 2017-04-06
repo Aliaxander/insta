@@ -872,12 +872,12 @@ class Likes extends Command
                             $likeCou++;
                         }
                     }
-                    
+                    echo "Requests: $requestCou | Likes: $likeCou | Follows: $followCou\n";
                     sleep(rand(10, 30));
                 }
                 sleep(rand(5, 20));
             }
-            echo "Requests: $requestCou | Likes: $likeCou | Follows: $followCou\n";
+           
             
         }
         
