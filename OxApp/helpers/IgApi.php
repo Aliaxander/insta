@@ -34,26 +34,26 @@ class IgApi
     
     public function getFeed($feedId)
     {
-        if (rand(0, 1) == 1) {
-            print_r($this->request('friendships/show/' . $feedId . '/'));
-            $result = $this->request('feed/user/' . $feedId . '/');
-            print_r($this->request('feed/user/' . $feedId . '/story/'));
-            print_r($this->request('feed/user/' . $feedId . '/info/'));
-        } elseif (rand(0, 1) == 0) {
-            print_r($this->request('friendships/show/' . $feedId . '/'));
-            print_r($this->request('feed/user/' . $feedId . '/story/'));
-            print_r($this->request('feed/user/' . $feedId . '/info/'));
-            $result = $this->request('feed/user/' . $feedId . '/');
-        } elseif (rand(1, 2) == 2) {
-            print_r($this->request('feed/user/' . $feedId . '/story/'));
-            print_r($this->request('feed/user/' . $feedId . '/info/'));
-            print_r($this->request('friendships/show/' . $feedId . '/'));
-            $result = $this->request('feed/user/' . $feedId . '/');
+        if (mt_rand(0, 1) == 1) {
+            print_r($this->request("friendships/show/" . $feedId . "/"));
+            $result = $this->request("feed/user/" . $feedId . "/");
+            print_r($this->request("feed/user/" . $feedId . "/story/"));
+            print_r($this->request("feed/user/" . $feedId . "/info/"));
+        } elseif (mt_rand(0, 1) == 0) {
+            print_r($this->request("friendships/show/" . $feedId . "/"));
+            print_r($this->request("feed/user/" . $feedId . "/story/"));
+            print_r($this->request("feed/user/" . $feedId . "/info/"));
+            $result = $this->request("feed/user/" . $feedId . "/");
+        } elseif (mt_rand(1, 2) == 2) {
+            print_r($this->request("feed/user/" . $feedId . "/story/"));
+            print_r($this->request("feed/user/" . $feedId . "/info/"));
+            print_r($this->request("friendships/show/" . $feedId . "/"));
+            $result = $this->request("feed/user/" . $feedId . "/");
         } else {
-            print_r($this->request('friendships/show/' . $feedId . '/'));
-            print_r($this->request('feed/user/' . $feedId . '/story/'));
-            $result = $this->request('feed/user/' . $feedId . '/');
-            print_r($this->request('feed/user/' . $feedId . '/info/'));
+            print_r($this->request("friendships/show/" . $feedId . "/"));
+            print_r($this->request("feed/user/" . $feedId . "/story/"));
+            $result = $this->request("feed/user/" . $feedId . "/");
+            print_r($this->request("feed/user/" . $feedId . "/info/"));
         }
         print_r($result);
         
