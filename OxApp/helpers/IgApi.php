@@ -34,10 +34,28 @@ class IgApi
     
     public function getFeed($feedId)
     {
-        $result = $this->request('feed/user/' . $feedId . '/');
+        if (rand(0, 1) == 1) {
+            print_r($this->request('friendships/show/' . $feedId . '/'));
+            $result = $this->request('feed/user/' . $feedId . '/');
+            print_r($this->request('feed/user/' . $feedId . '/story/'));
+            print_r($this->request('feed/user/' . $feedId . '/info/'));
+        } elseif (rand(0, 1) == 0) {
+            print_r($this->request('friendships/show/' . $feedId . '/'));
+            print_r($this->request('feed/user/' . $feedId . '/story/'));
+            print_r($this->request('feed/user/' . $feedId . '/info/'));
+            $result = $this->request('feed/user/' . $feedId . '/');
+        } elseif (rand(1, 2) == 2) {
+            print_r($this->request('feed/user/' . $feedId . '/story/'));
+            print_r($this->request('feed/user/' . $feedId . '/info/'));
+            print_r($this->request('friendships/show/' . $feedId . '/'));
+            $result = $this->request('feed/user/' . $feedId . '/');
+        } else {
+            print_r($this->request('friendships/show/' . $feedId . '/'));
+            print_r($this->request('feed/user/' . $feedId . '/story/'));
+            $result = $this->request('feed/user/' . $feedId . '/');
+            print_r($this->request('feed/user/' . $feedId . '/info/'));
+        }
         print_r($result);
-        print_r($this->request('feed/user/' . $feedId . '/info/'));
-        print_r($this->request('feed/user/' . $feedId . '/story/'));
         
         // print_r($this->request('feed/user/' . $feedId . '/story/'));
         return $result;
@@ -65,8 +83,15 @@ class IgApi
             'user_id' => $followUserId
         ];
         $data = json_encode($data);
+        $result = $this->request('friendships/create/' . $followUserId . '/', $data);
+        $this->request('feed/user/' . $followUserId . '/');
         
-        return $this->request('friendships/create/' . $followUserId . '/', $data);
+        return $result;
+    }
+    
+    public function getRecentActivityAll()
+    {
+        return $this->request('news/inbox/?limited_activity=true&show_su=true');
     }
     
     public function login($guid, $phoneId, $device_id, $password)
@@ -118,6 +143,7 @@ class IgApi
         $resultLogin = $this->request('accounts/login/', $data);
         print_r($resultLogin);
         $this->accountId = $resultLogin[1]['logged_in_user']['pk'];
+        print_r($this->request('news/inbox/?activity_module=all'));
     }
     
     public function editProfile()
@@ -154,7 +180,7 @@ class IgApi
     
     public function edit($biography, $url, $phoneId, $firstName, $email)
     {
-     
+        
         $sync = $this->sync();
         print_r($sync);
         if (preg_match('#Set-Cookie: csrftoken=([^;]+)#', $sync[0], $token)) {
@@ -466,6 +492,7 @@ guage_picker'
     protected function request($method, $data = null, $file = null)
     {
         echo "Request: \n";
+        echo $method . "\n";
         print_r($data);
         echo "\n\nResult: \n";
         $ch = curl_init();

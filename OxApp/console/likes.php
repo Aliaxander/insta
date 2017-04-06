@@ -26,9 +26,7 @@ class Likes extends Command
      */
     protected function configure()
     {
-        $this
-            ->setName('test:likes')
-            ->setDescription('Cron jobs');
+        $this->setName('test:likes')->setDescription('Cron jobs');
     }
     
     /**
@@ -80,56 +78,7 @@ class Likes extends Command
                 Users::where(['id' => $user->id])->update(['csrftoken' => $tokenResult]);
             }
             //$api->login($user->guid, $user->phoneId, $user->deviceId, $user->password);
-            $accs = "3169362944
-3228861749
-3249007104
-3403621908
-3456083125
-3623456948
-3658631849
-4046748603
-4209380076
-4232680325
-4254957207
-4295081680
-4453741427
-4527910788
-4583846233
-4611040427
-4813138814
-4945840761
-4998519532
-2159562
-19202426
-28698960
-46036857
-204346026
-246980280
-644030140
-699721404
-1371768195
-1536139314
-2215783803
-2234078255
-3064844050
-3886325230
-4010683717
-4673512213
-4720219485
-4736130806
-4784429213
-4817066790
-4828963113
-4991762490
-4992022147
-4993478628
-5003393257
-5003805089
-5004031159
-5018779
-9173202
-19035856
-22792546
+            $accs = "22792546
 40901837
 179515140
 184419097
@@ -801,31 +750,42 @@ class Likes extends Command
 253677420
 256895735
 258842750";
+            $startMinRand = 5;//10
+            $startMaxRand = 10;//15
+            $stopMinRand = 10;//20
+            $stopMaxRand = 20;//40
             $accs = explode("\n", $accs);
             foreach ($accs as $acc) {
                 echo "Set acc $acc:\n";
+                if (rand(0, 20) == 10) {
+                    $api->getRecentActivityAll();
+                }
                 $result = $api->getFeed($acc);
                 $requestCou += 3;
+                if (rand(0, 30) == 10) {
+                    $api->getRecentActivityAll();
+                }
                 if (mt_rand(0, 1) == 1) {
                     if (isset($result[1]['items'])) {
                         $rows = $result[1]['items'];
                         $like1 = @$result[1]['items'][mt_rand(0, count($rows) - 1)]['id'];
                         $like2 = @$result[1]['items'][mt_rand(0, count($rows) - 1)]['id'];
-                        sleep(rand(10, 30));
+                        sleep(rand($startMinRand, $stopMinRand));
                         if (mt_rand(0, 10) === 9) {
                             print_r($api->follow($acc));
                             $followCou++;
                             $requestCou++;
                         }
                         if (mt_rand(0, 9) == 1) {
-                            sleep(mt_rand(20, 40));
+                            sleep(mt_rand($startMaxRand, $stopMaxRand));
                             if ($like1) {
                                 print_r($api->like($like1));
+                                $api->getFeed($acc);
                                 $likeCou++;
                                 $requestCou++;
                             }
-                            sleep(mt_rand(20, 40));
-    
+                            sleep(mt_rand($startMaxRand, $stopMaxRand));
+                            
                             if (mt_rand(0, 1) == 1 && $like2) {
                                 print_r($api->like($like2));
                                 $likeCou++;
@@ -834,11 +794,10 @@ class Likes extends Command
                         }
                     }
                     echo "Requests: $requestCou | Likes: $likeCou | Follows: $followCou\n";
-                    sleep(rand(10, 30));
+                    sleep(rand($startMinRand, $stopMinRand));
                 }
-                sleep(rand(5, 20));
+                sleep(rand($startMinRand, $stopMinRand));
             }
-           
             
         }
         
