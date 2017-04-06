@@ -21,6 +21,7 @@
         </div>
         <ul class="nav navbar-nav">
             <li><a href="/generateProfile">generate</a></li>
+            <li><a href="/testMacros">testMacros</a></li>
             <li><a href="/showProfile">show</a></li>
             <li><a href="/proxy">proxy</a></li>
             <li><a href="/users">users</a></li>
