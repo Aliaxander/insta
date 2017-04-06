@@ -1,5 +1,4 @@
 {% include "global/head.tpl.php" %}
-
 <div class="container">
     <div class="rows">
         <form>

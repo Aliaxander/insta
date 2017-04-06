@@ -20,11 +20,22 @@
             <a class="navbar-brand" href="/">InstaOxCpa</a>
         </div>
         <ul class="nav navbar-nav">
-            <li><a href="/generateProfile">generate</a></li>
-            <li><a href="/testMacros">testMacros</a></li>
-            <li><a href="/showProfile">show</a></li>
-            <li><a href="/proxy">proxy</a></li>
-            <li><a href="/users">users</a></li>
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Description profile <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    <li><a href="/generateProfile">Generate Profile</a></li>
+                    <li><a href="/testMacros">Test Template</a></li>
+                    <li><a href="/showProfile">Show</a></li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Proxy <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    <li><a href="/proxy">Proxy list</a></li>
+                    <li><a href="/addProxy">Proxy add</a></li>
+                </ul>
+            </li>
+            <li><a href="/users">Users</a></li>
         </ul>
     </div>
 </nav>

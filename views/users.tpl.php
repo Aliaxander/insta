@@ -26,7 +26,7 @@
         <tr>
             {% endif %}
             <td>{{ user.id }}</td>
-            <td>{{ user.userName }}</td>
+            <td><a href="https://instagram.com/{{ user.userName }}" target="_blank">{{ user.userName }}</a></td>
             <td>{{ user.firstName }}</td>
             <td>{{ user.email }}</td>
             <td>{{ user.password }}</td>
