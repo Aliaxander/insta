@@ -9,6 +9,8 @@
 namespace OxApp\controllers;
 
 use Ox\App;
+use Ox\View;
+use OxApp\models\Users;
 
 /**
  * Class UsersController
@@ -22,6 +24,7 @@ class UsersController extends App
      */
     public function get()
     {
-        echo "ok";
+        $users = Users::find();
+        return View::build("user", $users->rows);
     }
 }
