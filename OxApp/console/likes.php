@@ -750,10 +750,10 @@ class Likes extends Command
 253677420
 256895735
 258842750";
-            $startMinRand = 5;//10
-            $startMaxRand = 10;//15
-            $stopMinRand = 10;//20
-            $stopMaxRand = 20;//40
+            $startMinRand = 10;//10
+            $startMaxRand = 15;//15
+            $stopMinRand = 20;//20
+            $stopMaxRand = 40;//40
             $accs = explode("\n", $accs);
             foreach ($accs as $acc) {
                 echo "Set acc $acc:\n";
