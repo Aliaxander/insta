@@ -82,10 +82,10 @@ class Likes extends Command
             }
             //$api->login($user->guid, $user->phoneId, $user->deviceId, $user->password);
             
-            $startMinRand = rand(15, 20);//10
-            $startMaxRand = rand(20, 30);//15
-            $stopMinRand = rand(25, 40);//20
-            $stopMaxRand = rand(45, 65);//40
+            $startMinRand = rand(20, 30);//10
+            $startMaxRand = rand(25, 35);//15
+            $stopMinRand = rand(30, 50);//20
+            $stopMaxRand = rand(50, 65);//40
             $status = true;
             while ($status = true) {
                 $accRow = InstBase::limit([0 => 1])->find(['status' => 0]);
