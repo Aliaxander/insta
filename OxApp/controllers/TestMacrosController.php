@@ -18,11 +18,12 @@ class TestMacrosController extends App
     public function get()
     {
         $data = [];
+        $macros = '';
         if(!empty($this->request->query->get('macros'))) {
             $macros = $this->request->query->get('macros');
             $generator = new TextTemplateGenerator($macros);
             $data = $generator->generate(20);
         }
-        return View::build("testMacros", ['data' => $data]);
+        return View::build("testMacros", ['data' => $data, 'macros' => $macros]);
     }
 }
