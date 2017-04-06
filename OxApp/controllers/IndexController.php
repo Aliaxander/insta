@@ -9,9 +9,10 @@
 namespace OxApp\controllers;
 
 
+use Ox\App;
 use Ox\View;
 
-class IndexController
+class IndexController extends App
 {
     public function get()
     {
