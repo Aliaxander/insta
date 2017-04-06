@@ -42,6 +42,7 @@ class Likes extends Command
         $api = new IgApi();
         $users = Users::limit([0 => 1])->find(['login' => 1, 'ban' => 0, 'requests' => 0]);
         foreach ($users->rows as $user) {
+            print_r($user);
             $requestCou = $user->requests;
             $likeCou = $user->likes;
             $followCou = $user->follows;
@@ -122,7 +123,11 @@ class Likes extends Command
                             if ($like1) {
                                 InstBase::where(['id' => $accRow->rows[0]->id])->update(['likes' => round($accRow->rows[0]->likes + 1)]);
                                 print_r($api->like($like1));
-                                $api->getFeed($acc);
+                                $feed = $api->getFeed($acc);
+                                if (@$feed[1]['message'] === 'checkpoint_required') {
+                                    Users::where(['id' => $user->id])->update(['ban' => 1]);
+                                    die("Account banned");
+                                }
                                 $likeCou++;
                                 $requestCou++;
                             }
