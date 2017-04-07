@@ -9,7 +9,7 @@
 namespace OxApp\helpers;
 
 
-class FreedomReg
+class FreenomReg
 {
     /**
      * @param $domain

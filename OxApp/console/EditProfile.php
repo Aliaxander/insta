@@ -8,7 +8,7 @@
 
 namespace Acme\Console\Command;
 
-use OxApp\helpers\FreedomReg;
+use OxApp\helpers\FreenomReg;
 use OxApp\helpers\IgApi;
 use OxApp\models\ProfileGenerate;
 use OxApp\models\Users;
@@ -70,12 +70,14 @@ class EditProfile extends Command
             $url = mb_strtolower(str_replace('%username%', $word, $profiles->url));
             
             
-            $result = FreedomReg::freedomReg($url);
+            $result = FreenomReg::freedomReg($url);
             $p = xml_parser_create();
             xml_parse_into_struct($p, $result[1], $vals, $index);
             xml_parser_free($p);
-            $domain = $vals[2]['value'];
-            
+            $domain = mb_strtolower($vals[2]['value']);
+            if (rand(0, 1) == 1) {
+                $domain = "http://" . $domain;
+            }
             
             $profile = $api->edit($biography, $domain, $user->phoneId, $user->firstName,
                 $user->email);
