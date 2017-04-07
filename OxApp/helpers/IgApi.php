@@ -582,13 +582,11 @@ guage_picker'
             
             $data = $this->buildBody($bodies, $boundary);
             $headers = [
-                'X-IG-Capabilities: 3Ro=',
-                'X-IG-Connection-Type: WIFI',
+                'Proxy-Connection: keep-alive',
+                'Connection: keep-alive',
+                'Accept: */*',
                 'Content-Type: multipart/form-data; boundary=' . $boundary,
-                'Content-Length: ' . strlen($data),
                 'Accept-Language: en-US',
-                'Accept-Encoding: gzip, deflate',
-                'Connection: close',
             ];
             curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
         }
