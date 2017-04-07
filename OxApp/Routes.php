@@ -15,10 +15,14 @@ Router::addMiddlewareGroup('Json', array(
     'ToJson' => [],
 ));
 
+Router::rout('/')->app('Index')->save();
+//description
 Router::rout('/generateProfile')->app('GenerateProfile')->save();
 Router::rout('/showProfile')->app('ShowProfile')->save();
-Router::rout('/deleteProfile/:num=>id')->app('DeleteProfile')->save();
-Router::rout('/')->app('Index')->save();
-Router::rout('/proxy')->app('Proxy')->save();
-Router::rout('/users')->app('Users')->save();
 Router::rout('/testMacros')->app('TestMacros')->save();
+Router::rout('/deleteProfile/:num=>id')->app('DeleteProfile')->save();
+//proxy
+Router::rout('/proxy')->app('Proxy')->save();
+Router::rout('/addProxy')->app('AddProxy')->save();
+//users
+Router::rout('/users')->app('Users')->save();
