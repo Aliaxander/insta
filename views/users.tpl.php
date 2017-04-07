@@ -9,8 +9,8 @@
             <th>email</th>
             <th>password</th>
             <th>logIn</th>
-            <th>gender</th>
             <th>proxy</th>
+            <th>requests</th>
             <th>follows</th>
             <th>likes</th>
             <th>dateCreate</th>
@@ -31,8 +31,8 @@
             <td>{{ user.email }}</td>
             <td>{{ user.password }}</td>
             <td>{{ user.logIn }}</td>
-            <td>{{ user.gender }}</td>
             <td>{{ user.proxy }}</td>
+            <td>{{ user.requests }}</td>
             <td>{{ user.follows }}</td>
             <td>{{ user.likes }}</td>
             <td>{{ user.dateCreate }}</td>

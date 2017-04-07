@@ -1,4 +1,6 @@
 {% include "global/head.tpl.php" %}
+<div class="container"><a href="/addProxy" class="btn btn-success" role="button">Add</a></div>
+
 <table class="table">
     <thead>
     <tr>

@@ -44,4 +44,7 @@ crashlytics.properties
 crashlytics-build.properties
 fabric.properties
 
+/vendor/
+/.idea/
 errors.log
+composer.lock
