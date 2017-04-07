@@ -70,6 +70,11 @@ class EditProfile extends Command
             //            $profile = $api->edit($biography, $url, $user->phoneId, $user->firstName,
             //                $user->email);//dat1ng.cf/i-love-to-do-it
             //            print_r($profile);
+            
+            $dir = scandir('/home/photos2');
+            unset($dir[array_search('.', $dir)]);
+            unset($dir[array_search('..', $dir)]);
+            $dir = array_values($dir);
             $photo = '/home/photos2/' . $dir[rand(0, count($dir) - 1)];
             
             $api->uploadPhoto($photo);
