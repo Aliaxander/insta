@@ -45,6 +45,8 @@ class Likes extends Command
             print_r($user);
             $requestCou = $user->requests;
             $likeCou = $user->likes;
+            $hour = $user->hour + 1;
+            $day = $user->day + 1;
             $followCou = $user->follows;
             Users::where(['id' => $user->id])->update(['requests' => round($requestCou + 1)]);
             $api->proxy = $user->proxy;
@@ -82,10 +84,6 @@ class Likes extends Command
             }
             //$api->login($user->guid, $user->phoneId, $user->deviceId, $user->password);
             
-            $startMinRand = rand(15, 20);//10
-            $startMaxRand = rand(20, 30);//15
-            $stopMinRand = rand(25, 40);//20
-            $stopMaxRand = rand(45, 50);//40
             $status = true;
             while ($status = true) {
                 $accRow = InstBase::limit([0 => 1])->find(['status' => 0]);
@@ -101,57 +99,54 @@ class Likes extends Command
                 if (isset($result['1']['message']) && $result['1']['message'] === 'checkpoint_required') {
                     Users::where(['id' => $user->id])->update(['ban' => 1]);
                     die();
+                } elseif (isset($result['1']['message']) && $result['1']['message'] === 'Not authorized to view user') {
+                    sleep(rand(1, 5));
+                    print_r($api->follow($acc));
+                    InstBase::where(['id' => $accRow->rows[0]->id])->update(['follow' => round($accRow->rows[0]->follow + 1)]);
+                    
+                    $followCou++;
+                    $requestCou++;
+                } elseif (isset($result[1]['items'])) {
+                    sleep(rand(15, 20));
+                    $rows = $result[1]['items'];
+                    $like1 = @$result[1]['items'][mt_rand(0, count($rows) - 1)]['id'];
+                    if ($like1) {
+                        InstBase::where(['id' => $accRow->rows[0]->id])->update(['likes' => round($accRow->rows[0]->likes + 1)]);
+                        print_r($api->like($like1));
+                        sleep(rand(0, 3));
+                        $feed = $api->getFeed($acc);
+                        if (@$feed[1]['message'] === 'checkpoint_required') {
+                            Users::where(['id' => $user->id])->update(['ban' => 1]);
+                            die("Account banned");
+                        }
+                        $likeCou++;
+                        $requestCou++;
+                    }
                 }
                 $requestCou += 3;
                 if (rand(0, 30) == 10) {
                     $api->getRecentActivityAll();
                 }
-                if (mt_rand(0, 1) == 1) {
-                    if (isset($result[1]['items'])) {
-                        $rows = $result[1]['items'];
-                        $like1 = @$result[1]['items'][mt_rand(0, count($rows) - 1)]['id'];
-                        $like2 = @$result[1]['items'][mt_rand(0, count($rows) - 1)]['id'];
-                        sleep(rand($startMinRand, $stopMinRand));
-                        if (mt_rand(0, 10) === 9) {
-                            print_r($api->follow($acc));
-                            InstBase::where(['id' => $accRow->rows[0]->id])->update(['follow' => round($accRow->rows[0]->follow + 1)]);
-                            
-                            $followCou++;
-                            $requestCou++;
-                        }
-                        if (mt_rand(0, 9) == 1) {
-                            sleep(mt_rand($startMaxRand, $stopMaxRand));
-                            if ($like1) {
-                                InstBase::where(['id' => $accRow->rows[0]->id])->update(['likes' => round($accRow->rows[0]->likes + 1)]);
-                                print_r($api->like($like1));
-                                $feed = $api->getFeed($acc);
-                                if (@$feed[1]['message'] === 'checkpoint_required') {
-                                    Users::where(['id' => $user->id])->update(['ban' => 1]);
-                                    die("Account banned");
-                                }
-                                $likeCou++;
-                                $requestCou++;
-                            }
-                            sleep(mt_rand($startMaxRand, $stopMaxRand));
-                            
-                            if (mt_rand(0, 1) == 1 && $like2) {
-                                InstBase::where(['id' => $accRow->rows[0]->id])->update(['likes' => round($accRow->rows[0]->likes + 1)]);
-                                print_r($api->like($like2));
-                                $likeCou++;
-                                $requestCou++;
-                            }
-                        }
-                    }
-                    
-                    Users::where(['id' => $user->id])->update([
-                        'requests' => $requestCou,
-                        'follows' => $followCou,
-                        'likes' => $likeCou
-                    ]);
-                    echo "Requests: $requestCou | Likes: $likeCou | Follows: $followCou\n";
-                    sleep(rand($startMinRand, $stopMinRand));
+                Users::where(['id' => $user->id])->update([
+                    'requests' => $requestCou,
+                    'follows' => $followCou,
+                    'likes' => $likeCou
+                ]);
+                echo "Requests: $requestCou | Likes: $likeCou | Follows: $followCou\n";
+                $folLikSum = round($likeCou + $followCou);
+                
+                $resultLikesForTimeout = $folLikSum / $hour;
+                if ($resultLikesForTimeout > 50 && $resultLikesForTimeout < 60) {
+                    Users::where(['id' => $user->id])->update(['hour' => $hour]);
+                    sleep(rand(3500, 4600));
                 }
-                sleep(rand($startMinRand, $stopMaxRand));
+                
+                $resultLikesForTimeout = $folLikSum / $hour;
+                if ($resultLikesForTimeout > 50 && $resultLikesForTimeout < 60) {
+                    Users::where(['id' => $user->id])->update(['hour' => $hour]);
+                    sleep(rand(3500, 4600));
+                }
+                sleep(rand(20, 30));
             }
         }
         
