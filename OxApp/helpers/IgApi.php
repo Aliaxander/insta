@@ -177,6 +177,13 @@ class IgApi
         }
     }
     
+    public function uploadPhoto($photo)
+    {
+        if (!empty($photo)) {
+            $resultEdit = $this->request('upload/photo/', null, null, $photo);
+            print_r($resultEdit);
+        }
+    }
     
     public function edit($biography, $url, $phoneId, $firstName, $email)
     {
@@ -489,7 +496,7 @@ guage_picker'
      *
      * @return array
      */
-    protected function request($method, $data = null, $file = null)
+    protected function request($method, $data = null, $file = null, $profilePhoto = null)
     {
         echo "Request: \n";
         echo $method . "\n";
@@ -538,6 +545,52 @@ guage_picker'
                 'Accept-Language: en-en',
             ];
             curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        } elseif ($profilePhoto) {
+            $boundary = $this->guid;
+            $bodies = [
+                [
+                    'type' => 'form-data',
+                    'name' => 'upload_id',
+                    'data' => number_format(round(microtime(true) * 1000), 0, '', ''),
+                ],
+                [
+                    'type' => 'form-data',
+                    'name' => '_uuid',
+                    'data' => $boundary,
+                ],
+                [
+                    'type' => 'form-data',
+                    'name' => '_csrftoken',
+                    'data' => $this->csrftoken,
+                ],
+                [
+                    'type' => 'form-data',
+                    'name' => 'image_compression',
+                    'data' => '{"lib_name":"jt","lib_version":"1.3.0","quality":"87"}',
+                ],
+                [
+                    'type' => 'form-data',
+                    'name' => 'photo',
+                    'data' => file_get_contents($profilePhoto),
+                    'filename' => 'pending_media_' . number_format(round(microtime(true) * 1000), 0, '', '') . '.jpg',
+                    'headers' => [
+                        'Content-Transfer-Encoding: binary',
+                        'Content-Type: application/octet-stream',
+                    ],
+                ],
+            ];
+            
+            $data = $this->buildBody($bodies, $boundary);
+            $headers = [
+                'X-IG-Capabilities: 3Ro=',
+                'X-IG-Connection-Type: WIFI',
+                'Content-Type: multipart/form-data; boundary=' . $boundary,
+                'Content-Length: ' . strlen($data),
+                'Accept-Language: en-US',
+                'Accept-Encoding: gzip, deflate',
+                'Connection: close',
+            ];
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
         }
         //                            $headers=[
         //                                "X-IG-Connection-Type: WIFI",
@@ -571,6 +624,7 @@ guage_picker'
         
         return [$header, json_decode($body, true)];
     }
+    
     
     /**
      * @param $bodies
