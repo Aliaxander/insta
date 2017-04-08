@@ -78,14 +78,15 @@ class EditProfile extends Command
             if (rand(0, 1) == 1) {
                 $domain = "http://" . $domain;
             }
-            $tokenResult = '';
+            $profileResult = '';
             $i = 0;
-            while ($tokenResult === '') {
-                $profile = $api->edit($biography, $domain, $user->phoneId, $user->firstName,
+            while ($profileResult === '') {
+                //$biography
+                $profile = $api->edit('', $domain, $user->phoneId, $user->firstName,
                     $user->email);
-                $tokenResult = $profile[1];
+                $profileResult = $profile[1];
                 if ($i == 3) {
-                    $tokenResult = false;
+                    $profileResult = false;
                 }
                 $i++;
             }
