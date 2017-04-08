@@ -142,7 +142,7 @@ class Likes extends Command
                     echo "Sleep";
                     sleep(rand(3500, 4600));
                 }
-                sleep(rand(20, 30));
+                sleep(rand(20, 50));
             }
         }
         
