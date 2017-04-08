@@ -107,21 +107,21 @@ class Likes extends Command
                     $followCou++;
                     $requestCou++;
                 } elseif (isset($result[1]['items'])) {
-                    sleep(rand(15, 20));
-                    $rows = $result[1]['items'];
-                    $like1 = @$result[1]['items'][mt_rand(0, count($rows) - 1)]['id'];
-                    if ($like1) {
-                        InstBase::where(['id' => $accRow->rows[0]->id])->update(['likes' => round($accRow->rows[0]->likes + 1)]);
-                        print_r($api->like($like1));
-                        sleep(rand(0, 3));
-                        $feed = $api->getFeed($acc);
-                        if (@$feed[1]['message'] === 'checkpoint_required') {
-                            Users::where(['id' => $user->id])->update(['ban' => 1]);
-                            die("Account banned");
-                        }
-                        $likeCou++;
-                        $requestCou++;
-                    }
+//                    sleep(rand(15, 20));
+//                    $rows = $result[1]['items'];
+//                    $like1 = @$result[1]['items'][mt_rand(0, count($rows) - 1)]['id'];
+//                    if ($like1) {
+//                        InstBase::where(['id' => $accRow->rows[0]->id])->update(['likes' => round($accRow->rows[0]->likes + 1)]);
+//                        print_r($api->like($like1));
+//                        sleep(rand(0, 3));
+//                        $feed = $api->getFeed($acc);
+//                        if (@$feed[1]['message'] === 'checkpoint_required') {
+//                            Users::where(['id' => $user->id])->update(['ban' => 1]);
+//                            die("Account banned");
+//                        }
+//                        $likeCou++;
+//                        $requestCou++;
+//                    }
                 }
                 $requestCou += 3;
                 if (rand(0, 30) == 10) {
@@ -142,7 +142,7 @@ class Likes extends Command
                     echo "Sleep";
                     sleep(rand(3500, 4600));
                 }
-                sleep(rand(20, 50));
+                sleep(rand(1, 3));
             }
         }
         
