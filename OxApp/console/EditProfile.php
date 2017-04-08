@@ -59,7 +59,7 @@ class EditProfile extends Command
             //SetPhoto:
             $api->changeProfilePicture($photo);
             unlink($photo);
-            sleep(rand(3, 10));
+           
             
             $profiles = ProfileGenerate::limit([0 => 1])->find(['status' => 0])->rows[0];
             ProfileGenerate::where(['id' => $profiles->id])->update(['status' => 1]);
