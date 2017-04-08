@@ -113,13 +113,13 @@ class IgApi
             }
             if ($sync[1]['message'] === 'checkpoint_required') {
                 Users::where(['guid' => $guid, 'phoneId' => $phoneId, 'deviceId' => $device_id])->update(['ban' => 1]);
-                die("Account banned");
+                exit("Account banned");
             }
             
             $i++;
         }
         if ($tokenResult == false || $tokenResult == '') {
-            die('empty token');
+            exit('empty token');
         }
         Users::where([
             'guid' => $guid,
@@ -200,7 +200,7 @@ class IgApi
                 $tokenResult = $token[1];
             }
             if (empty($tokenResult)) {
-                die("no token");
+                exit("no token");
             }
         }
         $this->csrftoken = $tokenResult;
