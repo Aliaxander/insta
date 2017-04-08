@@ -299,7 +299,7 @@ class IgApi
         
         print_r($this->checkEmail($email, $qe_id, $waterfall_id));
         
-        sleep(rand(1, 2));
+        sleep(rand(3, 5));
         $singTokenResult = '';
         $i = 0;
         while ($singTokenResult === '') {
@@ -322,7 +322,7 @@ class IgApi
         sleep(rand(3, 6));
         print_r($this->usernameSuggestions($usernameTmp4, $email, $waterfall_id));
         
-        sleep(rand(1, 3));
+        sleep(rand(3, 5));
         $singTokenResult = '';
         $i = 0;
         while ($singTokenResult === '') {
@@ -342,17 +342,17 @@ class IgApi
         }
         $this->csrftoken = $singTokenResult;
         
-        sleep(rand(1, 3));
+        sleep(rand(2, 5));
         print_r($this->usernameSuggestions($usernameTmp3, $email, $waterfall_id));
         
         sleep(rand(3, 7));
         print_r($this->usernameSuggestions($usernameTmp2, $email, $waterfall_id));
         
         if (rand(0, 1) == 1) {
-            sleep(rand(1, 4));
+            sleep(rand(2, 4));
             print_r($this->usernameSuggestions($usernameTmp1, $email, $waterfall_id));
         }
-        sleep(rand(1, 4));
+        sleep(rand(2, 5));
         $finalName = $this->usernameSuggestions($this->username, $email, $waterfall_id);
         print_r($finalName);
         //$this->username = $finalName[1]['suggestions'][rand(0, 11)];
@@ -360,7 +360,7 @@ class IgApi
         print_r($finalName);
         echo "SET name: " . $this->username . "\n";
         
-        sleep(rand(1, 2));
+        sleep(rand(1, 6));
         //register:
         $create = $this->createAccount($email, $waterfall_id);
         if (empty($create[1])) {
