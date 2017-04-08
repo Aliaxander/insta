@@ -326,9 +326,10 @@ class IgApi
         }
         $this->csrftoken = $singTokenResult;
         
-        sleep(rand(3, 6));
-        print_r($this->usernameSuggestions($usernameTmp4, $email, $waterfall_id));
-        
+        if(rand(0,1)==1) {
+            sleep(rand(3, 6));
+            print_r($this->usernameSuggestions($usernameTmp4, $email, $waterfall_id));
+        }
         sleep(rand(3, 5));
         $singTokenResult = '';
         $i = 0;
@@ -348,13 +349,14 @@ class IgApi
             die('empty sigKey token');
         }
         $this->csrftoken = $singTokenResult;
-        
-        sleep(rand(2, 5));
-        print_r($this->usernameSuggestions($usernameTmp3, $email, $waterfall_id));
-        
-        sleep(rand(3, 7));
-        print_r($this->usernameSuggestions($usernameTmp2, $email, $waterfall_id));
-        
+        if(rand(0,1)==1) {
+            sleep(rand(2, 5));
+            print_r($this->usernameSuggestions($usernameTmp3, $email, $waterfall_id));
+        }
+        if (rand(0, 1) == 1) {
+            sleep(rand(3, 7));
+            print_r($this->usernameSuggestions($usernameTmp2, $email, $waterfall_id));
+        }
         if (rand(0, 1) == 1) {
             sleep(rand(2, 4));
             print_r($this->usernameSuggestions($usernameTmp1, $email, $waterfall_id));
