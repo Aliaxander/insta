@@ -100,28 +100,28 @@ class Likes extends Command
                     Users::where(['id' => $user->id])->update(['ban' => 1]);
                     die();
                 } elseif (isset($result['1']['message']) && $result['1']['message'] === 'Not authorized to view user') {
-                    sleep(rand(1, 5));
-                    print_r($api->follow($acc));
-                    InstBase::where(['id' => $accRow->rows[0]->id])->update(['follow' => round($accRow->rows[0]->follow + 1)]);
-                    
-                    $followCou++;
-                    $requestCou++;
+//                    sleep(rand(1, 5));
+//                    print_r($api->follow($acc));
+//                    InstBase::where(['id' => $accRow->rows[0]->id])->update(['follow' => round($accRow->rows[0]->follow + 1)]);
+//
+//                    $followCou++;
+//                    $requestCou++;
                 } elseif (isset($result[1]['items'])) {
-//                    sleep(rand(15, 20));
-//                    $rows = $result[1]['items'];
-//                    $like1 = @$result[1]['items'][mt_rand(0, count($rows) - 1)]['id'];
-//                    if ($like1) {
-//                        InstBase::where(['id' => $accRow->rows[0]->id])->update(['likes' => round($accRow->rows[0]->likes + 1)]);
-//                        print_r($api->like($like1));
-//                        sleep(rand(0, 3));
-//                        $feed = $api->getFeed($acc);
-//                        if (@$feed[1]['message'] === 'checkpoint_required') {
-//                            Users::where(['id' => $user->id])->update(['ban' => 1]);
-//                            die("Account banned");
-//                        }
-//                        $likeCou++;
-//                        $requestCou++;
-//                    }
+                    sleep(rand(15, 20));
+                    $rows = $result[1]['items'];
+                    $like1 = @$result[1]['items'][mt_rand(0, count($rows) - 1)]['id'];
+                    if ($like1) {
+                        InstBase::where(['id' => $accRow->rows[0]->id])->update(['likes' => round($accRow->rows[0]->likes + 1)]);
+                        print_r($api->like($like1));
+                        sleep(rand(0, 3));
+                        $feed = $api->getFeed($acc);
+                        if (@$feed[1]['message'] === 'checkpoint_required') {
+                            Users::where(['id' => $user->id])->update(['ban' => 1]);
+                            die("Account banned");
+                        }
+                        $likeCou++;
+                        $requestCou++;
+                    }
                 }
                 $requestCou += 3;
                 if (rand(0, 30) == 10) {
