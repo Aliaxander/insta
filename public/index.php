@@ -28,10 +28,10 @@ header('Access-Control-Allow-Methods: POST, GET, DELETE, PUT, OPTIONS');
 header('Access-Control-Allow-Origin: *');
 $loader = require __DIR__ . '/../vendor/autoload.php';
 require(__DIR__ . "/../config.php");
-//require(__DIR__ . "/../OxApp/Routes.php");
-for ($i = 29999; $i < 30201; $i++) {
-    Proxy::add(['proxy' => '149.202.202.135:' . $i]);
-}
+require(__DIR__ . "/../OxApp/Routes.php");
+//for ($i = 29999; $i < 30201; $i++) {
+//    Proxy::add(['proxy' => '149.202.202.135:' . $i]);
+//}
 
 //print_r(FreenomReg::regNewDomain("dssdasddsfdsf.tk","sdfsd"));
 //
