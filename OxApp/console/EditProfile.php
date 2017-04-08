@@ -59,9 +59,9 @@ class EditProfile extends Command
             //SetPhoto:
             $api->changeProfilePicture($photo);
             unlink($photo);
-           
             
-            $profiles = ProfileGenerate::limit([0 => 1])->find(['status' => 0])->rows[0];
+            
+            $profiles = ProfileGenerate::groupBy('description')->limit([0 => 1])->find(['status' => 0])->rows[0];
             ProfileGenerate::where(['id' => $profiles->id])->update(['status' => 1]);
             $word = [$user->userName, $user->firstName, mt_rand(10000, 99999)];
             $word = $word[mt_rand(0, 2)];
