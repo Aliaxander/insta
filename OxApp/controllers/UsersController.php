@@ -24,7 +24,7 @@ class UsersController extends App
      */
     public function get()
     {
-        $users = Users::find();
+        $users = Users::orderBy(["id" => 'desc'])->find();
         return View::build('users', ['users' => $users->rows]);
     }
 }
