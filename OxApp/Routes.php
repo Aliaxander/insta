@@ -21,6 +21,10 @@ Router::rout('/generateProfile')->app('GenerateProfile')->save();
 Router::rout('/showProfile')->app('ShowProfile')->save();
 Router::rout('/testMacros')->app('TestMacros')->save();
 Router::rout('/deleteProfile/:num=>id')->app('DeleteProfile')->save();
+
+//users
+Router::rout('/deleteUsers')->app('DeleteUsers')->save();
+
 //proxy
 Router::rout('/proxy')->app('Proxy')->save();
 Router::rout('/addProxy')->app('AddProxy')->save();

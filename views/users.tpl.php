@@ -27,7 +27,7 @@
             {% else %}
         <tr>
             {% endif %}
-            <td><input type="checkbox" name="users[]" value="{{ user.id }}"></td>
+            <td><input type="checkbox" value="{{ user.id }}"></td>
             <td>{{ user.id }}</td>
             <td><a href="https://instagram.com/{{ user.userName }}" target="_blank">{{ user.userName }}</a></td>
             <td>{{ user.firstName }}</td>
@@ -39,10 +39,29 @@
             <td>{{ user.follows }}</td>
             <td>{{ user.likes }}</td>
             <td>{{ user.dateCreate }}</td>
-            <td><a href="/deleteUsers/{{ user.id }}"><span class="glyphicon glyphicon-trash"></a></span></td>
+            <td><a href="/deleteUsers?id={{ user.id }}"><span class="glyphicon glyphicon-trash"></a></span></td>
         </tr>
         {% endfor %}
         </tbody>
     </table>
+    <button class="btn btn-danger" onclick="del()">Delete</button>
+    <ul class="pagination pull-right" style="margin: 0;">
+        {% for i in range(1, totalPages) %}
+        <li{% if i==setPage %} class="active" {% endif %}><a
+                href="/users?page={{ i }}">{{ i }} {% if i==setPage %}<span class="sr-only">(current)</span>{% endif %}</a></li>
+        {% endfor %}
+    </ul>
 </div>
+<script>
+    function del() {
+        var checkboxes = $('input[type=checkbox]:checked');
+        var url = "/deleteUsers?id=";
+        for (var i=0; i < checkboxes.length; i++){
+            url = url + checkboxes[i].value + ",";
+        }
+        $.get( url );
+        location.reload();
+    }
+
+</script>
 {% include "global/footer.tpl.php" %}
