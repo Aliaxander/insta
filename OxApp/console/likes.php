@@ -54,7 +54,8 @@ class Likes extends Command
             $api->accountId = $user->accountId;
             $api->guid = $user->guid;
             $api->csrftoken = $user->csrftoken;
-            
+            $api->login($user->guid, $user->phoneId, $user->deviceId, $user->password);
+    
             if (empty($user->csrftoken)) {
                 $tokenResult = '';
                 $i = 0;
