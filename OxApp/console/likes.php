@@ -101,7 +101,7 @@ class Likes extends Command
                     Users::where(['id' => $user->id])->update(['ban' => 1]);
                     die();
                 } elseif (isset($result['1']['message']) && $result['1']['message'] === 'Not authorized to view user') {
-                    sleep(rand(1, 5));
+                    sleep(rand(5, 20));
                     print_r($api->follow($acc));
                     InstBase::where(['id' => $accRow->rows[0]->id])->update(['follow' => round($accRow->rows[0]->follow + 1)]);
 
@@ -109,7 +109,7 @@ class Likes extends Command
                     $requestCou++;
                     $requestCou+=2;
                 } elseif (isset($result[1]['items'])) {
-                    sleep(rand(15, 20));
+                    sleep(rand(5, 20));
                     $rows = $result[1]['items'];
                     $like1 = @$result[1]['items'][mt_rand(0, count($rows) - 1)]['id'];
                     if ($like1) {
@@ -144,7 +144,7 @@ class Likes extends Command
                     echo "Sleep";
                     sleep(rand(3500, 4600));
                 }
-                sleep(rand(10, 20));
+                sleep(rand(20, 40));
             }
         }
         
