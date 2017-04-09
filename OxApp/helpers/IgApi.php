@@ -325,9 +325,12 @@ class IgApi
         $this->csrftoken = $tokenResult;
         
         sleep(rand(5, 8));
+        $checkEmail = $this->checkEmail($email, $qe_id, $waterfall_id);
         
-        print_r($this->checkEmail($email, $qe_id, $waterfall_id));
-        
+        print_r($checkEmail);
+        if (isset($checkEmail[1]['message']) && $checkEmail[1]['message'] == 'Sorry, an error occured') {
+            die('Error. Ip ban?');
+        }
         sleep(rand(3, 5));
         $singTokenResult = '';
         $i = 0;
