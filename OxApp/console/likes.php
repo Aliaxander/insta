@@ -100,7 +100,9 @@ class Likes extends Command
                         $api->getRecentActivityAll();
                     }
                     $result = $api->getFeed($acc);
-                    if (isset($result['1']['message']) && $result['1']['message'] === 'checkpoint_required') {
+                    if (isset($result['1']['message']) && $result['1']['message'] === 'login_required') {
+                        $api->login($user->guid, $user->phoneId, $user->deviceId, $user->password);
+                    } elseif (isset($result['1']['message']) && $result['1']['message'] === 'checkpoint_required') {
                         Users::where(['id' => $user->id])->update(['ban' => 1]);
                         die();
                     } elseif (isset($result['1']['message']) && $result['1']['message'] === 'Not authorized to view user') {
