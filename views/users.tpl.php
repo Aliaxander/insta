@@ -4,6 +4,7 @@
         <thead>
         <tr>
             <th>#</th>
+            <th>id</th>
             <th>userName</th>
             <th>firstName</th>
             <th>email</th>
@@ -14,6 +15,7 @@
             <th>follows</th>
             <th>likes</th>
             <th>dateCreate</th>
+            <th>options</th>
         </tr>
         </thead>
         <tbody>
@@ -25,6 +27,7 @@
             {% else %}
         <tr>
             {% endif %}
+            <td><input type="checkbox" name="users[]" value="{{ user.id }}"></td>
             <td>{{ user.id }}</td>
             <td><a href="https://instagram.com/{{ user.userName }}" target="_blank">{{ user.userName }}</a></td>
             <td>{{ user.firstName }}</td>
@@ -36,6 +39,7 @@
             <td>{{ user.follows }}</td>
             <td>{{ user.likes }}</td>
             <td>{{ user.dateCreate }}</td>
+            <td><a href="/deleteUsers/{{ user.id }}"><span class="glyphicon glyphicon-trash"></a></span></td>
         </tr>
         {% endfor %}
         </tbody>
