@@ -68,21 +68,21 @@ class EditProfile extends Command
             $word = str_replace([' ', '.'], '', $word);
             $biography = $profiles->description;
             $url = mb_strtolower(str_replace('%username%', $word, $profiles->url));
-//
-//
-//            $result = FreenomReg::freedomReg($url);
-//            $p = xml_parser_create();
-//            xml_parse_into_struct($p, $result[1], $vals, $index);
-//            xml_parser_free($p);
-//            $domain = mb_strtolower($vals[2]['value']);
-//            if (rand(0, 1) == 1) {
-//                $domain = "http://" . $domain;
-//            }
+            //
+            //
+            $result = FreenomReg::freedomReg($url);
+            $p = xml_parser_create();
+            xml_parse_into_struct($p, $result[1], $vals, $index);
+            xml_parser_free($p);
+            $domain = mb_strtolower($vals[2]['value']);
+            if (rand(0, 1) == 1) {
+                $domain = "http://" . $domain;
+            }
             $profileResult = '';
             $i = 0;
             while ($profileResult === '') {
                 //$biography
-                $profile = $api->edit($biography, '', $user->phoneId, $user->firstName,
+                $profile = $api->edit($biography . ' ' . $domain, '', $user->phoneId, $user->firstName,
                     $user->email);
                 $profileResult = $profile[1];
                 if ($i == 3) {

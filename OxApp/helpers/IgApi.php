@@ -168,7 +168,7 @@ class IgApi
             'email' => 'glover.jayden46938@klocko.com',
             'biography' => '!! Yeee. Power by OxGroup !!',
             'gender' => 2,
-            'is_private' => true
+           // 'is_private' => true
         ];
         $data = json_encode($data);
         $resultEdit = $this->request('accounts/edit_profile/', $data);
