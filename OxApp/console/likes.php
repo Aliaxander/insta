@@ -54,7 +54,7 @@ class Likes extends Command
             $api->accountId = $user->accountId;
             $api->guid = $user->guid;
             $api->csrftoken = $user->csrftoken;
-            $api->login($user->guid, $user->phoneId, $user->deviceId, $user->password);
+            //$api->login($user->guid, $user->phoneId, $user->deviceId, $user->password);
     
             if (empty($user->csrftoken)) {
                 $tokenResult = '';
@@ -144,7 +144,7 @@ class Likes extends Command
                     echo "Sleep";
                     sleep(rand(3500, 4600));
                 }
-                sleep(rand(1, 3));
+                sleep(rand(10, 20));
             }
         }
         
