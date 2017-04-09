@@ -106,6 +106,7 @@ class Likes extends Command
 
                     $followCou++;
                     $requestCou++;
+                    $requestCou+=2;
                 } elseif (isset($result[1]['items'])) {
                     sleep(rand(15, 20));
                     $rows = $result[1]['items'];
@@ -122,8 +123,8 @@ class Likes extends Command
                         $likeCou++;
                         $requestCou++;
                     }
+                    $requestCou+=4;
                 }
-                $requestCou += 3;
                 if (rand(0, 30) == 10) {
                     $api->getRecentActivityAll();
                 }
