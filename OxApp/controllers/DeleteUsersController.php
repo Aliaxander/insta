@@ -23,6 +23,6 @@ class DeleteUsersController extends App
             }
         }
 
-        header("Location: /showProfile");
+        header("Location: /users");
     }
 }
