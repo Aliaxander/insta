@@ -30,9 +30,9 @@ class IgApi
     public function __construct()
     {
         $device = new Device('9.7.0', 'en_US');
-         $this->userAgent = UserAgent::buildUserAgent('9.7.0', 'en_US', $device);
+        $this->userAgent = UserAgent::buildUserAgent('9.7.0', 'en_US', $device);
         //$device = new Device('10.15.0', 'en_US');
-         //$this->userAgent = UserAgent::buildUserAgent('10.15.0', 'en_US', $device);
+        //$this->userAgent = UserAgent::buildUserAgent('10.15.0', 'en_US', $device);
     }
     
     public function getFeed($feedId)
@@ -168,7 +168,7 @@ class IgApi
             'email' => 'glover.jayden46938@klocko.com',
             'biography' => '!! Yeee. Power by OxGroup !!',
             'gender' => 2,
-           // 'is_private' => true
+            // 'is_private' => true
         ];
         $data = json_encode($data);
         $resultEdit = $this->request('accounts/edit_profile/', $data);
@@ -234,9 +234,15 @@ class IgApi
     {
         
         $faker = Factory::create();
-        $uname = $faker->userName;
+        if (mt_rand(0, 1) == 1) {
+            $uname = $faker->userName;
+        } elseif (mt_rand(0, 1) == 0) {
+            $uname = $faker->firstNameFemale . rand(1950, 2017);
+        } else {
+            $uname = $faker->lastName . rand(1950, 2017);
+        }
         if (rand(0, 1) == 1) {
-            $this->username = str_replace(".", "", $faker->userName);
+            $this->username = str_replace(".", "", $uname);
         } else {
             $this->username = $uname;
         }
@@ -249,12 +255,28 @@ class IgApi
         if (rand(0, 1) == 1) {
             $this->name .= " " . $faker->lastName;
         }
+        $domainMail = [
+            'mail.com',
+            'gmail.com',
+            'hotmail.com',
+            'icloud.com',
+            'yahoo.com',
+            'lycos.com',
+            'aol.com',
+            'gmx.com'
+        ];
         //$email = $faker->email;
-        if (rand(0, 3) > 0) {
+        if (mt_rand(0, 2) == 0) {
             $email = explode("@", $faker->email);
-            $email = implode(rand(0, 99999) . "@", $email);
-        } elseif (rand(0, 1) == 0) {
-            $email = str_replace(" ", ".", $this->name) . rand(0, 1999) . "@gmail.com";
+            $email = implode(rand(1940, 2017) . "@", $email);
+        } elseif (mt_rand(0, 2) == 0) {
+            $email = str_replace(" ", ".", $this->name) . mt_rand(0, 1999) . "@gmail.com";
+        } elseif (mt_rand(0, 1) == 0) {
+            $email = str_replace(" ", ".", $this->username) . mt_rand(0, 1999) . "@" . $domainMail[mt_rand(0,
+                    count($domainMail) - 1)];
+        } elseif (mt_rand(0, 1) == 0) {
+            $email = str_replace(" ", ".", $this->name) . mt_rand(0, 1999) . "@" . $domainMail[mt_rand(0,
+                    count($domainMail) - 1)];
         } else {
             $email = $uname . "@gmail.com";
         }
@@ -326,7 +348,7 @@ class IgApi
         }
         $this->csrftoken = $singTokenResult;
         
-        if(rand(0,1)==1) {
+        if (rand(0, 1) == 1) {
             sleep(rand(3, 6));
             print_r($this->usernameSuggestions($usernameTmp4, $email, $waterfall_id));
         }
@@ -349,7 +371,7 @@ class IgApi
             die('empty sigKey token');
         }
         $this->csrftoken = $singTokenResult;
-        if(rand(0,1)==1) {
+        if (rand(0, 1) == 1) {
             sleep(rand(2, 5));
             print_r($this->usernameSuggestions($usernameTmp3, $email, $waterfall_id));
         }
