@@ -39,10 +39,16 @@
             <td>{{ user.follows }}</td>
             <td>{{ user.likes }}</td>
             <td>{{ user.dateCreate }}</td>
-            <td><a href="/deleteUsers/{{ user.id }}"><span class="glyphicon glyphicon-trash"></a></span></td>
+            <td><a href="/deleteUsers?id={{ user.id }}"><span class="glyphicon glyphicon-trash"></a></span></td>
         </tr>
         {% endfor %}
         </tbody>
     </table>
+    <ul class="pagination pull-right" style="margin: 0;">
+        {% for i in range(1, totalPages) %}
+        <li{% if i==setPage %} class="disabled"{% endif %}><a
+                href="/users?page={{ i }}">{{ i }}</a></li>
+        {% endfor %}
+    </ul>
 </div>
 {% include "global/footer.tpl.php" %}
