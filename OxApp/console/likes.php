@@ -41,6 +41,9 @@ class Likes extends Command
         require(__DIR__ . "/../../config.php");
         $api = new IgApi();
         $users = Users::orderBy(["id" => 'desc'])->limit([0 => 1])->find(['login' => 1, 'ban' => 0, 'requests' => 0]);
+        if ($users->rows == 0) {
+            die('no job');
+        }
         foreach ($users->rows as $user) {
             print_r($user);
             $requestCou = $user->requests;
@@ -97,19 +100,20 @@ class Likes extends Command
                         $api->getRecentActivityAll();
                     }
                     $result = $api->getFeed($acc);
-                    if (isset($result['1']['message']) && $result['1']['message'] === 'checkpoint_required') {
+                    if (isset($result['1']['message']) && $result['1']['message'] === 'login_required') {
+                        $api->login($user->guid, $user->phoneId, $user->deviceId, $user->password);
+                    } elseif (isset($result['1']['message']) && $result['1']['message'] === 'checkpoint_required') {
                         Users::where(['id' => $user->id])->update(['ban' => 1]);
                         die();
                     } elseif (isset($result['1']['message']) && $result['1']['message'] === 'Not authorized to view user') {
-                        sleep(rand(5, 20));
+                        sleep(rand(10, 20));
                         print_r($api->follow($acc));
                         InstBase::where(['id' => $accRow->rows[0]->id])->update(['follow' => round($accRow->rows[0]->follow + 1)]);
                         
                         $followCou++;
-                        $requestCou++;
                         $requestCou += 2;
                     } elseif (isset($result[1]['items'])) {
-                        sleep(rand(5, 20));
+                        sleep(rand(10, 20));
                         $rows = $result[1]['items'];
                         $like1 = @$result[1]['items'][mt_rand(0, count($rows) - 1)]['id'];
                         if ($like1) {
@@ -122,9 +126,8 @@ class Likes extends Command
                                 die("Account banned");
                             }
                             $likeCou++;
-                            $requestCou++;
+                            $requestCou += 4;
                         }
-                        $requestCou += 4;
                     }
                     if (rand(0, 30) == 10) {
                         $api->getRecentActivityAll();
@@ -138,13 +141,13 @@ class Likes extends Command
                     $folLikSum = round($likeCou + $followCou);
                     
                     $resultLikesForTimeout = $folLikSum / $hour;
-                    if ($resultLikesForTimeout > 50 && $resultLikesForTimeout < 60) {
+                    if ($resultLikesForTimeout > 40 && $resultLikesForTimeout < 50) {
                         $hour += 1;
                         Users::where(['id' => $user->id])->update(['hour' => $hour]);
                         echo "Sleep";
                         sleep(rand(3500, 4600));
                     }
-                    sleep(rand(20, 40));
+                    sleep(rand(40, 80));
                 }
             }
         }
