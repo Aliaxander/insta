@@ -41,6 +41,9 @@ class Likes extends Command
         require(__DIR__ . "/../../config.php");
         $api = new IgApi();
         $users = Users::orderBy(["id" => 'desc'])->limit([0 => 1])->find(['login' => 1, 'ban' => 0, 'requests' => 0]);
+        if ($users->rows == 0) {
+            die('no job');
+        }
         foreach ($users->rows as $user) {
             print_r($user);
             $requestCou = $user->requests;
