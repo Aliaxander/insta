@@ -88,7 +88,7 @@ class Likes extends Command
             $status = true;
             while ($status = true) {
                 $accRow = InstBase::limit([0 => 1])->find(['status' => 0]);
-                $acc = preg_replace("/[^0-9]/", '', $accRow->rows[0]->account);
+                $acc = @preg_replace("/[^0-9]/", '', $accRow->rows[0]->account);
                 if (!empty($acc)) {
                     InstBase::where(['id' => $accRow->rows[0]->id])->update(['status' => 1]);
                     
