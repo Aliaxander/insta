@@ -111,7 +111,6 @@ class Likes extends Command
                         InstBase::where(['id' => $accRow->rows[0]->id])->update(['follow' => round($accRow->rows[0]->follow + 1)]);
                         
                         $followCou++;
-                        $requestCou++;
                         $requestCou += 2;
                     } elseif (isset($result[1]['items'])) {
                         sleep(rand(5, 20));
@@ -127,9 +126,8 @@ class Likes extends Command
                                 die("Account banned");
                             }
                             $likeCou++;
-                            $requestCou++;
+                            $requestCou += 4;
                         }
-                        $requestCou += 4;
                     }
                     if (rand(0, 30) == 10) {
                         $api->getRecentActivityAll();
