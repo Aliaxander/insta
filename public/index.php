@@ -15,6 +15,7 @@ use ox\freenom\Freenom_Service_Exception;
 use ox\freenom\Freenom_Request_Exception;
 use ox\freenom\Freenom_Exception;
 use OxApp\helpers\FreenomReg;
+use OxApp\models\InstBase;
 use OxApp\models\Proxy;
 
 ini_set("allow_url_fopen", true);
@@ -29,10 +30,18 @@ header('Access-Control-Allow-Origin: *');
 $loader = require __DIR__ . '/../vendor/autoload.php';
 require(__DIR__ . "/../config.php");
 require(__DIR__ . "/../OxApp/Routes.php");
-//for ($i = 29999; $i < 30201; $i++) {
-//    Proxy::add(['proxy' => '149.202.202.135:' . $i]);
+//for ($i = 3001; $i < 30200; $i++) {
+//    Proxy::add(['proxy' => '46.105.124.207:' . $i]);
+////}
+//$base=file_get_contents('/var/www/ox/instagram/public/base.txt');
+//echo $base;
+//
+//$base=explode("\n",$base);
+//foreach ($base as $acc) {
+//    $acc = preg_replace("/[^0-9]/", '', $acc);
+//    echo "$acc";
+//    InstBase::add(['account'=>$acc]);
 //}
-
 //print_r(FreenomReg::regNewDomain("dssdasddsfdsf.tk","sdfsd"));
 //
 //
