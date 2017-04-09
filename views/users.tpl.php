@@ -46,8 +46,8 @@
     </table>
     <ul class="pagination pull-right" style="margin: 0;">
         {% for i in range(1, totalPages) %}
-        <li{% if i==setPage %} class="disabled"{% endif %}><a
-                href="/users?page={{ i }}">{{ i }}</a></li>
+        <li{% if i==setPage %} class="active" {% endif %}><a
+                href="/users?page={{ i }}">{{ i }} {% if i==setPage %}<span class="sr-only">(current)</span>{% endif %}</a></li>
         {% endfor %}
     </ul>
 </div>
