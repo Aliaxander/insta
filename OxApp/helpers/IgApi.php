@@ -22,17 +22,17 @@ class IgApi
     public $accountId;
     protected $password;
     protected $device_id;
-    //protected $igKey = '2f6dcdf76deb0d3fd008886d032162a79b88052b5f50538c1ee93c4fe7d02e60';
-    protected $igKey = 'b03e0daaf2ab17cda2a569cace938d639d1288a1197f9ecf97efd0a4ec0874d7';
+    protected $igKey = '2f6dcdf76deb0d3fd008886d032162a79b88052b5f50538c1ee93c4fe7d02e60';
+    //protected $igKey = 'b03e0daaf2ab17cda2a569cace938d639d1288a1197f9ecf97efd0a4ec0874d7';
     protected $igVersion = '4';
     public $csrftoken;
     
     public function __construct()
     {
-//        $device = new Device('9.7.0', 'en_US');
-//        $this->userAgent = UserAgent::buildUserAgent('9.7.0', 'en_US', $device);
-        $device = new Device('10.15.0', 'en_US');
-        $this->userAgent = UserAgent::buildUserAgent('10.15.0', 'en_US', $device);
+        $device = new Device('9.7.0', 'en_US');
+        $this->userAgent = UserAgent::buildUserAgent('9.7.0', 'en_US', $device);
+        //        $device = new Device('10.15.0', 'en_US');
+        //        $this->userAgent = UserAgent::buildUserAgent('10.15.0', 'en_US', $device);
     }
     
     public function getFeed($feedId)
@@ -324,14 +324,14 @@ class IgApi
         }
         $this->csrftoken = $tokenResult;
         
-        sleep(rand(5, 8));
+        sleep(rand(5, 15));
         $checkEmail = $this->checkEmail($email, $qe_id, $waterfall_id);
         
         print_r($checkEmail);
         if (isset($checkEmail[1]['message']) && $checkEmail[1]['message'] == 'Sorry, an error occured') {
             die('Error. Ip ban?');
         }
-        sleep(rand(3, 5));
+        sleep(rand(5, 10));
         $singTokenResult = '';
         $i = 0;
         while ($singTokenResult === '') {
@@ -352,10 +352,10 @@ class IgApi
         $this->csrftoken = $singTokenResult;
         
         if (rand(0, 1) == 1) {
-            sleep(rand(3, 6));
+            sleep(rand(5, 10));
             print_r($this->usernameSuggestions($usernameTmp4, $email, $waterfall_id));
         }
-        sleep(rand(3, 5));
+        sleep(rand(5, 7));
         $singTokenResult = '';
         $i = 0;
         while ($singTokenResult === '') {
@@ -374,14 +374,14 @@ class IgApi
             die('empty sigKey token');
         }
         $this->csrftoken = $singTokenResult;
-        if (rand(0, 1) == 1) {
-            sleep(rand(2, 5));
+      
+            sleep(rand(3, 5));
             print_r($this->usernameSuggestions($usernameTmp3, $email, $waterfall_id));
-        }
-        if (rand(0, 1) == 1) {
+ 
+
             sleep(rand(3, 7));
             print_r($this->usernameSuggestions($usernameTmp2, $email, $waterfall_id));
-        }
+        
         if (rand(0, 1) == 1) {
             sleep(rand(2, 4));
             print_r($this->usernameSuggestions($usernameTmp1, $email, $waterfall_id));
@@ -449,9 +449,9 @@ class IgApi
             'device_id' => $this->device_id,
             'email' => $email,
             'waterfall_id' => $waterfall_id,
-            'qs_stamp' => "",
             'password' => $this->password,
             'force_sign_up_code' => '',
+            'qs_stamp' => "",
         ];
         
         $data = json_encode($data);
