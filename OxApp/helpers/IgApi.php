@@ -397,6 +397,7 @@ class IgApi
         sleep(rand(1, 6));
         //register:
         $create = $this->createAccount($email, $waterfall_id);
+        print_r($create);
         if (empty($create[1])) {
             $create = $this->createAccount($email, $waterfall_id);
         } elseif (isset($create[1]['errors']['username'])) {
