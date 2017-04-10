@@ -241,6 +241,7 @@ class IgApi
         } else {
             $uname = $faker->lastName . $faker->firstNameFemale . rand(1950, 2017);
         }
+        $uname = mb_strtolower($uname);
         if (rand(0, 1) == 1) {
             $this->username = str_replace(".", "", $uname);
         } else {
