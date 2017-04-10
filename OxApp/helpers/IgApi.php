@@ -398,16 +398,16 @@ class IgApi
         //register:
         $create = $this->createAccount($email, $waterfall_id);
         print_r($create);
-        if (empty($create[1])) {
+//        if (empty($create[1])) {
             $create = $this->createAccount($email, $waterfall_id);
-        } elseif (isset($create[1]['errors']['username'])) {
-            $this->username = $this->username . rand(0, 999999);
-            $finalName = $this->usernameSuggestions($this->username, $email, $waterfall_id);
-            print_r($finalName);
-            $create = $this->createAccount($email, $waterfall_id);
-        }
-        
-        if (isset($create[1]['created_user']['pk'])) {
+//        } elseif (isset($create[1]['errors']['username'])) {
+//            $this->username = $this->username . rand(0, 999999);
+//            $finalName = $this->usernameSuggestions($this->username, $email, $waterfall_id);
+//            print_r($finalName);
+//            $create = $this->createAccount($email, $waterfall_id);
+//        }
+//
+//        if (isset($create[1]['created_user']['pk'])) {
             Users::add([
                 'userName' => $this->username,
                 'firstName' => $this->name,
