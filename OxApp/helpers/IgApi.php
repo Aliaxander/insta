@@ -641,12 +641,13 @@ guage_picker'
             ];
             curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
         }
-        //                            $headers=[
-        //                                "X-IG-Connection-Type: WIFI",
-        //                                "X-IG-Capabilities: 3Ro=",
-        //                                'Accept-Encoding: gzip, deflate'
-        //                            ];
-        //                            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+                                    $headers=[
+                                        "X-IG-Connection-Type: WIFI",
+                                        "X-IG-Capabilities: 3Ro=",
+                                        'Accept-Encoding: gzip, deflate',
+                                        'Accept-Language: en-US',
+                                    ];
+                                    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
         //
         curl_setopt($ch, CURLOPT_HEADER, true);
         curl_setopt($ch, CURLOPT_VERBOSE, false);
