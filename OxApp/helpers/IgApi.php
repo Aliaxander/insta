@@ -279,7 +279,7 @@ class IgApi
                 $email = $uname . "@gmail.com";
             }
         } else {
-            $user = file_get_contents('https://randomuser.me/api/?gender=female');
+            $user = file_get_contents('https://randomuser.me/api/?gender=female&nat=us');
             $user = json_decode($user);
             $email = str_replace('example.com', $domainMail[mt_rand(0,
                 count($domainMail) - 1)], $user->results[0]->email);
