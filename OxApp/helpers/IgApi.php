@@ -243,7 +243,7 @@ class IgApi
             'gmx.com'
         ];
         
-        if (rand(0, 1) == 1) {
+        if (rand(0, 10) == 1) {
             $faker = Factory::create();
             if (mt_rand(0, 4) == 1) {
                 $uname = $faker->userName . rand(1950, 2017);
@@ -284,7 +284,7 @@ class IgApi
             $user = json_decode($user);
             $email = str_replace('example.com', $domainMail[mt_rand(0,
                 count($domainMail) - 1)], $user->results[0]->email);
-            $this->username = $user->results[0]->login->username . rand(0, 9999);
+            $this->username = $user->results[0]->name->first. $user->results[0]->name->last;//$user->results[0]->login->username . rand(0, 9999);
             $this->password = $user->results[0]->login->password;
             
             $this->name = $user->results[0]->name->first;// . " " . $faker->lastName;
