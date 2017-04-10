@@ -234,8 +234,8 @@ class IgApi
     {
         
         $faker = Factory::create();
-        if (mt_rand(0, 1) == 1) {
-            $uname = $faker->userName;
+        if (mt_rand(0, 3) == 1) {
+            $uname = $faker->userName . rand(1950, 2017);
         } elseif (mt_rand(0, 1) == 0) {
             $uname = $faker->firstNameFemale . rand(1950, 2017);
         } else {
@@ -374,13 +374,13 @@ class IgApi
             die('empty sigKey token');
         }
         $this->csrftoken = $singTokenResult;
-      
-            sleep(rand(3, 5));
-            print_r($this->usernameSuggestions($usernameTmp3, $email, $waterfall_id));
- 
-
-            sleep(rand(3, 7));
-            print_r($this->usernameSuggestions($usernameTmp2, $email, $waterfall_id));
+        
+        sleep(rand(3, 5));
+        print_r($this->usernameSuggestions($usernameTmp3, $email, $waterfall_id));
+        
+        
+        sleep(rand(3, 7));
+        print_r($this->usernameSuggestions($usernameTmp2, $email, $waterfall_id));
         
         if (rand(0, 1) == 1) {
             sleep(rand(2, 4));
