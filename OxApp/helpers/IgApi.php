@@ -284,7 +284,9 @@ class IgApi
             $user = json_decode($user);
             $email = str_replace('example.com', $domainMail[mt_rand(0,
                 count($domainMail) - 1)], $user->results[0]->email);
-            $this->username = $user->results[0]->name->first. $user->results[0]->name->last;//$user->results[0]->login->username . rand(0, 9999);
+            $email = explode("@", $email);
+            $email = implode(rand(1940, 2017) . "@", $email);
+            $this->username = $user->results[0]->name->first . $user->results[0]->name->last;//$user->results[0]->login->username . rand(0, 9999);
             $this->password = $user->results[0]->login->password;
             
             $this->name = $user->results[0]->name->first;// . " " . $faker->lastName;
