@@ -234,12 +234,12 @@ class IgApi
     {
         
         $faker = Factory::create();
-        if (mt_rand(0, 3) == 1) {
+        if (mt_rand(0, 4) == 1) {
             $uname = $faker->userName . rand(1950, 2017);
         } elseif (mt_rand(0, 1) == 0) {
-            $uname = $faker->firstNameFemale . rand(1950, 2017);
+            $uname = $faker->firstNameFemale . $faker->lastName . rand(1950, 2017);
         } else {
-            $uname = $faker->lastName . rand(1950, 2017);
+            $uname = $faker->lastName . $faker->firstNameFemale . rand(1950, 2017);
         }
         if (rand(0, 1) == 1) {
             $this->username = str_replace(".", "", $uname);
@@ -398,15 +398,15 @@ class IgApi
         //register:
         $create = $this->createAccount($email, $waterfall_id);
         print_r($create);
-//        if (empty($create[1])) {
-          //  $create = $this->createAccount($email, $waterfall_id);
-//        } elseif (isset($create[1]['errors']['username'])) {
-//            $this->username = $this->username . rand(0, 999999);
-//            $finalName = $this->usernameSuggestions($this->username, $email, $waterfall_id);
-//            print_r($finalName);
-//            $create = $this->createAccount($email, $waterfall_id);
-//        }
-//
+        //        if (empty($create[1])) {
+        //  $create = $this->createAccount($email, $waterfall_id);
+        //        } elseif (isset($create[1]['errors']['username'])) {
+        //            $this->username = $this->username . rand(0, 999999);
+        //            $finalName = $this->usernameSuggestions($this->username, $email, $waterfall_id);
+        //            print_r($finalName);
+        //            $create = $this->createAccount($email, $waterfall_id);
+        //        }
+        //
         if (isset($create[1]['created_user']['pk'])) {
             Users::add([
                 'userName' => $this->username,
@@ -427,7 +427,6 @@ class IgApi
                 'userAgent' => $this->userAgent
             ]);
         }
-        print_r($create);
         
         return true;
     }
