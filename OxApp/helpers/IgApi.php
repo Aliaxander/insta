@@ -232,30 +232,6 @@ class IgApi
     
     public function create()
     {
-        
-        $faker = Factory::create();
-        if (mt_rand(0, 4) == 1) {
-            $uname = $faker->userName . rand(1950, 2017);
-        } elseif (mt_rand(0, 1) == 0) {
-            $uname = $faker->firstNameFemale . $faker->lastName . rand(1950, 2017);
-        } else {
-            $uname = $faker->lastName . $faker->firstNameFemale . rand(1950, 2017);
-        }
-        $uname = mb_strtolower($uname);
-        if (rand(0, 1) == 1) {
-            $this->username = str_replace(".", "", $uname);
-        } else {
-            $this->username = $uname;
-        }
-        $usernameTmp1 = substr($this->username, 0, -round(1, mb_strlen($this->username) - 3));
-        $usernameTmp2 = substr($usernameTmp1, 0, -round(1, mb_strlen($usernameTmp1) - 3));
-        $usernameTmp3 = substr($usernameTmp2, 0, -round(1, mb_strlen($usernameTmp2) - 3));
-        $usernameTmp4 = substr($usernameTmp3, 0, -round(1, mb_strlen($usernameTmp3) - 3));
-        
-        $this->name = $faker->firstNameFemale;// . " " . $faker->lastName;
-        if (rand(0, 1) == 1) {
-            $this->name .= " " . $faker->lastName;
-        }
         $domainMail = [
             'mail.com',
             'gmail.com',
@@ -266,22 +242,61 @@ class IgApi
             'aol.com',
             'gmx.com'
         ];
-        //$email = $faker->email;
-        if (mt_rand(0, 2) == 0) {
-            $email = explode("@", $faker->email);
-            $email = implode(rand(1940, 2017) . "@", $email);
-        } elseif (mt_rand(0, 2) == 0) {
-            $email = str_replace(" ", ".", $this->name) . mt_rand(0, 1999) . "@gmail.com";
-        } elseif (mt_rand(0, 1) == 0) {
-            $email = str_replace(" ", ".", $this->username) . mt_rand(0, 1999) . "@" . $domainMail[mt_rand(0,
-                    count($domainMail) - 1)];
-        } elseif (mt_rand(0, 1) == 0) {
-            $email = str_replace(" ", ".", $this->name) . mt_rand(0, 1999) . "@" . $domainMail[mt_rand(0,
-                    count($domainMail) - 1)];
+        
+        if (rand(0, 1) == 1) {
+            $faker = Factory::create();
+            if (mt_rand(0, 4) == 1) {
+                $uname = $faker->userName . rand(1950, 2017);
+            } elseif (mt_rand(0, 1) == 0) {
+                $uname = $faker->firstNameFemale . $faker->lastName . rand(1950, 2017);
+            } else {
+                $uname = $faker->lastName . $faker->firstNameFemale . rand(1950, 2017);
+            }
+            $uname = mb_strtolower($uname);
+            if (rand(0, 1) == 1) {
+                $this->username = str_replace(".", "", $uname);
+            } else {
+                $this->username = $uname;
+            }
+            $usernameTmp1 = substr($this->username, 0, -round(1, mb_strlen($this->username) - 3));
+            $usernameTmp2 = substr($usernameTmp1, 0, -round(1, mb_strlen($usernameTmp1) - 3));
+            $usernameTmp3 = substr($usernameTmp2, 0, -round(1, mb_strlen($usernameTmp2) - 3));
+            $usernameTmp4 = substr($usernameTmp3, 0, -round(1, mb_strlen($usernameTmp3) - 3));
+            $this->password = strtolower(substr(md5(number_format(microtime(true), 7, '', '')), mt_rand(15, 24)));
+            $this->name = $faker->firstNameFemale;// . " " . $faker->lastName;
+            if (rand(0, 1) == 1) {
+                $this->name .= " " . $faker->lastName;
+            }
+            
+            //$email = $faker->email;
+            if (mt_rand(0, 2) == 0) {
+                $email = explode("@", $faker->email);
+                $email = implode(rand(1940, 2017) . "@", $email);
+            } elseif (mt_rand(0, 2) == 0) {
+                $email = str_replace(" ", ".", $this->name) . mt_rand(0, 1999) . "@gmail.com";
+            } elseif (mt_rand(0, 1) == 0) {
+                $email = str_replace(" ", ".", $this->username) . mt_rand(0, 1999) . "@" . $domainMail[mt_rand(0,
+                        count($domainMail) - 1)];
+            } elseif (mt_rand(0, 1) == 0) {
+                $email = str_replace(" ", ".", $this->name) . mt_rand(0, 1999) . "@" . $domainMail[mt_rand(0,
+                        count($domainMail) - 1)];
+            } else {
+                $email = $uname . "@gmail.com";
+            }
         } else {
-            $email = $uname . "@gmail.com";
+            $user = file_get_contents('https://randomuser.me/api/?gender=female');
+            $user = json_decode($user);
+            $email = str_replace('example.com', $domainMail[mt_rand(0,
+                count($domainMail) - 1)], $user->results[0]->email);
+            $this->username = $user->results[0]->login->username;
+            $this->password = $user->results[0]->login->password;
+            
+            $this->name = $user->results[0]->name->first;// . " " . $faker->lastName;
+            if (rand(0, 1) == 1) {
+                $this->name .= " " . $user->results[0]->name->last;
+            }
         }
-        $this->password = strtolower(substr(md5(number_format(microtime(true), 7, '', '')), mt_rand(15, 24)));
+        
         
         $megaRandomHash = md5(number_format(microtime(true), 7, '', ''));
         $this->device_id = 'android-' . strtolower(substr($megaRandomHash, 16));
