@@ -242,9 +242,8 @@ class IgApi
             'aol.com',
             'gmx.com'
         ];
-        
-        if (rand(0, 10) == 1) {
-            $faker = Factory::create();
+        $faker = Factory::create();
+        if (rand(0, 2) == 1) {
             if (mt_rand(0, 4) == 1) {
                 $uname = $faker->userName . rand(1950, 2017);
             } elseif (mt_rand(0, 1) == 0) {
@@ -258,7 +257,7 @@ class IgApi
             } else {
                 $this->username = $uname;
             }
-            $this->password = strtolower(substr(md5(number_format(microtime(true), 7, '', '')), mt_rand(15, 24)));
+            $this->password = strtolower(substr(md5(number_format(microtime(true), 7, '', '')), mt_rand(15, 20)));
             $this->name = $faker->firstNameFemale;// . " " . $faker->lastName;
             if (rand(0, 1) == 1) {
                 $this->name .= " " . $faker->lastName;
@@ -286,8 +285,9 @@ class IgApi
                 count($domainMail) - 1)], $user->results[0]->email);
             $email = explode("@", $email);
             $email = implode(rand(1940, 2017) . "@", $email);
-            $this->username = $user->results[0]->name->first . $user->results[0]->name->last;//$user->results[0]->login->username . rand(0, 9999);
-            $this->password = $user->results[0]->login->password;
+            $this->username = $user->results[0]->name->first . $user->results[0]->name->last . rand(1940,
+                    2017);//$user->results[0]->login->username . rand(0, 9999);
+            $this->password = strtolower(substr(md5(number_format(microtime(true), 7, '', '')), mt_rand(15, 20)));
             
             $this->name = $user->results[0]->name->first;// . " " . $faker->lastName;
             if (rand(0, 1) == 1) {
