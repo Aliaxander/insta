@@ -258,10 +258,6 @@ class IgApi
             } else {
                 $this->username = $uname;
             }
-            $usernameTmp1 = substr($this->username, 0, -round(1, mb_strlen($this->username) - 3));
-            $usernameTmp2 = substr($usernameTmp1, 0, -round(1, mb_strlen($usernameTmp1) - 3));
-            $usernameTmp3 = substr($usernameTmp2, 0, -round(1, mb_strlen($usernameTmp2) - 3));
-            $usernameTmp4 = substr($usernameTmp3, 0, -round(1, mb_strlen($usernameTmp3) - 3));
             $this->password = strtolower(substr(md5(number_format(microtime(true), 7, '', '')), mt_rand(15, 24)));
             $this->name = $faker->firstNameFemale;// . " " . $faker->lastName;
             if (rand(0, 1) == 1) {
@@ -296,7 +292,10 @@ class IgApi
                 $this->name .= " " . $user->results[0]->name->last;
             }
         }
-        
+        $usernameTmp1 = substr($this->username, 0, -round(1, mb_strlen($this->username) - 3));
+        $usernameTmp2 = substr($usernameTmp1, 0, -round(1, mb_strlen($usernameTmp1) - 3));
+        $usernameTmp3 = substr($usernameTmp2, 0, -round(1, mb_strlen($usernameTmp2) - 3));
+        $usernameTmp4 = substr($usernameTmp3, 0, -round(1, mb_strlen($usernameTmp3) - 3));
         
         $megaRandomHash = md5(number_format(microtime(true), 7, '', ''));
         $this->device_id = 'android-' . strtolower(substr($megaRandomHash, 16));
