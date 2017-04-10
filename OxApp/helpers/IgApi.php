@@ -450,9 +450,9 @@ class IgApi
             'device_id' => $this->device_id,
             'email' => $email,
             'waterfall_id' => $waterfall_id,
+            'qs_stamp' => "",
             'password' => $this->password,
             'force_sign_up_code' => '',
-            'qs_stamp' => "",
         ];
         
         $data = json_encode($data);
