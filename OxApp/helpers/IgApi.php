@@ -407,7 +407,7 @@ class IgApi
 //            $create = $this->createAccount($email, $waterfall_id);
 //        }
 //
-//        if (isset($create[1]['created_user']['pk'])) {
+        if (isset($create[1]['created_user']['pk'])) {
             Users::add([
                 'userName' => $this->username,
                 'firstName' => $this->name,
