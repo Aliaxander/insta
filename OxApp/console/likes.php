@@ -147,6 +147,9 @@ class Likes extends Command
                         echo "Sleep";
                         sleep(rand(2500, 3700));
                     }
+                    if($hour>=4 && $likeCou>2100){
+                        sleep(rand(70000, 87000));
+                    }
                     sleep(rand(2, 15));
                 }
             }
