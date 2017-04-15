@@ -16,6 +16,7 @@ use ox\freenom\Freenom_Request_Exception;
 use ox\freenom\Freenom_Exception;
 use OxApp\helpers\FreenomReg;
 use OxApp\models\InstBase;
+use OxApp\models\ProfileGenerate;
 use OxApp\models\Proxy;
 
 ini_set("allow_url_fopen", true);
@@ -30,7 +31,16 @@ header('Access-Control-Allow-Origin: *');
 $loader = require __DIR__ . '/../vendor/autoload.php';
 require(__DIR__ . "/../config.php");
 require(__DIR__ . "/../OxApp/Routes.php");
-
+//
+//$smiles=explode("\n", $smiles);
+//foreach ($smiles as $key=>$smile){
+//    ProfileGenerate::where(['id'=>$key])->update(['description' => $smile]);
+//}
+//
+//$urls = explode("\n", $urls);
+//foreach ($urls as $key => $val) {
+//    ProfileGenerate::add(['description' => $texts[$key], 'url' => $val]);
+//}
 //for ($i = 30001; $i < 30400; $i++) {
 //    Proxy::add(['proxy' => '46.105.124.207:' . $i]);
 //}

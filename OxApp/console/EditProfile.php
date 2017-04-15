@@ -61,28 +61,28 @@ class EditProfile extends Command
             unlink($photo);
             
             
-            $profiles = ProfileGenerate::groupBy('description')->limit([0 => 1])->find(['status' => 0])->rows[0];
+            $profiles = ProfileGenerate::limit([0 => 1])->find(['status' => 0])->rows[0];//groupBy('description')->
             ProfileGenerate::where(['id' => $profiles->id])->update(['status' => 1]);
-            $word = [$user->userName, $user->firstName, mt_rand(10000, 99999)];
-            $word = $word[mt_rand(0, 2)];
-            $word = str_replace([' ', '.'], '', $word);
+//            $word = [$user->userName, $user->firstName, mt_rand(10000, 99999)];
+//            $word = $word[mt_rand(0, 2)];
+//            $word = str_replace([' ', '.'], '', $word);
             $biography = $profiles->description;
-            $url = mb_strtolower(str_replace('%username%', $word, $profiles->url));
-            //
-            //
-            $result = FreenomReg::freedomReg($url);
-            $p = xml_parser_create();
-            xml_parse_into_struct($p, $result[1], $vals, $index);
-            xml_parser_free($p);
-            $domain = mb_strtolower($vals[2]['value']);
-            if (rand(0, 1) == 1) {
-                $domain = "http://" . $domain;
-            }
+//            $url = mb_strtolower(str_replace('%username%', $word, $profiles->url));
+//            //
+//            //
+//            $result = FreenomReg::freedomReg($url);
+//            $p = xml_parser_create();
+//            xml_parse_into_struct($p, $result[1], $vals, $index);
+//            xml_parser_free($p);
+//            $domain = mb_strtolower($vals[2]['value']);
+//            if (rand(0, 1) == 1) {
+//                $domain = "http://" . $domain;
+//            }
             $profileResult = '';
             $i = 0;
             while ($profileResult === '') {
                 //$biography
-                $profile = $api->edit($biography, $domain, $user->phoneId, $user->firstName,
+                $profile = $api->edit($biography, $profiles->url, $user->phoneId, $user->firstName,
                     $user->email);
                 $profileResult = $profile[1];
                 if ($i == 3) {

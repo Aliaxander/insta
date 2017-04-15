@@ -113,7 +113,7 @@ class Likes extends Command
 //                        $followCou++;
 //                        $requestCou += 2;
                     } elseif (isset($result[1]['items'])) {
-                        sleep(rand(10, 20));
+                        sleep(rand(1, 2));
                         $rows = $result[1]['items'];
                         $like1 = @$result[1]['items'][mt_rand(0, count($rows) - 1)]['id'];
                         if ($like1) {
@@ -141,13 +141,13 @@ class Likes extends Command
                     $folLikSum = round($likeCou + $followCou);
                     
                     $resultLikesForTimeout = $folLikSum / $hour;
-                    if ($resultLikesForTimeout > rand(40,50) && $resultLikesForTimeout < 60) {
+                    if ($resultLikesForTimeout > rand(400,500) && $resultLikesForTimeout < 600) {
                         $hour += 1;
                         Users::where(['id' => $user->id])->update(['hour' => $hour]);
                         echo "Sleep";
                         sleep(rand(2500, 3700));
                     }
-                    sleep(rand(40, 80));
+                    sleep(rand(2, 15));
                 }
             }
         }
