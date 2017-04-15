@@ -82,7 +82,7 @@ class EditProfile extends Command
             $i = 0;
             while ($profileResult === '') {
                 //$biography
-                $profile = $api->edit($biography . ' ' . $domain, '', $user->phoneId, $user->firstName,
+                $profile = $api->edit($biography, $domain, $user->phoneId, $user->firstName,
                     $user->email);
                 $profileResult = $profile[1];
                 if ($i == 3) {
