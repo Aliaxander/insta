@@ -23,6 +23,6 @@ class DeleteUsersController extends App
             }
         }
 
-        header("Location: /users");
+        header("Location: ".$_SERVER['HTTP_REFERER']);
     }
 }
