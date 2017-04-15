@@ -1,3 +1,4 @@
+Total likes: {{sumLikes}}
 {% include "global/head.tpl.php" %}
 <div class="table-responsive">
     <table class="table">
