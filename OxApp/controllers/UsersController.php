@@ -24,6 +24,15 @@ class UsersController extends App
      */
     public function get()
     {
+        $rule = [
+            "LogIn"
+        ];
+        $where = [];
+        foreach ($rule as $item) {
+            if (!empty($this->request->query->get($item)) || $this->request->query->get($item) == 0) {
+                $where[$item] = $this->request->query->get($item);
+            }
+        }
 
         if (!empty($this->request->query->get('orderBy')) && !empty($this->request->query->get('sort'))) {
             $orderBy = [$this->request->query->get('orderBy') => $this->request->query->get('sort')];
@@ -43,9 +52,11 @@ class UsersController extends App
         $startPage = $page * $limit - $limit;
         $paging = array($startPage => $limit);
         $total = Users::selectBy("count(id) as count")
+            ->where($where)
             ->orderBy(["id" => "desc"])
             ->find();
         $users = Users::orderBy($orderBy)
+            ->where($where)
             ->limit($paging)
             ->find()
             ->rows;
