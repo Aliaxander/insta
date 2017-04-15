@@ -60,9 +60,13 @@ class UsersController extends App
             ->limit($paging)
             ->find()
             ->rows;
+        
+            ->find();
+        $usersSum = @Users::selectBy(['sum(likes) as likes'])->find()->rows[0]->likes;
         return View::build('users', [
             'users' => $users,
             "setPage" => $page,
+            'sumLikes' => $usersSum,
             "totalRows" => (int)@$total->rows[0]->count,
             "totalPages" => ceil(@$total->rows[0]->count / $limit),
         ]);
