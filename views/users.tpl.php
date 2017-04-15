@@ -4,17 +4,17 @@
         <thead>
         <tr>
             <th>#</th>
-            <th>id</th>
-            <th>userName</th>
-            <th>firstName</th>
-            <th>email</th>
-            <th>password</th>
-            <th>logIn</th>
-            <th>proxy</th>
-            <th>requests</th>
-            <th>follows</th>
-            <th>likes</th>
-            <th>dateCreate</th>
+            <th><a href="?orderBy=id&sort=desc">id</a></th>
+            <th><a href="?orderBy=userName&sort=desc">userName</a></th>
+            <th><a href="?orderBy=firstName&sort=desc">firstName</a></th>
+            <th><a href="?orderBy=email&sort=desc">email</a></th>
+            <th><a href="?orderBy=password&sort=desc">password</a></th>
+            <th><a href="?orderBy=logIn&sort=desc">logIn</a></th>
+            <th><a href="?orderBy=proxy&sort=desc">proxy</a></th>
+            <th><a href="?orderBy=requests&sort=desc">requests</a></th>
+            <th><a href="?orderBy=follows&sort=desc">follows</a></th>
+            <th><a href="?orderBy=likes&sort=desc">likes</a></th>
+            <th><a href="?orderBy=dateCreate&sort=desc">dateCreate</a></th>
             <th>options</th>
         </tr>
         </thead>

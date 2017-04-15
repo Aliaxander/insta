@@ -24,6 +24,12 @@ class UsersController extends App
      */
     public function get()
     {
+
+        if (!empty($this->request->query->get('orderBy')) && !empty($this->request->query->get('sort'))) {
+            $orderBy = [$this->request->query->get('orderBy') => $this->request->query->get('sort')];
+        } else {
+            $orderBy = ["id" => "desc"];
+        }
         if (!empty($this->request->query->get("limit"))) {
             $limit = $this->request->query->get("limit");
         } else {
@@ -39,7 +45,7 @@ class UsersController extends App
         $total = Users::selectBy("count(id) as count")
             ->orderBy(["id" => "desc"])
             ->find();
-        $users = Users::orderBy(["id" => "desc"])
+        $users = Users::orderBy($orderBy)
             ->limit($paging)
             ->find()
             ->rows;
