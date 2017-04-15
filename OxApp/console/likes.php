@@ -106,12 +106,12 @@ class Likes extends Command
                         Users::where(['id' => $user->id])->update(['ban' => 1]);
                         die();
                     } elseif (isset($result['1']['message']) && $result['1']['message'] === 'Not authorized to view user') {
-                        sleep(rand(10, 20));
-                        print_r($api->follow($acc));
-                        InstBase::where(['id' => $accRow->rows[0]->id])->update(['follow' => round($accRow->rows[0]->follow + 1)]);
-                        
-                        $followCou++;
-                        $requestCou += 2;
+//                        sleep(rand(10, 20));
+//                        print_r($api->follow($acc));
+//                        InstBase::where(['id' => $accRow->rows[0]->id])->update(['follow' => round($accRow->rows[0]->follow + 1)]);
+//
+//                        $followCou++;
+//                        $requestCou += 2;
                     } elseif (isset($result[1]['items'])) {
                         sleep(rand(10, 20));
                         $rows = $result[1]['items'];
