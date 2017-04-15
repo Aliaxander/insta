@@ -128,11 +128,7 @@ class IgApi
         if ($tokenResult == false || $tokenResult == '') {
             exit('empty token');
         }
-        Users::where([
-            'guid' => $guid,
-            'phoneId' => $phoneId,
-            'deviceId' => $device_id
-        ])->update(['csrftoken' => $tokenResult]);
+      
         $this->csrftoken = $tokenResult;
         $this->fetchHeadersSingUp();
         
@@ -149,7 +145,12 @@ class IgApi
         $data = json_encode($data);
         $resultLogin = $this->request('accounts/login/', $data);
         print_r($resultLogin);
-        $this->accountId = $resultLogin[1]['logged_in_user']['pk'];
+        $this->accountId = @$resultLogin[1]['logged_in_user']['pk'];
+        Users::where([
+            'guid' => $guid,
+            'phoneId' => $phoneId,
+            'deviceId' => $device_id
+        ])->update(['csrftoken' => $tokenResult,'accountId'=> @$resultLogin[1]['logged_in_user']['pk']]);
         print_r($this->request('news/inbox/?activity_module=all'));
     }
     
@@ -438,6 +439,25 @@ class IgApi
                 'logIn' => 0,
                 'gender' => 0,
                 'accountId' => $create[1]['created_user']['pk'],
+                'photo' => '',
+                'biography' => '',
+                'proxy' => $this->proxy,
+                'userAgent' => $this->userAgent
+            ]);
+        }elseif(empty($create[1])){
+            Users::add([
+                'userName' => $this->username,
+                'firstName' => $this->name,
+                'email' => $email,
+                'password' => $this->password,
+                'deviceId' => $this->device_id,
+                'phoneId' => $this->phone_id,
+                'waterfall_id' => $waterfall_id,
+                'guid' => $this->guid,
+                'qeId' => $qe_id,
+                'logIn' => 0,
+                'gender' => 0,
+                'accountId' => 0,
                 'photo' => '',
                 'biography' => '',
                 'proxy' => $this->proxy,
