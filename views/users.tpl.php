@@ -33,6 +33,7 @@
             <th><a href="?orderBy=follows&sort=desc">follows</a></th>
             <th><a href="?orderBy=likes&sort=desc">likes</a></th>
             <th><a href="?orderBy=dateCreate&sort=desc">dateCreate</a></th>
+             <th><a href="?orderBy=hour&sort=desc">hour</a></th>
             <th>options</th>
         </tr>
         </thead>
@@ -56,6 +57,7 @@
             <td>{{ user.follows }}</td>
             <td>{{ user.likes }}</td>
             <td>{{ user.dateCreate }}</td>
+            <td>{{ user.hour }}</td>
             <td><a href="/deleteUsers?id={{ user.id }}"><span class="glyphicon glyphicon-trash"></a></span></td>
         </tr>
         {% endfor %}
