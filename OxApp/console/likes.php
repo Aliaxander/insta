@@ -111,7 +111,7 @@ class Likes extends Command
                         $checkPoint->proxy = $user->proxy;
                         $token = $checkPoint->doCheckpoint();
                         echo "\n\nCode you have received via mail: ";
-                        $code = trim(fgets(STDIN));
+                        //$code = trim(fgets(STDIN));
                        // $checkPoint->checkpointThird($code, $token);
                         echo "\n\nDone";
                          Users::where(['id' => $user->id])->update(['ban' => 1]);
