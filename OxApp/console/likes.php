@@ -113,11 +113,10 @@ class Likes extends Command
                         
                         
                         $checkPoint->request('https://i.instagram.com/challenge/');
-                        $checkPoint->username = 'browser_' . $checkPoint->username;
-                        $checkPoint->request('https://www.instagram.com/challenge/');
-                        
-                                               
-                                                $token = $checkPoint->doCheckpoint();
+                        $checkPoint->request('https://i.instagram.com/checkpoint/dismiss');
+    
+    
+                        $token = $checkPoint->doCheckpoint();
                         //                        echo "\n\nCode you have received via mail: ";
                         //                        //$code = trim(fgets(STDIN));
                         //                       // $checkPoint->checkpointThird($code, $token);
