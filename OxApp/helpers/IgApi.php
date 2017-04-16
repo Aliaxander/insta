@@ -9,6 +9,7 @@
 namespace OxApp\helpers;
 
 use Faker\Factory;
+use InstagramAPI\Checkpoint;
 use OxApp\models\Users;
 
 class IgApi
@@ -45,27 +46,31 @@ class IgApi
         } else {
             if (mt_rand(0, 1) == 1) {
                 $result = $this->request("feed/user/" . $feedId . "/");
-                print_r($this->request("feed/user/" . $feedId . "/story/"));
-                print_r($this->request("feed/user/" . $feedId . "/info/"));
+                $result2 = $this->request("feed/user/" . $feedId . "/story/");
+                $result3 = $this->request("feed/user/" . $feedId . "/info/");
             } elseif (mt_rand(0, 1) == 0) {
-                print_r($this->request("feed/user/" . $feedId . "/story/"));
-                print_r($this->request("feed/user/" . $feedId . "/info/"));
+                $result2 = $this->request("feed/user/" . $feedId . "/story/");
+                $result3 = $this->request("feed/user/" . $feedId . "/info/");
                 $result = $this->request("feed/user/" . $feedId . "/");
             } elseif (mt_rand(1, 2) == 2) {
-                print_r($this->request("feed/user/" . $feedId . "/story/"));
-                print_r($this->request("feed/user/" . $feedId . "/info/"));
+                $result2 = $this->request("feed/user/" . $feedId . "/story/");
+                $result3 = $this->request("feed/user/" . $feedId . "/info/");
                 $result = $this->request("feed/user/" . $feedId . "/");
             } else {
-                print_r($this->request("feed/user/" . $feedId . "/story/"));
+                $result2 = $this->request("feed/user/" . $feedId . "/story/");
                 $result = $this->request("feed/user/" . $feedId . "/");
-                print_r($this->request("feed/user/" . $feedId . "/info/"));
+                $result3 = $this->request("feed/user/" . $feedId . "/info/");
             }
         }
         
-        print_r($result);
-        
-        // print_r($this->request('feed/user/' . $feedId . '/story/'));
-        return $result;
+        if (empty($result) && !empty($result2)) {
+            $result = $result2;
+        } elseif (empty($result) && !empty($result3)) {
+            $result = $result3;
+        } else // print_r($this->request('feed/user/' . $feedId . '/story/'));
+        {
+            return $result;
+        }
     }
     
     public function like($mediaId)
@@ -103,6 +108,7 @@ class IgApi
     
     public function login($guid, $phoneId, $device_id, $password)
     {
+        unlink($this->username . "-cookies.dat");
         $this->guid = $guid;
         // $this->guid = '466dafce-f3e3-492b-f7d9-245ca0d3115c';
         // $phoneId = '485591b1-9ca8-4ed6-a1ff-289980b7fa37';
@@ -119,8 +125,18 @@ class IgApi
                 $tokenResult = false;
             }
             if ($sync[1]['message'] === 'checkpoint_required') {
-                Users::where(['guid' => $guid, 'phoneId' => $phoneId, 'deviceId' => $device_id])->update(['ban' => 1]);
-                print("Account banned");
+                echo "\nLimit fixer----------------------------------------\n";
+                $checkPoint = new Checkpoint($this->username);
+                $checkPoint->proxy = $this->proxy;
+                $checkPoint->accountId = $this->accountId;
+                $checkPoint->request($sync[1]['checkpoint_url']);
+                $checkPoint->request('https://www.instagram.com/challenge/');
+                
+                
+                echo "\nEND Limit fixer----------------------------------------\n";
+                //                Users::where(['guid' => $guid, 'phoneId' => $phoneId, 'deviceId' => $device_id])->update(['ban' => 1]);
+                //                print("Account banned");
+                exit();
             }
             
             $i++;
@@ -152,6 +168,23 @@ class IgApi
             'deviceId' => $device_id
         ])->update(['csrftoken' => $tokenResult, 'accountId' => @$resultLogin[1]['logged_in_user']['pk']]);
         $newsInbox = $this->request('news/inbox/?activity_module=all');
+        if ($newsInbox[1]['message'] === 'checkpoint_required') {
+            echo "\nLimit fixer----------------------------------------\n";
+            $checkPoint = new Checkpoint($this->username);
+            $checkPoint->proxy = $this->proxy;
+            $checkPoint->accountId = $this->accountId;
+            $checkPoint->request($newsInbox[1]['checkpoint_url']);
+            $checkPoint->request('https://www.instagram.com/challenge/');
+            print_r($checkPoint->checkpointSecondStep($tokenResult));
+            print_r($checkPoint->request('https://i.instagram.com/challenge/?next=instagram://checkpoint/dismiss'));
+            print_r($checkPoint->request('https://www.instagram.com/challenge/?next=instagram://checkpoint/dismiss'));
+            
+    
+            echo "\nEND Limit fixer----------------------------------------\n";
+            //                Users::where(['guid' => $guid, 'phoneId' => $phoneId, 'deviceId' => $device_id])->update(['ban' => 1]);
+            //                print("Account banned");
+            
+        }
         
         return $resultLogin;
     }
@@ -693,6 +726,8 @@ guage_picker'
         $header = substr($resp, 0, $header_len);
         $body = substr($resp, $header_len);
         curl_close($ch);
+        print_r($body);
+        print_r(json_decode($body, true));
         
         return [$header, json_decode($body, true)];
     }

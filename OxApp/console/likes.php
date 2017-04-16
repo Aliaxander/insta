@@ -58,7 +58,10 @@ class Likes extends Command
             $api->accountId = $user->accountId;
             $api->guid = $user->guid;
             $api->csrftoken = $user->csrftoken;
-            $api->login($user->guid, $user->phoneId, $user->deviceId, $user->password);
+            if (!file_exists($user->userName . "-cookies.dat")) {
+                echo "login account:";
+                $api->login($user->guid, $user->phoneId, $user->deviceId, $user->password);
+            }
             
             if (empty($user->csrftoken)) {
                 $tokenResult = '';
@@ -75,8 +78,12 @@ class Likes extends Command
                         $tokenResult = false;
                     }
                     if ($sync[1]['message'] === 'checkpoint_required') {
-                        Users::where(['id' => $user->id])->update(['ban' => 1]);
-                        die("Account banned");
+                        $checkPoint = new Checkpoint($user->userName);
+                        $checkPoint->proxy = $user->proxy;
+                        $checkPoint->accountId = $user->accountId;
+                        $checkPoint->request($sync[1]['checkpoint_url']);
+                        //                        Users::where(['id' => $user->id])->update(['ban' => 1]);
+                        //                        die("Account banned");
                     }
                     
                     $i++;
@@ -102,6 +109,7 @@ class Likes extends Command
                     }
                     $result = $api->getFeed($acc);
                     if (isset($result['1']['message']) && $result['1']['message'] === 'login_required') {
+                        echo "login_required";
                         $login = $api->login($user->guid, $user->phoneId, $user->deviceId, $user->password);
                         $checkPoint = new Checkpoint($user->userName);
                         if (isset($login[1]['checkpoint_url'])) {

@@ -75,7 +75,7 @@ class Checkpoint
     
     public function request($endpoint, $headers = null, $post = null, $first = true)
     {
-        echo "Request: $endpoint";
+        echo "\n------------Request-----------------:\n $endpoint";
         print_r($post);
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $endpoint);
@@ -111,7 +111,7 @@ class Checkpoint
             echo "RESPONSE: $body\n\n";
         }
         $result = [$header, $body];
-        echo "\nResult:\n";
+        echo "\n--------------Result--------------:\n";
         print_r($result);
         
         return $result;
