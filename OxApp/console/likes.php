@@ -110,7 +110,7 @@ class Likes extends Command
                         
                         $checkPoint = new Checkpoint($user->userName);
                         $checkPoint->proxy = $user->proxy;
-                        $checkPoint->request('https://i.instagram.com/checkpoint_required');
+                        $checkPoint->request('https://i.instagram.com/challenge/');
                         $token = $checkPoint->doCheckpoint();
                         echo "\n\nCode you have received via mail: ";
                         $code = trim(fgets(STDIN));
