@@ -10,7 +10,7 @@ class Checkpoint
     protected $userAgent;
     protected $debug;
     
-    public function __construct($username, $settingsPath = null, $debug = false)
+    public function __construct($username, $debug = false)
     {
         $this->username = $username;
         $this->debug = $debug;
@@ -28,8 +28,6 @@ class Checkpoint
     public function checkpointFirstStep()
     {
         $response = $this->request('https://i.instagram.com/integrity/checkpoint/checkpoint_logged_out_main/' . $this->accountId . '/?next=instagram%3A%2F%2Fcheckpoint%2Fdismiss');
-        print_r($response);
-        $response = $this->request('https://www.instagram.com/challenge/?next=instagram://checkpoint/dismiss');
         print_r($response);
         
         preg_match('#Set-Cookie: csrftoken=([^;]+)#', $response[0], $token);
@@ -77,6 +75,8 @@ class Checkpoint
     
     public function request($endpoint, $headers = null, $post = null, $first = true)
     {
+        echo "Request: $endpoint";
+        print_r($post);
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $endpoint);
         curl_setopt($ch, CURLOPT_USERAGENT, $this->userAgent);
@@ -89,8 +89,8 @@ class Checkpoint
         curl_setopt($ch, CURLOPT_VERBOSE, $this->debug);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-        curl_setopt($ch, CURLOPT_COOKIEFILE, $this->settingsPath . $this->username . '-cookies.dat');
-        curl_setopt($ch, CURLOPT_COOKIEJAR, $this->settingsPath . $this->username . '-cookies.dat');
+        curl_setopt($ch, CURLOPT_COOKIEFILE, $this->username . '-cookies.dat');
+        curl_setopt($ch, CURLOPT_COOKIEJAR, $this->username . '-cookies.dat');
         if ($post) {
             curl_setopt($ch, CURLOPT_POST, count($post));
             curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($post));
@@ -110,7 +110,10 @@ class Checkpoint
             }
             echo "RESPONSE: $body\n\n";
         }
+        $result = [$header, json_decode($body, true)];
+        echo "\nResult:\n";
+        print_r($result);
         
-        return [$header, json_decode($body, true)];
+        return $result;
     }
 }
