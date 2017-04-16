@@ -105,7 +105,7 @@ class Likes extends Command
                         $api->login($user->guid, $user->phoneId, $user->deviceId, $user->password);
                     } elseif (isset($result['1']['message']) && $result['1']['message'] === 'checkpoint_required') {
                         
-                        // $api->login($user->guid, $user->phoneId, $user->deviceId, $user->password);
+                        $api->login($user->guid, $user->phoneId, $user->deviceId, $user->password);
                         
                         $checkPoint = new Checkpoint($user->userName);
                         $checkPoint->proxy = $user->proxy;

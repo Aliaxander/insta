@@ -120,7 +120,7 @@ class IgApi
             }
             if ($sync[1]['message'] === 'checkpoint_required') {
                 Users::where(['guid' => $guid, 'phoneId' => $phoneId, 'deviceId' => $device_id])->update(['ban' => 1]);
-                exit("Account banned");
+                print("Account banned");
             }
             
             $i++;
