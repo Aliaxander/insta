@@ -104,24 +104,25 @@ class Likes extends Command
                     if (isset($result['1']['message']) && $result['1']['message'] === 'login_required') {
                         $api->login($user->guid, $user->phoneId, $user->deviceId, $user->password);
                     } elseif (isset($result['1']['message']) && $result['1']['message'] === 'checkpoint_required') {
-                       // Users::where(['id' => $user->id])->update(['ban' => 1]);
-                       // die();
-                        $api->login($user->guid, $user->phoneId, $user->deviceId, $user->password);
-    
-                        $checkPoint=new Checkpoint($user->userName);
-                        $checkPoint->proxy=$user->proxy;
+                        // Users::where(['id' => $user->id])->update(['ban' => 1]);
+                        // die();
+                        // $api->login($user->guid, $user->phoneId, $user->deviceId, $user->password);
+                        
+                        $checkPoint = new Checkpoint($user->userName);
+                        $checkPoint->proxy = $user->proxy;
+                        $checkPoint->request('https://i.instagram.com/checkpoint_required');
                         $token = $checkPoint->doCheckpoint();
                         echo "\n\nCode you have received via mail: ";
                         $code = trim(fgets(STDIN));
                         $checkPoint->checkpointThird($code, $token);
                         echo "\n\nDone";
                     } elseif (isset($result['1']['message']) && $result['1']['message'] === 'Not authorized to view user') {
-//                        sleep(rand(10, 20));
-//                        print_r($api->follow($acc));
-//                        InstBase::where(['id' => $accRow->rows[0]->id])->update(['follow' => round($accRow->rows[0]->follow + 1)]);
-//
-//                        $followCou++;
-//                        $requestCou += 2;
+                        //                        sleep(rand(10, 20));
+                        //                        print_r($api->follow($acc));
+                        //                        InstBase::where(['id' => $accRow->rows[0]->id])->update(['follow' => round($accRow->rows[0]->follow + 1)]);
+                        //
+                        //                        $followCou++;
+                        //                        $requestCou += 2;
                     } elseif (isset($result[1]['items'])) {
                         sleep(rand(0, 1));
                         $rows = $result[1]['items'];
@@ -151,13 +152,13 @@ class Likes extends Command
                     $folLikSum = round($likeCou + $followCou);
                     
                     $resultLikesForTimeout = $folLikSum / $hour;
-                    if ($resultLikesForTimeout > rand(400,500) && $resultLikesForTimeout < 600) {
+                    if ($resultLikesForTimeout > rand(400, 500) && $resultLikesForTimeout < 600) {
                         $hour += 1;
                         Users::where(['id' => $user->id])->update(['hour' => $hour]);
                         echo "Sleep";
                         sleep(rand(500, 1500));
                     }
-                    if($hour>=4 && $likeCou>2100){
+                    if ($hour >= 4 && $likeCou > 2100) {
                         sleep(rand(70000, 87000));
                     }
                     sleep(rand(1, 5));
