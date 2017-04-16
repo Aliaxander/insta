@@ -108,13 +108,13 @@ class Likes extends Command
                         $api->login($user->guid, $user->phoneId, $user->deviceId, $user->password);
                         
                         $checkPoint = new Checkpoint($user->userName);
-                        $checkPoint->proxy = $user->proxy;
-                        $token = $checkPoint->doCheckpoint();
-                        echo "\n\nCode you have received via mail: ";
-                        //$code = trim(fgets(STDIN));
-                       // $checkPoint->checkpointThird($code, $token);
-                        echo "\n\nDone";
-                         Users::where(['id' => $user->id])->update(['ban' => 1]);
+//                        $checkPoint->proxy = $user->proxy;
+//                        $token = $checkPoint->doCheckpoint();
+//                        echo "\n\nCode you have received via mail: ";
+//                        //$code = trim(fgets(STDIN));
+//                       // $checkPoint->checkpointThird($code, $token);
+//                        echo "\n\nDone";
+//                         Users::where(['id' => $user->id])->update(['ban' => 1]);
                          die();
                     } elseif (isset($result['1']['message']) && $result['1']['message'] === 'Not authorized to view user') {
                         //                        sleep(rand(10, 20));
@@ -144,7 +144,7 @@ class Likes extends Command
                         $api->getRecentActivityAll();
                     }
                     Users::where(['id' => $user->id])->update([
-                        'requests' => $requestCou,
+                       // 'requests' => $requestCou,
                         'follows' => $followCou,
                         'likes' => $likeCou
                     ]);
