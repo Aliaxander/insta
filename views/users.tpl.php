@@ -16,6 +16,13 @@
             <th></th>
             <th></th>
             <th></th>
+            <th></th>
+            <th>
+                <select class="form-control input-sm" name="ban">
+                    <option value="">all</option>
+                    <option value="0">No ban</option>
+                    <option value="1">Ban</option>
+                </select></th>
             <th><button type="submit" class="btn btn-primary">Filter</button></th>
             </form>
         </tr>
@@ -34,6 +41,7 @@
             <th><a href="?orderBy=likes&sort=desc">likes</a></th>
             <th><a href="?orderBy=dateCreate&sort=desc">dateCreate</a></th>
              <th><a href="?orderBy=hour&sort=desc">hour</a></th>
+             <th><a href="?orderBy=ban&sort=desc">ban</a></th>
             <th>options</th>
         </tr>
         </thead>
@@ -58,6 +66,7 @@
             <td>{{ user.likes }}</td>
             <td>{{ user.dateCreate }}</td>
             <td>{{ user.hour }}</td>
+            <td>{{ user.ban }}</td>
             <td><a href="/deleteUsers?id={{ user.id }}"><span class="glyphicon glyphicon-trash"></a></span></td>
         </tr>
         {% endfor %}
