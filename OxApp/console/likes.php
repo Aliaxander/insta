@@ -145,7 +145,7 @@ class Likes extends Command
                         $hour += 1;
                         Users::where(['id' => $user->id])->update(['hour' => $hour]);
                         echo "Sleep";
-                        sleep(rand(2500, 3700));
+                        sleep(rand(500, 1500));
                     }
                     if($hour>=4 && $likeCou>2100){
                         sleep(rand(70000, 87000));
