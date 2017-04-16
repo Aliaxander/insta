@@ -29,6 +29,9 @@ class Checkpoint
     {
         $response = $this->request('https://i.instagram.com/integrity/checkpoint/checkpoint_logged_out_main/' . $this->accountId . '/?next=instagram%3A%2F%2Fcheckpoint%2Fdismiss');
         print_r($response);
+        $response = $this->request('https://www.instagram.com/challenge/?next=instagram://checkpoint/dismiss');
+        print_r($response);
+        
         preg_match('#Set-Cookie: csrftoken=([^;]+)#', $response[0], $token);
         
         return $token;
