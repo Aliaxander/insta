@@ -25,7 +25,8 @@ class UsersController extends App
     public function get()
     {
         $rule = [
-            "LogIn"
+            "LogIn",
+            "ban"
         ];
         $where = [];
         foreach ($rule as $item) {
