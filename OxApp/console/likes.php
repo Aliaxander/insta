@@ -106,6 +106,8 @@ class Likes extends Command
                     } elseif (isset($result['1']['message']) && $result['1']['message'] === 'checkpoint_required') {
                        // Users::where(['id' => $user->id])->update(['ban' => 1]);
                        // die();
+                        $api->login($user->guid, $user->phoneId, $user->deviceId, $user->password);
+    
                         $checkPoint=new Checkpoint($user->userName);
                         $checkPoint->proxy=$user->proxy;
                         $token = $checkPoint->doCheckpoint();
