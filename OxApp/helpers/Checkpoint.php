@@ -3,7 +3,7 @@ namespace InstagramAPI;
 
 class Checkpoint
 {
-    protected $username;
+    public $username;
     protected $settingsPath;
     public $accountId;
     public $proxy;

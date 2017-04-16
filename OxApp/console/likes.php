@@ -52,7 +52,7 @@ class Likes extends Command
             $hour = $user->hour + 1;
             $day = $user->day + 1;
             $followCou = $user->follows;
-          //  Users::where(['id' => $user->id])->update(['requests' => round($requestCou + 1)]);
+            //  Users::where(['id' => $user->id])->update(['requests' => round($requestCou + 1)]);
             $api->proxy = $user->proxy;
             $api->username = $user->userName;
             $api->accountId = $user->accountId;
@@ -105,20 +105,25 @@ class Likes extends Command
                         $api->login($user->guid, $user->phoneId, $user->deviceId, $user->password);
                     } elseif (isset($result['1']['message']) && $result['1']['message'] === 'checkpoint_required') {
                         
-                      //  $api->login($user->guid, $user->phoneId, $user->deviceId, $user->password);
+                        //  $api->login($user->guid, $user->phoneId, $user->deviceId, $user->password);
                         
                         $checkPoint = new Checkpoint($user->userName);
+                        $checkPoint->proxy = $user->proxy;
+                        $checkPoint->accountId = $user->accountId;
+                        
+                        
                         $checkPoint->request('https://i.instagram.com/challenge/');
+                        $checkPoint->username = 'browser_' . $checkPoint->username;
                         $checkPoint->request('https://www.instagram.com/challenge/');
                         
-//                        $checkPoint->proxy = $user->proxy;
-//                        $token = $checkPoint->doCheckpoint();
-//                        echo "\n\nCode you have received via mail: ";
-//                        //$code = trim(fgets(STDIN));
-//                       // $checkPoint->checkpointThird($code, $token);
-//                        echo "\n\nDone";
-//                         Users::where(['id' => $user->id])->update(['ban' => 1]);
-                         die();
+                                               
+                                                $token = $checkPoint->doCheckpoint();
+                        //                        echo "\n\nCode you have received via mail: ";
+                        //                        //$code = trim(fgets(STDIN));
+                        //                       // $checkPoint->checkpointThird($code, $token);
+                        //                        echo "\n\nDone";
+                        //                         Users::where(['id' => $user->id])->update(['ban' => 1]);
+                        die();
                     } elseif (isset($result['1']['message']) && $result['1']['message'] === 'Not authorized to view user') {
                         //                        sleep(rand(10, 20));
                         //                        print_r($api->follow($acc));
@@ -147,7 +152,7 @@ class Likes extends Command
                         $api->getRecentActivityAll();
                     }
                     Users::where(['id' => $user->id])->update([
-                       // 'requests' => $requestCou,
+                        // 'requests' => $requestCou,
                         'follows' => $followCou,
                         'likes' => $likeCou
                     ]);
