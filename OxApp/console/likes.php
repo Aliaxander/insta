@@ -8,6 +8,7 @@
 
 namespace Acme\Console\Command;
 
+use InstagramAPI\Checkpoint;
 use OxApp\helpers\IgApi;
 use OxApp\models\InstBase;
 use OxApp\models\Users;
@@ -103,8 +104,15 @@ class Likes extends Command
                     if (isset($result['1']['message']) && $result['1']['message'] === 'login_required') {
                         $api->login($user->guid, $user->phoneId, $user->deviceId, $user->password);
                     } elseif (isset($result['1']['message']) && $result['1']['message'] === 'checkpoint_required') {
-                        Users::where(['id' => $user->id])->update(['ban' => 1]);
-                        die();
+                       // Users::where(['id' => $user->id])->update(['ban' => 1]);
+                       // die();
+                        $checkPoint=new Checkpoint($user->userName);
+                        $checkPoint->proxy=$user->proxy;
+                        $token = $checkPoint->doCheckpoint();
+                        echo "\n\nCode you have received via mail: ";
+                        $code = trim(fgets(STDIN));
+                        $checkPoint->checkpointThird($code, $token);
+                        echo "\n\nDone";
                     } elseif (isset($result['1']['message']) && $result['1']['message'] === 'Not authorized to view user') {
 //                        sleep(rand(10, 20));
 //                        print_r($api->follow($acc));

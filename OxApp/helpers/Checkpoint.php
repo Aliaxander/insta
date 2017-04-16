@@ -6,6 +6,7 @@ class Checkpoint
     protected $username;
     protected $settingsPath;
     public $accountId;
+    public $proxy;
     protected $userAgent;
     protected $debug;
     
@@ -27,6 +28,7 @@ class Checkpoint
     public function checkpointFirstStep()
     {
         $response = $this->request('https://i.instagram.com/integrity/checkpoint/checkpoint_logged_out_main/' . $this->accountId . '/?next=instagram%3A%2F%2Fcheckpoint%2Fdismiss');
+        print_r($response);
         preg_match('#Set-Cookie: csrftoken=([^;]+)#', $response[0], $token);
         
         return $token;
@@ -90,6 +92,7 @@ class Checkpoint
             curl_setopt($ch, CURLOPT_POST, count($post));
             curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($post));
         }
+        curl_setopt($ch, CURLOPT_PROXY, $this->proxy);
         $resp = curl_exec($ch);
         $header_len = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
         $header = substr($resp, 0, $header_len);

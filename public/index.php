@@ -30,16 +30,17 @@ header('Access-Control-Allow-Methods: POST, GET, DELETE, PUT, OPTIONS');
 header('Access-Control-Allow-Origin: *');
 $loader = require __DIR__ . '/../vendor/autoload.php';
 require(__DIR__ . "/../config.php");
-require(__DIR__ . "/../OxApp/Routes.php");
-//$file = file('base.txt');
-//foreach ($file as $str) {
-//    $acc = @preg_replace("/[^0-9]/", '', $str);
-//    if (InstBase::where(['account' => $acc])->find()->count == 0) {
-//        InstBase::add(['account' => $acc]);
-//        echo $acc;
-//    }
-//    echo "no";
-//}
+//require(__DIR__ . "/../OxApp/Routes.php");
+$file = file('base.txt');
+foreach ($file as $str) {
+    $acc = @preg_replace("/[^0-9]/", '', $str);
+    if (InstBase::where(['account' => $acc])->find()->count == 0) {
+        InstBase::add(['account' => $acc]);
+        echo $acc;
+    }else {
+        echo "no";
+    }
+}
 //$smiles=explode("\n", $smiles);
 //foreach ($smiles as $key=>$smile){
 //    ProfileGenerate::where(['id'=>$key])->update(['description' => $smile]);
