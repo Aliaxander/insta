@@ -58,7 +58,7 @@ class Likes extends Command
             $api->accountId = $user->accountId;
             $api->guid = $user->guid;
             $api->csrftoken = $user->csrftoken;
-            //$api->login($user->guid, $user->phoneId, $user->deviceId, $user->password);
+            $api->login($user->guid, $user->phoneId, $user->deviceId, $user->password);
             
             if (empty($user->csrftoken)) {
                 $tokenResult = '';
@@ -102,21 +102,36 @@ class Likes extends Command
                     }
                     $result = $api->getFeed($acc);
                     if (isset($result['1']['message']) && $result['1']['message'] === 'login_required') {
-                        $api->login($user->guid, $user->phoneId, $user->deviceId, $user->password);
-                    } elseif (isset($result['1']['message']) && $result['1']['message'] === 'checkpoint_required') {
-                        
-                        //  $api->login($user->guid, $user->phoneId, $user->deviceId, $user->password);
-                        
+                        $login = $api->login($user->guid, $user->phoneId, $user->deviceId, $user->password);
                         $checkPoint = new Checkpoint($user->userName);
-                        $checkPoint->proxy = $user->proxy;
-                        $checkPoint->accountId = $user->accountId;
+                        if (isset($login[1]['checkpoint_url'])) {
+                            $result = $checkPoint->request($login[1]['checkpoint_url']);
+                            if (preg_match("/Your phone number will be added\b/i", $result[1])) {
+                                Users::where(['id' => $user->id])->update(['ban' => 1]);
+                                die("SMS BAN!");
+                            }
+                        }
+                    } elseif (isset($result['1']['message']) && $result['1']['message'] === 'checkpoint_required') {
+                        echo "\nLogout user account\n";
+                        unlink($user->userName . "-cookies.dat");
+                        $login = $api->login($user->guid, $user->phoneId, $user->deviceId, $user->password);
+                        $checkPoint = new Checkpoint($user->userName);
+                        if (isset($login[1]['checkpoint_url'])) {
+                            $result = $checkPoint->request($login[1]['checkpoint_url']);
+                            if (preg_match("/Your phone number will be added\b/i", $result[1])) {
+                                Users::where(['id' => $user->id])->update(['ban' => 1]);
+                                die("SMS BAN!");
+                            }
+                        }
+                        //                        $checkPoint = new Checkpoint($user->userName);
+                        //                        $checkPoint->proxy = $user->proxy;
+                        //                        $checkPoint->accountId = $user->accountId;
+                        //                        $checkPoint->request('https://i.instagram.com/challenge/?activity_module=all');
                         
-                        
-                        $checkPoint->request('https://i.instagram.com/challenge/');
-                        $checkPoint->request('https://i.instagram.com/checkpoint/dismiss');
-    
-    
-                        $token = $checkPoint->doCheckpoint();
+                        //                        $checkPoint->request('https://i.instagram.com/checkpoint/dismiss');
+                        //                        $api->fetchHeadersSingUp();
+                        //
+                        //                        $token = $checkPoint->doCheckpoint();
                         //                        echo "\n\nCode you have received via mail: ";
                         //                        //$code = trim(fgets(STDIN));
                         //                       // $checkPoint->checkpointThird($code, $token);

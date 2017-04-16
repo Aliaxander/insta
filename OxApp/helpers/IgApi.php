@@ -128,7 +128,7 @@ class IgApi
         if ($tokenResult == false || $tokenResult == '') {
             exit('empty token');
         }
-      
+        
         $this->csrftoken = $tokenResult;
         $this->fetchHeadersSingUp();
         
@@ -150,8 +150,10 @@ class IgApi
             'guid' => $guid,
             'phoneId' => $phoneId,
             'deviceId' => $device_id
-        ])->update(['csrftoken' => $tokenResult,'accountId'=> @$resultLogin[1]['logged_in_user']['pk']]);
-        print_r($this->request('news/inbox/?activity_module=all'));
+        ])->update(['csrftoken' => $tokenResult, 'accountId' => @$resultLogin[1]['logged_in_user']['pk']]);
+        $newsInbox = $this->request('news/inbox/?activity_module=all');
+        
+        return $resultLogin;
     }
     
     public function editProfile()
@@ -444,7 +446,7 @@ class IgApi
                 'proxy' => $this->proxy,
                 'userAgent' => $this->userAgent
             ]);
-        }elseif(empty($create[1])){
+        } elseif (empty($create[1])) {
             Users::add([
                 'userName' => $this->username,
                 'firstName' => $this->name,
@@ -518,7 +520,7 @@ class IgApi
     /**
      * @return array
      */
-    protected function fetchHeadersSingUp()
+    public function fetchHeadersSingUp()
     {
         return $this->request("si/fetch_headers/?guid=" . mb_strtolower(str_replace("-", "",
                 $this->guid)) . "&challenge_type=singup");
@@ -661,13 +663,13 @@ guage_picker'
             ];
             curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
         }
-//                                    $headers=[
-//                                        "X-IG-Connection-Type: WIFI",
-//                                        "X-IG-Capabilities: 3Ro=",
-//                                        'Accept-Encoding: gzip, deflate',
-//                                        'Accept-Language: en-US',
-//                                    ];
-//                                    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        //                                    $headers=[
+        //                                        "X-IG-Connection-Type: WIFI",
+        //                                        "X-IG-Capabilities: 3Ro=",
+        //                                        'Accept-Encoding: gzip, deflate',
+        //                                        'Accept-Language: en-US',
+        //                                    ];
+        //                                    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
         //
         curl_setopt($ch, CURLOPT_HEADER, true);
         curl_setopt($ch, CURLOPT_VERBOSE, false);
