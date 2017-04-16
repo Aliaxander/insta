@@ -52,7 +52,7 @@ class Likes extends Command
             $hour = $user->hour + 1;
             $day = $user->day + 1;
             $followCou = $user->follows;
-            //  Users::where(['id' => $user->id])->update(['requests' => round($requestCou + 1)]);
+            Users::where(['id' => $user->id])->update(['requests' => round($requestCou + 1)]);
             $api->proxy = $user->proxy;
             $api->username = $user->userName;
             $api->accountId = $user->accountId;
@@ -174,7 +174,7 @@ class Likes extends Command
                         $api->getRecentActivityAll();
                     }
                     Users::where(['id' => $user->id])->update([
-                        // 'requests' => $requestCou,
+                        'requests' => $requestCou,
                         'follows' => $followCou,
                         'likes' => $likeCou
                     ]);
