@@ -96,7 +96,7 @@ class Likes extends Command
                     InstBase::where(['id' => $accRow->rows[0]->id])->update(['status' => 1]);
                     
                     echo "Set acc $acc:\n";
-                    if (rand(0, 20) == 10) {
+                    if (rand(0, 50) == 10) {
                         $api->getRecentActivityAll();
                     }
                     $result = $api->getFeed($acc);
@@ -113,13 +113,13 @@ class Likes extends Command
 //                        $followCou++;
 //                        $requestCou += 2;
                     } elseif (isset($result[1]['items'])) {
-                        sleep(rand(1, 2));
+                        sleep(rand(0, 1));
                         $rows = $result[1]['items'];
                         $like1 = @$result[1]['items'][mt_rand(0, count($rows) - 1)]['id'];
                         if ($like1) {
                             InstBase::where(['id' => $accRow->rows[0]->id])->update(['likes' => round($accRow->rows[0]->likes + 1)]);
                             print_r($api->like($like1));
-                            sleep(rand(0, 3));
+                            sleep(rand(0, 1));
                             $feed = $api->getFeed($acc);
                             if (@$feed[1]['message'] === 'checkpoint_required') {
                                 Users::where(['id' => $user->id])->update(['ban' => 1]);
@@ -129,7 +129,7 @@ class Likes extends Command
                             $requestCou += 4;
                         }
                     }
-                    if (rand(0, 30) == 10) {
+                    if (rand(0, 50) == 10) {
                         $api->getRecentActivityAll();
                     }
                     Users::where(['id' => $user->id])->update([
