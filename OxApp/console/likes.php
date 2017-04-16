@@ -104,18 +104,18 @@ class Likes extends Command
                     if (isset($result['1']['message']) && $result['1']['message'] === 'login_required') {
                         $api->login($user->guid, $user->phoneId, $user->deviceId, $user->password);
                     } elseif (isset($result['1']['message']) && $result['1']['message'] === 'checkpoint_required') {
-                        // Users::where(['id' => $user->id])->update(['ban' => 1]);
-                        // die();
+                        
                         // $api->login($user->guid, $user->phoneId, $user->deviceId, $user->password);
                         
                         $checkPoint = new Checkpoint($user->userName);
                         $checkPoint->proxy = $user->proxy;
-                        $checkPoint->request('https://i.instagram.com/challenge/');
                         $token = $checkPoint->doCheckpoint();
                         echo "\n\nCode you have received via mail: ";
                         $code = trim(fgets(STDIN));
-                        $checkPoint->checkpointThird($code, $token);
+                       // $checkPoint->checkpointThird($code, $token);
                         echo "\n\nDone";
+                         Users::where(['id' => $user->id])->update(['ban' => 1]);
+                         die();
                     } elseif (isset($result['1']['message']) && $result['1']['message'] === 'Not authorized to view user') {
                         //                        sleep(rand(10, 20));
                         //                        print_r($api->follow($acc));
