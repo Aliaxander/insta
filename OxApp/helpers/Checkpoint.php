@@ -110,7 +110,7 @@ class Checkpoint
             }
             echo "RESPONSE: $body\n\n";
         }
-        $result = [$header, json_decode($body, true)];
+        $result = [$header, $body];
         echo "\nResult:\n";
         print_r($result);
         
