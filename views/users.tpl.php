@@ -19,6 +19,7 @@
                             </select></th>
                         <th></th>
                         <th></th>
+                        <th></th>
                         <th><select class="form-control" name="LogIn">
                                 <option value="">all</option>
                                 <option value="0">LogIn 0</option>
@@ -47,6 +48,7 @@
                     <th>#</th>
                     <th><a href="{{ url }}orderBy=id&sort=desc">id</a></th>
                     <th><a href="{{ url }}orderBy=userGroup&sort=desc">userGroup</a></th>
+                    <th>Task</th>
                     <th><a href="{{ url }}orderBy=userName&sort=desc">userName</a></th>
                     <th><a href="{{ url }}orderBy=firstName&sort=desc">firstName</a></th>
                     <th><a href="{{ url }}orderBy=logIn&sort=desc">logIn</a></th>
@@ -72,6 +74,7 @@
                     <td><input type="checkbox" class="checkAll" value="{{ user.id }}"></td>
                     <td>{{ user.id }}</td>
                     <td>{{ user.userGroup }}</td>
+                    <td>{{ user.taskType }}</td>
                     <td><a href="https://instagram.com/{{ user.userName }}" target="_blank">{{ user.userName }}</a></td>
                     <td>{{ user.firstName }}</td>
                     <td>{{ user.logIn }}</td>

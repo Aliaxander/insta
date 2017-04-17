@@ -10,6 +10,7 @@ namespace OxApp\controllers;
 
 use Ox\App;
 use Ox\View;
+use OxApp\models\Task;
 use OxApp\models\TaskType;
 use OxApp\models\UserGroup;
 use OxApp\models\Users;
@@ -70,12 +71,16 @@ class UsersController extends App
             $template = 'users';
         }
         $taskType = TaskType::find()->rows;
+        foreach ($taskType as $item) {
+            $taskTypes[$item->id] = $item->name;
+        }
         $group = UserGroup::find()->rows;
         foreach ($group as $item) {
             $groups[$item->id] = $item->name;
         }
         foreach ($users as $key => $user) {
             $users[$key]->userGroup = $groups[$user->userGroup];
+            $users[$key]->taskType = $taskTypes[$user->userTask];
         }
         $usersSum = @Users::selectBy(['sum(likes) as likes'])->find()->rows[0]->likes;
         if ($_SERVER['REQUEST_URI'] == "/users") {
