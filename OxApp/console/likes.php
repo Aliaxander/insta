@@ -82,8 +82,8 @@ class Likes extends Command
                         $checkPoint->proxy = $user->proxy;
                         $checkPoint->accountId = $user->accountId;
                         $checkPoint->request($sync[1]['checkpoint_url']);
-                        //                        Users::where(['id' => $user->id])->update(['ban' => 1]);
-                        //                        die("Account banned");
+                                                Users::where(['id' => $user->id])->update(['ban' => 1]);
+                                                die("Account banned");
                     }
                     
                     $i++;
@@ -191,7 +191,7 @@ class Likes extends Command
                     if ($hour >= 4 && $likeCou > 2100) {
                         sleep(rand(70000, 87000));
                     }
-                    sleep(rand(1, 5));
+                    sleep(rand(1, 20));
                 }
             }
         }
