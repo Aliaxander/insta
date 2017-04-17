@@ -10,6 +10,7 @@ namespace OxApp\controllers;
 
 use Ox\App;
 use Ox\View;
+use OxApp\models\UserGroup;
 use OxApp\models\Users;
 
 /**
@@ -61,19 +62,37 @@ class UsersController extends App
             ->limit($paging)
             ->find()
             ->rows;
-        if($this->request->query->get('detail') == 'all') {
+        if ($this->request->query->get('detail') == 'all') {
             $template = 'userDetail';
         } else {
             $template = 'users';
         }
-  
+        $group = UserGroup::find()->rows;
+        foreach ($group as $item) {
+            $groups[$item->id] = $item->name;
+        }
+        foreach ($users as $key => $user) {
+            $users[$key]->userGroup = $groups[$user->userGroup];
+        }
         $usersSum = @Users::selectBy(['sum(likes) as likes'])->find()->rows[0]->likes;
         return View::build($template, [
+            'groups' => $group,
             'users' => $users,
-            "setPage" => $page,
+            'setPage' => $page,
             'sumLikes' => $usersSum,
-            "totalRows" => (int)@$total->rows[0]->count,
-            "totalPages" => ceil(@$total->rows[0]->count / $limit),
+            'totalRows' => (int)@$total->rows[0]->count,
+            'totalPages' => ceil(@$total->rows[0]->count / $limit),
         ]);
+    }
+
+    public function post()
+    {
+        $id = explode(',',$this->request->request->get('id'));
+        Users::update([
+            'userGroup' => $this->request->request->get('userGroup')],[
+            'id/in' => $id
+        ]);
+
+        return $this->get();
     }
 }
