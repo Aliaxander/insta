@@ -13,19 +13,25 @@ use Ox\App;
 use Ox\View;
 use OxApp\models\Proxy;
 
+/**
+ * Class AddProxyController
+ *
+ * @package OxApp\controllers
+ */
 class AddProxyController extends App
 {
     public function get()
     {
         return View::build('addProxy');
     }
-
+    
     public function post()
     {
-        $proxy = trim($this->request->request->get('proxy'));
-        $proxylist = explode("\r\n", $proxy);
-        foreach ($proxylist as $item) {
-            Proxy::add(['proxy' => $item, 'status' => 0]);
+        
+        for ($i = $this->request->request->get('portIn'); $i < $this->request->request->get('portOut'); $i++) {
+            Proxy::add([
+                'proxy' => $this->request->request->get('ip') . $i . ";" . $this->request->request->get('authData'),
+            ]);
         }
         $this->get();
     }

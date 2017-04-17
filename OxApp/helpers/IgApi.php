@@ -719,8 +719,22 @@ guage_picker'
             curl_setopt($ch, CURLOPT_POST, true);
             curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
         }
-        curl_setopt($ch, CURLOPT_PROXY, $this->proxy);
-        curl_setopt($ch, CURLOPT_PROXYUSERPWD, "rustam:ghbdtn123");
+        
+        $pos = strripos($this->proxy, ';');
+        if ($pos === false) {
+            curl_setopt($ch, CURLOPT_PROXY, $this->proxy);
+        } else {
+            $proxy = explode(";", $this->proxy);
+            curl_setopt($ch, CURLOPT_PROXY, $proxy[0]);
+            if (!empty($proxy[1])) {
+                curl_setopt($ch, CURLOPT_PROXYUSERPWD, $proxy[1]);
+            }
+        }
+        
+        
+        if (!empty($this->proxyAuth)) {
+            
+        }
         $resp = curl_exec($ch);
         $header_len = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
         $header = substr($resp, 0, $header_len);

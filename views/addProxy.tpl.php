@@ -4,8 +4,10 @@
         <form method="post">
             <div class="form-group">
                 <label for="inputEmail3" class="control-label">Proxy List</label>
-                <textarea name="proxy" class="form-control" rows="8"
-                          placeholder="каждый ip с новой строки"></textarea>
+	            <input type="text" name="ip" placeholder="127.155.254.222" value="">
+	            <input type="text" name="portIn" placeholder="port from" value="">
+	            <input type="text" name="portOut" placeholder="port to" value="">
+	            <input type="text" name="authData" placeholder="login:pass" value="">
             </div>
             <div class="form-group">
                 <div>
