@@ -61,9 +61,14 @@ class UsersController extends App
             ->limit($paging)
             ->find()
             ->rows;
+        if($this->request->query->get('detail') == 'all') {
+            $template = 'userDetail';
+        } else {
+            $template = 'users';
+        }
   
         $usersSum = @Users::selectBy(['sum(likes) as likes'])->find()->rows[0]->likes;
-        return View::build('users', [
+        return View::build($template, [
             'users' => $users,
             "setPage" => $page,
             'sumLikes' => $usersSum,
