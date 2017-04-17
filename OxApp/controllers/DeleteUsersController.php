@@ -13,14 +13,11 @@ use OxApp\models\Users;
 
 class DeleteUsersController extends App
 {
-    public function get()
+    public function post()
     {
-        $selectId = $this->request->query->get("id");
-        $id = explode(",", $selectId);
+        $id = explode(',',$this->request->request->get("id"));
         if (!empty($id)) {
-            foreach ($id as $userId) {
-                Users::delete(['id' => $userId]);
-            }
+                Users::delete(['id/in' => $id]);
         }
 
         header("Location: ".$_SERVER['HTTP_REFERER']);
