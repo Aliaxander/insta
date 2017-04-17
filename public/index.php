@@ -215,15 +215,15 @@ require(__DIR__ . "/../OxApp/Routes.php");
 //}
 //
 
-//$file = file('base.txt');
+//$file = file('/Users/Aliaxander/web/ox/instag/ox.txt');
 //foreach ($file as $str) {
 //    $acc = @preg_replace("/[^0-9]/", '', $str);
-//    if (InstBase::where(['account' => $acc])->find()->count == 0) {
+//    //if (InstBase::where(['account' => $acc])->find()->count == 0) {
 //        InstBase::add(['account' => $acc]);
 //        echo $acc;
-//    }else {
-//        echo "no";
-//    }
+////    }else {
+////        echo "no";
+////    }
 //}
 //$smiles=explode("\n", $smiles);
 //foreach ($smiles as $key=>$smile){
@@ -279,7 +279,7 @@ require(__DIR__ . "/../OxApp/Routes.php");
 //    print_r(ProfileGenerate::where(['id' => $i])->update(['url' => "www." . $val]));
 //    $i++;
 //}
-//for ($i = 30001; $i < 30400; $i++) {
+//for ($i = 30001; $i < 30499; $i++) {
 //    Proxy::add(['proxy' => '46.105.124.207:' . $i]);
 //}
 //$base=file_get_contents('/var/www/ox/instagram/public/base.txt');

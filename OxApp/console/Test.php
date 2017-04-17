@@ -42,18 +42,20 @@ class Test extends Command
     {
         //5 600 000
         require(__DIR__ . "/../../config.php");
-        $proxy = Proxy::limit([0 => 1])->find(['status' => 0]);
-    
-        $api = new IgApi();
-    
-        if ($proxy->count > 0) {
-            foreach ($proxy->rows as $row) {
-                Proxy::where(['id' => $row->id])->update(['status' => 1]);
-                $api->proxy = $row->proxy;
-                $api->create();
+        for ($i = 0; $i < 10; $i++) {
+            $proxy = Proxy::limit([0 => 1])->find(['status' => 0]);
+            
+            $api = new IgApi();
+            
+            if ($proxy->count > 0) {
+                foreach ($proxy->rows as $row) {
+                    Proxy::where(['id' => $row->id])->update(['status' => 1]);
+                    $api->proxy = $row->proxy;
+                    $api->create();
+                }
             }
         }
-    
+        
         return $output->writeln("Complite");
     }
 }
