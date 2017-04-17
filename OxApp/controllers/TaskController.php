@@ -9,6 +9,7 @@
 namespace OxApp\controllers;
 
 use Ox\App;
+use OxApp\models\Task;
 
 /**
  * Class TaskController
@@ -29,6 +30,24 @@ class TaskController extends App
      */
     public function post()
     {
-        //
+        $id = explode(',', $this->request->request->get('id'));
+        foreach ($id as $item) {
+            if (Task::find(['userId' => $item])->count > 0) {
+                Task::update([
+                    'taskTypeId' => $this->request->request->get('taskTypeId'),
+                    'status' => 0
+                ],[
+                    'userId' => $item
+                ]);
+            } else {
+                Task::add([
+                    'taskTypeId' => $this->request->request->get('taskTypeId'),
+                    'userId' => $item,
+                    'status' => 0
+                ]);
+            }
+        }
+
+        header("Location: /users");
     }
 }

@@ -148,7 +148,7 @@
 <div class="modal fade modal-task" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
     <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
-            <form method="post">
+            <form method="post" action="/task">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                                 aria-hidden="true">&times;</span></button>
@@ -156,7 +156,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="row">
-                        <select class="form-control input-lg" name="userGroup">
+                        <select class="form-control input-lg" name="taskTypeId">
                             {% for task in taskType %}
                             <option value="{{ task.id }}">{{ task.name }}</option>
                             {% endfor %}
