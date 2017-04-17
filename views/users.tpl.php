@@ -67,7 +67,7 @@
                     {% else %}
                 <tr>
                     {% endif %}
-                    <td><input type="checkbox" value="{{ user.id }}"></td>
+                    <td><input type="checkbox" class="checkAll" value="{{ user.id }}"></td>
                     <td>{{ user.id }}</td>
                     <td>{{ user.userGroup }}</td>
                     <td><a href="https://instagram.com/{{ user.userName }}" target="_blank">{{ user.userName }}</a></td>
@@ -88,21 +88,25 @@
         </div>
     </div>
     <div class="panel-footer">
-        <button class="btn btn-danger" onclick="check()" data-toggle="modal" data-target=".modal-delete">Delete
-        </button>
-        <button class="btn btn-success" id="checkAll">check All</button>
-        <button class="btn btn-primary" id="addGroup" data-toggle="modal" onclick="check()"
-                data-target=".modal-group">Add to Group
-        </button>
-        <ul class="pagination pull-right" style="margin: 0;">
-            {% for i in range(1, totalPages) %}
-            <li
-                    {% if i==setPage %} class="active" {% endif %}><a
-                        href="/users?page={{ i }}">{{ i }} {% if i==setPage %}<span class="sr-only">(current)</span>{%
-                    endif
-                    %}</a></li>
-            {% endfor %}
-        </ul>
+        <div class="row">
+            <button class="btn btn-danger" onclick="check()" data-toggle="modal" data-target=".modal-delete">Delete
+            </button>
+            <button class="btn btn-success" id="checkAll"
+                    onclick="$('.checkAll').prop('checked', !($('.checkAll').is(':checked')));">check All
+            </button>
+            <button class="btn btn-primary" id="addGroup" data-toggle="modal" onclick="check()"
+                    data-target=".modal-group">Add to Group
+            </button>
+            <ul class="pagination pull-right" style="margin: 0;">
+                {% for i in range(1, totalPages) %}
+                <li
+                        {% if i==setPage %} class="active" {% endif %}><a
+                            href="/users?page={{ i }}">{{ i }} {% if i==setPage %}<span class="sr-only">(current)</span>{%
+                        endif
+                        %}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
     </div>
 </div>
 
@@ -170,10 +174,5 @@
         console.log(id);
         $('.id_profile').val(id);
     }
-
-    $('#checkAll').click(function () {
-        $('input').prop('checked', true);
-    });
-
 </script>
 {% include "global/footer.tpl.php" %}
