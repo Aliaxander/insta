@@ -10,6 +10,7 @@ namespace OxApp\controllers;
 
 use Ox\App;
 use Ox\View;
+use OxApp\models\TaskType;
 use OxApp\models\UserGroup;
 use OxApp\models\Users;
 
@@ -68,6 +69,7 @@ class UsersController extends App
         } else {
             $template = 'users';
         }
+        $taskType = TaskType::find()->rows;
         $group = UserGroup::find()->rows;
         foreach ($group as $item) {
             $groups[$item->id] = $item->name;
@@ -83,6 +85,7 @@ class UsersController extends App
         }
         return View::build($template, [
             'url' => $url,
+            'taskType' => $taskType,
             'groups' => $group,
             'users' => $users,
             'setPage' => $page,

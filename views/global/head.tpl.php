@@ -45,6 +45,12 @@
                     <li><a href="/users?detail=all">Users detail</a></li>
                 </ul>
             </li>
+            <li><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                   aria-expanded="false">Task <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    <li><a href="/task">Task</a></li>
+                </ul>
+            </li>
         </ul>
     </div>
 </nav>

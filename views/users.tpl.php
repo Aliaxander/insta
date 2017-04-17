@@ -91,13 +91,16 @@
     </div>
     <div class="panel-footer">
         <div class="row">
-            <button class="btn btn-danger" onclick="check()" data-toggle="modal" data-target=".modal-delete">Delete
-            </button>
             <button class="btn btn-success" id="checkAll"
                     onclick="$('.checkAll').prop('checked', !($('.checkAll').is(':checked')));">check All
             </button>
-            <button class="btn btn-primary" id="addGroup" data-toggle="modal" onclick="check()"
+            <button class="btn btn-danger" onclick="check()" data-toggle="modal" data-target=".modal-delete">Delete
+            </button>
+            <button class="btn btn-primary" data-toggle="modal" onclick="check()"
                     data-target=".modal-group">Add to Group
+            </button>
+            <button class="btn btn-info" data-toggle="modal" onclick="check()"
+                    data-target=".modal-task">Add Task
             </button>
             <ul class="pagination pull-right" style="margin: 0;">
                 {% for i in range(1, totalPages) %}
@@ -141,6 +144,35 @@
     </div>
 </div>
 <!-- end moadal add-group -->
+<!-- modal addTask -->
+<div class="modal fade modal-task" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <form method="post">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="gridSystemModalLabel">Add profile to group</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <select class="form-control input-lg" name="userGroup">
+                            {% for task in taskType %}
+                            <option value="{{ task.id }}">{{ task.name }}</option>
+                            {% endfor %}
+                        </select>
+                        <input type="hidden" class="form-control id_profile" name="id">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Add</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- end moadal add-task -->
 <!-- modal delete -->
 <div class="modal fade modal-delete" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
     <div class="modal-dialog modal-sm" role="document">

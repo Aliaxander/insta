@@ -24,5 +24,4 @@ use Ox\DataBase\AbstractModel;
 class InstBase extends AbstractModel
 {
     protected static $from = 'instBase';
-    
 }
