@@ -3,20 +3,20 @@
     <table class="table">
         <thead>
         <tr>
-            <th><a href="?orderBy=id&sort=desc">id</a></th>
-            <th><a href="?orderBy=userName&sort=desc">userName</a></th>
-            <th><a href="?orderBy=firstName&sort=desc">firstName</a></th>
-            <th><a href="?orderBy=email&sort=desc">email</a></th>
-            <th><a href="?orderBy=password&sort=desc">password</a></th>
-            <th><a href="?orderBy=deviceId&sort=desc">deviceId</a></th>
-            <th><a href="?orderBy=phoneId&sort=desc">phoneId</a></th>
-            <th><a href="?orderBy=waterfall_id&sort=desc">waterfall_id</a></th>
-            <th><a href="?orderBy=guid&sort=desc">guid</a></th>
-            <th><a href="?orderBy=qeId&sort=desc">qeId</a></th>
-            <th><a href="?orderBy=accountId&sort=desc">accountId</a></th>
-            <th><a href="?orderBy=proxy&sort=desc">proxy</a></th>
-            <th><a href="?orderBy=userAgent&sort=desc">userAgent</a></th>
-            <th><a href="?orderBy=dateCreate&sort=desc">dateCreate</a></th>
+            <th><a href="?detail=all&orderBy=id&sort=desc">id</a></th>
+            <th><a href="?detail=all&orderBy=userName&sort=desc">userName</a></th>
+            <th><a href="?detail=all&orderBy=firstName&sort=desc">firstName</a></th>
+            <th><a href="?detail=all&orderBy=email&sort=desc">email</a></th>
+            <th><a href="?detail=all&orderBy=password&sort=desc">password</a></th>
+            <th><a href="?detail=all&orderBy=deviceId&sort=desc">deviceId</a></th>
+            <th><a href="?detail=all&orderBy=phoneId&sort=desc">phoneId</a></th>
+            <th><a href="?detail=all&orderBy=waterfall_id&sort=desc">waterfall_id</a></th>
+            <th><a href="?detail=all&orderBy=guid&sort=desc">guid</a></th>
+            <th><a href="?detail=all&orderBy=qeId&sort=desc">qeId</a></th>
+            <th><a href="?detail=all&orderBy=accountId&sort=desc">accountId</a></th>
+            <th><a href="?detail=all&orderBy=proxy&sort=desc">proxy</a></th>
+            <th><a href="?detail=all&orderBy=userAgent&sort=desc">userAgent</a></th>
+            <th><a href="?detail=all&orderBy=dateCreate&sort=desc">dateCreate</a></th>
         </tr>
         </thead>
         <tbody>
