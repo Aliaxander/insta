@@ -22,7 +22,7 @@ header('Access-Control-Allow-Methods: POST, GET, DELETE, PUT, OPTIONS');
 header('Access-Control-Allow-Origin: *');
 $loader = require __DIR__ . '/../vendor/autoload.php';
 require(__DIR__ . "/../config.php");
-//require(__DIR__ . "/../OxApp/Routes.php");
+require(__DIR__ . "/../OxApp/Routes.php");
 
 //$email = "domainreg480@gmail.com";
 //$password = "m9Rgx7UpoTiJjM8k";
