@@ -720,7 +720,7 @@ guage_picker'
             curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
         }
         curl_setopt($ch, CURLOPT_PROXY, $this->proxy);
-        curl_setopt($ch, CURLOPT_PROXYUSERPWD, "rustam:drago11n");
+        curl_setopt($ch, CURLOPT_PROXYUSERPWD, "rustam:ghbdtn123");
         $resp = curl_exec($ch);
         $header_len = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
         $header = substr($resp, 0, $header_len);

@@ -282,8 +282,11 @@ require(__DIR__ . "/../OxApp/Routes.php");
 ////Рустам Алимурадов, [17.04.17 18:27]
 //86.110.118.234:30000 - 30999
 //rustam:drago11n
-//for ($i = 30000; $i < 30999; $i++) {
-//    Proxy::add(['proxy' => '86.110.118.234:' . $i]);
+//185.154.20.207:50000 - 60000
+//rustam
+//ghbdtn123
+//for ($i = 50000; $i < 50500; $i++) {
+//    Proxy::add(['proxy' => '185.154.20.207:' . $i]);
 //}
 //$base=file_get_contents('/var/www/ox/instagram/public/base.txt');
 //echo $base;
