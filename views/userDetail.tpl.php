@@ -29,6 +29,7 @@
         <tr>
             {% endif %}
             <td>{{ user.id }}</td>
+            <td>{{ user.userName }}</td>
             <td>{{ user.firstName }}</td>
             <td>{{ user.email }}</td>
             <td>{{ user.password }}</td>
@@ -39,6 +40,7 @@
             <td>{{ user.qeId }}</td>
             <td>{{ user.accountId }}</td>
             <td>{{ user.proxy }}</td>
+            <td>{{ user.userAgent }}</td>
             <td>{{ user.dateCreate }}</td>
         </tr>
         {% endfor %}
