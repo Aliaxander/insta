@@ -30,7 +30,7 @@ class AddProxyController extends App
         
         for ($i = $this->request->request->get('portIn'); $i < $this->request->request->get('portOut'); $i++) {
             Proxy::add([
-                'proxy' => $this->request->request->get('ip') . $i . ";" . $this->request->request->get('authData'),
+                'proxy' => $this->request->request->get('ip') .":". $i . ";" . $this->request->request->get('authData'),
             ]);
         }
         $this->get();
