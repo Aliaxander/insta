@@ -125,17 +125,17 @@ class IgApi
                 $tokenResult = false;
             }
             if ($sync[1]['message'] === 'checkpoint_required') {
-//                echo "\nLimit fixer----------------------------------------\n";
-//                $checkPoint = new Checkpoint($this->username);
-//                $checkPoint->proxy = $this->proxy;
-//                $checkPoint->accountId = $this->accountId;
-//                $checkPoint->request($sync[1]['checkpoint_url']);
-//                $checkPoint->request('https://www.instagram.com/challenge/');
-//
-//
-//                echo "\nEND Limit fixer----------------------------------------\n";
-                                Users::where(['guid' => $guid, 'phoneId' => $phoneId, 'deviceId' => $device_id])->update(['ban' => 1]);
-                                print("Account banned");
+                //                echo "\nLimit fixer----------------------------------------\n";
+                //                $checkPoint = new Checkpoint($this->username);
+                //                $checkPoint->proxy = $this->proxy;
+                //                $checkPoint->accountId = $this->accountId;
+                //                $checkPoint->request($sync[1]['checkpoint_url']);
+                //                $checkPoint->request('https://www.instagram.com/challenge/');
+                //
+                //
+                //                echo "\nEND Limit fixer----------------------------------------\n";
+                Users::where(['guid' => $guid, 'phoneId' => $phoneId, 'deviceId' => $device_id])->update(['ban' => 1]);
+                print("Account banned");
                 exit();
             }
             
@@ -169,20 +169,20 @@ class IgApi
         ])->update(['csrftoken' => $tokenResult, 'accountId' => @$resultLogin[1]['logged_in_user']['pk']]);
         $newsInbox = $this->request('news/inbox/?activity_module=all');
         if ($newsInbox[1]['message'] === 'checkpoint_required') {
-//            echo "\nLimit fixer----------------------------------------\n";
-//            $checkPoint = new Checkpoint($this->username);
-//            $checkPoint->proxy = $this->proxy;
-//            $checkPoint->accountId = $this->accountId;
-//            $checkPoint->request($newsInbox[1]['checkpoint_url']);
-//            $checkPoint->request('https://www.instagram.com/challenge/');
-//            print_r($checkPoint->checkpointSecondStep($tokenResult));
-//            print_r($checkPoint->request('https://i.instagram.com/challenge/?next=instagram://checkpoint/dismiss'));
-//            print_r($checkPoint->request('https://www.instagram.com/challenge/?next=instagram://checkpoint/dismiss'));
-//
-//
-//            echo "\nEND Limit fixer----------------------------------------\n";
-                            Users::where(['guid' => $guid, 'phoneId' => $phoneId, 'deviceId' => $device_id])->update(['ban' => 1]);
-                            print("Account banned");
+            //            echo "\nLimit fixer----------------------------------------\n";
+            //            $checkPoint = new Checkpoint($this->username);
+            //            $checkPoint->proxy = $this->proxy;
+            //            $checkPoint->accountId = $this->accountId;
+            //            $checkPoint->request($newsInbox[1]['checkpoint_url']);
+            //            $checkPoint->request('https://www.instagram.com/challenge/');
+            //            print_r($checkPoint->checkpointSecondStep($tokenResult));
+            //            print_r($checkPoint->request('https://i.instagram.com/challenge/?next=instagram://checkpoint/dismiss'));
+            //            print_r($checkPoint->request('https://www.instagram.com/challenge/?next=instagram://checkpoint/dismiss'));
+            //
+            //
+            //            echo "\nEND Limit fixer----------------------------------------\n";
+            Users::where(['guid' => $guid, 'phoneId' => $phoneId, 'deviceId' => $device_id])->update(['ban' => 1]);
+            print("Account banned");
             
         }
         
@@ -720,7 +720,7 @@ guage_picker'
             curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
         }
         curl_setopt($ch, CURLOPT_PROXY, $this->proxy);
-        //curl_setopt($ch, CURLOPT_PROXYUSERPWD, "HmddbF:h0WAKS");
+        curl_setopt($ch, CURLOPT_PROXYUSERPWD, "rustam:drago11n");
         $resp = curl_exec($ch);
         $header_len = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
         $header = substr($resp, 0, $header_len);

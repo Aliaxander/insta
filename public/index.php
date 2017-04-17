@@ -22,7 +22,7 @@ header('Access-Control-Allow-Methods: POST, GET, DELETE, PUT, OPTIONS');
 header('Access-Control-Allow-Origin: *');
 $loader = require __DIR__ . '/../vendor/autoload.php';
 require(__DIR__ . "/../config.php");
-require(__DIR__ . "/../OxApp/Routes.php");
+//require(__DIR__ . "/../OxApp/Routes.php");
 
 //$email = "domainreg480@gmail.com";
 //$password = "m9Rgx7UpoTiJjM8k";
@@ -279,8 +279,11 @@ require(__DIR__ . "/../OxApp/Routes.php");
 //    print_r(ProfileGenerate::where(['id' => $i])->update(['url' => "www." . $val]));
 //    $i++;
 //}
-//for ($i = 30001; $i < 30499; $i++) {
-//    Proxy::add(['proxy' => '46.105.124.207:' . $i]);
+////Рустам Алимурадов, [17.04.17 18:27]
+//86.110.118.234:30000 - 30999
+//rustam:drago11n
+//for ($i = 30000; $i < 30999; $i++) {
+//    Proxy::add(['proxy' => '86.110.118.234:' . $i]);
 //}
 //$base=file_get_contents('/var/www/ox/instagram/public/base.txt');
 //echo $base;
