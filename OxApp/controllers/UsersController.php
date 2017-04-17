@@ -76,7 +76,13 @@ class UsersController extends App
             $users[$key]->userGroup = $groups[$user->userGroup];
         }
         $usersSum = @Users::selectBy(['sum(likes) as likes'])->find()->rows[0]->likes;
+        if ($_SERVER['REQUEST_URI'] == "/users") {
+            $url = $_SERVER['REQUEST_URI'] . "?";
+        } else {
+            $url = $_SERVER['REQUEST_URI'] . "&";
+        }
         return View::build($template, [
+            'url' => $url,
             'groups' => $group,
             'users' => $users,
             'setPage' => $page,
@@ -88,9 +94,9 @@ class UsersController extends App
 
     public function post()
     {
-        $id = explode(',',$this->request->request->get('id'));
+        $id = explode(',', $this->request->request->get('id'));
         Users::update([
-            'userGroup' => $this->request->request->get('userGroup')],[
+            'userGroup' => $this->request->request->get('userGroup')], [
             'id/in' => $id
         ]);
 

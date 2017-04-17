@@ -45,18 +45,18 @@
                 <thead>
                 <tr>
                     <th>#</th>
-                    <th><a href="?orderBy=id&sort=desc">id</a></th>
-                    <th><a href="?orderBy=userGroup&sort=desc">userGroup</a></th>
-                    <th><a href="?orderBy=userName&sort=desc">userName</a></th>
-                    <th><a href="?orderBy=firstName&sort=desc">firstName</a></th>
-                    <th><a href="?orderBy=logIn&sort=desc">logIn</a></th>
-                    <th><a href="?orderBy=proxy&sort=desc">proxy</a></th>
-                    <th><a href="?orderBy=requests&sort=desc">requests</a></th>
-                    <th><a href="?orderBy=follows&sort=desc">follows</a></th>
-                    <th><a href="?orderBy=likes&sort=desc">likes</a></th>
-                    <th><a href="?orderBy=dateCreate&sort=desc">dateCreate</a></th>
-                    <th><a href="?orderBy=hour&sort=desc">hour</a></th>
-                    <th><a href="?orderBy=ban&sort=desc">ban</a></th>
+                    <th><a href="{{ url }}orderBy=id&sort=desc">id</a></th>
+                    <th><a href="{{ url }}orderBy=userGroup&sort=desc">userGroup</a></th>
+                    <th><a href="{{ url }}orderBy=userName&sort=desc">userName</a></th>
+                    <th><a href="{{ url }}orderBy=firstName&sort=desc">firstName</a></th>
+                    <th><a href="{{ url }}orderBy=logIn&sort=desc">logIn</a></th>
+                    <th><a href="{{ url }}orderBy=proxy&sort=desc">proxy</a></th>
+                    <th><a href="{{ url }}orderBy=requests&sort=desc">requests</a></th>
+                    <th><a href="{{ url }}orderBy=follows&sort=desc">follows</a></th>
+                    <th><a href="{{ url }}orderBy=likes&sort=desc">likes</a></th>
+                    <th><a href="{{ url }}orderBy=dateCreate&sort=desc">dateCreate</a></th>
+                    <th><a href="{{ url }}orderBy=hour&sort=desc">hour</a></th>
+                    <th><a href="{{ url }}orderBy=ban&sort=desc">ban</a></th>
                     <th>options</th>
                 </tr>
                 </thead>
@@ -103,7 +103,7 @@
                 {% for i in range(1, totalPages) %}
                 <li
                         {% if i==setPage %} class="active" {% endif %}><a
-                            href="/users?page={{ i }}">{{ i }} {% if i==setPage %}<span class="sr-only">(current)</span>{%
+                            href="{{ url }}page={{ i }}">{{ i }} {% if i==setPage %}<span class="sr-only">(current)</span>{%
                         endif
                         %}</a></li>
                 {% endfor %}
