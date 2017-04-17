@@ -8,36 +8,38 @@
             <table class="table">
                 <thead>
                 <tr>
-                    <th></th>
-                    <th></th>
-                    <th><select class="form-control" name="userGroup">
-                            <option value="">all</option>
-                            {% for group in groups %}
-                            <option value="{{ group.id }}">{{ group.name }}</option>
-                            {% endfor %}
-                        </select></th>
-                    <th></th>
-                    <th></th>
-                    <th><select class="form-control" name="LogIn">
-                            <option value="">all</option>
-                            <option value="0">LogIn 0</option>
-                            <option value="1">LogIn 1</option>
-                        </select></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th>
-                        <select class="form-control" name="ban">
-                            <option value="">all</option>
-                            <option value="0">No ban</option>
-                            <option value="1">Ban</option>
-                        </select></th>
-                    <th>
-                        <button type="submit" class="btn btn-primary">Filter</button>
-                    </th>
+                    <form method="get">
+                        <th></th>
+                        <th></th>
+                        <th><select class="form-control" name="userGroup">
+                                <option value="">all</option>
+                                {% for group in groups %}
+                                <option value="{{ group.id }}">{{ group.name }}</option>
+                                {% endfor %}
+                            </select></th>
+                        <th></th>
+                        <th></th>
+                        <th><select class="form-control" name="LogIn">
+                                <option value="">all</option>
+                                <option value="0">LogIn 0</option>
+                                <option value="1">LogIn 1</option>
+                            </select></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th>
+                            <select class="form-control" name="ban">
+                                <option value="">all</option>
+                                <option value="0">No ban</option>
+                                <option value="1">Ban</option>
+                            </select></th>
+                        <th>
+                            <button type="submit" class="btn btn-primary">Filter</button>
+                        </th>
+                    </form>
                 </tr>
                 </thead>
                 <thead>

@@ -27,7 +27,8 @@ class UsersController extends App
     {
         $rule = [
             "LogIn",
-            "ban"
+            "ban",
+            "userGroup"
         ];
         $where = [];
         foreach ($rule as $item) {
