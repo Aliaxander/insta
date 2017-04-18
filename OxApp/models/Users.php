@@ -9,7 +9,6 @@
 namespace OxApp\models;
 
 use Ox\DataBase\AbstractModel;
-use Faker\Factory;
 
 /**
  * Class Users

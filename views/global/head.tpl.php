@@ -35,7 +35,6 @@
                    aria-expanded="false">Proxy <span class="caret"></span></a>
                 <ul class="dropdown-menu">
                     <li><a href="/proxy">Proxy list</a></li>
-                    <li><a href="/addProxy">Proxy add</a></li>
                 </ul>
             </li>
             <li><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"

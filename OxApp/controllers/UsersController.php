@@ -28,13 +28,14 @@ class UsersController extends App
     public function get()
     {
         $rule = [
-            "LogIn",
-            "ban",
-            "userGroup"
+            'LogIn',
+            'ban',
+            'userGroup',
+            'userTask'
         ];
         $where = [];
         foreach ($rule as $item) {
-            if (!empty($this->request->query->get($item)) || $this->request->query->get($item) == 0) {
+            if (!empty($this->request->query->get($item))) {
                 $where[$item] = $this->request->query->get($item);
             }
         }
@@ -42,10 +43,10 @@ class UsersController extends App
         if (!empty($this->request->query->get('orderBy')) && !empty($this->request->query->get('sort'))) {
             $orderBy = [$this->request->query->get('orderBy') => $this->request->query->get('sort')];
         } else {
-            $orderBy = ["id" => "desc"];
+            $orderBy = ['id' => 'desc'];
         }
-        if (!empty($this->request->query->get("limit"))) {
-            $limit = $this->request->query->get("limit");
+        if (!empty($this->request->query->get('limit'))) {
+            $limit = $this->request->query->get('limit');
         } else {
             $limit = 50;
         }
@@ -80,7 +81,7 @@ class UsersController extends App
         }
         foreach ($users as $key => $user) {
             $users[$key]->userGroup = $groups[$user->userGroup];
-            $users[$key]->taskType = $taskTypes[$user->userTask];
+            $users[$key]->userTask = $taskTypes[$user->userTask];
         }
         $usersSum = @Users::selectBy(['sum(likes) as likes'])->find()->rows[0]->likes;
         if ($_SERVER['REQUEST_URI'] == "/users") {
@@ -90,7 +91,7 @@ class UsersController extends App
         }
         return View::build($template, [
             'url' => $url,
-            'taskType' => $taskType,
+            'taskTypes' => $taskType,
             'groups' => $group,
             'users' => $users,
             'setPage' => $page,
@@ -104,7 +105,8 @@ class UsersController extends App
     {
         $id = explode(',', $this->request->request->get('id'));
         Users::update([
-            'userGroup' => $this->request->request->get('userGroup')], [
+            'userGroup' => $this->request->request->get('userGroup')
+        ], [
             'id/in' => $id
         ]);
 

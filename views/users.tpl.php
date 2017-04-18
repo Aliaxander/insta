@@ -17,7 +17,12 @@
                                 <option value="{{ group.id }}">{{ group.name }}</option>
                                 {% endfor %}
                             </select></th>
-                        <th></th>
+                        <th><select class="form-control" name="userTask">
+                                <option value="">all</option>
+                                {% for taskType in taskTypes %}
+                                <option value="{{ taskType.id }}">{{ taskType.name }}</option>
+                                {% endfor %}
+                            </select></th>
                         <th></th>
                         <th></th>
                         <th><select class="form-control" name="LogIn">
@@ -74,7 +79,7 @@
                     <td><input type="checkbox" class="checkAll" value="{{ user.id }}"></td>
                     <td>{{ user.id }}</td>
                     <td>{{ user.userGroup }}</td>
-                    <td>{{ user.taskType }}</td>
+                    <td>{{ user.userTask }}</td>
                     <td><a href="https://instagram.com/{{ user.userName }}" target="_blank">{{ user.userName }}</a></td>
                     <td>{{ user.firstName }}</td>
                     <td>{{ user.logIn }}</td>
