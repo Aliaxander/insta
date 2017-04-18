@@ -38,7 +38,7 @@ class UsersController extends App
                 $where[$item] = $this->request->query->get($item);
             }
         }
-
+        
         if (!empty($this->request->query->get('orderBy')) && !empty($this->request->query->get('sort'))) {
             $orderBy = [$this->request->query->get('orderBy') => $this->request->query->get('sort')];
         } else {
@@ -88,6 +88,7 @@ class UsersController extends App
         } else {
             $url = $_SERVER['REQUEST_URI'] . "&";
         }
+        
         return View::build($template, [
             'url' => $url,
             'taskTypes' => $taskType,
@@ -99,16 +100,16 @@ class UsersController extends App
             'totalPages' => ceil(@$total->rows[0]->count / $limit),
         ]);
     }
-
+    
     public function post()
     {
         $id = explode(',', $this->request->request->get('id'));
-        Users::update([
-            'userGroup' => $this->request->request->get('userGroup')
-        ], [
+        Users::where([
             'id/in' => $id
+        ])->update([
+            'userGroup' => $this->request->request->get('userGroup')
         ]);
-
+        
         return $this->get();
     }
 }

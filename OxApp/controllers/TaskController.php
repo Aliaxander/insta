@@ -11,9 +11,11 @@ namespace OxApp\controllers;
 use Ox\App;
 use Ox\View;
 use OxApp\models\Task;
+use OxApp\models\Users;
 
 /**
  * Class TaskController
+ *
  * @package OxApp\controllers
  */
 class TaskController extends App
@@ -25,30 +27,30 @@ class TaskController extends App
     {
         return View::build("task");
     }
-
+    
     /**
      * POST method
      */
     public function post()
     {
-        $id = explode(',', $this->request->request->get('id'));
-        foreach ($id as $item) {
-            if (Task::find(['userId' => $item])->count > 0) {
-                Task::update([
-                    'taskTypeId' => $this->request->request->get('taskTypeId'),
-                    'status' => 0
-                ],[
-                    'userId' => $item
-                ]);
-            } else {
-                Task::add([
-                    'taskTypeId' => $this->request->request->get('taskTypeId'),
-                    'userId' => $item,
-                    'status' => 0
-                ]);
-            }
-        }
-
+        //        $id = explode(',', $this->request->request->get('id'));
+        //        foreach ($id as $item) {
+        //            if (Task::find(['userId' => $item])->count > 0) {
+        //                Task::update([
+        //                    'taskTypeId' => $this->request->request->get('taskTypeId'),
+        //                    'status' => 0
+        //                ],[
+        //                    'userId' => $item
+        //                ]);
+        //            } else {
+        //                Task::add([
+        //                    'taskTypeId' => $this->request->request->get('taskTypeId'),
+        //                    'userId' => $item,
+        //                    'status' => 0
+        //                ]);
+        //            }
+        //        }
+        Users::where(['id/in' => $this->request->request->get('id')])->update(['userTask' => $this->request->request->get('taskTypeId')]);
         header("Location: /users");
     }
 }
