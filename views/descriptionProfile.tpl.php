@@ -27,16 +27,17 @@
                     </div>
                     {% endfor %}
                 </div>
-                <div class="panel-footer">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <button class="btn btn-success" data-toggle="modal"
-                                    data-target=".modal-description">Generate Description
-                            </button>
-                        </div>
+            </div>
+            <div class="panel-footer">
+                <div class="row">
+                    <div class="col-md-12">
+                        <button class="btn btn-success" data-toggle="modal"
+                                data-target=".modal-description">Generate Description
+                        </button>
                     </div>
                 </div>
             </div>
+
         </div>
     </div>
 </div>
@@ -55,7 +56,8 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label for="inputEmail3" class="control-label">Description</label>
-                                <textarea name="biography" class="form-control" rows="4" placeholder="{Добрый день|Доброе утро}! Какая {на улице|за {окном|бортом}} {прекрасная|очаровательная|великолепная} погода!"></textarea>
+                                <textarea name="biography" class="form-control" rows="4"
+                                          placeholder="{Добрый день|Доброе утро}! Какая {на улице|за {окном|бортом}} {прекрасная|очаровательная|великолепная} погода!"></textarea>
                             </div>
                             <div class="form-group">
                                 <label for="count" class="control-label">count</label>
