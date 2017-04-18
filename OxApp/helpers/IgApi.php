@@ -47,19 +47,15 @@ class IgApi
             if (mt_rand(0, 1) == 1) {
                 $result = $this->request("feed/user/" . $feedId . "/");
                 $result2 = $this->request("feed/user/" . $feedId . "/story/");
-                $result3 = $this->request("feed/user/" . $feedId . "/info/");
             } elseif (mt_rand(0, 1) == 0) {
                 $result2 = $this->request("feed/user/" . $feedId . "/story/");
-                $result3 = $this->request("feed/user/" . $feedId . "/info/");
                 $result = $this->request("feed/user/" . $feedId . "/");
             } elseif (mt_rand(1, 2) == 2) {
                 $result2 = $this->request("feed/user/" . $feedId . "/story/");
-                $result3 = $this->request("feed/user/" . $feedId . "/info/");
                 $result = $this->request("feed/user/" . $feedId . "/");
             } else {
                 $result2 = $this->request("feed/user/" . $feedId . "/story/");
                 $result = $this->request("feed/user/" . $feedId . "/");
-                $result3 = $this->request("feed/user/" . $feedId . "/info/");
             }
         }
         
