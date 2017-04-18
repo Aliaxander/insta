@@ -121,6 +121,7 @@ class EditProfile extends Command
                     'photo' => $profile[1]['user']['profile_pic_url']
                 ]);
             } else {
+                die("No job");
                 $status = false;
             }
         }
