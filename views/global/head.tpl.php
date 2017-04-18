@@ -25,9 +25,8 @@
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                    aria-expanded="false">Description profile <span class="caret"></span></a>
                 <ul class="dropdown-menu">
-                    <li><a href="/generateProfile">Generate Profile</a></li>
+                    <li><a href="/descriptionProfile">DescriptionProfile</a></li>
                     <li><a href="/testMacros">Test Template</a></li>
-                    <li><a href="/showProfile">Show</a></li>
                 </ul>
             </li>
             <li class="dropdown">
