@@ -10,6 +10,8 @@ namespace OxApp\controllers;
 
 use Ox\App;
 use Ox\View;
+use OxApp\models\Domains;
+use OxApp\models\InstBase;
 use OxApp\models\ProfileGenerate;
 use OxApp\models\Proxy;
 use OxApp\models\Users;
@@ -18,15 +20,22 @@ class IndexController extends App
 {
     public function get()
     {
-        $allUsers = Users::find();
-        $banUsers = Users::find(["ban" => 1]);
-        $proxy = Proxy::find();
-        $description = ProfileGenerate::find();
+        $allUsers = Users::selectBy(['count(id) as count'])->find()->rows[0]->count;
+        $banUsers = Users::selectBy(['count(id) as count'])->find(["ban" => 1])->rows[0]->count;
+        $proxy = Proxy::selectBy(['count(id) as count'])->find()->rows[0]->count;
+        $description = ProfileGenerate::selectBy(['count(id) as count'])->find()->rows[0]->count;
+        $instBase = instBase::selectBy(['count(id) as count'])->find()->rows[0]->count;
+        $domains = Domains::selectBy(['count(id) as count'])->find()->rows[0]->count;
         return View::build("index", [
-            "allUsers" => $allUsers->count,
-            "banUsers" => $banUsers->count,
-            "proxy" => $proxy->count,
-            "description" => $description->count,
+            'data' =>
+                [
+                    "instBase" => $instBase,
+                    "domains" => $domains,
+                    "allUsers" => $allUsers,
+                    "banUsers" => $banUsers,
+                    "proxy" => $proxy,
+                    "description" => $description,
+                ]
         ]);
     }
 }

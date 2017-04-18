@@ -13,21 +13,25 @@
                 <h3 class="panel-title">Description profile</h3>
             </div>
             <div class="panel-body">
-                <div class="row">
-                    {% for profile in profiles %}
-                    <div class="col-sm-12 col-md-4">
-                        <div class="thumbnail">
-                            <div class="caption">
-                                <p>{{ profile.description }}</p>
-                                <p><a href="{{ profile.url }}">{{ profile.url }}</a></p>
-                                <p><a href="/deleteProfile/{{ profile.id }}" class="btn btn-danger"
-                                      role="button">Delete</a></p>
-                            </div>
+                <button class="btn btn-success btn-sm" data-toggle="modal"
+                        data-target=".modal-description">Generate Description
+                </button>
+            </div>
+            <div class="row">
+                {% for profile in profiles %}
+                <div class="col-sm-12 col-md-4">
+                    <div class="thumbnail">
+                        <div class="caption">
+                            <p>{{ profile.description }}</p>
+                            <p><a href="{{ profile.url }}">{{ profile.url }}</a></p>
+                            <p><a href="/deleteProfile/{{ profile.id }}" class="btn btn-danger"
+                                  role="button">Delete</a></p>
                         </div>
                     </div>
-                    {% endfor %}
                 </div>
+                {% endfor %}
             </div>
+
             <div class="panel-footer">
                 <div class="row">
                     <div class="col-md-12">

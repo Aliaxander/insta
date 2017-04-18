@@ -12,30 +12,31 @@
             <div class="panel-heading">
                 <h3 class="panel-title">Proxy</h3>
             </div>
-            <div class="panel-body">
-                <table class="table">
-                    <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>proxy</th>
-                        <th>status</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {% for proxy in proxyes %}
-                    {% if proxy.status == 0 %}
-                    <tr class="success">
-                        {% else %}
-                    <tr class="danger">
-                        {% endif %}
-                        <td>{{ proxy.id }}</td>
-                        <td>{{ proxy.proxy }}</td>
-                        <td>{{ proxy.status }}</td>
-                    </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
-            </div>
+            <div class="panel-body"><button class="btn btn-success btn-sm" data-toggle="modal"
+                                            data-target=".modal-proxy">Add Proxy
+                </button></div>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>proxy</th>
+                    <th>status</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for proxy in proxyes %}
+                {% if proxy.status == 0 %}
+                <tr class="success">
+                    {% else %}
+                <tr class="danger">
+                    {% endif %}
+                    <td>{{ proxy.id }}</td>
+                    <td>{{ proxy.proxy }}</td>
+                    <td>{{ proxy.status }}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
             <div class="panel-footer">
                 <div class="row">
                     <div class="col-md-12">
@@ -63,7 +64,8 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label for="ip" class="control-label">Proxy ip </label>
-                                <input type="text" class="form-control" name="ip" placeholder="127.155.254.222" value="">
+                                <input type="text" class="form-control" name="ip" placeholder="127.155.254.222"
+                                       value="">
                             </div>
                             <div class="form-group">
                                 <label for="portIn" class="control-label">Port from </label>
@@ -75,7 +77,8 @@
                             </div>
                             <div class="form-group">
                                 <label for="authData" class="control-label">Login:pass </label>
-                                <input type="text" class="form-control" name="authData" placeholder="login:pass" value="">
+                                <input type="text" class="form-control" name="authData" placeholder="login:pass"
+                                       value="">
                             </div>
                         </div>
                     </div>
