@@ -42,10 +42,10 @@ class Likes extends Command
         require(__DIR__ . "/../../config.php");
         $api = new IgApi();
         $users = Users::orderBy(["id" => 'desc'])->limit([0 => 1])->find(['login' => 1, 'ban' => 0, 'requests' => 0]);
-        if ($users->rows == 0) {
+        if ($users->count == 0) {
             die('no job');
-        }
-        foreach ($users->rows as $user) {
+        } else {
+            $user = $users->rows[0];
             print_r($user);
             $requestCou = $user->requests;
             $likeCou = $user->likes;
@@ -82,8 +82,8 @@ class Likes extends Command
                         $checkPoint->proxy = $user->proxy;
                         $checkPoint->accountId = $user->accountId;
                         $checkPoint->request($sync[1]['checkpoint_url']);
-                                                Users::where(['id' => $user->id])->update(['ban' => 1]);
-                                                die("Account banned");
+                        Users::where(['id' => $user->id])->update(['ban' => 1]);
+                        die("Account banned");
                     }
                     
                     $i++;
