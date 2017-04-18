@@ -173,11 +173,13 @@ class Likes extends Command
                     if (rand(0, 50) == 10) {
                         $api->getRecentActivityAll();
                     }
-                    Users::where(['id' => $user->id])->update([
-                        'requests' => $requestCou,
-                        'follows' => $followCou,
-                        'likes' => $likeCou
-                    ]);
+                    if ($requestCou !== 0) {
+                        Users::where(['id' => $user->id])->update([
+                            'requests' => $requestCou,
+                            'follows' => $followCou,
+                            'likes' => $likeCou
+                        ]);
+                    }
                     $requestCou++;
                     echo "Requests: $requestCou | Likes: $likeCou | Follows: $followCou\n";
                     $folLikSum = round($likeCou + $followCou);
