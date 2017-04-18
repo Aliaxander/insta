@@ -170,7 +170,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <select class="form-control input-lg" name="taskTypeId">
-                                {% for task in taskType %}
+                                {% for task in taskTypes %}
                                 <option value="{{ task.id }}">{{ task.name }}</option>
                                 {% endfor %}
                             </select>
