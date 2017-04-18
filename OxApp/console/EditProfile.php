@@ -115,9 +115,9 @@ class EditProfile extends Command
                 //            sleep(rand(3, 10));
                 
                 Users::where(['id' => $user->id])->update([
-                    'login' => 1,
+                    'logIn' => 1,
                     'biography' => $biography,
-                    'url' => $domain,
+                    'url' => $domain->domain,
                     'photo' => $profile[1]['user']['profile_pic_url']
                 ]);
             } else {
