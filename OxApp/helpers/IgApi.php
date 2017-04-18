@@ -47,12 +47,6 @@ class IgApi
             if (mt_rand(0, 1) == 1) {
                 $result = $this->request("feed/user/" . $feedId . "/");
                 $result2 = $this->request("feed/user/" . $feedId . "/story/");
-            } elseif (mt_rand(0, 1) == 0) {
-                $result2 = $this->request("feed/user/" . $feedId . "/story/");
-                $result = $this->request("feed/user/" . $feedId . "/");
-            } elseif (mt_rand(1, 2) == 2) {
-                $result2 = $this->request("feed/user/" . $feedId . "/story/");
-                $result = $this->request("feed/user/" . $feedId . "/");
             } else {
                 $result2 = $this->request("feed/user/" . $feedId . "/story/");
                 $result = $this->request("feed/user/" . $feedId . "/");
@@ -61,12 +55,9 @@ class IgApi
         
         if (empty($result) && !empty($result2)) {
             $result = $result2;
-        } elseif (empty($result) && !empty($result3)) {
-            $result = $result3;
-        } else // print_r($this->request('feed/user/' . $feedId . '/story/'));
-        {
-            return $result;
         }
+        
+        return $result;
     }
     
     public function like($mediaId)
