@@ -30,19 +30,14 @@ class DescriptionProfileController extends App
     public function post()
     {
         $biography = $this->request->request->get('biography');
-        $domain = $this->request->request->get('domain');
         $count = $this->request->request->get('count');
-
         $generator = new TextTemplateGenerator($biography);
-        $generator1 = new TextTemplateGenerator($domain);
         $biography = array_unique($generator->generate($count));
-        $domains = array_unique($generator1->generate($count));
 
-        $counts = count($domains)-1;
+
         foreach ($biography as $key => $item) {
-            $url = @$domains[mt_rand(0, $counts)];
-            $data= ['description' => $item, 'url' => $url, 'status' => 0];
-            if(!empty($item) && !empty($url)) {
+            $data= ['description' => $item, 'status' => 0];
+            if(!empty($item)) {
                 ProfileGenerate::add($data);
             }
         }
