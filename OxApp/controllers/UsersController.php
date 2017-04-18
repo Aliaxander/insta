@@ -10,7 +10,7 @@ namespace OxApp\controllers;
 
 use Ox\App;
 use Ox\View;
-use OxApp\models\Task;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use OxApp\models\TaskType;
 use OxApp\models\UserGroup;
 use OxApp\models\Users;

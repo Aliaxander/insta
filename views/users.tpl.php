@@ -110,6 +110,7 @@
             <button class="btn btn-info" data-toggle="modal" onclick="check()"
                     data-target=".modal-task">Add Task
             </button>
+
             <ul class="pagination pull-right" style="margin: 0;">
                 {% for i in range(1, totalPages) %}
                 <li

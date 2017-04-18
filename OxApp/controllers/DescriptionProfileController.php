@@ -24,7 +24,7 @@ class DescriptionProfileController extends App
     public function get() {
         $profiles = ProfileGenerate::find();
         $profile = $profiles->rows;
-        return View::build("showProfile", ['profiles' => $profile, 'alerts' => $this->alerts]);
+        return View::build("descriptionProfile", ['profiles' => $profile, 'alerts' => $this->alerts]);
     }
 
     public function post()

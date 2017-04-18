@@ -18,7 +18,7 @@
     <div class="container">
 
         <div class="navbar-header">
-            <a class="navbar-brand" href="/">InstaOxCpa</a>
+            <a class="navbar-brand" href="/">OxInsta</a>
         </div>
         <ul class="nav navbar-nav">
             <li class="dropdown">
