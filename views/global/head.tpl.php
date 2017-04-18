@@ -18,25 +18,39 @@
     <div class="container">
 
         <div class="navbar-header">
-            <a class="navbar-brand" href="/">InstaOxCpa</a>
+            <a class="navbar-brand" href="/">OxInsta</a>
         </div>
         <ul class="nav navbar-nav">
             <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Description profile <span class="caret"></span></a>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                   aria-expanded="false">Description profile <span class="caret"></span></a>
                 <ul class="dropdown-menu">
-                    <li><a href="/generateProfile">Generate Profile</a></li>
+                    <li><a href="/descriptionProfile">DescriptionProfile</a></li>
                     <li><a href="/testMacros">Test Template</a></li>
-                    <li><a href="/showProfile">Show</a></li>
                 </ul>
             </li>
             <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Proxy <span class="caret"></span></a>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                   aria-expanded="false">Proxy <span class="caret"></span></a>
                 <ul class="dropdown-menu">
                     <li><a href="/proxy">Proxy list</a></li>
-                    <li><a href="/addProxy">Proxy add</a></li>
                 </ul>
             </li>
-            <li><a href="/users">Users</a></li>
+            <li><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                   aria-expanded="false">User <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    <li><a href="/users">Users</a></li>
+                    <li><a href="/users?detail=all">Users Detail</a></li>
+                    <li><a href="/userGroup">Users Group</a></li>
+                </ul>
+            </li>
+            <li><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                   aria-expanded="false">Task <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    <li><a href="/task">Task</a></li>
+                    <li><a href="/taskType">Task Type</a></li>
+                </ul>
+            </li>
         </ul>
     </div>
 </nav>

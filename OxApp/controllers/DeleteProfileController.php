@@ -18,6 +18,6 @@ class DeleteProfileController extends App
     {
         $selectId = $this->request->query->get("id");
         ProfileGenerate::delete(['id' => $selectId]);
-        header("Location: /showProfile");
+        header("Location: /descriptionProfile");
     }
 }
