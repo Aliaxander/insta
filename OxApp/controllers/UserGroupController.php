@@ -3,28 +3,28 @@
  * Created by PhpStorm.
  * User: kinky
  * Date: 18.04.17
- * Time: 10:21
+ * Time: 11:24
  */
 
 namespace OxApp\controllers;
 
 use Ox\App;
 use Ox\View;
-use OxApp\models\TaskType;
+use OxApp\models\UserGroup;
 
 /**
- * Class TaskType
+ * Class UserGroupController
  * @package OxApp\controllers
  */
-class TaskTypeController extends App
+class UserGroupController extends App
 {
     /**
      * GET method
      */
     public function get()
     {
-        $taskTypes = TaskType::find()->rows;
-        return View::build("taskType", ['taskTypes' => $taskTypes]);
+        $userGroups = UserGroup::find()->rows;
+        return View::build('userGroup', ['userGroups' => $userGroups]);
 
     }
 
@@ -33,6 +33,7 @@ class TaskTypeController extends App
      */
     public function post()
     {
-        //
+
+
     }
 }

@@ -109,7 +109,8 @@
                 {% for i in range(1, totalPages) %}
                 <li
                         {% if i==setPage %} class="active" {% endif %}><a
-                            href="{{ url }}page={{ i }}">{{ i }} {% if i==setPage %}<span class="sr-only">(current)</span>{%
+                            href="{{ url }}page={{ i }}">{{ i }} {% if i==setPage %}<span
+                                class="sr-only">(current)</span>{%
                         endif
                         %}</a></li>
                 {% endfor %}
@@ -130,12 +131,14 @@
                 </div>
                 <div class="modal-body">
                     <div class="row">
-                        <select class="form-control input-lg" name="userGroup">
-                            {% for group in groups %}
-                            <option value="{{ group.id }}">{{ group.name }}</option>
-                            {% endfor %}
-                        </select>
-                        <input type="hidden" class="form-control id_profile" name="id">
+                        <div class="col-md-12">
+                            <select class="form-control input-lg" name="userGroup">
+                                {% for group in groups %}
+                                <option value="{{ group.id }}">{{ group.name }}</option>
+                                {% endfor %}
+                            </select>
+                            <input type="hidden" class="form-control id_profile" name="id">
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -159,12 +162,14 @@
                 </div>
                 <div class="modal-body">
                     <div class="row">
-                        <select class="form-control input-lg" name="taskTypeId">
-                            {% for task in taskType %}
-                            <option value="{{ task.id }}">{{ task.name }}</option>
-                            {% endfor %}
-                        </select>
-                        <input type="hidden" class="form-control id_profile" name="id">
+                        <div class="col-md-12">
+                            <select class="form-control input-lg" name="taskTypeId">
+                                {% for task in taskType %}
+                                <option value="{{ task.id }}">{{ task.name }}</option>
+                                {% endfor %}
+                            </select>
+                            <input type="hidden" class="form-control id_profile" name="id">
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -188,13 +193,15 @@
                 </div>
                 <div class="modal-body">
                     <div class="row">
-                        <h4>Do you really want to delete profiles</h4>
-                        <input type="hidden" class="form-control id_profile" name="id">
+                        <div class="col-md-12">
+                            <h4>Do you really want to delete profiles</h4>
+                            <input type="hidden" class="form-control id_profile" name="id">
+                        </div>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-danger">Delete</button>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </div>
                 </div>
             </form>
         </div>

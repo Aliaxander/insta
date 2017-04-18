@@ -42,13 +42,15 @@
                    aria-expanded="false">User <span class="caret"></span></a>
                 <ul class="dropdown-menu">
                     <li><a href="/users">Users</a></li>
-                    <li><a href="/users?detail=all">Users detail</a></li>
+                    <li><a href="/users?detail=all">Users Detail</a></li>
+                    <li><a href="/userGroup">Users Group</a></li>
                 </ul>
             </li>
             <li><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                    aria-expanded="false">Task <span class="caret"></span></a>
                 <ul class="dropdown-menu">
                     <li><a href="/task">Task</a></li>
+                    <li><a href="/taskType">Task Type</a></li>
                 </ul>
             </li>
         </ul>

@@ -30,5 +30,7 @@ Router::rout('/proxy')->app('Proxy')->save();
 Router::rout('/addProxy')->app('AddProxy')->save();
 //users
 Router::rout('/users')->app('Users')->save();
+Router::rout('/userGroup')->app('UserGroup')->save();
 //task
 Router::rout('/task')->app('Task')->save();
+Router::rout('/taskType')->app('TaskType')->save();
