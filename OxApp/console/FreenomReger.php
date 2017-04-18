@@ -74,6 +74,7 @@ class FreenomReger extends Command
             $params['domain'] = $uname . $domains[rand(0, 4)];
             echo "Test: " . $params['domain'] . "\n";
             $result = $this->freenom_RegisterFreeDomain($params);
+            print_r($result);
             if (!isset($result->error) && $result->domain->status !== "NOT AVAILABLE") {
                 $cmd = 'curl -X POST https://api.dnspod.com/Domain.Create -d \'user_token=' . $token . '&domain=' . $params['domain'] . '&format=json\'';
                 exec($cmd, $result);
