@@ -33,7 +33,9 @@ class ProxyController extends App
     {
         $ips = explode("\n", $this->request->request->get('ip'));
         foreach ($ips as $ip) {
-            $ip = str_replace(["\n", " "], "", $ip);
+            $ip = str_replace("\n", "", $ip);
+            $ip = str_replace("\r", "", $ip);
+            $ip = str_replace(" ", "", $ip);
             if (!empty($ip)) {
                 for ($i = $this->request->request->get('portIn'); $i < $this->request->request->get('portOut'); $i++) {
                     Proxy::add([
