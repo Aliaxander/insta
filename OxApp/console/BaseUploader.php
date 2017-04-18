@@ -8,12 +8,7 @@
 
 namespace Acme\Console\Command;
 
-use Faker\Factory;
-use OxApp\helpers\IgApi;
-
-use OxApp\models\Domains;
 use OxApp\models\InstBase;
-use OxApp\models\Proxy;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;

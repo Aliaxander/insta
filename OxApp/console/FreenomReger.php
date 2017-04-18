@@ -9,26 +9,20 @@
 namespace Acme\Console\Command;
 
 use Faker\Factory;
-use OxApp\helpers\IgApi;
 
 use OxApp\models\Domains;
-use OxApp\models\Proxy;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Class CronCommands
+ * Class FreenomReger
  *
  * @package Acme\Console\Command
  */
 class FreenomReger extends Command
 {
-    private $VERBOSE = true;
-    private $LOG = true;
-    private $DEBUG = true;
-    
     /**
      * configure
      */
