@@ -98,6 +98,10 @@ class Likes extends Command
             
             $status = true;
             while ($status = true) {
+                $user = Users::find(['id' => $user->id]);
+                if ($user->count === 0) {
+                    die();
+                }
                 $accRow = InstBase::limit([0 => 1])->find(['status' => 0]);
                 $acc = @preg_replace("/[^0-9]/", '', $accRow->rows[0]->account);
                 if (!empty($acc)) {
