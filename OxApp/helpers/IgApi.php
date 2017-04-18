@@ -135,7 +135,7 @@ class IgApi
                 //
                 //                echo "\nEND Limit fixer----------------------------------------\n";
                 Users::where(['guid' => $guid, 'phoneId' => $phoneId, 'deviceId' => $device_id])->update(['ban' => 1]);
-                print("Account banned");
+                die("Account banned");
                 exit();
             }
             
@@ -160,6 +160,10 @@ class IgApi
         
         $data = json_encode($data);
         $resultLogin = $this->request('accounts/login/', $data);
+        if ($resultLogin[1]['error_type'] === "inactive user") {
+            Users::where(['guid' => $guid, 'phoneId' => $phoneId, 'deviceId' => $device_id])->update(['ban' => 1]);
+            die("Account banned");
+        }
         print_r($resultLogin);
         $this->accountId = @$resultLogin[1]['logged_in_user']['pk'];
         Users::where([
