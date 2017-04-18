@@ -178,6 +178,7 @@ class Likes extends Command
                         'follows' => $followCou,
                         'likes' => $likeCou
                     ]);
+                    $requestCou++;
                     echo "Requests: $requestCou | Likes: $likeCou | Follows: $followCou\n";
                     $folLikSum = round($likeCou + $followCou);
                     
