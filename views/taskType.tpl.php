@@ -1,6 +1,12 @@
 {% include "global/head.tpl.php" %}
 <div class="container">
     <div class="row">
+        {% for key, alert in alerts %}
+        <div class="alert alert-{{ key }} alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <strong>{{ key }}</strong> {{ alert }}
+        </div>
+        {% endfor %}
         <div class="panel panel-primary">
             <div class="panel-heading">
                 <h3 class="panel-title">Task Type</h3>

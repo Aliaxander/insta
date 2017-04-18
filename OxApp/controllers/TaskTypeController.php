@@ -18,13 +18,15 @@ use OxApp\models\TaskType;
  */
 class TaskTypeController extends App
 {
+    protected $alerts = [];
+
     /**
      * GET method
      */
     public function get()
     {
         $taskTypes = TaskType::find()->rows;
-        return View::build("taskType", ['taskTypes' => $taskTypes]);
+        return View::build("taskType", ['taskTypes' => $taskTypes, 'alerts' => $this->alerts]);
 
     }
 
@@ -33,6 +35,12 @@ class TaskTypeController extends App
      */
     public function post()
     {
-        //
+        $name = trim($this->request->request->get('name'));
+        if(!empty($name)) {
+            TaskType::add(['name' => $name]);
+        }
+        $this->alerts = ['success' => 'TaskType add'];
+
+         return $this->get();
     }
 }

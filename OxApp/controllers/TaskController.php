@@ -9,6 +9,7 @@
 namespace OxApp\controllers;
 
 use Ox\App;
+use Ox\View;
 use OxApp\models\Task;
 
 /**
@@ -22,7 +23,7 @@ class TaskController extends App
      */
     public function get()
     {
-        //
+        return View::build("task");
     }
 
     /**

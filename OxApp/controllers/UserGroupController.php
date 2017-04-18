@@ -18,14 +18,15 @@ use OxApp\models\UserGroup;
  */
 class UserGroupController extends App
 {
+    protected $alerts = [];
+
     /**
      * GET method
      */
     public function get()
     {
         $userGroups = UserGroup::find()->rows;
-        return View::build('userGroup', ['userGroups' => $userGroups]);
-
+        return View::build('userGroup', ['userGroups' => $userGroups, 'alerts' => $this->alerts]);
     }
 
     /**
@@ -33,7 +34,12 @@ class UserGroupController extends App
      */
     public function post()
     {
+        $name = trim($this->request->request->get('name'));
+        if(!empty($name)) {
+            UserGroup::add(['name' => $name]);
+        }
+        $this->alerts = ['success' => 'userGroup add'];
 
-
+        return $this->get();
     }
 }
