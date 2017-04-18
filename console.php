@@ -1,7 +1,9 @@
 #!/usr/bin/env php
 <?php
 // application.php
+use Acme\Console\Command\BaseUploader;
 use Acme\Console\Command\EditProfile;
+use Acme\Console\Command\FreenomReger;
 use Acme\Console\Command\Likes;
 use Acme\Console\Command\Test;
 use Ox\DataBase\DbConfig;
@@ -20,6 +22,8 @@ $application = new Application();
 $application->add(new Test());
 $application->add(new Likes());
 $application->add(new EditProfile());
+$application->add(new FreenomReger());
+$application->add(new BaseUploader());
 $application->addCommands(
     array(
         // Migrations Commands
