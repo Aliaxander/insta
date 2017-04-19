@@ -19,6 +19,7 @@
     <script src="//rawgit.com/hhurz/tableExport.jquery.plugin/master/tableExport.js"></script>
     <script src="/js/bootstrap-table-export.js"></script>
     <script src="/js/bootstrap-table-filter-control.js"></script>
+    <script src="/js/bootstrap-table-cookie.js"></script>
     <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>

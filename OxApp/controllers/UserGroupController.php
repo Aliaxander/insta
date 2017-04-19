@@ -29,7 +29,7 @@ class UserGroupController extends App
         $userGroups = UserGroup::find()->rows;
         foreach ($userGroups as $key => $item) {
             $users = @Users::selectBy(['count(id) as count', 'sum(likes) as sumLikes'])
-                ->find(['userTask' => $item->id])->rows[0];
+                ->find(['userGroup' => $item->id])->rows[0];
             $userGroups[$key]->users = $users->count;
             $userGroups[$key]->sumLikes = $users->sumLikes;
         }

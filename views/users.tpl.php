@@ -29,6 +29,8 @@
                data-show-refresh="true"
                data-show-toggle="true"
                data-show-export="true"
+               data-cookie="true"
+               data-cookie-id-table="saveId"
                data-sort-name="id"
                data-sort-order="desc"
                data-side-pagination="server"
