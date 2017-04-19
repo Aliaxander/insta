@@ -60,6 +60,8 @@ class FreenomReger extends Command
         $domains = ['.tk', '.ml', '.ga', '.cf', '.gq'];
         $email = "domainreg480@gmail.com";
         $password = "m9Rgx7UpoTiJjM8k";
+//        $email = "yayaandreyandrey@yahoo.com";
+//        $password = "09101992";
         $params['account_email'] = $email;
         $params['account_password'] = $password;
         //freenom_SaveContactDetails($params);
