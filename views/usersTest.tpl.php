@@ -6,17 +6,17 @@
     <div class="panel-body">
         <table id="table"
                data-toggle="table"
-               data-url="http://insta.oxgroup.media/api/users"
+               data-url="/api/users"
                data-show-columns="true"
                data-search="true"
                data-show-refresh="true"
                data-show-toggle="true"
+               data-show-export="true"
                data-sort-name="id"
                data-sort-order="desc"
                data-side-pagination="server"
                data-pagination="true"
-               data-filter-control="true"
-               data-page-list="[5, 10, 20, 50, 100, 200, 500]">
+               data-page-list="[5, 10, 20, 50, 100, 200, 500, 1000, 5000, ALL]">
             <thead>
             <tr>
                 <th data-field="state" data-checkbox="true"></th>
@@ -70,8 +70,10 @@
 <script>
     var $table = $('#table');
     $(function () {
-
-    });
+            $table.bootstrapTable('destroy').bootstrapTable({
+                exportDataType: "selected"
+        });
+    })
 
 </script>
 {% include "global/footer.tpl.php" %}
