@@ -61,7 +61,17 @@ class EditProfile extends Command
                 $api = new IgApi();
                 $api->proxy = $user->proxy;
                 $api->username = $user->userName;
-                $api->login($user->guid, $user->phoneId, $user->deviceId, $user->password);
+                $loginResult = '';
+                $i = 0;
+                while ($loginResult === '') {
+                    $login = $api->login($user->guid, $user->phoneId, $user->deviceId, $user->password);
+                    $loginResult = $login[1];
+                    if ($i === 5) {
+                        $loginResult = false;
+                    }
+                    $i++;
+                }
+                
                 
                 //SetPhoto:
                 $api->changeProfilePicture($photo);
@@ -94,7 +104,10 @@ class EditProfile extends Command
                         $profile = $api->edit($biography, $domain->rows[0]->domain, $user->phoneId, $user->firstName,
                             $user->email);
                         $profileResult = $profile[1];
-                        if ($i == 3) {
+                        if (empty($profile[1])) {
+                            $profileResult = '';
+                        }
+                        if ($i === 5) {
                             $profileResult = false;
                         }
                         $i++;
