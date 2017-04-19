@@ -146,6 +146,7 @@ class IgApi
         
         $data = json_encode($data);
         $resultLogin = '';
+        $i=0;
         while ($resultLogin == '') {
             $login = $this->request('accounts/login/', $data);
             $resultLogin = $login[1];
@@ -231,22 +232,24 @@ class IgApi
     
     public function edit($biography, $url, $phoneId, $firstName, $email)
     {
-        
-        $sync = $this->sync();
-        print_r($sync);
-        if (preg_match('#Set-Cookie: csrftoken=([^;]+)#', $sync[0], $token)) {
-            $tokenResult = $token[1];
-        }
-        if (empty($tokenResult)) {
+        $tokenResult = '';
+        $i = 0;
+        while ($tokenResult === '') {
             $sync = $this->sync();
             print_r($sync);
+        
             if (preg_match('#Set-Cookie: csrftoken=([^;]+)#', $sync[0], $token)) {
                 $tokenResult = $token[1];
             }
-            if (empty($tokenResult)) {
-                exit("no token");
+            if ($i == 10) {
+                $tokenResult = false;
             }
+            $i++;
         }
+        if ($tokenResult == false || $tokenResult == '') {
+            die('no token');
+        }
+        
         $this->csrftoken = $tokenResult;
         sleep(rand(0, 2));
         $data = [
