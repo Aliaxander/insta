@@ -29,7 +29,12 @@ Router::rout('/deleteUsers')->app('DeleteUsers')->save();
 Router::rout('/proxy')->app('Proxy')->save();
 //users
 Router::rout('/users')->app('Users')->save();
+Router::rout('/usersTest')->app('html\\Users')->save();
 Router::rout('/userGroup')->app('UserGroup')->save();
 //task
 Router::rout('/task')->app('Task')->save();
 Router::rout('/taskType')->app('TaskType')->save();
+
+Router::setMiddlewareGroup('Json', function () {
+    Router::rout('/api/users')->app('api\\Users')->save();
+});
