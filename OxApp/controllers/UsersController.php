@@ -28,13 +28,12 @@ class UsersController extends App
     {
         $taskType = TaskType::find()->rows;
         $group = UserGroup::find()->rows;
-        $likesSum = @Users::selectBy(['sum(likes) as likes'])->find()->rows[0]->likes;
-        $usersSum = @Users::selectBy(['count(id) as count'])->find()->rows[0]->count;
+        $users = @Users::selectBy(['sum(likes) as likes', 'count(id) as count'])->find()->rows[0];
         return View::build('users', [
             'taskTypes' => $taskType,
             'groups' => $group,
-            'likesSum' => $likesSum,
-            'usersSum' => $usersSum,
+            'likesSum' => $users->likes,
+            'usersSum' => $users->count,
 
         ]);
     }

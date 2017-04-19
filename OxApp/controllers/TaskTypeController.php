@@ -11,6 +11,7 @@ namespace OxApp\controllers;
 use Ox\App;
 use Ox\View;
 use OxApp\models\TaskType;
+use OxApp\models\Users;
 
 /**
  * Class TaskType
@@ -26,6 +27,13 @@ class TaskTypeController extends App
     public function get()
     {
         $taskTypes = TaskType::find()->rows;
+        foreach ($taskTypes as $key => $item) {
+            $users = @Users::selectBy(['count(id) as count', 'sum(likes) as sumLikes'])
+                ->find(['userTask' => $item->id])->rows[0];
+            $taskTypes[$key]->users = $users->count;
+            $taskTypes[$key]->sumLikes = $users->sumLikes;
+        }
+
         return View::build("taskType", ['taskTypes' => $taskTypes, 'alerts' => $this->alerts]);
 
     }
@@ -36,11 +44,11 @@ class TaskTypeController extends App
     public function post()
     {
         $name = trim($this->request->request->get('name'));
-        if(!empty($name)) {
+        if (!empty($name)) {
             TaskType::add(['name' => $name]);
         }
         $this->alerts = ['success' => 'TaskType add'];
 
-         return $this->get();
+        return $this->get();
     }
 }

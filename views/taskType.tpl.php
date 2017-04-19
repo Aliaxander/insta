@@ -3,7 +3,8 @@
     <div class="row">
         {% for key, alert in alerts %}
         <div class="alert alert-{{ key }} alert-dismissible" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
             <strong>{{ key }}</strong> {{ alert }}
         </div>
         {% endfor %}
@@ -16,7 +17,9 @@
                     <div class="col-md-12">
                         <ul class="list-group">
                             {% for taskType in taskTypes %}
-                            <li class="list-group-item">{{ taskType.name }}</li>
+                            <li class="list-group-item">{{ taskType.name }}<span
+                                        class="badge">users: {{ taskType.users }}</span><span
+                                        class="badge">likes: {{ taskType.sumLikes }}</span></li>
                             {% endfor %}
                         </ul>
                     </div>
