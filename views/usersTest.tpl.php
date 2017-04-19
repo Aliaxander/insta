@@ -6,7 +6,7 @@
     <div class="panel-body">
         <table id="table"
                data-toggle="table"
-               data-url="http://insta.local/api/users"
+               data-url="http://insta.oxgroup.media/api/users"
                data-show-columns="true"
                data-search="true"
                data-show-refresh="true"
