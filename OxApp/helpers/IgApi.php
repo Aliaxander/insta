@@ -158,7 +158,7 @@ class IgApi
             }
             $i++;
         }
-        if ($resultLogin['error_type'] === "inactive user") {
+        if ($resultLogin['error_type'] === "inactive user" || $resultLogin['error_type'] === 'invalid_user') {
             Users::where(['guid' => $guid, 'phoneId' => $phoneId, 'deviceId' => $device_id])->update(['ban' => 1]);
             die("Account banned");
         }
