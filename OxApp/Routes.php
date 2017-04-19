@@ -22,6 +22,9 @@ Router::rout('/descriptionProfile')->app('DescriptionProfile')->save();
 Router::rout('/testMacros')->app('TestMacros')->save();
 Router::rout('/deleteProfile/:num=>id')->app('DeleteProfile')->save();
 
+//Reset requests:
+Router::rout('/resetRequests')->app('ResetRequests')->save();
+
 //users
 Router::rout('/deleteUsers')->app('DeleteUsers')->save();
 
