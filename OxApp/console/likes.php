@@ -42,10 +42,10 @@ class Likes extends Command
         require(__DIR__ . "/../../config.php");
         $api = new IgApi();
         $users = Users::orderBy(["id" => 'desc'])->limit([0 => 1])->find(['login' => 1, 'ban' => 0, 'requests' => 0]);
-        if ($users->rows == 0) {
+        if ($users->count == 0) {
             die('no job');
-        }
-        foreach ($users->rows as $user) {
+        } else {
+            $user = $users->rows[0];
             print_r($user);
             $requestCou = $user->requests;
             $likeCou = $user->likes;
@@ -82,8 +82,8 @@ class Likes extends Command
                         $checkPoint->proxy = $user->proxy;
                         $checkPoint->accountId = $user->accountId;
                         $checkPoint->request($sync[1]['checkpoint_url']);
-                                                Users::where(['id' => $user->id])->update(['ban' => 1]);
-                                                die("Account banned");
+                        Users::where(['id' => $user->id])->update(['ban' => 1]);
+                        die("Account banned");
                     }
                     
                     $i++;
@@ -98,13 +98,17 @@ class Likes extends Command
             
             $status = true;
             while ($status = true) {
+                $userTest = Users::find(['id' => $user->id]);
+                if ($userTest->count === 0) {
+                    die();
+                }
                 $accRow = InstBase::limit([0 => 1])->find(['status' => 0]);
                 $acc = @preg_replace("/[^0-9]/", '', $accRow->rows[0]->account);
                 if (!empty($acc)) {
                     InstBase::where(['id' => $accRow->rows[0]->id])->update(['status' => 1]);
                     
                     echo "Set acc $acc:\n";
-                    if (rand(0, 50) == 10) {
+                    if (rand(0, 30) == 10) {
                         $api->getRecentActivityAll();
                     }
                     $result = $api->getFeed($acc);
@@ -160,7 +164,6 @@ class Likes extends Command
                         if ($like1) {
                             InstBase::where(['id' => $accRow->rows[0]->id])->update(['likes' => round($accRow->rows[0]->likes + 1)]);
                             print_r($api->like($like1));
-                            sleep(rand(0, 1));
                             $feed = $api->getFeed($acc);
                             if (@$feed[1]['message'] === 'checkpoint_required') {
                                 Users::where(['id' => $user->id])->update(['ban' => 1]);
@@ -168,21 +171,25 @@ class Likes extends Command
                             }
                             $likeCou++;
                             $requestCou += 4;
+                            sleep(rand(5, 10));
                         }
                     }
-                    if (rand(0, 50) == 10) {
+                    if (rand(0, 40) == 10) {
                         $api->getRecentActivityAll();
                     }
-                    Users::where(['id' => $user->id])->update([
-                        'requests' => $requestCou,
-                        'follows' => $followCou,
-                        'likes' => $likeCou
-                    ]);
+                    if ($requestCou !== 0) {
+                        Users::where(['id' => $user->id])->update([
+                            'requests' => $requestCou,
+                            'follows' => $followCou,
+                            'likes' => $likeCou
+                        ]);
+                    }
+                    $requestCou++;
                     echo "Requests: $requestCou | Likes: $likeCou | Follows: $followCou\n";
                     $folLikSum = round($likeCou + $followCou);
                     
                     $resultLikesForTimeout = $folLikSum / $hour;
-                    if ($resultLikesForTimeout > rand(400, 500) && $resultLikesForTimeout < 600) {
+                    if ($resultLikesForTimeout > rand(480, 500) && $resultLikesForTimeout < 600) {
                         $hour += 1;
                         Users::where(['id' => $user->id])->update(['hour' => $hour]);
                         echo "Sleep";
@@ -191,7 +198,7 @@ class Likes extends Command
                     if ($hour >= 4 && $likeCou > 2100) {
                         sleep(rand(70000, 87000));
                     }
-                    sleep(rand(1, 20));
+                
                 }
             }
         }

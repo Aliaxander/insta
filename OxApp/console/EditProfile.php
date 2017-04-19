@@ -10,7 +10,6 @@ namespace Acme\Console\Command;
 
 use OxApp\helpers\FreenomReg;
 use OxApp\helpers\IgApi;
-use OxApp\models\Domains;
 use OxApp\models\ProfileGenerate;
 use OxApp\models\Users;
 use Symfony\Component\Console\Command\Command;
