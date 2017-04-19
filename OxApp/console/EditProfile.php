@@ -10,6 +10,7 @@ namespace Acme\Console\Command;
 
 use OxApp\helpers\FreenomReg;
 use OxApp\helpers\IgApi;
+use OxApp\models\Domains;
 use OxApp\models\ProfileGenerate;
 use OxApp\models\Users;
 use Symfony\Component\Console\Command\Command;
@@ -64,7 +65,7 @@ class EditProfile extends Command
                 
                 //SetPhoto:
                 $api->changeProfilePicture($photo);
-                unlink($photo);
+                //unlink($photo);
                 
                 $profiles = ProfileGenerate::limit([0 => 1])->find(['status' => 0])->rows[0];//groupBy('description')->
                 ProfileGenerate::where(['id' => $profiles->id])->update(['status' => 1]);
@@ -114,7 +115,7 @@ class EditProfile extends Command
                     Users::where(['id' => $user->id])->update([
                         'login' => 1,
                         'biography' => $biography,
-                        'url' => $domain,
+                        'url' => $domain->rows[0]->domain,
                         'photo' => $profile[1]['user']['profile_pic_url']
                     ]);
                 } else {
