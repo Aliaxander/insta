@@ -11,10 +11,13 @@
             data-target=".modal-task" disabled><i
                 class="glyphicon glyphicon-briefcase"></i> Add Task
     </button>
+    <a href="#" class="btn btn-default btn-lg disabled" role="button">Total likes: {{ likesSum }}</a>
+    <a href="#" class="btn btn-default btn-lg disabled" role="button">Total users: {{ usersSum }}</a>
+
 </div>
 <div class="panel panel-primary">
     <div class="panel-heading">
-        <h3 class="panel-title">Users Detail</h3>
+        <h3 class="panel-title">Users</h3>
     </div>
     <div class="panel-body">
         <table id="table"
@@ -186,15 +189,16 @@
         $table.on('check.bs.table uncheck.bs.table ' +
             'check-all.bs.table uncheck-all.bs.table', function () {
             $remove.prop('disabled', !$table.bootstrapTable('getSelections').length);
-            // save your data, here just save the current page
             selections = getIdSelections();
-            console.log(selections);
-            // push or splice the selections if you want to save all data selections
         });
 
         $remove.click(function () {
             var ids = getIdSelections();
             $('.id_profile').val(ids);
+        });
+
+        $table.bootstrapTable('destroy').bootstrapTable({
+            exportDataType: "selected"
         });
 
     });
@@ -203,12 +207,5 @@
             return row.id
         });
     }
-
-    $(function () {
-        $table.bootstrapTable('destroy').bootstrapTable({
-            exportDataType: "selected"
-        });
-    })
-
 </script>
 {% include "global/footer.tpl.php" %}
