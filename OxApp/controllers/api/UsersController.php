@@ -18,7 +18,7 @@ class UsersController extends App
     public function get()
     {
         $rule = [
-            'LogIn',
+            'logIn',
             'ban',
             'userGroup',
             'userTask'
@@ -72,8 +72,7 @@ class UsersController extends App
         }
         return json_encode([
             'total' => (int)@$total->rows[0]->count,
-            'rows' => $users,
-            'where' => $where
+            'rows' => $users
         ]);
     }
 }

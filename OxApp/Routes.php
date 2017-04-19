@@ -29,7 +29,6 @@ Router::rout('/deleteUsers')->app('DeleteUsers')->save();
 Router::rout('/proxy')->app('Proxy')->save();
 //users
 Router::rout('/users')->app('Users')->save();
-Router::rout('/usersTest')->app('html\\Users')->save();
 Router::rout('/userGroup')->app('UserGroup')->save();
 //task
 Router::rout('/task')->app('Task')->save();

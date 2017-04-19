@@ -51,7 +51,6 @@
                    aria-expanded="false">User <span class="caret"></span></a>
                 <ul class="dropdown-menu">
                     <li><a href="/users">Users</a></li>
-                    <li><a href="/usersTest">Users Detail</a></li>
                     <li><a href="/userGroup">Users Group</a></li>
                 </ul>
             </li>
