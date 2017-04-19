@@ -66,7 +66,7 @@
 						<div class="col-md-12">
 							<div class="form-group">
 								<label for="ip" class="control-label">Proxy ip </label>
-								<textarea name="ip" placeholder="127.155.254.222"></textarea>
+								<textarea name="ip" class="form-control" placeholder="127.155.254.222"></textarea>
 							</div>
 							<div class="form-group">
 								<label for="portIn" class="control-label">Port from </label>

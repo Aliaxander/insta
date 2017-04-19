@@ -221,16 +221,13 @@
             $remove.prop('disabled', !$table.bootstrapTable('getSelections').length);
             selections = getIdSelections();
         });
-
         $remove.click(function () {
             var ids = getIdSelections();
             $('.id_profile').val(ids);
         });
-
         $table.bootstrapTable('destroy').bootstrapTable({
             exportDataType: "selected"
         });
-
     });
     function getIdSelections() {
         return $.map($table.bootstrapTable('getSelections'), function (row) {

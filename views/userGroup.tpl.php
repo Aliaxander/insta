@@ -16,7 +16,9 @@
                     <div class="col-md-12">
                         <ul class="list-group">
                             {% for userGroup in userGroups %}
-                            <li class="list-group-item">{{ userGroup.name }}</li>
+                            <li class="list-group-item">{{ userGroup.name }}<span
+                                        class="badge">users: {{ userGroup.users }}</span><span
+                                        class="badge">likes: {{ userGroup.sumLikes }}</span></li>
                             {% endfor %}
                         </ul>
                     </div>

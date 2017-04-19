@@ -11,6 +11,7 @@ namespace OxApp\controllers;
 use Ox\App;
 use Ox\View;
 use OxApp\models\UserGroup;
+use OxApp\models\Users;
 
 /**
  * Class UserGroupController
@@ -26,6 +27,12 @@ class UserGroupController extends App
     public function get()
     {
         $userGroups = UserGroup::find()->rows;
+        foreach ($userGroups as $key => $item) {
+            $users = @Users::selectBy(['count(id) as count', 'sum(likes) as sumLikes'])
+                ->find(['userGroup' => $item->id])->rows[0];
+            $userGroups[$key]->users = $users->count;
+            $userGroups[$key]->sumLikes = $users->sumLikes;
+        }
         return View::build('userGroup', ['userGroups' => $userGroups, 'alerts' => $this->alerts]);
     }
 
