@@ -16,23 +16,24 @@
                data-sort-order="desc"
                data-side-pagination="server"
                data-pagination="true"
+               data-filter-control="true"
                data-page-list="[5, 10, 20, 50, 100, 200, 500, 1000, 5000, ALL]">
             <thead>
             <tr>
                 <th data-field="state" data-checkbox="true"></th>
                 <th data-field="id" data-sortable="true">ID</th>
-                <th data-field="userGroup" data-sortable="true">userGroup</th>
-                <th data-field="userTask" data-sortable="true">userTask</th>
+                <th data-field="userGroup" data-filter-control="select" data-sortable="true">userGroup</th>
+                <th data-field="userTask" data-filter-control="select" data-sortable="true">userTask</th>
                 <th data-field="userName" data-sortable="true">userName</th>
-                <th data-field="firstName" data-sortable="true">firstName</th>
-                <th data-field="email" data-sortable="true">email</th>
+                <th data-field="firstName" data-visible="false" data-sortable="true">firstName</th>
+                <th data-field="email" data-visible="false" data-sortable="true">email</th>
                 <th data-field="password" data-visible="false" data-sortable="true">password</th>
                 <th data-field="deviceId" data-visible="false" data-sortable="true">deviceId</th>
                 <th data-field="phoneId" data-visible="false" data-sortable="true">phoneId</th>
                 <th data-field="waterfall_id" data-visible="false" data-sortable="true">waterfall_id</th>
                 <th data-field="guid" data-visible="false" data-sortable="true">guid</th>
                 <th data-field="qeId" data-visible="false" data-sortable="true">qeId</th>
-                <th data-field="logIn" data-visible="false" data-sortable="true">logIn</th>
+                <th data-field="logIn" data-filter-control="select" data-sortable="true">logIn</th>
                 <th data-field="csrftoken" data-visible="false" data-sortable="true">csrftoken</th>
                 <th data-field="gender" data-visible="false" data-sortable="true">gender</th>
                 <th data-field="accountId" data-visible="false" data-sortable="true">accountId</th>
@@ -48,7 +49,7 @@
                 <th data-field="hour" data-sortable="true">hour</th>
                 <th data-field="month" data-visible="false" data-sortable="true">month</th>
                 <th data-field="dateCreate" data-sortable="true">dateCreate</th>
-                <th data-field="ban" data-sortable="true">ban</th>
+                <th data-field="ban" data-filter-control="select" data-sortable="true">ban</th>
             </tr>
             </thead>
         </table>
