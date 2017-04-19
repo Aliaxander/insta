@@ -173,7 +173,7 @@
 </div>
 <!-- end moadal delete -->
 <!-- modal reset -->
-<div class="modal fade modal-reser" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+<div class="modal fade modal-reset" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
 	<div class="modal-dialog modal-sm" role="document">
 		<div class="modal-content">
 			<form method="post" action="/resetRequests">
