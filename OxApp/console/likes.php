@@ -41,7 +41,11 @@ class Likes extends Command
     {
         require(__DIR__ . "/../../config.php");
         $api = new IgApi();
-        $users = Users::orderBy(["id" => 'desc'])->limit([0 => 1])->find(['login' => 1, 'ban' => 0, 'requests' => 0]);
+        $users = Users::orderBy(["id" => 'desc'])->limit([0 => 1])->find([
+            'login/in' => [1, 2],
+            'ban' => 0,
+            'requests' => 0
+        ]);
         if ($users->count == 0) {
             die('no job');
         } else {
@@ -58,7 +62,7 @@ class Likes extends Command
             $api->accountId = $user->accountId;
             $api->guid = $user->guid;
             $api->csrftoken = $user->csrftoken;
-            if (!file_exists($user->userName . "-cookies.dat")) {
+            if (!file_exists($user->userName . "-cookies.dat") || $user->login === 2) {
                 echo "login account:";
                 $api->login($user->guid, $user->phoneId, $user->deviceId, $user->password);
             }
@@ -198,7 +202,7 @@ class Likes extends Command
                     if ($hour >= 4 && $likeCou > 700) {
                         sleep(rand(70000, 87000));
                     }
-                
+                    
                 }
             }
         }
