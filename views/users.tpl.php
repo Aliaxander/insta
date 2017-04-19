@@ -1,135 +1,87 @@
 {% include "global/head.tpl.php" %}
+<div id="toolbar">
+    <button class="btn btn-danger check" data-toggle="modal" data-target=".modal-delete" disabled><i
+                class="glyphicon glyphicon-remove"></i> Delete
+    </button>
+    <button class="btn btn-primary check" data-toggle="modal"
+            data-target=".modal-group" disabled><i
+                class="glyphicon glyphicon-folder-open"></i> Add to Group
+    </button>
+    <button class="btn btn-info check" data-toggle="modal"
+            data-target=".modal-task" disabled><i
+                class="glyphicon glyphicon-briefcase"></i> Add Task
+    </button>
+</div>
 <div class="panel panel-primary">
     <div class="panel-heading">
-        <h3 class="panel-title">Users || Total likes: {{sumLikes}} || Total users: {{ totalRows }}</h3>
+        <h3 class="panel-title">Users Detail</h3>
     </div>
     <div class="panel-body">
-        <div class="table-responsive">
-            <table class="table">
-                <thead>
-                <tr>
-                    <form method="get">
-                        <th></th>
-                        <th></th>
-                        <th><select class="form-control" name="userGroup">
-                                <option value="">all</option>
-                                {% for group in groups %}
-                                <option value="{{ group.id }}">{{ group.name }}</option>
-                                {% endfor %}
-                            </select></th>
-                        <th><select class="form-control" name="userTask">
-                                <option value="">all</option>
-                                {% for taskType in taskTypes %}
-                                <option value="{{ taskType.id }}">{{ taskType.name }}</option>
-                                {% endfor %}
-                            </select></th>
-                        <th></th>
-                        <th></th>
-                        <th><select class="form-control" name="LogIn">
-                                <option value="">all</option>
-                                <option value="0">LogIn 0</option>
-                                <option value="1">LogIn 1</option>
-                            </select></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th>
-                            <select class="form-control" name="ban">
-                                <option value="">all</option>
-                                <option value="0">No ban</option>
-                                <option value="1">Ban</option>
-                            </select></th>
-                        <th>
-                            <button type="submit" class="btn btn-primary">Filter</button>
-                        </th>
-                    </form>
-                </tr>
-                </thead>
-                <thead>
-                <tr>
-                    <th>#</th>
-                    <th><a href="{{ url }}orderBy=id&sort=desc">id</a></th>
-                    <th><a href="{{ url }}orderBy=userGroup&sort=desc">userGroup</a></th>
-                    <th>Task</th>
-                    <th><a href="{{ url }}orderBy=userName&sort=desc">userName</a></th>
-                    <th><a href="{{ url }}orderBy=firstName&sort=desc">firstName</a></th>
-                    <th><a href="{{ url }}orderBy=logIn&sort=desc">logIn</a></th>
-                    <th><a href="{{ url }}orderBy=proxy&sort=desc">proxy</a></th>
-                    <th><a href="{{ url }}orderBy=requests&sort=desc">requests</a></th>
-                    <th><a href="{{ url }}orderBy=follows&sort=desc">follows</a></th>
-                    <th><a href="{{ url }}orderBy=likes&sort=desc">likes</a></th>
-                    <th><a href="{{ url }}orderBy=dateCreate&sort=desc">dateCreate</a></th>
-                    <th><a href="{{ url }}orderBy=hour&sort=desc">hour</a></th>
-                    <th><a href="{{ url }}orderBy=ban&sort=desc">ban</a></th>
-                    <th>options</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for user in users %}
-                {% if user.ban %}
-                <tr class="danger">
-                    {% elseif user.ban == 0 and user.logIn == 1 %}
-                <tr class="success">
-                    {% else %}
-                <tr>
-                    {% endif %}
-                    <td><input type="checkbox" class="checkAll" value="{{ user.id }}"></td>
-                    <td>{{ user.id }}</td>
-                    <td>{{ user.userGroup }}</td>
-                    <td>{{ user.userTask }}</td>
-                    <td><a href="https://instagram.com/{{ user.userName }}" target="_blank">{{ user.userName }}</a></td>
-                    <td>{{ user.firstName }}</td>
-                    <td>{{ user.logIn }}</td>
-                    <td>{{ user.proxy }}</td>
-                    <td>{{ user.requests }}</td>
-                    <td>{{ user.follows }}</td>
-                    <td>{{ user.likes }}</td>
-                    <td>{{ user.dateCreate }}</td>
-                    <td>{{ user.hour }}</td>
-                    <td>{{ user.ban }}</td>
-                    <td><a href="/deleteUsers?id={{ user.id }}"><span class="glyphicon glyphicon-trash"></a></span></td>
-                </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    </div>
-    <div class="panel-footer">
-        <div class="row">
-            <button class="btn btn-success" id="checkAll"
-                    onclick="$('.checkAll').prop('checked', !($('.checkAll').is(':checked')));">check All
-            </button>
-            <button class="btn btn-danger" onclick="check()" data-toggle="modal" data-target=".modal-delete">Delete
-            </button>
-            <button class="btn btn-primary" data-toggle="modal" onclick="check()"
-                    data-target=".modal-group">Add to Group
-            </button>
-            <button class="btn btn-info" data-toggle="modal" onclick="check()"
-                    data-target=".modal-task">Add Task
-            </button>
-
-            <ul class="pagination pull-right" style="margin: 0;">
-                {% for i in range(1, totalPages) %}
-                <li
-                        {% if i==setPage %} class="active" {% endif %}><a
-                            href="{{ url }}page={{ i }}">{{ i }} {% if i==setPage %}<span
-                                class="sr-only">(current)</span>{%
-                        endif
-                        %}</a></li>
-                {% endfor %}
-            </ul>
-        </div>
+        <table id="table"
+               data-toolbar="#toolbar"
+               data-toggle="table"
+               data-url="/api/users"
+               data-show-columns="true"
+               data-search="true"
+               data-show-refresh="true"
+               data-show-toggle="true"
+               data-show-export="true"
+               data-sort-name="id"
+               data-sort-order="desc"
+               data-side-pagination="server"
+               data-pagination="true"
+               data-filter-control="true"
+               data-click-to-select="true"
+               data-page-list="[5, 10, 20, 50, 100, 200, 500, 1000, 5000, ALL]">
+            <thead>
+            <tr>
+                <th data-field="state" data-checkbox="true"></th>
+                <th data-field="id" data-sortable="true">ID</th>
+                <th data-field="userGroup" data-filter-control="select" data-filter-data="url:/api/userGroup"
+                    data-sortable="true">userGroup
+                </th>
+                <th data-field="userTask" data-filter-control="select" data-filter-data="url:/api/taskType"
+                    data-sortable="true">userTask
+                </th>
+                <th data-field="userName" data-sortable="true">userName</th>
+                <th data-field="firstName" data-visible="false" data-sortable="true">firstName</th>
+                <th data-field="email" data-visible="false" data-sortable="true">email</th>
+                <th data-field="password" data-visible="false" data-sortable="true">password</th>
+                <th data-field="deviceId" data-visible="false" data-sortable="true">deviceId</th>
+                <th data-field="phoneId" data-visible="false" data-sortable="true">phoneId</th>
+                <th data-field="waterfall_id" data-visible="false" data-sortable="true">waterfall_id</th>
+                <th data-field="guid" data-visible="false" data-sortable="true">guid</th>
+                <th data-field="qeId" data-visible="false" data-sortable="true">qeId</th>
+                <th data-field="logIn" data-filter-control="select" data-filter-data="var:logIn" data-sortable="true">
+                    logIn
+                </th>
+                <th data-field="csrftoken" data-visible="false" data-sortable="true">csrftoken</th>
+                <th data-field="gender" data-visible="false" data-sortable="true">gender</th>
+                <th data-field="accountId" data-visible="false" data-sortable="true">accountId</th>
+                <th data-field="photo" data-visible="false" data-sortable="true">photo</th>
+                <th data-field="biography" data-visible="false" data-sortable="true">biography</th>
+                <th data-field="url" data-visible="false" data-sortable="true">url</th>
+                <th data-field="proxy" data-sortable="true">proxy</th>
+                <th data-field="userAgent" data-visible="false" data-sortable="true">userAgent</th>
+                <th data-field="requests" data-sortable="true">requests</th>
+                <th data-field="follows" data-visible="false" data-sortable="true">follows</th>
+                <th data-field="likes" data-sortable="true">likes</th>
+                <th data-field="day" data-visible="false" data-sortable="true">day</th>
+                <th data-field="hour" data-sortable="true">hour</th>
+                <th data-field="month" data-visible="false" data-sortable="true">month</th>
+                <th data-field="dateCreate" data-sortable="true">dateCreate</th>
+                <th data-field="ban" data-filter-control="select" data-filter-data="var:ban" data-sortable="true">ban
+                </th>
+            </tr>
+            </thead>
+        </table>
     </div>
 </div>
-
 <!-- modal addGroup -->
 <div class="modal fade modal-group" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
     <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
-            <form method="post">
+            <form method="post" action="/users">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                                 aria-hidden="true">&times;</span></button>
@@ -204,10 +156,10 @@
                             <input type="hidden" class="form-control id_profile" name="id">
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-danger">Delete</button>
-                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-danger">Delete</button>
                 </div>
             </form>
         </div>
@@ -215,14 +167,48 @@
 </div>
 <!-- end moadal delete -->
 <script>
-    function check() {
-        var checkboxes = $('input[type=checkbox]:checked');
-        var id = [];
-        for (var i = 0; i < checkboxes.length; i++) {
-            id.push(checkboxes[i].value);
-        }
-        console.log(id);
-        $('.id_profile').val(id);
+    var ban = {
+        0: "No ban",
+        1: "Ban"
+    };
+    var logIn = {
+        0: "No logIn",
+        1: "LogIn"
+    };
+    var $table = $('#table'),
+        $remove = $('.check'),
+        selections = [];
+    $(function () {
+        // sometimes footer render error.
+        setTimeout(function () {
+            $table.bootstrapTable('resetView');
+        }, 200);
+        $table.on('check.bs.table uncheck.bs.table ' +
+            'check-all.bs.table uncheck-all.bs.table', function () {
+            $remove.prop('disabled', !$table.bootstrapTable('getSelections').length);
+            // save your data, here just save the current page
+            selections = getIdSelections();
+            console.log(selections);
+            // push or splice the selections if you want to save all data selections
+        });
+
+        $remove.click(function () {
+            var ids = getIdSelections();
+            $('.id_profile').val(ids);
+        });
+
+    });
+    function getIdSelections() {
+        return $.map($table.bootstrapTable('getSelections'), function (row) {
+            return row.id
+        });
     }
+
+    $(function () {
+        $table.bootstrapTable('destroy').bootstrapTable({
+            exportDataType: "selected"
+        });
+    })
+
 </script>
 {% include "global/footer.tpl.php" %}

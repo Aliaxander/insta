@@ -8,6 +8,7 @@
 
 namespace Acme\Console\Command;
 
+use OxApp\helpers\FreenomReg;
 use OxApp\helpers\IgApi;
 use OxApp\models\Domains;
 use OxApp\models\ProfileGenerate;
@@ -45,11 +46,11 @@ class EditProfile extends Command
         $status = true;
         while ($status = true) {
             $users = Users::orderBy(["id" => 'desc'])->limit([0 => 1])->find([
-                'login' => 0,
                 'ban' => 0,
-                'userTask' => 2
+                'userTask' => 2,
+                'login' => 0
             ]);
-            if ($users->count > 0) {
+            if ($users->count == 1) {
                 $user = $users->rows[0];
                 $dir = scandir('/home/photos');
                 unset($dir[array_search('.', $dir)]);
@@ -65,7 +66,6 @@ class EditProfile extends Command
                 //SetPhoto:
                 $api->changeProfilePicture($photo);
                 //unlink($photo);
-                
                 
                 $profiles = ProfileGenerate::limit([0 => 1])->find(['status' => 0])->rows[0];//groupBy('description')->
                 ProfileGenerate::where(['id' => $profiles->id])->update(['status' => 1]);
@@ -85,14 +85,13 @@ class EditProfile extends Command
                 //                    $domain = "http://" . $domain;
                 //                }
                 $domain = Domains::limit([0 => 1])->find(['status' => 0]);
-                if ($domain->count > 0) {
-                    $domain = $domain->rows[0];
-                    Domains::where(['id' => $domain->id])->update(['status' => 1]);
+                if ($domain->count == 1) {
+                    Domains::where(['id' => $domain->rows[0]->id])->update(['status' => 1]);
                     $profileResult = '';
                     $i = 0;
                     while ($profileResult === '') {
                         //$biography
-                        $profile = $api->edit($biography, $domain->domain, $user->phoneId, $user->firstName,
+                        $profile = $api->edit($biography, $domain->rows[0]->domain, $user->phoneId, $user->firstName,
                             $user->email);
                         $profileResult = $profile[1];
                         if ($i == 3) {
@@ -100,29 +99,30 @@ class EditProfile extends Command
                         }
                         $i++;
                     }
+                    
+                    print_r($profile);
+                    
+                    //            $dir = scandir('/home/photos2');
+                    //            unset($dir[array_search('.', $dir)]);
+                    //            unset($dir[array_search('..', $dir)]);
+                    //            $dir = array_values($dir);
+                    //            $photo = '/home/photos2/' . $dir[rand(0, count($dir) - 1)];
+                    //
+                    //            $api->uploadPhoto($photo);
+                    //            unlink($photo);
+                    //            sleep(rand(3, 10));
+                    
+                    Users::where(['id' => $user->id])->update([
+                        'login' => 1,
+                        'biography' => $biography,
+                        'url' => $domain->rows[0]->domain,
+                        'photo' => $profile[1]['user']['profile_pic_url']
+                    ]);
+                } else {
+                    die('no domains');
                 }
-                
-                print_r($profile);
-                
-                //            $dir = scandir('/home/photos2');
-                //            unset($dir[array_search('.', $dir)]);
-                //            unset($dir[array_search('..', $dir)]);
-                //            $dir = array_values($dir);
-                //            $photo = '/home/photos2/' . $dir[rand(0, count($dir) - 1)];
-                //
-                //            $api->uploadPhoto($photo);
-                //            unlink($photo);
-                //            sleep(rand(3, 10));
-                
-                Users::where(['id' => $user->id])->update([
-                    'logIn' => 1,
-                    'biography' => $biography,
-                    'url' => $domain->domain,
-                    'photo' => $profile[1]['user']['profile_pic_url']
-                ]);
             } else {
-                die("No job");
-                $status = false;
+                die('no tasks');
             }
         }
         
