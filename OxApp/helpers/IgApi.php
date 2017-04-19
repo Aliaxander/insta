@@ -111,7 +111,7 @@ class IgApi
             if ($i == 10) {
                 $tokenResult = false;
             }
-            if ($sync[1]['message'] === 'checkpoint_required') {
+            if (@$sync[1]['message'] === 'checkpoint_required') {
                 //                echo "\nLimit fixer----------------------------------------\n";
                 //                $checkPoint = new Checkpoint($this->username);
                 //                $checkPoint->proxy = $this->proxy;
@@ -123,7 +123,6 @@ class IgApi
                 //                echo "\nEND Limit fixer----------------------------------------\n";
                 Users::where(['guid' => $guid, 'phoneId' => $phoneId, 'deviceId' => $device_id])->update(['ban' => 1]);
                 die("Account banned");
-                exit();
             }
             
             $i++;
@@ -158,7 +157,7 @@ class IgApi
             }
             $i++;
         }
-        if ($resultLogin['error_type'] === "inactive user" || $resultLogin['error_type'] === 'invalid_user') {
+        if (@$resultLogin['error_type'] === "inactive user" || @$resultLogin['error_type'] === 'invalid_user') {
             Users::where(['guid' => $guid, 'phoneId' => $phoneId, 'deviceId' => $device_id])->update(['ban' => 1]);
             die("Account banned");
         }
@@ -170,7 +169,7 @@ class IgApi
             'deviceId' => $device_id
         ])->update(['csrftoken' => $tokenResult, 'accountId' => @$resultLogin['logged_in_user']['pk']]);
         $newsInbox = $this->request('news/inbox/?activity_module=all');
-        if ($newsInbox[1]['message'] === 'checkpoint_required') {
+        if (@$newsInbox[1]['message'] === 'checkpoint_required') {
             //            echo "\nLimit fixer----------------------------------------\n";
             //            $checkPoint = new Checkpoint($this->username);
             //            $checkPoint->proxy = $this->proxy;
