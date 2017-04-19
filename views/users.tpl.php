@@ -11,8 +11,8 @@
             data-target=".modal-task" disabled><i
                 class="glyphicon glyphicon-briefcase"></i> Add Task
     </button>
-    <a href="#" class="btn btn-default btn-lg disabled" role="button">Total likes: {{ likesSum }}</a>
-    <a href="#" class="btn btn-default btn-lg disabled" role="button">Total users: {{ usersSum }}</a>
+    <a href="#" class="btn btn-default disabled" role="button">Total likes: {{ likesSum }}</a>
+    <a href="#" class="btn btn-default disabled" role="button">Total users: {{ usersSum }}</a>
 
 </div>
 <div class="panel panel-primary">
