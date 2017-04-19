@@ -10,6 +10,7 @@ namespace OxApp\controllers;
 
 
 use Ox\AbstractClass;
+use Ox\App;
 use OxApp\models\Users;
 
 /**
@@ -17,7 +18,7 @@ use OxApp\models\Users;
  *
  * @package OxApp\controllers
  */
-class ResetRequestsController extends AbstractClass
+class ResetRequestsController extends App
 {
     public function get()
     {
