@@ -10,6 +10,8 @@ namespace OxApp\controllers\html;
 
 use Ox\App;
 use Ox\View;
+use OxApp\models\TaskType;
+use OxApp\models\UserGroup;
 
 /**
  * Class UsersController
@@ -19,6 +21,11 @@ class UsersController extends App
 {
     public function get()
     {
-        return View::build('usersTest');
+        $taskType = TaskType::find()->rows;
+        $group = UserGroup::find()->rows;
+        return View::build('usersTest', [
+            'taskTypes' => $taskType,
+            'groups' => $group
+        ]);
     }
 }

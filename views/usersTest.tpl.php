@@ -1,10 +1,24 @@
 {% include "global/head.tpl.php" %}
+<div id="toolbar">
+    <button id="remove" class="btn btn-danger" data-toggle="modal" data-target=".modal-delete"><i
+                class="glyphicon glyphicon-remove"></i> Delete
+    </button>
+    <button class="btn btn-primary" data-toggle="modal"
+            data-target=".modal-group"><i
+                class="glyphicon glyphicon-folder-open"></i> Add to Group
+    </button>
+    <button class="btn btn-info" data-toggle="modal"
+            data-target=".modal-task"><i
+                class="glyphicon glyphicon-briefcase"></i> Add Task
+    </button>
+</div>
 <div class="panel panel-primary">
     <div class="panel-heading">
         <h3 class="panel-title">Users Detail</h3>
     </div>
     <div class="panel-body">
         <table id="table"
+               data-toolbar="#toolbar"
                data-toggle="table"
                data-url="/api/users"
                data-show-columns="true"
@@ -54,25 +68,102 @@
             </thead>
         </table>
     </div>
-    <div class="panel-footer">
-        <div class="row">
-            <button class="btn btn-danger" onclick="check()" data-toggle="modal" data-target=".modal-delete">Delete
-            </button>
-            <button class="btn btn-primary" data-toggle="modal" onclick="check()"
-                    data-target=".modal-group">Add to Group
-            </button>
-            <button class="btn btn-info" data-toggle="modal" onclick="check()"
-                    data-target=".modal-task">Add Task
-            </button>
+</div>
+<!-- modal addGroup -->
+<div class="modal fade modal-group" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <form method="post">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="gridSystemModalLabel">Add profile to group</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <select class="form-control input-lg" name="userGroup">
+                                {% for group in groups %}
+                                <option value="{{ group.id }}">{{ group.name }}</option>
+                                {% endfor %}
+                            </select>
+                            <input type="hidden" class="form-control id_profile" name="id">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Add</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
-
+<!-- end moadal add-group -->
+<!-- modal addTask -->
+<div class="modal fade modal-task" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <form method="post" action="/task">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="gridSystemModalLabel">Add profile to group</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <select class="form-control input-lg" name="taskTypeId">
+                                {% for task in taskTypes %}
+                                <option value="{{ task.id }}">{{ task.name }}</option>
+                                {% endfor %}
+                            </select>
+                            <input type="hidden" class="form-control id_profile" name="id">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Add</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- end moadal add-task -->
+<!-- modal delete -->
+<div class="modal fade modal-delete" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <form method="post" action="/deleteUsers">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="gridSystemModalLabel">Delete profile</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h4>Do you really want to delete profiles</h4>
+                            <input type="hidden" class="form-control id_profile" name="id">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- end moadal delete -->
 <script>
     var $table = $('#table');
+
     $(function () {
-            $table.bootstrapTable('destroy').bootstrapTable({
-                exportDataType: "selected"
+        $table.bootstrapTable('destroy').bootstrapTable({
+            exportDataType: "selected"
         });
     })
 

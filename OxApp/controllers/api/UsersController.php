@@ -24,9 +24,18 @@ class UsersController extends App
             'userTask'
         ];
         $where = [];
-        foreach ($rule as $item) {
-            if (!empty($this->request->query->get($item))) {
-                $where[$item] = $this->request->query->get($item);
+        if (!empty($this->request->query->get('filter'))) {
+            $filters = json_decode($this->request->query->get('filter'));
+            foreach ($filters as $key => $item) {
+                if (in_array($key, $rule)) {
+                    if ($key == 'userGroup') {
+                        $where[$key] = UserGroup::find(['name' => $item])->rows[0]->id;
+                    } elseif ($key == 'userTask') {
+                        $where[$key] = TaskType::find(['name' => $item])->rows[0]->id;
+                    } else {
+                        $where[$key] = $item;
+                    }
+                }
             }
         }
         if (!empty($this->request->query->get('order')) && !empty($this->request->query->get('sort'))) {
@@ -70,6 +79,7 @@ class UsersController extends App
         return json_encode([
             'total' => (int)@$total->rows[0]->count,
             'rows' => $users,
+            'where' => $where
         ]);
     }
 }
