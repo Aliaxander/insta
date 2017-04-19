@@ -28,13 +28,7 @@ class UsersController extends App
             $filters = json_decode($this->request->query->get('filter'));
             foreach ($filters as $key => $item) {
                 if (in_array($key, $rule)) {
-                    if ($key == 'userGroup') {
-                        $where[$key] = UserGroup::find(['name' => $item])->rows[0]->id;
-                    } elseif ($key == 'userTask') {
-                        $where[$key] = TaskType::find(['name' => $item])->rows[0]->id;
-                    } else {
-                        $where[$key] = $item;
-                    }
+                    $where[$key] = $item;
                 }
             }
         }
