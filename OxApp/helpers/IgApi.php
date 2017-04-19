@@ -146,18 +146,29 @@ class IgApi
         ];
         
         $data = json_encode($data);
-        $resultLogin = $this->request('accounts/login/', $data);
-        if ($resultLogin[1]['error_type'] === "inactive user") {
+        $resultLogin = '';
+        while ($resultLogin == '') {
+            $login = $this->request('accounts/login/', $data);
+            $resultLogin = $login[1];
+            if (empty($resultLogin)) {
+                $resultLogin = '';
+            }
+            if ($i === 5) {
+                $resultLogin = false;
+            }
+            $i++;
+        }
+        if ($resultLogin['error_type'] === "inactive user") {
             Users::where(['guid' => $guid, 'phoneId' => $phoneId, 'deviceId' => $device_id])->update(['ban' => 1]);
             die("Account banned");
         }
         print_r($resultLogin);
-        $this->accountId = @$resultLogin[1]['logged_in_user']['pk'];
+        $this->accountId = @$resultLogin['logged_in_user']['pk'];
         Users::where([
             'guid' => $guid,
             'phoneId' => $phoneId,
             'deviceId' => $device_id
-        ])->update(['csrftoken' => $tokenResult, 'accountId' => @$resultLogin[1]['logged_in_user']['pk']]);
+        ])->update(['csrftoken' => $tokenResult, 'accountId' => @$resultLogin['logged_in_user']['pk']]);
         $newsInbox = $this->request('news/inbox/?activity_module=all');
         if ($newsInbox[1]['message'] === 'checkpoint_required') {
             //            echo "\nLimit fixer----------------------------------------\n";
