@@ -72,7 +72,7 @@ class EditProfile extends Command
                 //            $word = [$user->userName, $user->firstName, mt_rand(10000, 99999)];
                 //            $word = $word[mt_rand(0, 2)];
                 //            $word = str_replace([' ', '.'], '', $word);
-                $biography = $profiles->description;
+                $biography = @$profiles->description;
                 //            $url = mb_strtolower(str_replace('%username%', $word, $profiles->url));
                 //            //
                 //            //
