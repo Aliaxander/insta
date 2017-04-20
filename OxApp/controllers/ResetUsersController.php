@@ -18,21 +18,23 @@ use OxApp\models\Users;
  *
  * @package OxApp\controllers
  */
-class ResetRequestsController extends App
+class ResetUsersController extends App
 {
     public function get()
     {
         $this->post();
     }
-    
+
     public function post()
     {
-        $id = explode(',', $this->request->get("id"));
+        $id = explode(',', $this->request->request->get("id"));
+        $resetType = $this->request->request->get("resetType");
         if (!empty($id)) {
-            Users::where(['id/in' => $id])->update(['requests'=>0]);
+            Users::where(['id/in' => $id])->update([$resetType => 0]);
         }
-        
+
+
         header("Location: " . $_SERVER['HTTP_REFERER']);
     }
-    
+
 }

@@ -56,7 +56,7 @@ class EditProfile extends Command
                 unset($dir[array_search('.', $dir)]);
                 unset($dir[array_search('..', $dir)]);
                 $dir = array_values($dir);
-                $photo = '/home/photos/' . $dir[rand(0, count($dir) - 1)];
+               
                 
                 $api = new IgApi();
                 $api->proxy = $user->proxy;
@@ -72,9 +72,26 @@ class EditProfile extends Command
                     $i++;
                 }
                 
-                
                 //SetPhoto:
-                $api->changeProfilePicture($photo);
+                $photoResult = '';
+                $result = true;
+                $i = 0;
+                while ($photoResult === '') {
+                    $photo = '/home/photos/' . $dir[rand(0, count($dir) - 1)];
+                    $result = $api->changeProfilePicture($photo);
+                    $photoResult = $result[1];
+                    if ($i === 5) {
+                        $photoResult = false;
+                    }
+                    $i++;
+                }
+                if (@$result[1]['message'] === 'checkpoint_required') {
+                    Users::where([
+                        'id' => $user->id
+                    ])->update(['ban' => 1]);
+                    die("Account banned");
+                }
+                
                 //unlink($photo);
                 
                 $profiles = ProfileGenerate::limit([0 => 1])->find(['status' => 0])->rows[0];//groupBy('description')->

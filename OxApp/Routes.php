@@ -22,8 +22,8 @@ Router::rout('/descriptionProfile')->app('DescriptionProfile')->save();
 Router::rout('/testMacros')->app('TestMacros')->save();
 Router::rout('/deleteProfile/:num=>id')->app('DeleteProfile')->save();
 
-//Reset requests:
-Router::rout('/resetRequests')->app('ResetRequests')->save();
+//Reset users:
+Router::rout('/resetUsers')->app('ResetUsers')->save();
 
 //users
 Router::rout('/deleteUsers')->app('DeleteUsers')->save();
@@ -39,6 +39,4 @@ Router::rout('/taskType')->app('TaskType')->save();
 
 Router::setMiddlewareGroup('Json', function () {
     Router::rout('/api/users')->app('api\\Users')->save();
-    Router::rout('/api/userGroup')->app('api\\UserGroup')->save();
-    Router::rout('/api/taskType')->app('api\\TaskType')->save();
 });

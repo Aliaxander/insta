@@ -146,7 +146,7 @@ class IgApi
         
         $data = json_encode($data);
         $resultLogin = '';
-        $i=0;
+        $i = 0;
         while ($resultLogin == '') {
             $login = $this->request('accounts/login/', $data);
             $resultLogin = $login[1];
@@ -185,7 +185,6 @@ class IgApi
             //            echo "\nEND Limit fixer----------------------------------------\n";
             Users::where(['guid' => $guid, 'phoneId' => $phoneId, 'deviceId' => $device_id])->update(['ban' => 1]);
             print("Account banned");
-            
         }
         
         return $resultLogin;
@@ -215,11 +214,14 @@ class IgApi
     
     public function changeProfilePicture($photo)
     {
+        $resultEdit = true;
         if (!empty($photo)) {
             $resultEdit = $this->request('accounts/change_profile_picture/', null,
                 $photo);
             print_r($resultEdit);
         }
+        
+        return $resultEdit;
     }
     
     public function uploadPhoto($photo)
@@ -237,7 +239,7 @@ class IgApi
         while ($tokenResult === '') {
             $sync = $this->sync();
             print_r($sync);
-        
+            
             if (preg_match('#Set-Cookie: csrftoken=([^;]+)#', $sync[0], $token)) {
                 $tokenResult = $token[1];
             }
@@ -435,7 +437,6 @@ class IgApi
         sleep(rand(3, 5));
         print_r($this->usernameSuggestions($usernameTmp3, $email, $waterfall_id));
         
-        
         sleep(rand(3, 7));
         print_r($this->usernameSuggestions($usernameTmp2, $email, $waterfall_id));
         
@@ -453,7 +454,17 @@ class IgApi
         
         sleep(rand(1, 6));
         //register:
-        $create = $this->createAccount($email, $waterfall_id);
+        $createResult = '';
+        $i = 0;
+        while ($createResult === '') {
+            $create = $this->createAccount($email, $waterfall_id);
+            $createResult = $create[1];
+            if ($i === 5) {
+                $createResult = false;
+            }
+            $i++;
+        }
+      
         print_r($create);
         //        if (empty($create[1])) {
         //  $create = $this->createAccount($email, $waterfall_id);
@@ -500,7 +511,8 @@ class IgApi
                 'photo' => '',
                 'biography' => '',
                 'proxy' => $this->proxy,
-                'userAgent' => $this->userAgent
+                'userAgent' => $this->userAgent,
+                'dateCreate' => '//now()//'
             ]);
         }
         
@@ -735,9 +747,7 @@ guage_picker'
             }
         }
         
-        
         if (!empty($this->proxyAuth)) {
-            
         }
         $resp = curl_exec($ch);
         $header_len = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
