@@ -11,9 +11,6 @@
             data-target=".modal-task" disabled><i
                 class="glyphicon glyphicon-briefcase"></i> Add Task
     </button>
-	<button class="btn btn-danger check" data-toggle="modal" data-target=".modal-reset" disabled><i
-				class="glyphicon glyphicon-remove"></i> Reset requests
-	</button>
     <a href="#" class="btn btn-default disabled" role="button">Total likes: {{ likesSum }}</a>
     <a href="#" class="btn btn-default disabled" role="button">Total users: {{ usersSum }}</a>
 
@@ -38,7 +35,8 @@
                data-pagination="true"
                data-filter-control="true"
                data-click-to-select="true"
-               data-page-list="[5, 10, 20, 50, 100, 200, 500, 1000, 5000, ALL]">
+               data-row-style="rowStyle"
+               data-page-list="[5, 10, 20, 50, 100, 200, 500, 1000, 5000]">
             <thead>
             <tr>
                 <th data-field="state" data-checkbox="true"></th>
@@ -147,56 +145,29 @@
 <!-- end moadal add-task -->
 <!-- modal delete -->
 <div class="modal fade modal-delete" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
-	<div class="modal-dialog modal-sm" role="document">
-		<div class="modal-content">
-			<form method="post" action="/deleteUsers">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-								aria-hidden="true">&times;</span></button>
-					<h4 class="modal-title" id="gridSystemModalLabel">Delete profile</h4>
-				</div>
-				<div class="modal-body">
-					<div class="row">
-						<div class="col-md-12">
-							<h4>Do you really want to delete profiles</h4>
-							<input type="hidden" class="form-control id_profile" name="id">
-						</div>
-					</div>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-					<button type="submit" class="btn btn-danger">Delete</button>
-				</div>
-			</form>
-		</div>
-	</div>
-</div>
-<!-- end moadal delete -->
-<!-- modal reset -->
-<div class="modal fade modal-reset" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
-	<div class="modal-dialog modal-sm" role="document">
-		<div class="modal-content">
-			<form method="post" action="/resetRequests">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-								aria-hidden="true">&times;</span></button>
-					<h4 class="modal-title" id="gridSystemModalLabel">Reset requests</h4>
-				</div>
-				<div class="modal-body">
-					<div class="row">
-						<div class="col-md-12">
-							<h4>Restart liking process.</h4>
-							<input type="hidden" class="form-control id_profile" name="id">
-						</div>
-					</div>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-					<button type="submit" class="btn btn-danger">Reset</button>
-				</div>
-			</form>
-		</div>
-	</div>
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <form method="post" action="/deleteUsers">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="gridSystemModalLabel">Delete profile</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h4>Do you really want to delete profiles</h4>
+                            <input type="hidden" class="form-control id_profile" name="id">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
 <!-- end moadal delete -->
 <script>
@@ -233,6 +204,18 @@
         return $.map($table.bootstrapTable('getSelections'), function (row) {
             return row.id
         });
+    }
+    function rowStyle(row, index) {
+        if (row.logIn == 1 && row.ban == 0) {
+            return {
+                classes: 'success'
+            };
+        } else if (row.ban == 1) {
+            return {
+                classes: 'danger'
+            };
+        }
+        return {};
     }
 </script>
 {% include "global/footer.tpl.php" %}
