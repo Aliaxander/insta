@@ -34,6 +34,8 @@
                data-url="/api/users"
                data-show-columns="true"
                data-search="true"
+               data-cookie="true"
+               data-cookie-id-table="saveId"
                data-show-refresh="true"
                data-show-toggle="true"
                data-show-export="true"
