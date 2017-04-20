@@ -501,7 +501,8 @@ class IgApi
                 'photo' => '',
                 'biography' => '',
                 'proxy' => $this->proxy,
-                'userAgent' => $this->userAgent
+                'userAgent' => $this->userAgent,
+                'dateCreate' => '//now()//'
             ]);
         }
         
