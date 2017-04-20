@@ -456,7 +456,7 @@ class IgApi
         //register:
         $createResult = '';
         $i = 0;
-        while ($singTokenResult === '') {
+        while ($createResult === '') {
             $create = $this->createAccount($email, $waterfall_id);
             $createResult = $create[1];
             if ($i === 5) {
