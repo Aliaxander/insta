@@ -124,6 +124,8 @@ class EditProfile extends Command
                     $subDomain = [$user->firstName, $user->userName];
                     $domain = $subDomain[rand(0, 1)] . $domains[rand(0, 1)];
                     $domain = str_replace(" ", "", $domain);
+                    $domain = str_replace("'", "", $domain);
+                    $domain = str_replace('"', "", $domain);
                     $domain = mb_strtolower($domain);
                     $profile = $api->edit($biography, $domain, $user->phoneId, $user->firstName,
                         $user->email);
