@@ -11,6 +11,10 @@
             data-target=".modal-task" disabled><i
                 class="glyphicon glyphicon-briefcase"></i> Add Task
     </button>
+    <button class="btn btn-warning check" data-toggle="modal"
+            data-target=".modal-resetUsers" disabled><i
+                class="glyphicon glyphicon-refresh"></i> Reset
+    </button>
     <a href="#" class="btn btn-default disabled" role="button">Total likes: {{ likesSum }}</a>
     <a href="#" class="btn btn-default disabled" role="button">Total users: {{ usersSum }}</a>
 
@@ -170,6 +174,39 @@
     </div>
 </div>
 <!-- end moadal delete -->
+<!-- modal updateUsers -->
+<div class="modal fade modal-resetUsers" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <form method="post" action="/resetUsers">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="gridSystemModalLabel">updateUsers</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <select class="form-control input-lg" name="resetType">
+                                <option value="requests" selected>Requests</option>
+                                <option value="likes">Likes</option>
+                                <option value="logIn">logIn</option>
+                                <option value="hour">Hour</option>
+                                <option value="follows">Follows</option>
+                            </select>
+                            <input type="hidden" class="form-control id_profile" name="id">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Reset</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- end moadal add-updateUsers -->
 <script>
     var ban = {
         0: "No ban",
