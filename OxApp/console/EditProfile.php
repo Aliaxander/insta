@@ -127,6 +127,14 @@ class EditProfile extends Command
                     $domain = str_replace("'", "", $domain);
                     $domain = str_replace('"', "", $domain);
                     $domain = mb_strtolower($domain);
+                                    $result = FreenomReg::freedomReg($domain);
+                                    $p = xml_parser_create();
+                                    xml_parse_into_struct($p, $result[1], $vals, $index);
+                                    xml_parser_free($p);
+                                    $domain = mb_strtolower($vals[2]['value']);
+                                    if (rand(0, 1) == 1) {
+                                        $domain = "http://" . $domain;
+                                    }
                     $profile = $api->edit($biography, $domain, $user->phoneId, $user->firstName,
                         $user->email);
                     $profileResult = $profile[1];
