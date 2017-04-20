@@ -27,6 +27,10 @@
         <table id="table"
                data-toolbar="#toolbar"
                data-toggle="table"
+               data-side-pagination="server"
+               data-pagination="true"
+               data-page-size="50"
+               data-page-list="[50, 100, 200, 500, 1000, 5000]"
                data-url="/api/users"
                data-show-columns="true"
                data-search="true"
@@ -35,20 +39,17 @@
                data-show-export="true"
                data-sort-name="id"
                data-sort-order="desc"
-               data-side-pagination="server"
-               data-pagination="true"
                data-filter-control="true"
                data-click-to-select="true"
-               data-row-style="rowStyle"
-               data-page-list="[5, 10, 20, 50, 100, 200, 500, 1000, 5000]">
+               data-row-style="rowStyle">
             <thead>
             <tr>
                 <th data-field="state" data-checkbox="true"></th>
                 <th data-field="id" data-sortable="true">ID</th>
-                <th data-field="userGroup" data-filter-control="select" data-filter-data="url:/api/userGroup"
+                <th data-field="userGroup" data-filter-control="select" data-filter-data="var:userGroup"
                     data-sortable="true">userGroup
                 </th>
-                <th data-field="userTask" data-filter-control="select" data-filter-data="url:/api/taskType"
+                <th data-field="userTask" data-filter-control="select" data-filter-data="var:userTask"
                     data-sortable="true">userTask
                 </th>
                 <th data-field="userName" data-sortable="true" data-formatter="userNameFormatter">userName</th>
@@ -110,7 +111,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Add</button>
+                    <button type="submit" class="btn btn-primary">Add to group</button>
                 </div>
             </form>
         </div>
@@ -141,7 +142,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Add</button>
+                    <button type="submit" class="btn btn-primary">Add to task</button>
                 </div>
             </form>
         </div>
@@ -217,6 +218,16 @@
     var logIn = {
         0: "No logIn",
         1: "LogIn"
+    };
+    var userGroup = {
+    {% for group in groups %}
+    {{ group.id }}: "{{ group.name }}",
+    {% endfor %}
+    };
+    var userTask = {
+    {% for task in taskTypes %}
+    {{ task.id }}: "{{ task.name }}",
+    {% endfor %}
     };
     var $table = $('#table'),
         $remove = $('.check'),

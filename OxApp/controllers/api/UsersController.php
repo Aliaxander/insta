@@ -40,7 +40,7 @@ class UsersController extends App
         if (!empty($this->request->query->get('limit'))) {
             $limit = $this->request->query->get('limit');
         } else {
-            $limit = 10;
+            $limit = 50;
         }
         if (!empty($this->request->query->get("offset"))) {
             $offset = $this->request->query->get("offset");
@@ -72,7 +72,7 @@ class UsersController extends App
         }
         return json_encode([
             'total' => (int)@$total->rows[0]->count,
-            'rows' => $users
+            'rows' => $users,
         ]);
     }
 }
