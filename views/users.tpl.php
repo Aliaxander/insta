@@ -279,9 +279,11 @@
     }
     function detailFormatter(index, row) {
         var html = [];
+        html.push('<div class="list-group">');
         $.each(row, function (key, value) {
-            html.push('<p><b>' + key + ':</b> ' + value + '</p>');
+            html.push('<button type="button" class="list-group-item">' + key + '<span class="badge">' + value + '</span></button>');
         });
+        html.push('</div>');
         return html.join('');
     }
 </script>
