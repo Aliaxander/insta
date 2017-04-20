@@ -39,6 +39,8 @@
                data-show-refresh="true"
                data-show-toggle="true"
                data-show-export="true"
+               data-detail-view="true"
+               data-detail-formatter="detailFormatter"
                data-sort-name="id"
                data-sort-order="desc"
                data-filter-control="true"
@@ -274,6 +276,13 @@
     }
     function userNameFormatter(value) {
         return '<a href="https://instagram.com/' + value + '" target="_blank"><i class="glyphicon glyphicon-link"></i> ' + value + '</a>';
+    }
+    function detailFormatter(index, row) {
+        var html = [];
+        $.each(row, function (key, value) {
+            html.push('<p><b>' + key + ':</b> ' + value + '</p>');
+        });
+        return html.join('');
     }
 </script>
 {% include "global/footer.tpl.php" %}
