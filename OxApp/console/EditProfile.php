@@ -52,6 +52,7 @@ class EditProfile extends Command
             ]);
             if ($users->count == 1) {
                 $user = $users->rows[0];
+                Users::where(['id' => $user->id])->update(['userTask' => 3]);
                 $dir = scandir('/home/photos');
                 unset($dir[array_search('.', $dir)]);
                 unset($dir[array_search('..', $dir)]);
