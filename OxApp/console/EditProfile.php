@@ -72,9 +72,25 @@ class EditProfile extends Command
                     $i++;
                 }
                 
-                
                 //SetPhoto:
-                $api->changeProfilePicture($photo);
+                $photoResult = '';
+                $result = true;
+                $i = 0;
+                while ($photoResult === '') {
+                    $result = $api->changeProfilePicture($photo);
+                    $photoResult = $result[1];
+                    if ($i === 5) {
+                        $photoResult = false;
+                    }
+                    $i++;
+                }
+                if ($result !== true || $result[1]['message'] === 'checkpoint_required') {
+                    Users::where([
+                        'id' => $user->id
+                    ])->update(['ban' => 1]);
+                    die("Account banned");
+                }
+                
                 //unlink($photo);
                 
                 $profiles = ProfileGenerate::limit([0 => 1])->find(['status' => 0])->rows[0];//groupBy('description')->
