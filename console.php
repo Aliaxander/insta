@@ -6,6 +6,7 @@ use Acme\Console\Command\EditProfile;
 use Acme\Console\Command\FreenomReger;
 use Acme\Console\Command\Likes;
 use Acme\Console\Command\Test;
+use Acme\Console\Command\BaseUpload;
 use Ox\DataBase\DbConfig;
 use Symfony\Component\Console\Application;
 
@@ -24,6 +25,7 @@ $application->add(new Likes());
 $application->add(new EditProfile());
 $application->add(new FreenomReger());
 $application->add(new BaseUploader());
+$application->add(new BaseUpload());
 $application->addCommands(
     array(
         // Migrations Commands
