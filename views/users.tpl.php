@@ -47,7 +47,7 @@
                 <th data-field="userTask" data-filter-control="select" data-filter-data="url:/api/taskType"
                     data-sortable="true">userTask
                 </th>
-                <th data-field="userName" data-sortable="true">userName</th>
+                <th data-field="userName" data-sortable="true" data-formatter="userNameFormatter">userName</th>
                 <th data-field="firstName" data-visible="false" data-sortable="true">firstName</th>
                 <th data-field="email" data-visible="false" data-sortable="true">email</th>
                 <th data-field="password" data-visible="false" data-sortable="true">password</th>
@@ -216,6 +216,9 @@
             };
         }
         return {};
+    }
+    function userNameFormatter(value) {
+        return '<a href="https://instagram.com/' + value + '">' + value + '</a>';
     }
 </script>
 {% include "global/footer.tpl.php" %}
