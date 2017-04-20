@@ -56,7 +56,7 @@ class EditProfile extends Command
                 unset($dir[array_search('.', $dir)]);
                 unset($dir[array_search('..', $dir)]);
                 $dir = array_values($dir);
-               
+                
                 
                 $api = new IgApi();
                 $api->proxy = $user->proxy;
@@ -122,6 +122,8 @@ class EditProfile extends Command
                     $domains = ['.myblogonline.pw', '.blogonline.pw'];
                     $subDomain = [$user->firstName, $user->userName];
                     $domain = $subDomain[rand(0, 1)] . $domains[rand(0, 1)];
+                    $domain = str_replace(" ", "", $domain);
+                    $domain = mb_strtolower($domain);
                     $profile = $api->edit($biography, $domain, $user->phoneId, $user->firstName,
                         $user->email);
                     $profileResult = $profile[1];
