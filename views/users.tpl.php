@@ -218,7 +218,7 @@
         return {};
     }
     function userNameFormatter(value) {
-        return '<a href="https://instagram.com/' + value + '">' + value + '</a>';
+        return '<a href="https://instagram.com/' + value + '"><i class="glyphicon glyphicon-link"></i> ' + value + '</a>';
     }
 </script>
 {% include "global/footer.tpl.php" %}
