@@ -48,7 +48,6 @@ class BaseUpload extends Command
         } catch (\PDOException $e) {
             throw new \PDOException($e);
         }
-
         $file = $input->getArgument('file');
         $file = file($file);
         foreach ($file as $item) {
@@ -56,7 +55,7 @@ class BaseUpload extends Command
             $text .= "('$acc'),";
         }
         $text = mb_substr($text, 0, -1);
-        $count = $db->exec("INSERT INTO profile (`title`) VALUE $text");
+        $count = $db->exec("INSERT INTO profile (`account`) VALUE $text");
         $end = microtime(true);
         $time = round($end - $start, 4);
 
