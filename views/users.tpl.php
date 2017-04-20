@@ -77,7 +77,8 @@
                 <th data-field="day" data-visible="false" data-sortable="true">day</th>
                 <th data-field="hour" data-sortable="true">hour</th>
                 <th data-field="month" data-visible="false" data-sortable="true">month</th>
-                <th data-field="dateCreate" data-sortable="true">dateCreate</th>
+                <th data-field="dateCreate" data-visible="false" data-sortable="true">dateCreate</th>
+                <th data-field="dateUpdate" data-sortable="true">dateUpdate</th>
                 <th data-field="ban" data-filter-control="select" data-filter-data="var:ban" data-sortable="true">ban
                 </th>
             </tr>
@@ -190,9 +191,10 @@
                             <select class="form-control input-lg" name="resetType">
                                 <option value="requests" selected>Requests</option>
                                 <option value="likes">Likes</option>
-                                <option value="logIn">logIn</option>
+                                <option value="logIn">LogIn</option>
                                 <option value="hour">Hour</option>
                                 <option value="follows">Follows</option>
+                                <option value="ban">Ban</option>
                             </select>
                             <input type="hidden" class="form-control id_profile" name="id">
                         </div>
@@ -254,8 +256,11 @@
         }
         return {};
     }
+    function getHeight() {
+        return $(window).height() - $('h1').outerHeight(true);
+    }
     function userNameFormatter(value) {
-        return '<a href="https://instagram.com/' + value + '"><i class="glyphicon glyphicon-link"></i> ' + value + '</a>';
+        return '<a href="https://instagram.com/' + value + '" target="_blank"><i class="glyphicon glyphicon-link"></i> ' + value + '</a>';
     }
 </script>
 {% include "global/footer.tpl.php" %}
