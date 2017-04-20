@@ -39,6 +39,4 @@ Router::rout('/taskType')->app('TaskType')->save();
 
 Router::setMiddlewareGroup('Json', function () {
     Router::rout('/api/users')->app('api\\Users')->save();
-    Router::rout('/api/userGroup')->app('api\\UserGroup')->save();
-    Router::rout('/api/taskType')->app('api\\TaskType')->save();
 });

@@ -27,7 +27,7 @@ class UsersController extends App
         if (!empty($this->request->query->get('filter'))) {
             $filters = json_decode($this->request->query->get('filter'));
             foreach ($filters as $key => $item) {
-                if (in_array($key, $rule)) {
+                if (in_array($key, $rule) && $item != '') {
                     $where[$key] = $item;
                 }
             }
@@ -40,7 +40,7 @@ class UsersController extends App
         if (!empty($this->request->query->get('limit'))) {
             $limit = $this->request->query->get('limit');
         } else {
-            $limit = 10;
+            $limit = 50;
         }
         if (!empty($this->request->query->get("offset"))) {
             $offset = $this->request->query->get("offset");
@@ -70,9 +70,10 @@ class UsersController extends App
             $users[$key]->userGroup = $groups[$user->userGroup];
             $users[$key]->userTask = $taskTypes[$user->userTask];
         }
+
         return json_encode([
             'total' => (int)@$total->rows[0]->count,
-            'rows' => $users
+            'rows' => $users,
         ]);
     }
 }
