@@ -56,7 +56,7 @@ class EditProfile extends Command
                 unset($dir[array_search('.', $dir)]);
                 unset($dir[array_search('..', $dir)]);
                 $dir = array_values($dir);
-                $photo = '/home/photos/' . $dir[rand(0, count($dir) - 1)];
+               
                 
                 $api = new IgApi();
                 $api->proxy = $user->proxy;
@@ -77,6 +77,7 @@ class EditProfile extends Command
                 $result = true;
                 $i = 0;
                 while ($photoResult === '') {
+                    $photo = '/home/photos/' . $dir[rand(0, count($dir) - 1)];
                     $result = $api->changeProfilePicture($photo);
                     $photoResult = $result[1];
                     if ($i === 5) {
