@@ -167,7 +167,17 @@ class Likes extends Command
                         $like1 = @$result[1]['items'][mt_rand(0, count($rows) - 1)]['id'];
                         if ($like1) {
                             InstBase::where(['id' => $accRow->rows[0]->id])->update(['likes' => round($accRow->rows[0]->likes + 1)]);
-                            print_r($api->like($like1));
+                            $createResult = '';
+                            $i = 0;
+                            while ($createResult === '') {
+                                $likes = $api->like($like1);
+                                $createResult = $likes[1];
+                                if ($i === 3) {
+                                    $createResult = false;
+                                }
+                                $i++;
+                            }
+                            print_r($likes);
                             $feed = $api->getFeed($acc);
                             if (@$feed[1]['message'] === 'checkpoint_required') {
                                 Users::where(['id' => $user->id])->update(['ban' => 1]);
@@ -202,7 +212,6 @@ class Likes extends Command
                     if ($hour >= 4 && $likeCou > 700) {
                         sleep(rand(70000, 87000));
                     }
-                    
                 }
             }
         }
