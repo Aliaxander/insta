@@ -454,7 +454,17 @@ class IgApi
         
         sleep(rand(1, 6));
         //register:
-        $create = $this->createAccount($email, $waterfall_id);
+        $createResult = '';
+        $i = 0;
+        while ($singTokenResult === '') {
+            $create = $this->createAccount($email, $waterfall_id);
+            $createResult = $create[1];
+            if ($i === 5) {
+                $createResult = false;
+            }
+            $i++;
+        }
+      
         print_r($create);
         //        if (empty($create[1])) {
         //  $create = $this->createAccount($email, $waterfall_id);
