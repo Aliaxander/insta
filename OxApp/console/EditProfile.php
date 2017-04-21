@@ -112,62 +112,52 @@ class EditProfile extends Command
                 //                if (rand(0, 1) == 1) {
                 //                    $domain = "http://" . $domain;
                 //                }
-                //                $domain = Domains::limit([0 => 1])->find(['status' => 0]);
-                //                if ($domain->count == 1) {
-                //                    Domains::where(['id' => $domain->rows[0]->id])->update(['status' => 1]);
-                $profileResult = '';
-                $i = 0;
-                while ($profileResult === '') {
-                    //$biography
-                    //$domain= $domain->rows[0]->domain;
-                    $domains = ['.myblogonline.pw', '.blogonline.pw'];
-                    $subDomain = [$user->firstName, $user->userName];
-                    $domain = $subDomain[rand(0, 1)] . $domains[rand(0, 1)];
-                    $domain = str_replace(" ", "", $domain);
-                    $domain = str_replace("'", "", $domain);
-                    $domain = str_replace('"', "", $domain);
-                    $domain = mb_strtolower($domain);
-                                    $result = FreenomReg::freedomReg($domain);
-                                    $p = xml_parser_create();
-                                    xml_parse_into_struct($p, $result[1], $vals, $index);
-                                    xml_parser_free($p);
-                                    $domain = mb_strtolower($vals[2]['value']);
-                                    if (rand(0, 1) == 1) {
-                                        $domain = "http://" . $domain;
-                                    }
-                    $profile = $api->edit($biography, $domain, $user->phoneId, $user->firstName,
-                        $user->email);
-                    $profileResult = $profile[1];
-                    if (empty($profile[1])) {
-                        $profileResult = '';
+                $domain = Domains::limit([0 => 1])->find(['status' => 0]);
+                if ($domain->count == 1) {
+                    Domains::where(['id' => $domain->rows[0]->id])->update(['status' => 1]);
+                    $profileResult = '';
+                    $i = 0;
+                    while ($profileResult === '') {
+                        //$biography
+                        $domain = $domain->rows[0]->domain;
+                        //                    $domains = ['.myblogonline.pw', '.blogonline.pw'];
+                        //                    $subDomain = [$user->firstName, $user->userName];
+                        //                    $domain = $subDomain[rand(0, 1)] . $domains[rand(0, 1)];
+                        //                    $domain = str_replace(" ", "", $domain);
+                        //                    $domain = mb_strtolower($domain);
+                        $profile = $api->edit($biography, $domain, $user->phoneId, $user->firstName,
+                            $user->email);
+                        $profileResult = $profile[1];
+                        if (empty($profile[1])) {
+                            $profileResult = '';
+                        }
+                        if ($i === 5) {
+                            $profileResult = false;
+                        }
+                        $i++;
                     }
-                    if ($i === 5) {
-                        $profileResult = false;
-                    }
-                    $i++;
+                    
+                    print_r($profile);
+                    
+                    //            $dir = scandir('/home/photos2');
+                    //            unset($dir[array_search('.', $dir)]);
+                    //            unset($dir[array_search('..', $dir)]);
+                    //            $dir = array_values($dir);
+                    //            $photo = '/home/photos2/' . $dir[rand(0, count($dir) - 1)];
+                    //
+                    //            $api->uploadPhoto($photo);
+                    //            unlink($photo);
+                    //            sleep(rand(3, 10));
+                    
+                    Users::where(['id' => $user->id])->update([
+                        'login' => 1,
+                        'biography' => $biography,
+                        'url' => $domain,
+                        'photo' => $profile[1]['user']['profile_pic_url']
+                    ]);
+                } else {
+                    die('no domains');
                 }
-                
-                print_r($profile);
-                
-                //            $dir = scandir('/home/photos2');
-                //            unset($dir[array_search('.', $dir)]);
-                //            unset($dir[array_search('..', $dir)]);
-                //            $dir = array_values($dir);
-                //            $photo = '/home/photos2/' . $dir[rand(0, count($dir) - 1)];
-                //
-                //            $api->uploadPhoto($photo);
-                //            unlink($photo);
-                //            sleep(rand(3, 10));
-                
-                Users::where(['id' => $user->id])->update([
-                    'login' => 1,
-                    'biography' => $biography,
-                    'url' => $domain,
-                    'photo' => $profile[1]['user']['profile_pic_url']
-                ]);
-                //                } else {
-                //                    die('no domains');
-                //                }
             } else {
                 die('no tasks');
             }
