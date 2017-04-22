@@ -180,7 +180,8 @@ class IgApi
             $checkPoint->request('https://www.instagram.com/challenge/');
             $result = $checkPoint->checkpointSecondStep($tokenResult);
             print_r($result);
-            if (preg_match("/<input id=\"id_phone_number\" name=\"phone_number\" type=\"tel\" />\b/i", $result[1])) {
+            if (preg_match("/Your phone number will be added\b/i", $result[1]) || preg_match("/Introduce tu número de teléfono.\b/i",
+                    $result[1])) {
                 
                 if (preg_match('# <input type="hidden" name="csrfmiddlewaretoken" value="(.*?)"/>#is', $result[1],
                     $token)) {
