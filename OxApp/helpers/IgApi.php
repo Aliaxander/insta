@@ -14,8 +14,9 @@ use OxApp\models\Users;
 
 class IgApi
 {
+    
     public $username;
-    public $userAgent = 'Instagram 10.8.0 Android (17/4.2.2; 240dpi; 480x800; samsung; GT-S7270; logan; hawaii_ss_logan; ru_RU)';
+    public $userAgent = 'Instagram 9.7.0 Android (17/4.2.2; 240dpi; 480x800; samsung; GT-S7270; logan; hawaii_ss_logan; ru_RU)';
     public $proxy = '46.105.124.207:5016';
     protected $phone_id;
     protected $name;
@@ -23,15 +24,15 @@ class IgApi
     public $accountId;
     protected $password;
     protected $device_id;
-    protected $igKey = '68a04945eb02970e2e8d15266fc256f7295da123e123f44b88f09d594a5902df';
+    protected $igKey = '2f6dcdf76deb0d3fd008886d032162a79b88052b5f50538c1ee93c4fe7d02e60';
     //protected $igKey = 'b03e0daaf2ab17cda2a569cace938d639d1288a1197f9ecf97efd0a4ec0874d7';
     protected $igVersion = '4';
     public $csrftoken;
     
     public function __construct()
     {
-        $device = new Device('10.8.0', 'en_US');
-        $this->userAgent = UserAgent::buildUserAgent('10.8.0', 'en_US', $device);
+        $device = new Device('9.7.0', 'en_US');
+        $this->userAgent = UserAgent::buildUserAgent('9.7.0', 'en_US', $device);
         //        $device = new Device('10.15.0', 'en_US');
         //        $this->userAgent = UserAgent::buildUserAgent('10.15.0', 'en_US', $device);
     }
@@ -311,9 +312,7 @@ class IgApi
             'hotmail.com',
             'icloud.com',
             'yahoo.com',
-            'lycos.com',
-            'aol.com',
-            'gmx.com'
+            'mail.ru'
         ];
         $faker = Factory::create();
         if (rand(0, 2) == 1) {
@@ -743,14 +742,14 @@ guage_picker'
             ];
             curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
         } else {
-            $headers = [
-                "X-IG-Connection-Type: WIFI",
-                "X-IG-Capabilities: 3ToAAA==",
-                'Accept-Encoding: gzip, deflate',
-                'Accept-Language: en-US',
-            ];
-            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-            curl_setopt($ch, CURLOPT_ENCODING, "gzip");
+            //            $headers = [
+            //                "X-IG-Connection-Type: WIFI",
+            //                "X-IG-Capabilities: 3ToAAA==",
+            //                'Accept-Encoding: gzip, deflate',
+            //                'Accept-Language: en-US',
+            //            ];
+            //            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+            //            curl_setopt($ch, CURLOPT_ENCODING, "gzip");
         }
         //
         curl_setopt($ch, CURLOPT_HEADER, true);
