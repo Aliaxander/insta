@@ -88,57 +88,58 @@ class ParseBase extends Command
                     die("ban user manual");
                 }
                 $accRow = \OxApp\models\ParseBase::limit([0 => 1])->find(['status' => 0]);
-                $acc = @preg_replace("/[^0-9]/", '', $accRow->rows[0]->account);
-                if (!empty($acc)) {
-                    \OxApp\models\ParseBase::where(['id' => $accRow->rows[0]->id])->update(['status' => 1]);
-                    
-                    $result = $api->getFeed($account);
-                    if (isset($result['1']['message']) && $result['1']['message'] === 'login_required') {
-                        echo "login_required";
-                        $login = $api->login($user->guid, $user->phoneId, $user->deviceId, $user->password);
-                        $checkPoint = new Checkpoint($user->userName);
-                        if (isset($login[1]['checkpoint_url'])) {
-                            $result = $checkPoint->request($login[1]['checkpoint_url']);
-                            if (preg_match("/Your phone number will be added\b/i", $result[1])) {
-                                Users::where(['id' => $user->id])->update(['ban' => 3]);
-                                die("SMS BAN!");
-                            }
-                        }
-                    } elseif (isset($result['1']['message']) && $result['1']['message'] === 'checkpoint_required') {
-                        echo "\nLogout user account\n";
-                        unlink("/home/insta/cookies/" . $user->userName . "-cookies.dat");
-                        $login = $api->login($user->guid, $user->phoneId, $user->deviceId, $user->password);
-                        $checkPoint = new Checkpoint($user->userName);
-                        if (isset($login[1]['checkpoint_url'])) {
-                            $result = $checkPoint->request($login[1]['checkpoint_url']);
-                            if (preg_match("/Your phone number will be added\b/i", $result[1])) {
-                                Users::where(['id' => $user->id])->update(['ban' => 1]);
-                                die("SMS BAN!");
-                            }
-                        }
-                    }
-                    if (!empty($result[1]['items'])) {
-                        $this->addToDb($result[1]['items']);
+                if ($accRow->count > 0) {
+                    $acc = @preg_replace("/[^0-9]/", '', $accRow->rows[0]->account);
+                    if (!empty($acc)) {
+                        \OxApp\models\ParseBase::where(['id' => $accRow->rows[0]->id])->update(['status' => 1]);
                         
-                        if (isset($result[1]['next_max_id'])) {
-                            $result2 = $api->getFeed($account, $result[1]['next_max_id']);
-                            $this->addToDb($result[1]['items']);
-                            
-                            if (isset($result2[1]['next_max_id'])) {
-                                $result3 = $api->getFeed($account, $result2[1]['next_max_id']);
-                                $this->addToDb($result3[1]['items']);
-                                if (isset($result3[1]['next_max_id'])) {
-                                    $result4 = $api->getFeed($account, $result3[1]['next_max_id']);
-                                    $this->addToDb($result4[1]['items']);
+                        $result = $api->getFeed($account);
+                        if (isset($result['1']['message']) && $result['1']['message'] === 'login_required') {
+                            echo "login_required";
+                            $login = $api->login($user->guid, $user->phoneId, $user->deviceId, $user->password);
+                            $checkPoint = new Checkpoint($user->userName);
+                            if (isset($login[1]['checkpoint_url'])) {
+                                $result = $checkPoint->request($login[1]['checkpoint_url']);
+                                if (preg_match("/Your phone number will be added\b/i", $result[1])) {
+                                    Users::where(['id' => $user->id])->update(['ban' => 3]);
+                                    die("SMS BAN!");
                                 }
                             }
+                        } elseif (isset($result['1']['message']) && $result['1']['message'] === 'checkpoint_required') {
+                            echo "\nLogout user account\n";
+                            unlink("/home/insta/cookies/" . $user->userName . "-cookies.dat");
+                            $login = $api->login($user->guid, $user->phoneId, $user->deviceId, $user->password);
+                            $checkPoint = new Checkpoint($user->userName);
+                            if (isset($login[1]['checkpoint_url'])) {
+                                $result = $checkPoint->request($login[1]['checkpoint_url']);
+                                if (preg_match("/Your phone number will be added\b/i", $result[1])) {
+                                    Users::where(['id' => $user->id])->update(['ban' => 1]);
+                                    die("SMS BAN!");
+                                }
+                            }
+                        }
+                        if (!empty($result[1]['items'])) {
+                            $this->addToDb($result[1]['items']);
+                            
+                            if (isset($result[1]['next_max_id'])) {
+                                $result2 = $api->getFeed($account, $result[1]['next_max_id']);
+                                $this->addToDb($result[1]['items']);
+                                
+                                if (isset($result2[1]['next_max_id'])) {
+                                    $result3 = $api->getFeed($account, $result2[1]['next_max_id']);
+                                    $this->addToDb($result3[1]['items']);
+                                    if (isset($result3[1]['next_max_id'])) {
+                                        $result4 = $api->getFeed($account, $result3[1]['next_max_id']);
+                                        $this->addToDb($result4[1]['items']);
+                                    }
+                                }
+                                
+                            }
                             
                         }
-                        
                     }
                 }
             }
-            
             
         }
         
