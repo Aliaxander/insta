@@ -746,7 +746,7 @@ guage_picker'
             $headers = [
                 "X-IG-Connection-Type: WIFI",
                 "X-IG-Capabilities: 3ToAAA==",
-                'Accept-Encoding: gzip, deflate',
+               // 'Accept-Encoding: gzip, deflate',
                 'Accept-Language: en-US',
             ];
             curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
