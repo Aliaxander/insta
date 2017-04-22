@@ -90,7 +90,7 @@ class ParseBase extends Command
                 $accRow = \OxApp\models\ParseBase::limit([0 => 1])->find(['status' => 0]);
                 $acc = @preg_replace("/[^0-9]/", '', $accRow->rows[0]->account);
                 if (!empty($acc)) {
-                    InstBase::where(['id' => $accRow->rows[0]->id])->update(['status' => 1]);
+                    \OxApp\models\ParseBase::where(['id' => $accRow->rows[0]->id])->update(['status' => 1]);
                     
                     $result = $api->getFeed($account);
                     if (isset($result['1']['message']) && $result['1']['message'] === 'login_required') {
