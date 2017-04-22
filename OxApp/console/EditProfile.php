@@ -8,6 +8,7 @@
 
 namespace Acme\Console\Command;
 
+use Faker\Factory;
 use OxApp\helpers\FreenomReg;
 use OxApp\helpers\IgApi;
 use OxApp\models\Domains;
@@ -57,7 +58,6 @@ class EditProfile extends Command
                 unset($dir[array_search('.', $dir)]);
                 unset($dir[array_search('..', $dir)]);
                 $dir = array_values($dir);
-                
                 
                 $api = new IgApi();
                 $api->proxy = $user->proxy;
@@ -112,19 +112,35 @@ class EditProfile extends Command
                 //                if (rand(0, 1) == 1) {
                 //                    $domain = "http://" . $domain;
                 //                }
+                
+                //$faker = Factory::create();
                 $domain = Domains::limit([0 => 1])->find(['status' => 0]);
                 if ($domain->count == 1) {
                     Domains::where(['id' => $domain->rows[0]->id])->update(['status' => 1]);
+                    $domain = $domain->rows[0]->domain;
+                    if (rand(0, 1) == 1) {
+                        $domain = "http://" . $domain;
+                    }
+                    $domain = str_replace(" ", "", $domain);
                     $profileResult = '';
                     $i = 0;
                     while ($profileResult === '') {
                         //$biography
-                        $domain = $domain->rows[0]->domain;
-                        //                    $domains = ['.myblogonline.pw', '.blogonline.pw'];
-                        //                    $subDomain = [$user->firstName, $user->userName];
-                        //                    $domain = $subDomain[rand(0, 1)] . $domains[rand(0, 1)];
+                        //$domain = $domain->rows[0]->domain;
+                        // $domains = ['.myblogonline.pw', '.blogonline.pw'];
+                        //$domain = $faker->userName . rand(1950, 2017) . '.love2live2.com ';
                         //                    $domain = str_replace(" ", "", $domain);
+                        //                    $domain = str_replace("'", "", $domain);
                         //                    $domain = mb_strtolower($domain);
+                        //                    $result = FreenomReg::freedomReg($domain);
+                        //                    $p = xml_parser_create();
+                        //                    xml_parse_into_struct($p, $result[1], $vals, $index);
+                        //                    xml_parser_free($p);
+                        //                    $domain = mb_strtolower($vals[2]['value']);
+                        //                    if (rand(0, 1) == 1) {
+                        //                        $domain = "http://" . $domain;
+                        //                    }
+                        
                         $profile = $api->edit($biography, $domain, $user->phoneId, $user->firstName,
                             $user->email);
                         $profileResult = $profile[1];
