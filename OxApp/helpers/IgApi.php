@@ -176,12 +176,10 @@ class IgApi
             $checkPoint = new Checkpoint($this->username);
             $checkPoint->proxy = $this->proxy;
             $checkPoint->accountId = $this->accountId;
-            $checkPoint->request($newsInbox[1]['checkpoint_url']);
-            $checkPoint->request('https://www.instagram.com/challenge/');
-            $result = $checkPoint->checkpointSecondStep($tokenResult);
+            $result = $checkPoint->request($newsInbox[1]['checkpoint_url']);
             print_r($result);
             if (preg_match("/Your phone number will be added\b/i",
-                    $result[1]) || preg_match("/Introduce tu número de teléfono.\b/i",
+                    $result[1]) || preg_match("/Introduce tu número de teléfono\b/i",
                     $result[1])
             ) {
                 echo "Search token:";
