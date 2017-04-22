@@ -742,14 +742,15 @@ guage_picker'
                 'Accept-Language: en-US',
             ];
             curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-        }else {
+        } else {
             $headers = [
                 "X-IG-Connection-Type: WIFI",
                 "X-IG-Capabilities: 3ToAAA==",
-               // 'Accept-Encoding: gzip, deflate',
+                'Accept-Encoding: gzip, deflate',
                 'Accept-Language: en-US',
             ];
             curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+            curl_setopt($ch, CURLOPT_ENCODING, "gzip");
         }
         //
         curl_setopt($ch, CURLOPT_HEADER, true);
