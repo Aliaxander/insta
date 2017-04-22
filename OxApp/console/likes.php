@@ -62,7 +62,7 @@ class Likes extends Command
             $api->accountId = $user->accountId;
             $api->guid = $user->guid;
             $api->csrftoken = $user->csrftoken;
-            if (!file_exists($user->userName . "-cookies.dat") || $user->login === 2) {
+            if (!file_exists($user->userName . "-cookies.dat") || $user->logIn === 2) {
                 echo "login account:";
                 $api->login($user->guid, $user->phoneId, $user->deviceId, $user->password);
             }

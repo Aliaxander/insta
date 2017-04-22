@@ -40,9 +40,12 @@ class IgApi
     {
         
         $tst = $this->request("friendships/show/" . $feedId . "/");
-        if ($tst['1']['is_private'] == 1) {
+        if (@$tst['1']['is_private'] == 1) {
             $result = [];
             $result['1']['message'] = 'Not authorized to view user';
+        }elseif (@$tst['1']['message'] === "checkpoint_required") {
+            $result = [];
+            $result['1']['message'] = 'checkpoint_required';
         } else {
             if (mt_rand(0, 1) == 1) {
                 $result = $this->request("feed/user/" . $feedId . "/");
@@ -176,29 +179,33 @@ class IgApi
             $checkPoint = new Checkpoint($this->username);
             $checkPoint->proxy = $this->proxy;
             $checkPoint->accountId = $this->accountId;
-            $result = $checkPoint->request($newsInbox[1]['checkpoint_url']);
-            print_r($result);
-            if (preg_match("/Your phone number will be added\b/i",
-                    $result[1]) || preg_match("/Introduce tu número de teléfono\b/i",
-                    $result[1])
-            ) {
-                echo "Search token:";
-                if (preg_match('# <input type="hidden" name="csrfmiddlewaretoken" value="(.*?)"/>#is', $result[1],
-                    $token)) {
-                    $token = $token[1];
-                }
-                echo $token . "\n";
-                echo "Set phone number:";
-                $data=[];
-                $data['phone_number'] = '79356658544';
-                $data['csrfmiddlewaretoken'] = $token;
-                print_r($checkPoint->request('https://i.instagram.com/challenge/', null, $data));
-            }
+            //            $result = $checkPoint->request($newsInbox[1]['checkpoint_url']);
+            //            print_r($result);
+            //            if (preg_match("/Your phone number will be added\b/i",
+            //                    $result[1]) || preg_match("/Introduce tu número de teléfono\b/i",
+            //                    $result[1])
+            //            ) {
+            //                echo "Search token:";
+            //                if (preg_match('# <input type="hidden" name="csrfmiddlewaretoken" value="(.*?)"/>#is', $result[1],
+            //                    $token)) {
+            //                    $token = $token[1];
+            //                }
+            //                echo $token . "\n";
+            //                echo "Set phone number:";
+            //                $data=[];
+            //                $data['phone_number'] = '79356658544';
+            //                $data['csrfmiddlewaretoken'] = $token;
+            //                print_r($checkPoint->request('https://i.instagram.com/challenge/', null, $data));
+            // }
             //
             //                        print_r($checkPoint->request('https://i.instagram.com/challenge/?next=instagram://checkpoint/dismiss'));
             //                        print_r($checkPoint->request('https://www.instagram.com/challenge/?next=instagram://checkpoint/dismiss'));
             
-            
+            $result = $checkPoint->request($newsInbox[1]['checkpoint_url']);
+            if (preg_match("/Your phone number will be added\b/i", $result[1])) {
+                Users::where(['guid' => $guid, 'phoneId' => $phoneId, 'deviceId' => $device_id])->update(['ban' => 3]);
+                die("SMS BAN!");
+            }
             echo "\nEND Limit fixer----------------------------------------\n";
             //Users::where(['guid' => $guid, 'phoneId' => $phoneId, 'deviceId' => $device_id])->update(['ban' => 1]);
             print("Account banned");
