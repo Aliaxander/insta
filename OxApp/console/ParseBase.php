@@ -80,7 +80,6 @@ class ParseBase extends Command
                 $api->login($user->guid, $user->phoneId, $user->deviceId, $user->password);
                 Users::where(['id' => $user->id])->update(['login' => 1]);
             }
-            $account = $input->getArgument('account');
             
             while ($status = true) {
                 $userTest = Users::find(['id' => $user->id, 'ban' => 0]);
@@ -93,7 +92,7 @@ class ParseBase extends Command
                     if (!empty($acc)) {
                         \OxApp\models\ParseBase::where(['id' => $accRow->rows[0]->id])->update(['status' => 1]);
                         
-                        $result = $api->getFeed($account);
+                        $result = $api->getFeed($acc);
                         if (isset($result['1']['message']) && $result['1']['message'] === 'login_required') {
                             echo "login_required";
                             $login = $api->login($user->guid, $user->phoneId, $user->deviceId, $user->password);
