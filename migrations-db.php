@@ -12,7 +12,7 @@
 
 return array(
     'driver' => 'pdo_mysql',
-    'host' => '149.202.202.135',
+    'host' => 'localhost',
     'user' => 'insta',
     'password' => '63Z2dBTID7Sbg7nW',
     'dbname' => 'insta'

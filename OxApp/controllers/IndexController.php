@@ -20,13 +20,14 @@ class IndexController extends App
 {
     public function get()
     {
-        $allUsers = Users::selectBy(['count(id) as count'])->find()->rows[0]->count;
+        $allUsers = Users::selectBy(['count(id) as count'])->find(['ban' => 0])->rows[0]->count;
         $banUsers = Users::selectBy(['count(id) as count'])->find(["ban" => 1])->rows[0]->count;
-        $proxy = Proxy::selectBy(['count(id) as count'])->find()->rows[0]->count;
-        $description = ProfileGenerate::selectBy(['count(id) as count'])->find()->rows[0]->count;
-        $instBase = instBase::selectBy(['count(id) as count'])->find()->rows[0]->count;
-        $domains = Domains::selectBy(['count(id) as count'])->find()->rows[0]->count;
-        return View::build("index", [
+        $proxy = Proxy::selectBy(['count(id) as count'])->find(['status' => 1])->rows[0]->count;
+        $description = ProfileGenerate::selectBy(['count(id) as count'])->find(['status' => 1])->rows[0]->count;
+        $instBase = instBase::selectBy(['count(id) as count'])->find(['status' => 1])->rows[0]->count;
+        $domains = Domains::selectBy(['count(id) as count'])->find(['status' => 1])->rows[0]->count;
+        
+        View::build("index", [
             'data' =>
                 [
                     "instBase" => $instBase,
