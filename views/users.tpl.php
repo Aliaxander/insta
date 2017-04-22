@@ -265,7 +265,7 @@
             return {
                 classes: 'success'
             };
-        } else if (row.ban == 1) {
+        } else if (row.ban >= 1) {
             return {
                 classes: 'danger'
             };
