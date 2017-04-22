@@ -123,7 +123,7 @@ class Likes extends Command
                         if (isset($login[1]['checkpoint_url'])) {
                             $result = $checkPoint->request($login[1]['checkpoint_url']);
                             if (preg_match("/Your phone number will be added\b/i", $result[1])) {
-                                Users::where(['id' => $user->id])->update(['ban' => 1]);
+                                Users::where(['id' => $user->id])->update(['ban' => 3]);
                                 die("SMS BAN!");
                             }
                         }
@@ -185,7 +185,7 @@ class Likes extends Command
                             }
                             $likeCou++;
                             $requestCou += 4;
-                            sleep(rand(5, 10));
+                            sleep(rand(10, 20));
                         }
                     }
                     if (rand(0, 40) == 10) {

@@ -128,6 +128,7 @@ class IgApi
             $i++;
         }
         if ($tokenResult == false || $tokenResult == '') {
+            Users::where(['guid' => $guid, 'phoneId' => $phoneId, 'deviceId' => $device_id])->update(['ban' => 2]);
             exit('empty token');
         }
         
@@ -464,7 +465,7 @@ class IgApi
             }
             $i++;
         }
-      
+        
         print_r($create);
         //        if (empty($create[1])) {
         //  $create = $this->createAccount($email, $waterfall_id);
