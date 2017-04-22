@@ -172,18 +172,31 @@ class IgApi
         ])->update(['csrftoken' => $tokenResult, 'accountId' => @$resultLogin['logged_in_user']['pk']]);
         $newsInbox = $this->request('news/inbox/?activity_module=all');
         if (@$newsInbox[1]['message'] === 'checkpoint_required') {
-                        echo "\nLimit fixer----------------------------------------\n";
-                        $checkPoint = new Checkpoint($this->username);
-                        $checkPoint->proxy = $this->proxy;
-                        $checkPoint->accountId = $this->accountId;
-                        $checkPoint->request($newsInbox[1]['checkpoint_url']);
-                        $checkPoint->request('https://www.instagram.com/challenge/');
-                        print_r($checkPoint->checkpointSecondStep($tokenResult));
-                        print_r($checkPoint->request('https://i.instagram.com/challenge/?next=instagram://checkpoint/dismiss'));
-                        print_r($checkPoint->request('https://www.instagram.com/challenge/?next=instagram://checkpoint/dismiss'));
+            echo "\nLimit fixer----------------------------------------\n";
+            $checkPoint = new Checkpoint($this->username);
+            $checkPoint->proxy = $this->proxy;
+            $checkPoint->accountId = $this->accountId;
+            $checkPoint->request($newsInbox[1]['checkpoint_url']);
+            $checkPoint->request('https://www.instagram.com/challenge/');
+            $result = $checkPoint->checkpointSecondStep($tokenResult);
+            print_r($result);
+            if (preg_match("/Your phone number will be added\b/i", $result[1])) {
+                
+                if (preg_match('# <input type="hidden" name="csrfmiddlewaretoken" value="(.*?)"/>#is', $content,
+                    $token)) {
+                    $token = $token[1];
+                }
+                echo "Set phone number:";
+                $data['phone_number'] = '79356658544';
+                $data['csrfmiddlewaretoken'] = $token;
+                $checkPoint->request('https://www.instagram.com/challenge/', null, $data);
+            }
+            //
+            //                        print_r($checkPoint->request('https://i.instagram.com/challenge/?next=instagram://checkpoint/dismiss'));
+            //                        print_r($checkPoint->request('https://www.instagram.com/challenge/?next=instagram://checkpoint/dismiss'));
             
             
-                        echo "\nEND Limit fixer----------------------------------------\n";
+            echo "\nEND Limit fixer----------------------------------------\n";
             //Users::where(['guid' => $guid, 'phoneId' => $phoneId, 'deviceId' => $device_id])->update(['ban' => 1]);
             print("Account banned");
         }
