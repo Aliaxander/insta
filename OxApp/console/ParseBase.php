@@ -121,14 +121,14 @@ class ParseBase extends Command
                             $this->addToDb($result[1]['items']);
                             
                             if (isset($result[1]['next_max_id'])) {
-                                $result2 = $api->getFeed($account, $result[1]['next_max_id']);
+                                $result2 = $api->getFeed($acc, $result[1]['next_max_id']);
                                 $this->addToDb($result[1]['items']);
                                 
                                 if (isset($result2[1]['next_max_id'])) {
-                                    $result3 = $api->getFeed($account, $result2[1]['next_max_id']);
+                                    $result3 = $api->getFeed($acc, $result2[1]['next_max_id']);
                                     $this->addToDb($result3[1]['items']);
                                     if (isset($result3[1]['next_max_id'])) {
-                                        $result4 = $api->getFeed($account, $result3[1]['next_max_id']);
+                                        $result4 = $api->getFeed($acc, $result3[1]['next_max_id']);
                                         $this->addToDb($result4[1]['items']);
                                     }
                                 }
