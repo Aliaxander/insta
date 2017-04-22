@@ -121,6 +121,7 @@ class EditProfile extends Command
                     if (rand(0, 1) == 1) {
                         $domain = "http://" . $domain;
                     }
+                    $domain = str_replace(" ", "", $domain);
                     $profileResult = '';
                     $i = 0;
                     while ($profileResult === '') {

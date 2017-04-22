@@ -6,6 +6,7 @@
  * Time: 10:34
  */
 
+use OxApp\models\Domains;
 
 ini_set("allow_url_fopen", true);
 ini_set('display_errors', '1');
@@ -19,3 +20,48 @@ header('Access-Control-Allow-Origin: *');
 $loader = require __DIR__ . '/../vendor/autoload.php';
 require(__DIR__ . "/../config.php");
 require(__DIR__ . "/../OxApp/Routes.php");
+//
+//$domains = "lyveroot.tk
+//lyveroot.ml
+//lyveroot.ga
+//lyveroot.cf
+//lyveroot.gq
+//zorkaholove.tk
+//zorkaholove.ml
+//zorkaholove.ga
+//zorkaholove.cf
+//zorkaholove.gq
+//freemylove.tk
+//freemylove.ml
+//freemylove.ga
+//freemylove.cf
+//freemylove.gq
+//mylovefree.tk
+//mylovefree.ml
+//mylovefree.ga
+//mylovefree.cf
+//mylovefree.gq
+//grosselov.tk
+//grosselov.ml
+//grosselov.ga
+//grosselov.cf
+//grosselov.gq
+//grossemadam.tk
+//grossemadam.ml
+//grossemadam.ga
+//grossemadam.cf
+//grossemadam.gq
+//loveroot.tk
+//loveroot.ml
+//loveroot.cf
+//loveroot.gq
+//loveroot.ga
+//terralove.tk
+//terralove.ml
+//terralove.ga
+//terralove.cf
+//terralove.gq";
+//$domains = explode("\n", $domains);
+//foreach ($domains as $domain) {
+//    Domains::add(['domain' => $domain]);
+//}
