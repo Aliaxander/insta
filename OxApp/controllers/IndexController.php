@@ -22,10 +22,10 @@ class IndexController extends App
     {
         $allUsers = Users::selectBy(['count(id) as count'])->find(['ban' => 0])->rows[0]->count;
         $banUsers = Users::selectBy(['count(id) as count'])->find(["ban" => 1])->rows[0]->count;
-        $proxy = Proxy::selectBy(['count(id) as count'])->find(['status' => 1])->rows[0]->count;
-        $description = ProfileGenerate::selectBy(['count(id) as count'])->find(['status' => 1])->rows[0]->count;
-        $instBase = instBase::selectBy(['count(id) as count'])->find(['status' => 1])->rows[0]->count;
-        $domains = Domains::selectBy(['count(id) as count'])->find(['status' => 1])->rows[0]->count;
+        $proxy = Proxy::selectBy(['count(id) as count'])->find(['status' => 0])->rows[0]->count;
+        $description = ProfileGenerate::selectBy(['count(id) as count'])->find(['status' => 0])->rows[0]->count;
+        $instBase = instBase::selectBy(['count(id) as count'])->find(['status' => 0])->rows[0]->count;
+        $domains = Domains::selectBy(['count(id) as count'])->find(['status' => 0])->rows[0]->count;
         
         View::build("index", [
             'data' =>
