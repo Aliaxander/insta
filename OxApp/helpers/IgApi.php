@@ -192,7 +192,7 @@ class IgApi
                 $data=[];
                 $data['phone_number'] = '79356658544';
                 $data['csrfmiddlewaretoken'] = $token;
-                print_r($checkPoint->request('https://www.instagram.com/challenge/', null, $data));
+                print_r($checkPoint->request('https://i.instagram.com/challenge/', null, $data));
             }
             //
             //                        print_r($checkPoint->request('https://i.instagram.com/challenge/?next=instagram://checkpoint/dismiss'));
