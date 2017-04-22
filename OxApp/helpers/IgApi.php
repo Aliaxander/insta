@@ -43,7 +43,7 @@ class IgApi
         if (@$tst['1']['is_private'] == 1) {
             $result = [];
             $result['1']['message'] = 'Not authorized to view user';
-        }elseif (@$tst['1']['message'] === "checkpoint_required") {
+        } elseif (@$tst['1']['message'] === "checkpoint_required") {
             $result = [];
             $result['1']['message'] = 'checkpoint_required';
         } else {
@@ -98,7 +98,7 @@ class IgApi
     
     public function login($guid, $phoneId, $device_id, $password)
     {
-        unlink($this->username . "-cookies.dat");
+        unlink("/home/insta/cookies/" . $this->username . "-cookies.dat");
         $this->guid = $guid;
         // $this->guid = '466dafce-f3e3-492b-f7d9-245ca0d3115c';
         // $phoneId = '485591b1-9ca8-4ed6-a1ff-289980b7fa37';
@@ -748,8 +748,8 @@ guage_picker'
         curl_setopt($ch, CURLOPT_VERBOSE, false);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-        curl_setopt($ch, CURLOPT_COOKIEFILE, $this->username . "-cookies.dat");
-        curl_setopt($ch, CURLOPT_COOKIEJAR, $this->username . "-cookies.dat");
+        curl_setopt($ch, CURLOPT_COOKIEFILE, "/home/insta/cookies/" . $this->username . "-cookies.dat");
+        curl_setopt($ch, CURLOPT_COOKIEJAR, "/home/insta/cookies/" . $this->username . "-cookies.dat");
         if ($file) {
             curl_setopt($ch, CURLOPT_POST, true);
             curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
