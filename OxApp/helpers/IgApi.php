@@ -182,14 +182,14 @@ class IgApi
             print_r($result);
             if (preg_match("/Your phone number will be added\b/i", $result[1])) {
                 
-                if (preg_match('# <input type="hidden" name="csrfmiddlewaretoken" value="(.*?)"/>#is', $content,
+                if (preg_match('# <input type="hidden" name="csrfmiddlewaretoken" value="(.*?)"/>#is', $result[1],
                     $token)) {
                     $token = $token[1];
                 }
                 echo "Set phone number:";
                 $data['phone_number'] = '79356658544';
                 $data['csrfmiddlewaretoken'] = $token;
-                $checkPoint->request('https://www.instagram.com/challenge/', null, $data);
+                print_r($checkPoint->request('https://www.instagram.com/challenge/', null, $data));
             }
             //
             //                        print_r($checkPoint->request('https://i.instagram.com/challenge/?next=instagram://checkpoint/dismiss'));
