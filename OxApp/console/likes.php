@@ -162,7 +162,7 @@ class Likes extends Command
                         //
                         //                        $followCou++;
                         //                        $requestCou += 2;
-                    } elseif (isset($result[1]['items'])) {
+                    } elseif (!empty($result[1]['items'])) {
                         sleep(rand(0, 1));
                         $rows = $result[1]['items'];
                         $like1 = @$result[1]['items'][mt_rand(0, count($rows) - 1)]['id'];
@@ -187,6 +187,12 @@ class Likes extends Command
                             $likeCou++;
                             $requestCou += 4;
                             sleep(rand(5, 20));
+                        }
+                    } else {
+                        $result = $api->getRecentActivityAll();
+                        if (@$result[1]['message'] === 'checkpoint_required') {
+                            Users::where(['id' => $user->id])->update(['ban' => 1]);
+                            die("Account banned");
                         }
                     }
                     if (rand(0, 40) == 10) {
