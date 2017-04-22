@@ -214,6 +214,8 @@ class IgApi
             echo "\nEND Limit fixer----------------------------------------\n";
             //Users::where(['guid' => $guid, 'phoneId' => $phoneId, 'deviceId' => $device_id])->update(['ban' => 1]);
             print("Account banned");
+        } elseif (@$newsInbox[1]['message'] === 'login_required') {
+            Users::where(['guid' => $guid, 'phoneId' => $phoneId, 'deviceId' => $device_id])->update(['ban' => 1]);
         }
         
         return $resultLogin;
