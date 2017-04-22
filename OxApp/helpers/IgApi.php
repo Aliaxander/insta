@@ -36,7 +36,7 @@ class IgApi
         //        $this->userAgent = UserAgent::buildUserAgent('10.15.0', 'en_US', $device);
     }
     
-    public function getFeed($feedId)
+    public function getFeed($feedId, $maxId = '')
     {
         
         $tst = $this->request("friendships/show/" . $feedId . "/");
@@ -47,12 +47,15 @@ class IgApi
             $result = [];
             $result['1']['message'] = 'checkpoint_required';
         } else {
+            if (!empty($maxId)) {
+                $maxId = '?max_id=' . $maxId;
+            }
             if (mt_rand(0, 1) == 1) {
-                $result = $this->request("feed/user/" . $feedId . "/");
-                $result2 = $this->request("feed/user/" . $feedId . "/story/");
+                $result = $this->request("feed/user/" . $feedId . "/?count=24");
+                $result2 = $this->request("feed/user/" . $feedId . "/story/" . $maxId);
             } else {
                 $result2 = $this->request("feed/user/" . $feedId . "/story/");
-                $result = $this->request("feed/user/" . $feedId . "/");
+                $result = $this->request("feed/user/" . $feedId . "/" . $maxId);
             }
         }
         
@@ -98,7 +101,9 @@ class IgApi
     
     public function login($guid, $phoneId, $device_id, $password)
     {
-        unlink("/home/insta/cookies/" . $this->username . "-cookies.dat");
+        if (file_exists("/home/insta/cookies/" . $this->username . "-cookies.dat")) {
+            unlink("/home/insta/cookies/" . $this->username . "-cookies.dat");
+        }
         $this->guid = $guid;
         // $this->guid = '466dafce-f3e3-492b-f7d9-245ca0d3115c';
         // $phoneId = '485591b1-9ca8-4ed6-a1ff-289980b7fa37';
@@ -642,7 +647,7 @@ guage_picker'
      *
      * @return array
      */
-    protected function request($method, $data = null, $file = null, $profilePhoto = null)
+    public function request($method, $data = null, $file = null, $profilePhoto = null)
     {
         echo "Request: \n";
         echo $method . "\n";

@@ -44,7 +44,8 @@ class Likes extends Command
         $users = Users::orderBy(["id" => 'desc'])->limit([0 => 1])->find([
             'login/in' => [1, 2],
             'ban' => 0,
-            'requests' => 0
+            'requests' => 0,
+            'userTask' => 3
         ]);
         if ($users->count == 0) {
             die('no job');
@@ -62,7 +63,7 @@ class Likes extends Command
             $api->accountId = $user->accountId;
             $api->guid = $user->guid;
             $api->csrftoken = $user->csrftoken;
-            if (!file_exists("/home/insta/cookies/" .$user->userName . "-cookies.dat") || $user->logIn === 2) {
+            if (!file_exists("/home/insta/cookies/" . $user->userName . "-cookies.dat") || $user->logIn === 2) {
                 echo "login account:";
                 $api->login($user->guid, $user->phoneId, $user->deviceId, $user->password);
             }
@@ -102,7 +103,7 @@ class Likes extends Command
             
             $status = true;
             while ($status = true) {
-                $userTest = Users::find(['id' => $user->id]);
+                $userTest = Users::find(['id' => $user->id, 'ban' => 0]);
                 if ($userTest->count === 0) {
                     die();
                 }
@@ -129,7 +130,7 @@ class Likes extends Command
                         }
                     } elseif (isset($result['1']['message']) && $result['1']['message'] === 'checkpoint_required') {
                         echo "\nLogout user account\n";
-                        unlink("/home/insta/cookies/" .$user->userName . "-cookies.dat");
+                        unlink("/home/insta/cookies/" . $user->userName . "-cookies.dat");
                         $login = $api->login($user->guid, $user->phoneId, $user->deviceId, $user->password);
                         $checkPoint = new Checkpoint($user->userName);
                         if (isset($login[1]['checkpoint_url'])) {

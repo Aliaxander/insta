@@ -5,6 +5,7 @@ use Acme\Console\Command\BaseUploader;
 use Acme\Console\Command\EditProfile;
 use Acme\Console\Command\FreenomReger;
 use Acme\Console\Command\Likes;
+use Acme\Console\Command\ParseBase;
 use Acme\Console\Command\Test;
 use Acme\Console\Command\BaseUpload;
 use Ox\DataBase\DbConfig;
@@ -26,6 +27,7 @@ $application->add(new EditProfile());
 $application->add(new FreenomReger());
 $application->add(new BaseUploader());
 $application->add(new BaseUpload());
+$application->add(new ParseBase());
 $application->addCommands(
     array(
         // Migrations Commands
