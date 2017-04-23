@@ -75,7 +75,7 @@ class ParseBase extends Command
             $api->accountId = $user->accountId;
             $api->guid = $user->guid;
             $api->csrftoken = $user->csrftoken;
-            Users::where(['id' => $user->id])->update(['login' => 1]);
+           
             if (!file_exists($user->userName . "-cookies.dat") || $user->logIn === 2) {
                 echo "login account:";
                 $api->login($user->guid, $user->phoneId, $user->deviceId, $user->password);
@@ -84,6 +84,7 @@ class ParseBase extends Command
             while ($status = true) {
                 $userTest = Users::find(['id' => $user->id, 'ban' => 0]);
                 if ($userTest->count === 0) {
+                    Users::where(['id' => $user->id])->update(['login' => 0]);
                     die("ban user manual");
                 }
                 $accRow = \OxApp\models\ParseBase::limit([0 => 1])->find(['status' => 0]);
@@ -138,6 +139,7 @@ class ParseBase extends Command
                         }
                     }
                 }else{
+                    Users::where(['id' => $user->id])->update(['login' => 0]);
                     die("no jobs");
                 }
             }
