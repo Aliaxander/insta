@@ -138,8 +138,8 @@ class ParseBase extends Command
                             
                         }
                     }
-                }else{
-                    Users::where(['id' => $user->id])->update(['login' => 0]);
+                } else {
+                    Users::where(['id' => $user->id])->update(['login' => 0, 'requests' => 0]);
                     die("no jobs");
                 }
             }
