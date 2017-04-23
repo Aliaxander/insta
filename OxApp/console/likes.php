@@ -210,11 +210,11 @@ class Likes extends Command
                     $folLikSum = round($likeCou + $followCou);
                     
                     $resultLikesForTimeout = $folLikSum / $hour;
-                    if ($resultLikesForTimeout > rand(480, 500) && $resultLikesForTimeout < 600) {
+                    if ($resultLikesForTimeout > rand(450, 500) && $resultLikesForTimeout < 600) {
                         $hour += 1;
                         Users::where(['id' => $user->id])->update(['hour' => $hour]);
                         echo "Sleep";
-                        sleep(rand(500, 1500));
+                        sleep(rand(2000, 9000));
                     }
                     if ($hour >= 4 && $likeCou > 700) {
                         sleep(rand(70000, 87000));
