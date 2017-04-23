@@ -75,10 +75,10 @@ class ParseBase extends Command
             $api->accountId = $user->accountId;
             $api->guid = $user->guid;
             $api->csrftoken = $user->csrftoken;
+            Users::where(['id' => $user->id])->update(['login' => 1]);
             if (!file_exists($user->userName . "-cookies.dat") || $user->logIn === 2) {
                 echo "login account:";
                 $api->login($user->guid, $user->phoneId, $user->deviceId, $user->password);
-                Users::where(['id' => $user->id])->update(['login' => 1]);
             }
             
             while ($status = true) {
