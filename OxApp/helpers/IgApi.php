@@ -102,8 +102,8 @@ class IgApi
     
     public function login($guid, $phoneId, $device_id, $password)
     {
-        if (file_exists("/home/insta/cookies/" . $this->username . "-cookies.dat")) {
-            unlink("/home/insta/cookies/" . $this->username . "-cookies.dat");
+        if (file_exists($this->username . "-cookies.dat")) {
+            unlink($this->username . "-cookies.dat");
         }
         $this->guid = $guid;
         // $this->guid = '466dafce-f3e3-492b-f7d9-245ca0d3115c';
@@ -317,11 +317,11 @@ class IgApi
         $faker = Factory::create();
         if (rand(0, 2) == 1) {
             if (mt_rand(0, 4) == 1) {
-                $uname = $faker->userName . rand(1950, 2017);
+                $uname = $faker->userName . rand(1100, 2017);
             } elseif (mt_rand(0, 1) == 0) {
-                $uname = $faker->firstNameFemale . $faker->lastName . rand(1950, 2017);
+                $uname = $faker->firstNameFemale . $faker->lastName . rand(1100, 2017);
             } else {
-                $uname = $faker->lastName . $faker->firstNameFemale . rand(1950, 2017);
+                $uname = $faker->lastName . $faker->firstNameFemale . rand(1100, 2017);
             }
             $uname = mb_strtolower($uname);
             if (rand(0, 1) == 1) {
@@ -338,7 +338,7 @@ class IgApi
             //$email = $faker->email;
             if (mt_rand(0, 2) == 0) {
                 $email = explode("@", $faker->email);
-                $email = implode(rand(1940, 2017) . "@", $email);
+                $email = implode(rand(1100, 2017) . "@", $email);
             } elseif (mt_rand(0, 2) == 0) {
                 $email = str_replace(" ", ".", $this->name) . mt_rand(0, 1999) . "@gmail.com";
             } elseif (mt_rand(0, 1) == 0) {
@@ -356,8 +356,8 @@ class IgApi
             $email = str_replace('example.com', $domainMail[mt_rand(0,
                 count($domainMail) - 1)], $user->results[0]->email);
             $email = explode("@", $email);
-            $email = implode(rand(1940, 2017) . "@", $email);
-            $this->username = $user->results[0]->name->first . $user->results[0]->name->last . rand(1940,
+            $email = implode(rand(1100, 2017) . "@", $email);
+            $this->username = $user->results[0]->name->first . $user->results[0]->name->last . rand(1100,
                     2017);//$user->results[0]->login->username . rand(0, 9999);
             $this->password = strtolower(substr(md5(number_format(microtime(true), 7, '', '')), mt_rand(15, 20)));
             
@@ -467,9 +467,9 @@ class IgApi
         sleep(rand(3, 5));
         print_r($this->usernameSuggestions($usernameTmp3, $email, $waterfall_id));
         
-        sleep(rand(3, 7));
-        print_r($this->usernameSuggestions($usernameTmp2, $email, $waterfall_id));
-        
+//        sleep(rand(3, 7));
+//        print_r($this->usernameSuggestions($usernameTmp2, $email, $waterfall_id));
+//
         if (rand(0, 1) == 1) {
             sleep(rand(2, 4));
             print_r($this->usernameSuggestions($usernameTmp1, $email, $waterfall_id));
@@ -751,8 +751,8 @@ class IgApi
         curl_setopt($ch, CURLOPT_VERBOSE, false);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-        curl_setopt($ch, CURLOPT_COOKIEFILE, "/home/insta/cookies/" . $this->username . "-cookies.dat");
-        curl_setopt($ch, CURLOPT_COOKIEJAR, "/home/insta/cookies/" . $this->username . "-cookies.dat");
+        curl_setopt($ch, CURLOPT_COOKIEFILE, $this->username . "-cookies.dat");
+        curl_setopt($ch, CURLOPT_COOKIEJAR, $this->username . "-cookies.dat");
         if ($file) {
             curl_setopt($ch, CURLOPT_POST, true);
             curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);

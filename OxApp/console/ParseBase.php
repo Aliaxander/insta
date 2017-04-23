@@ -75,7 +75,7 @@ class ParseBase extends Command
             $api->accountId = $user->accountId;
             $api->guid = $user->guid;
             $api->csrftoken = $user->csrftoken;
-            if (!file_exists("/home/insta/cookies/" . $user->userName . "-cookies.dat") || $user->logIn === 2) {
+            if (!file_exists($user->userName . "-cookies.dat") || $user->logIn === 2) {
                 echo "login account:";
                 $api->login($user->guid, $user->phoneId, $user->deviceId, $user->password);
                 Users::where(['id' => $user->id])->update(['login' => 1]);
@@ -106,7 +106,7 @@ class ParseBase extends Command
                             }
                         } elseif (isset($result['1']['message']) && $result['1']['message'] === 'checkpoint_required') {
                             echo "\nLogout user account\n";
-                            unlink("/home/insta/cookies/" . $user->userName . "-cookies.dat");
+                            unlink($user->userName . "-cookies.dat");
                             $login = $api->login($user->guid, $user->phoneId, $user->deviceId, $user->password);
                             $checkPoint = new Checkpoint($user->userName);
                             if (isset($login[1]['checkpoint_url'])) {
