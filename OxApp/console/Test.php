@@ -43,7 +43,7 @@ class Test extends Command
         //5 600 000
         require(__DIR__ . "/../../config.php");
         for ($i = 0; $i < 30; $i++) {
-            $proxy = Proxy::limit([0 => 1])->find(['status' => 0]);
+            $proxy = Proxy::orderBy(['id' => 'desc'])->limit([0 => 1])->find(['status' => 0]);
             
             $api = new IgApi();
             
