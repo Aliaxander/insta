@@ -85,7 +85,7 @@
                 <th data-field="month" data-visible="false" data-sortable="true">month</th>
                 <th data-field="dateCreate" data-visible="false" data-sortable="true">dateCreate</th>
                 <th data-field="dateUpdate" data-sortable="true">dateUpdate</th>
-                <th data-field="ban" data-filter-control="select" data-filter-data="var:ban" data-footer-formatter="footerFormatter" data-sortable="true">ban
+                <th data-field="ban" data-filter-control="select" data-filter-data="var:ban" data-sortable="true">ban
                 </th>
             </tr>
             </thead>
@@ -217,8 +217,9 @@
 <!-- end moadal add-updateUsers -->
 <script>
     var ban = {
-        0: "No ban",
-        1: "Ban"
+       {% for ban in bans %}
+    {{ ban.id }}: "{{ ban.name }}",
+    {% endfor %}
     };
     var logIn = {
         0: "No logIn",
@@ -261,11 +262,11 @@
         });
     }
     function rowStyle(row, index) {
-        if (row.logIn == 1 && row.ban == 0) {
+        if (row.logIn == 1 && row.ban == 'work') {
             return {
                 classes: 'success'
             };
-        } else if (row.ban >= 1) {
+        } else if (row.ban != 'work') {
             return {
                 classes: 'danger'
             };
