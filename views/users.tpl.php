@@ -217,8 +217,9 @@
 <!-- end moadal add-updateUsers -->
 <script>
     var ban = {
-        0: "No ban",
-        1: "Ban"
+       {% for ban in bans %}
+    {{ ban.id }}: "{{ ban.name }}",
+    {% endfor %}
     };
     var logIn = {
         0: "No logIn",
