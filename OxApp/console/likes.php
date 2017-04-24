@@ -156,21 +156,24 @@ class Likes extends Command
                         //                         Users::where(['id' => $user->id])->update(['ban' => 1]);
                         die();
                     } elseif (isset($result['1']['message']) && $result['1']['message'] === 'Not authorized to view user') {
-//                                                sleep(rand(10, 20));
-//                                                print_r($api->follow($acc));
-//                                                InstBase::where(['id' => $accRow->rows[0]->id])->update(['follow' => round($accRow->rows[0]->follow + 1)]);
-//                                                $followCou++;
-//                                                $requestCou += 2;
+                        //                                                sleep(rand(10, 20));
+                        //                                                print_r($api->follow($acc));
+                        //                                                InstBase::where(['id' => $accRow->rows[0]->id])->update(['follow' => round($accRow->rows[0]->follow + 1)]);
+                        //                                                $followCou++;
+                        //                                                $requestCou += 2;
                     } elseif (!empty($result[1]['items'])) {
                         sleep(rand(0, 1));
                         $rows = $result[1]['items'];
-                        $like1 = @$result[1]['items'][mt_rand(0, count($rows) - 1)]['id'];
+                        $rowMedia = @$result[1]['items'][mt_rand(0, count($rows) - 1)];
+                        $like1 = $rowMedia['id'];
+                        $userNameLike = $rowMedia['user']['username'];
+                        $mediaType = $rowMedia['media_type'];
                         if ($like1) {
                             InstBase::where(['id' => $accRow->rows[0]->id])->update(['likes' => round($accRow->rows[0]->likes + 1)]);
                             $createResult = '';
                             $i = 0;
                             while ($createResult === '') {
-                                $likes = $api->like($like1);
+                                $likes = $api->like($like1, $acc, $userNameLike, $mediaType);
                                 $createResult = $likes[1];
                                 if ($i === 3) {
                                     $createResult = false;

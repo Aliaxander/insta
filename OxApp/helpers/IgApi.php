@@ -53,14 +53,14 @@ class IgApi
                 $maxId = '?max_id=' . $maxId;
             }
             if (mt_rand(0, 1) == 1) {
-                $result = $this->request("feed/user/" . $feedId . "/");
-                $result2 = $this->request("feed/user/" . $feedId . "/story/" . $maxId);
+                $result = $this->request("feed/user/" . $feedId . "/" . $maxId);
+                $result2 = $this->request("feed/user/" . $feedId . "/story/");
             } else {
                 $result2 = $this->request("feed/user/" . $feedId . "/story/");
                 $result = $this->request("feed/user/" . $feedId . "/" . $maxId);
             }
         }
-        
+        $this->request("users/" . $feedId . "/info/");
         if (empty($result) && !empty($result2)) {
             $result = $result2;
         }
@@ -68,13 +68,26 @@ class IgApi
         return $result;
     }
     
-    public function like($mediaId)
+    public function like($mediaId, $userId, $userName, $moduleId)
     {
+        $moduleName = 'photo_view_profile';
+        switch ($moduleId) {
+            case (1):
+                $moduleName = 'photo_view_profile';
+                break;
+            case (2):
+                $moduleName = 'video_view_profile';
+                break;
+        }
         $data = [
+            'module_name' => $moduleName,
+            'media_id' => $mediaId,
+            '_csrftoken' => $this->csrftoken,
+            'username' => $userName,
+            'user_id' => $userId,
             '_uid' => $this->accountId,
             '_uuid' => $this->guid,
-            '_csrftoken' => $this->csrftoken,
-            'media_id' => $mediaId
+            
         ];
         $data = json_encode($data);
         
@@ -103,8 +116,8 @@ class IgApi
     
     public function login($guid, $phoneId, $device_id, $password)
     {
-        if (file_exists("/home/insta/cookies/" .$this->username . "-cookies.dat")) {
-            unlink("/home/insta/cookies/" .$this->username . "-cookies.dat");
+        if (file_exists("/home/insta/cookies/" . $this->username . "-cookies.dat")) {
+            unlink("/home/insta/cookies/" . $this->username . "-cookies.dat");
         }
         $this->guid = $guid;
         // $this->guid = '466dafce-f3e3-492b-f7d9-245ca0d3115c';
@@ -175,7 +188,7 @@ class IgApi
         }
         print_r($resultLogin);
         $this->accountId = @$resultLogin['logged_in_user']['pk'];
-        $this->rank_token = $this->accountId.'_'.$this->guid;
+        $this->rank_token = $this->accountId . '_' . $this->guid;
         Users::where([
             'guid' => $guid,
             'phoneId' => $phoneId,
@@ -469,9 +482,9 @@ class IgApi
         sleep(rand(3, 5));
         print_r($this->usernameSuggestions($usernameTmp3, $email, $waterfall_id));
         
-//        sleep(rand(3, 7));
-//        print_r($this->usernameSuggestions($usernameTmp2, $email, $waterfall_id));
-//
+        //        sleep(rand(3, 7));
+        //        print_r($this->usernameSuggestions($usernameTmp2, $email, $waterfall_id));
+        //
         if (rand(0, 1) == 1) {
             sleep(rand(2, 4));
             print_r($this->usernameSuggestions($usernameTmp1, $email, $waterfall_id));
@@ -739,22 +752,22 @@ class IgApi
             ];
             curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
         } else {
-            //            $headers = [
-            //                "X-IG-Connection-Type: WIFI",
-            //                "X-IG-Capabilities: 3ToAAA==",
-            //                'Accept-Encoding: gzip, deflate',
-            //                'Accept-Language: en-US',
-            //            ];
-            //            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-            //            curl_setopt($ch, CURLOPT_ENCODING, "gzip");
+            $headers = [
+                "X-IG-Connection-Type: WIFI",
+                "X-IG-Capabilities: 3Ro=",
+                'Accept-Encoding: gzip, deflate',
+                'Accept-Language: en-US',
+            ];
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+            curl_setopt($ch, CURLOPT_ENCODING, "gzip");
         }
         //
         curl_setopt($ch, CURLOPT_HEADER, true);
         curl_setopt($ch, CURLOPT_VERBOSE, false);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-        curl_setopt($ch, CURLOPT_COOKIEFILE, "/home/insta/cookies/" .$this->username . "-cookies.dat");
-        curl_setopt($ch, CURLOPT_COOKIEJAR, "/home/insta/cookies/" .$this->username . "-cookies.dat");
+        curl_setopt($ch, CURLOPT_COOKIEFILE, "/home/insta/cookies/" . $this->username . "-cookies.dat");
+        curl_setopt($ch, CURLOPT_COOKIEJAR, "/home/insta/cookies/" . $this->username . "-cookies.dat");
         if ($file) {
             curl_setopt($ch, CURLOPT_POST, true);
             curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
@@ -784,6 +797,7 @@ class IgApi
         $body = substr($resp, $header_len);
         curl_close($ch);
         print_r($body);
+        
         //print_r(json_decode($body, true));
         
         return [$header, json_decode($body, true)];

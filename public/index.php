@@ -7,10 +7,12 @@
  */
 
 use Faker\Factory;
+use OxApp\helpers\IgApi;
 use OxApp\models\Domains;
 use OxApp\models\HashTags;
 use OxApp\models\ParseBase;
 use OxApp\models\Proxy;
+use OxApp\models\Users;
 
 ini_set("allow_url_fopen", true);
 ini_set('display_errors', '1');
