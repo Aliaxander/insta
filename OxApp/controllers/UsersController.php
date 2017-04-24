@@ -10,6 +10,7 @@ namespace OxApp\controllers;
 
 use Ox\App;
 use Ox\View;
+use OxApp\models\BanStatus;
 use OxApp\models\TaskType;
 use OxApp\models\UserGroup;
 use OxApp\models\Users;
@@ -28,10 +29,12 @@ class UsersController extends App
     {
         $taskType = TaskType::find()->rows;
         $group = UserGroup::find()->rows;
+        $ban = BanStatus::find()->rows;
         $users = @Users::selectBy(['sum(likes) as likes', 'count(id) as count'])->find()->rows[0];
         return View::build('users', [
             'taskTypes' => $taskType,
             'groups' => $group,
+            'bans' => $ban,
             'likesSum' => $users->likes,
             'usersSum' => $users->count,
 
