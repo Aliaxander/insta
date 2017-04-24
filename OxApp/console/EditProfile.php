@@ -36,7 +36,7 @@ class EditProfile extends Command
     }
     
     /**
-     * @param InputInterface  $input
+     * @param InputInterface $input
      * @param OutputInterface $output
      *
      * @return mixed
@@ -54,7 +54,12 @@ class EditProfile extends Command
             if ($users->count == 1) {
                 $user = $users->rows[0];
                 $proxy = explode(":", $user->proxy);
-                $findUsers = Users::find(['ban' => 0, 'userTask' => 3, 'login' => 1, 'proxy/like' => $proxy[0] . ":%"]);
+                $findUsers = Users::find([
+                    'ban' => 0,
+                    'userTask' => 3,
+                    'login' => [0, 1],
+                    'proxy/like' => $proxy[0] . ":%"
+                ]);
                 if ($findUsers->count > 9) {
                     die('Wait limit subnet ip');
                 }
