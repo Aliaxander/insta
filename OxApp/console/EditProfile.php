@@ -68,9 +68,11 @@ class EditProfile extends Command
                         'login' => 0,
                         'proxy/not like' => $proxy[0] . ":%"
                     ]);
-                    $user = $users->rows[0];
-                    $proxy = explode(":", $user->proxy);
-                    
+                    $user = @$users->rows[0];
+                    $proxy = explode(":", @$user->proxy);
+                    if (empty($user)) {
+                        die('No users');
+                    }
                     $findUsers = Users::find([
                         'ban' => 0,
                         'userTask' => 3,
