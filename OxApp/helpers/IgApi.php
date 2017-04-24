@@ -22,6 +22,7 @@ class IgApi
     protected $name;
     public $guid;
     public $accountId;
+    public $rank_token;
     protected $password;
     protected $device_id;
     protected $igKey = '2f6dcdf76deb0d3fd008886d032162a79b88052b5f50538c1ee93c4fe7d02e60';
@@ -174,6 +175,7 @@ class IgApi
         }
         print_r($resultLogin);
         $this->accountId = @$resultLogin['logged_in_user']['pk'];
+        $this->rank_token = $this->accountId.'_'.$this->guid;
         Users::where([
             'guid' => $guid,
             'phoneId' => $phoneId,
