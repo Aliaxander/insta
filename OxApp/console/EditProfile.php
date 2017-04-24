@@ -61,7 +61,8 @@ class EditProfile extends Command
                     'login/in' => [0, 1],
                     'proxy/like' => $proxy[0] . ":%"
                 ]);
-                if ($findUsers->count > $limitAccounts) {
+                if ($findUsers->count >= $limitAccounts) {
+                    echo "\nLimit account. Search other account:\n";
                     $users = Users::orderBy(["id" => 'desc'])->limit([0 => 1])->find([
                         'ban' => 0,
                         'userTask' => 2,
