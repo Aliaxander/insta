@@ -145,7 +145,7 @@ class EditProfile extends Command
                     //                }
                     
                     //$faker = Factory::create();
-                    $domain = Domains::limit([0 => 1])->find(['status' => 0]);
+                    $domain = Domains::orderBy(['id' => 'desc'])->limit([0 => 1])->find(['status' => 0]);
                     if ($domain->count == 1) {
                         Domains::where(['id' => $domain->rows[0]->id])->update(['status' => 1]);
                         $domain = $domain->rows[0]->domain;
