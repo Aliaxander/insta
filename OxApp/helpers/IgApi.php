@@ -289,16 +289,15 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
 мышц","_uuid":"419fcce5-b663-4b31-80c0-5586609f730f","email":"bagirus11@gmail.com"}
          */
         $data = [
-            'external_url' => $url,
-            'gender' => 2,
-            'phone_number'=>'',
+            'phone_id' => $phoneId,
             '_csrftoken' => $this->csrftoken,
             'username' => $this->username,
-            'first_name' => $firstName,
             '_uid' => $this->accountId,
-            '_uuid'=>$this->phone_id,
-            'biography' => $biography,
+            'first_name' => $firstName,
             'email' => $email,
+            'biography' => $biography,
+            'gender' => 2,
+            'external_url' => $url,
             'is_private' => true
         ];
         
