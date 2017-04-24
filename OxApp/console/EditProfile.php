@@ -114,7 +114,7 @@ class EditProfile extends Command
                     }
                     $i++;
                 }
-                if (@$result[1]['message'] === 'checkpoint_required') {
+                if (@$result[1]['message'] === 'checkpoint_required' && !empty($user->id)) {
                     Users::where([
                         'id' => $user->id
                     ])->update(['ban' => 1]);
