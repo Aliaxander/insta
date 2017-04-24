@@ -289,18 +289,19 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
 мышц","_uuid":"419fcce5-b663-4b31-80c0-5586609f730f","email":"bagirus11@gmail.com"}
          */
         $data = [
-            'phone_id' => $phoneId,
+            'external_url' => $url,
+            'gender' => 2,
+            'phone_number' => '',
             '_csrftoken' => $this->csrftoken,
             'username' => $this->username,
-            '_uid' => $this->accountId,
             'first_name' => $firstName,
-            'email' => $email,
+            '_uid' => $this->accountId,
+            '_uuid' => $phoneId,
             'biography' => $biography,
-            'gender' => 2,
-            'external_url' => $url,
+            'email' => $email,
             'is_private' => true
         ];
-        
+      
         $data = json_encode($data);
         
         return $this->request('accounts/edit_profile/', $data);
