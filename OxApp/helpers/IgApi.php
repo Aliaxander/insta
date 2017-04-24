@@ -53,7 +53,7 @@ class IgApi
                 $maxId = '?max_id=' . $maxId;
             }
             if (mt_rand(0, 1) == 1) {
-                $result = $this->request("feed/user/" . $feedId . "/?count=24");
+                $result = $this->request("feed/user/" . $feedId . "/");
                 $result2 = $this->request("feed/user/" . $feedId . "/story/" . $maxId);
             } else {
                 $result2 = $this->request("feed/user/" . $feedId . "/story/");
