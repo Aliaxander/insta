@@ -237,27 +237,6 @@ class IgApi
         return $resultLogin;
     }
     
-    public function editProfile()
-    {
-        print_r($this->request('accounts/current_user/'));
-        sleep(rand(1, 4));
-        $data = [
-            '_uid' => $this->accountId,
-            '_uuid' => $this->guid,
-            '_csrftoken' => $this->csrftoken,
-            'external_url' => '',
-            'phone_number' => '',
-            'username' => $this->username,
-            'first_name' => 'Susan Zulauf',
-            'email' => 'glover.jayden46938@klocko.com',
-            'biography' => '!! Yeee. Power by OxGroup !!',
-            'gender' => 2,
-            // 'is_private' => true
-        ];
-        $data = json_encode($data);
-        $resultEdit = $this->request('accounts/edit_profile/', $data);
-        print_r($resultEdit);
-    }
     
     public function changeProfilePicture($photo)
     {
@@ -301,16 +280,25 @@ class IgApi
         
         $this->csrftoken = $tokenResult;
         sleep(rand(0, 2));
+    
+        print_r($this->request('accounts/current_user/?edit=true'));
+        sleep(rand(1, 4));
+        /*
+         * {"external_url":"https://price.yt/1f972c0d","gender":"3","phone_number":"","_csrfto
+ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abgymnic","_uid":"5374297804","biography":"Уникальный пояс для тренировки
+мышц","_uuid":"419fcce5-b663-4b31-80c0-5586609f730f","email":"bagirus11@gmail.com"}
+         */
         $data = [
-            'phone_id' => $phoneId,
+            'external_url' => $url,
+            'gender' => 2,
+            'phone_number'=>'',
             '_csrftoken' => $this->csrftoken,
             'username' => $this->username,
-            '_uid' => $this->accountId,
             'first_name' => $firstName,
-            'email' => $email,
+            '_uid' => $this->accountId,
+            '_uuid'=>$this->phone_id,
             'biography' => $biography,
-            'gender' => 2,
-            'external_url' => $url,
+            'email' => $email,
             'is_private' => true
         ];
         
