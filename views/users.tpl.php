@@ -261,11 +261,11 @@
         });
     }
     function rowStyle(row, index) {
-        if (row.logIn == 1 && row.ban == 0) {
+        if (row.logIn == 1 && row.ban == 'work') {
             return {
                 classes: 'success'
             };
-        } else if (row.ban >= 1) {
+        } else if (row.ban != 'work') {
             return {
                 classes: 'danger'
             };
