@@ -9,6 +9,7 @@
 namespace OxApp\controllers\api;
 
 use Ox\App;
+use OxApp\models\BanStatus;
 use OxApp\models\TaskType;
 use OxApp\models\UserGroup;
 use OxApp\models\Users;
@@ -57,7 +58,10 @@ class UsersController extends App
             ->limit($paging)
             ->find()
             ->rows;
-
+        $banStatus = BanStatus::find()->rows;
+        foreach ($banStatus as $item) {
+            $bans[$item->id] = $item->name;
+        }
         $taskType = TaskType::find()->rows;
         foreach ($taskType as $item) {
             $taskTypes[$item->id] = $item->name;
@@ -69,6 +73,7 @@ class UsersController extends App
         foreach ($users as $key => $user) {
             $users[$key]->userGroup = $groups[$user->userGroup];
             $users[$key]->userTask = $taskTypes[$user->userTask];
+            $users[$key]->ban = $bans[$user->ban];
         }
 
         return json_encode([
