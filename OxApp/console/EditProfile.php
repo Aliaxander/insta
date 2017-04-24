@@ -52,7 +52,7 @@ class EditProfile extends Command
                 'login' => 0
             ]);
             if ($users->count > 0) {
-                $limitAccounts = 13;
+                $limitAccounts = 10;
                 $user = $users->rows[0];
                 $proxy = explode(":", $user->proxy);
                 $findUsers = Users::find([
@@ -80,7 +80,7 @@ class EditProfile extends Command
                         'login/in' => [0, 1],
                         'proxy/like' => $proxy[0] . ":%"
                     ]);
-                    if ($findUsers->count > $limitAccounts) {
+                    if ($findUsers->count >= $limitAccounts) {
                         die('Wait limit subnet ip');
                     }
                 }
