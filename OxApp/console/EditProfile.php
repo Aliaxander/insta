@@ -204,10 +204,10 @@ class EditProfile extends Command
                             ]);
                         }
                     } else {
-                        die('no tasks');
+                        die('no domains');
                     }
                 } else {
-                    die('no domains');
+                    die('no tasks');
                 }
             } else {
                 die('no tasks');
