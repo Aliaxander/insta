@@ -57,7 +57,7 @@ class EditProfile extends Command
                 $findUsers = Users::find([
                     'ban' => 0,
                     'userTask' => 3,
-                    'login' => [0, 1],
+                    'login/in' => [0, 1],
                     'proxy/like' => $proxy[0] . ":%"
                 ]);
                 if ($findUsers->count > 9) {
@@ -72,7 +72,7 @@ class EditProfile extends Command
                 $findUsers = Users::find([
                     'ban' => 0,
                     'userTask' => 3,
-                    'login' => [0, 1],
+                    'login/in' => [0, 1],
                     'proxy/like' => $proxy[0] . ":%"
                 ]);
                 if ($findUsers->count > 9) {
