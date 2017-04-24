@@ -46,14 +46,14 @@ class EditProfile extends Command
         require(__DIR__ . "/../../config.php");
         $status = true;
         while ($status = true) {
-            $users = Users::orderBy(["id" => 'desc'])->limit([0 => 1])->find([
+            $users = Users::orderBy(["id" => 'desc'])->limit([0 => 100])->find([
                 'ban' => 0,
                 'userTask' => 2,
                 'login' => 0
             ]);
-            if ($users->count == 1) {
+            if ($users->count > 0) {
                 $limitAccounts = 14;
-                $user = $users->rows[0];
+                $user = $users->rows[mt_rand(0, $users->count - 1)];
                 $proxy = explode(":", $user->proxy);
                 $findUsers = Users::find([
                     'ban' => 0,
@@ -62,25 +62,27 @@ class EditProfile extends Command
                     'proxy/like' => $proxy[0] . ":%"
                 ]);
                 if ($findUsers->count > $limitAccounts) {
-                    $users = Users::orderBy(["id" => 'desc'])->limit([0 => 1])->find([
+                    $users = Users::orderBy(["id" => 'desc'])->limit([0 => 100])->find([
                         'ban' => 0,
                         'userTask' => 2,
                         'login' => 0,
                         'proxy/not like' => $proxy[0] . ":%"
                     ]);
-                    $user = $users->rows[0];
-                }
-                $findUsers = Users::find([
-                    'ban' => 0,
-                    'userTask' => 3,
-                    'login/in' => [0, 1],
-                    'proxy/like' => $proxy[0] . ":%"
-                ]);
-                if ($findUsers->count > $limitAccounts) {
-                    die('Wait limit subnet ip');
+                    $user = $users->rows[mt_rand(0, $users->count - 1)];
+                    $proxy = explode(":", $user->proxy);
+                    
+                    $findUsers = Users::find([
+                        'ban' => 0,
+                        'userTask' => 3,
+                        'login/in' => [0, 1],
+                        'proxy/like' => $proxy[0] . ":%"
+                    ]);
+                    if ($findUsers->count > $limitAccounts) {
+                        die('Wait limit subnet ip');
+                    }
                 }
                 Users::where(['id' => $user->id])->update(['userTask' => 3]);
-                $dir = scandir('/home/photos');
+                $dir = scandir('/home$findUsers/photos');
                 unset($dir[array_search('.', $dir)]);
                 unset($dir[array_search('..', $dir)]);
                 $dir = array_values($dir);
