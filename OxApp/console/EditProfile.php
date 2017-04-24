@@ -46,7 +46,7 @@ class EditProfile extends Command
         require(__DIR__ . "/../../config.php");
         $status = true;
         while ($status = true) {
-            $users = Users::orderBy(["id" => 'desc'])->limit([0 => 100])->find([
+            $users = Users::orderBy(["id" => 'desc'])->limit([0 => 1])->find([
                 'ban' => 0,
                 'userTask' => 2,
                 'login' => 0
