@@ -24,6 +24,16 @@ header('Access-Control-Allow-Origin: *');
 $loader = require __DIR__ . '/../vendor/autoload.php';
 require(__DIR__ . "/../config.php");
 require(__DIR__ . "/../OxApp/Routes.php");
+
+//$accounts = "";
+//$domains = explode("\n", $accounts);
+//foreach ($domains as $domain) {
+//    $proxy = str_replace(["\n", " "], "", $domain);
+//    if (ParseBase::find(['account' => $domain])->count == 0) {
+//        ParseBase::add(['account' => $domain]);
+//    }
+//}
+
 //
 //$accounts = "";
 //$domains = explode("\n", $accounts);
@@ -34,12 +44,12 @@ require(__DIR__ . "/../OxApp/Routes.php");
 //    }
 //}
 
-//
+//$domains='';
 //$domains = explode("\n", $domains);
 //foreach ($domains as $domain) {
 //    $proxy = str_replace(["\n", " "], "", $domain);
 //    Domains::add(['domain' => $domain]);
-////}
+//}
 //$domains = "";
 //$domains = explode("\n", $domains);
 //foreach ($domains as $domain) {
