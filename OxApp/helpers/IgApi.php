@@ -160,7 +160,7 @@ class IgApi
         
         $data = [
             'phone_id' => $phoneId,
-            '_csrftoken' => $this->csrftoken,
+            //'_csrftoken' => $this->csrftoken,
             'username' => $this->username,
             'guid' => $this->guid,
             'device_id' => $device_id,
