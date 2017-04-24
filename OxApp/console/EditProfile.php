@@ -52,6 +52,7 @@ class EditProfile extends Command
                 'login' => 0
             ]);
             if ($users->count == 1) {
+                $limitAccounts = 14;
                 $user = $users->rows[0];
                 $proxy = explode(":", $user->proxy);
                 $findUsers = Users::find([
@@ -60,7 +61,7 @@ class EditProfile extends Command
                     'login/in' => [0, 1],
                     'proxy/like' => $proxy[0] . ":%"
                 ]);
-                if ($findUsers->count > 9) {
+                if ($findUsers->count > $limitAccounts) {
                     $users = Users::orderBy(["id" => 'desc'])->limit([0 => 1])->find([
                         'ban' => 0,
                         'userTask' => 2,
@@ -75,7 +76,7 @@ class EditProfile extends Command
                     'login/in' => [0, 1],
                     'proxy/like' => $proxy[0] . ":%"
                 ]);
-                if ($findUsers->count > 9) {
+                if ($findUsers->count > $limitAccounts) {
                     die('Wait limit subnet ip');
                 }
                 Users::where(['id' => $user->id])->update(['userTask' => 3]);
