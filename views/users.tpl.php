@@ -85,7 +85,7 @@
                 <th data-field="month" data-visible="false" data-sortable="true">month</th>
                 <th data-field="dateCreate" data-visible="false" data-sortable="true">dateCreate</th>
                 <th data-field="dateUpdate" data-sortable="true">dateUpdate</th>
-                <th data-field="ban" data-filter-control="select" data-filter-data="var:ban" data-footer-formatter="footerFormatter" data-sortable="true">ban
+                <th data-field="ban" data-filter-control="select" data-filter-data="var:ban" data-sortable="true">ban
                 </th>
             </tr>
             </thead>
