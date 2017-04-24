@@ -102,8 +102,8 @@ class IgApi
     
     public function login($guid, $phoneId, $device_id, $password)
     {
-        if (file_exists($this->username . "-cookies.dat")) {
-            unlink($this->username . "-cookies.dat");
+        if (file_exists("/home/insta/cookies/" .$this->username . "-cookies.dat")) {
+            unlink("/home/insta/cookies/" .$this->username . "-cookies.dat");
         }
         $this->guid = $guid;
         // $this->guid = '466dafce-f3e3-492b-f7d9-245ca0d3115c';
@@ -751,8 +751,8 @@ class IgApi
         curl_setopt($ch, CURLOPT_VERBOSE, false);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-        curl_setopt($ch, CURLOPT_COOKIEFILE, $this->username . "-cookies.dat");
-        curl_setopt($ch, CURLOPT_COOKIEJAR, $this->username . "-cookies.dat");
+        curl_setopt($ch, CURLOPT_COOKIEFILE, "/home/insta/cookies/" .$this->username . "-cookies.dat");
+        curl_setopt($ch, CURLOPT_COOKIEJAR, "/home/insta/cookies/" .$this->username . "-cookies.dat");
         if ($file) {
             curl_setopt($ch, CURLOPT_POST, true);
             curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
@@ -782,7 +782,7 @@ class IgApi
         $body = substr($resp, $header_len);
         curl_close($ch);
         print_r($body);
-        print_r(json_decode($body, true));
+        //print_r(json_decode($body, true));
         
         return [$header, json_decode($body, true)];
     }

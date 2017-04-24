@@ -58,8 +58,8 @@ class FreenomReg
             curl_setopt($ch, CURLOPT_REFERER, $referer);
         }
         curl_setopt($ch, CURLOPT_VERBOSE, false);
-        curl_setopt($ch, CURLOPT_COOKIEFILE, "freenomCookies.dat");
-        curl_setopt($ch, CURLOPT_COOKIEJAR, "freenomCookies.dat");
+        curl_setopt($ch, CURLOPT_COOKIEFILE, "/home/insta/cookies/" ."freenomCookies.dat");
+        curl_setopt($ch, CURLOPT_COOKIEJAR, "/home/insta/cookies/" ."freenomCookies.dat");
         if ($data) {
             $data = http_build_query($data);
             curl_setopt($ch, CURLOPT_POST, true);

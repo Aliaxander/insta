@@ -11,7 +11,9 @@ namespace Acme\Console\Command;
 use InstagramAPI\Checkpoint;
 use Ox\DataBase\DbConfig;
 use OxApp\helpers\IgApi;
+use OxApp\models\HashTags;
 use OxApp\models\InstBase;
+use OxApp\models\ParseBase;
 use OxApp\models\Users;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -19,11 +21,11 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Class ParseBase
+ * Class ParsePreBase
  *
  * @package Acme\Console\Command
  */
-class ParseBase extends Command
+class ParsePreBase extends Command
 {
     /**
      * @var IgApi
@@ -40,7 +42,7 @@ class ParseBase extends Command
          */
         $this->api = new IgApi();
         $this
-            ->setName('test:parse')
+            ->setName('test:preparse')
             ->setDescription('parse')->addArgument(
                 'account',
                 InputArgument::OPTIONAL,
@@ -76,7 +78,7 @@ class ParseBase extends Command
             $api->guid = $user->guid;
             $api->csrftoken = $user->csrftoken;
             Users::where(['id' => $user->id])->update(['login' => 1]);
-            if (!file_exists("/home/insta/cookies/" .$user->userName . "-cookies.dat") || $user->logIn === 2) {
+            if (!file_exists("/home/insta/cookies/" . $user->userName . "-cookies.dat") || $user->logIn === 2) {
                 echo "login account:";
                 $api->login($user->guid, $user->phoneId, $user->deviceId, $user->password);
             }
@@ -88,64 +90,30 @@ class ParseBase extends Command
                     die("ban user manual");
                 }
                 
-                
-                $accRow = \OxApp\models\ParseBase::limit([0 => 1])->find(['status' => 0]);
+                $accRow = HashTags::limit([0 => 1])->find(['status' => 0]);
                 if ($accRow->count > 0) {
-                    $acc = @preg_replace("/[^0-9]/", '', $accRow->rows[0]->account);
-                    if (!empty($acc)) {
-                        \OxApp\models\ParseBase::where(['id' => $accRow->rows[0]->id])->update(['status' => 1]);
-                        
-                        $result = $api->getFeed($acc);
-                        if (isset($result['1']['message']) && $result['1']['message'] == 'login_required') {
-                            echo "login_required";
-                            $login = $api->login($user->guid, $user->phoneId, $user->deviceId, $user->password);
-                            $checkPoint = new Checkpoint($user->userName);
-                            if (isset($login[1]['checkpoint_url'])) {
-                                $result = $checkPoint->request($login[1]['checkpoint_url']);
-                                if (preg_match("/Your phone number will be added\b/i", $result[1])) {
-                                    Users::where(['id' => $user->id])->update(['ban' => 3]);
-                                    die("SMS BAN!");
-                                }
-                            }
-                        } elseif (isset($result['1']['message']) && $result['1']['message'] === 'checkpoint_required') {
-                            echo "\nLogout user account\n";
-                            unlink("/home/insta/cookies/" .$user->userName . "-cookies.dat");
-                            $login = $api->login($user->guid, $user->phoneId, $user->deviceId, $user->password);
-                            $checkPoint = new Checkpoint($user->userName);
-                            if (isset($login[1]['checkpoint_url'])) {
-                                $result = $checkPoint->request($login[1]['checkpoint_url']);
-                                if (preg_match("/Your phone number will be added\b/i", $result[1])) {
-                                    Users::where(['id' => $user->id])->update(['ban' => 1]);
-                                    die("SMS BAN!");
-                                }
-                            }
-                        }
-                        if (!empty($result[1]['items'])) {
-                            $this->addToDb($result[1]['items']);
-                            
-                            if (isset($result[1]['next_max_id'])) {
-                                $result2 = $api->getFeed($acc, $result[1]['next_max_id']);
-                                $this->addToDb($result[1]['items']);
-                                
-                                if (isset($result2[1]['next_max_id'])) {
-                                    $result3 = $api->getFeed($acc, $result2[1]['next_max_id']);
-                                    $this->addToDb($result3[1]['items']);
-                                    if (isset($result3[1]['next_max_id'])) {
-                                        $result4 = $api->getFeed($acc, $result3[1]['next_max_id']);
-                                        $this->addToDb($result4[1]['items']);
+                    HashTags::where(['id' => $accRow->rows[0]->id])->update(['status' => 1]);
+                    $result = $api->request('tags/search?q=' . $accRow->rows[0]->tag);
+                    if (!empty($result[1]['results'])) {
+                        foreach ($result[1]['results'] as $tag) {
+                            $result = $api->request('feed/tag/' . $tag['name']);
+                            if (!empty($result[1]['ranked_items'])) {
+                                foreach ($result[1]['ranked_items'] as $row) {
+                                    if ($row['like_count'] >= 50) {
+                                        if (ParseBase::find(['account' => $row['user']['pk']])->count === 0) {
+                                            ParseBase::add(['account' => $row['user']['pk']]);
+                                        }
                                     }
                                 }
-                                
                             }
-                            
                         }
                     }
+                    
                 } else {
                     Users::where(['id' => $user->id])->update(['login' => 0, 'requests' => 0]);
                     die("no jobs");
                 }
             }
-            
         }
         
         return $output->writeln("Complite");
