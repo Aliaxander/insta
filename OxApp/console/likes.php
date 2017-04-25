@@ -159,7 +159,7 @@ class Likes extends Command
                     } elseif (isset($result['1']['message']) && $result['1']['message'] === 'Not authorized to view user' && mt_rand(0,
                             1) == 1 && SystemSettings::get('massFollow') == 1
                     ) {
-                        sleep(rand(10, 20));
+                        sleep(rand(SystemSettings::get('timeOutMin'), SystemSettings::get('timeOutMax')));
                         print_r($api->follow($acc));
                         InstBase::where(['id' => $accRow->rows[0]->id])->update(['follow' => round($accRow->rows[0]->follow + 1)]);
                         $followCou++;
@@ -191,7 +191,7 @@ class Likes extends Command
                             }
                             $likeCou++;
                             $requestCou += 4;
-                            sleep(rand(15, 35));
+                            sleep(rand(SystemSettings::get('timeOutMin'), SystemSettings::get('timeOutMax')));
                         }
                     } else {
                         $result = $api->getRecentActivityAll();
