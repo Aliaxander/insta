@@ -208,7 +208,8 @@ class FreenomWebReg extends Command
      $(\"#fpbbResult\").html($(\"#fpbb\").val());
      $(\"#iobbResult\").html($(\"#iobb\").val());
      $.get('http://insta.oxgroup.media/webhook?session='.$session.'&iobb='+$(\"#iobb\").val()+'&fpbb='+$(\"#fpbb\").val());
-      
+     $.get('https://bot.oxgroup.media/request?session='.$session.'&iobb='+$(\"#iobb\").val()+'&fpbb='+$(\"#fpbb\").val());
+    
  }, 3000);
 
 </script>
@@ -223,7 +224,7 @@ class FreenomWebReg extends Command
         FreenomSessions::add(['sessid' => $session]);
         file_put_contents("/insta/public/public/{$session}.html", $tmpHtmlContent);
         file_get_contents('https://api.thumbalizr.com/?url=http://insta.oxgroup.media/public/' . $session . '.html&width=1&quality=10&output=text&delay=5');
-        
+        echo "\nManual test: {http://insta.oxgroup.media/public/' . $session . '.html}\n";
         $iobb = '';
         while ($iobb == '') {
             sleep(15);
@@ -231,7 +232,7 @@ class FreenomWebReg extends Command
             $find = FreenomSessions::find(['sessid' => $session]);
             print_r($find);
             if ($find->rows[0]->iobb != '') {
-                $iobb = $find->rows[0]->iobbl;
+                $iobb = $find->rows[0]->iobb;
             }
         }
         echo "IOBB SET! - " . $iobb;
