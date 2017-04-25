@@ -52,7 +52,7 @@ class EditProfile extends Command
                 'login' => 0
             ]);
             if ($users->count > 0) {
-                $limitAccounts = 10;
+                $limitAccounts = 20;
                 $user = $users->rows[0];
                 $proxy = explode(":", $user->proxy);
                 $findUsers = Users::find([
