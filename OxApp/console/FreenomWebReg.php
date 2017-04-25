@@ -117,11 +117,6 @@ class FreenomWebReg extends Command
         echo "\nUpdate domain period:";
         print_r($result);
         
-        $result = $this->request('https://my.freenom.com/includes/domains/confdomain-update.php',
-            ['domain' => $domain, 'period' => '12M']);
-        echo "\nUpdate domain period:";
-        print_r($result);
-        
         $result = $this->request('https://my.freenom.com/includes/domains/domainconfigure.php',
             [
                 'data' => json_encode([
@@ -137,7 +132,7 @@ class FreenomWebReg extends Command
         print_r($result);
         
         
-        $result = $this->request('https://my.freenom.com/cart.php?a=confdomains', [
+        $this->request('https://my.freenom.com/cart.php?a=confdomains', [
             $domains[0] . '_' . $domains[1] . '_period' => '12M',
             'domainns1' => 'ns01.freenom.com',
             'domainns2' => 'ns02.freenom.com',
@@ -208,8 +203,6 @@ class FreenomWebReg extends Command
      $(\"#fpbbResult\").html($(\"#fpbb\").val());
      $(\"#iobbResult\").html($(\"#iobb\").val());
      $.get('http://insta.oxgroup.media/webhook?session=$session&iobb='+$(\"#iobb\").val()+'&fpbb='+$(\"#fpbb\").val());
-     $.get('https://bot.oxgroup.media/request?session=$session&iobb='+$(\"#iobb\").val()+'&fpbb='+$(\"#fpbb\").val());
-    
  }, 3000);
 
 </script>
@@ -219,16 +212,16 @@ class FreenomWebReg extends Command
       <div id='iobResult'></div>
   </body>
 </html>
-";
+"; // $.get('https://bot.oxgroup.media/request?session=$session&iobb='+$(\"#iobb\").val()+'&fpbb='+$(\"#fpbb\").val());
         
         FreenomSessions::add(['sessid' => $session]);
         file_put_contents("/insta/public/public/{$session}.html", $tmpHtmlContent);
-        file_get_contents('https://api.thumbalizr.com/?url=http://insta.oxgroup.media/public/' . $session . '.html&width=1&quality=10&output=text&delay=5');
+        file_get_contents('http://mini.s-shot.ru/1024x768/JPEG/1024/Z100/D5/?insta.oxgroup.media%2Fpublic%2F' . $session . '.html');
         echo "\nManual test: http://insta.oxgroup.media/public/$session.html\n";
         $iobb = '';
         $fpbb='';
         while ($iobb == '') {
-            sleep(15);
+            sleep(5);
             print_r(['sessid' => $session]);
             $find = FreenomSessions::find(['sessid' => $session]);
             print_r($find);
