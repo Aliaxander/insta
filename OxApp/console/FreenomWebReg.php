@@ -216,7 +216,7 @@ class FreenomWebReg extends Command
   </body>
 </html>
 ";
-        file_put_contents("/home/insta/public/public/tst.html", $tmpHtmlContent);
+        file_put_contents("/insta/public/public/tst.html", $tmpHtmlContent);
         file_get_contents('https://api.thumbalizr.com/?url=http://insta.oxgroup.media/public/tst.html?243234?=324234&width=250');
         //
         
