@@ -76,7 +76,7 @@ class FreenomWebReg extends Command
         $email = 'asdfghbvc@yahoo.com';
         $password = 'T3kWEuyVJBSL2ca2';
         $this->username = str_replace(['@', '.'], '', $email);
-        $domain = 'sfsdfsadfszadf.tk';
+        $domain = 'resultnonete.tk';
         $domains = explode(".", $domain);
         $ip = '217.182.242.108';
         //Login:
