@@ -117,11 +117,6 @@ class FreenomWebReg extends Command
         echo "\nUpdate domain period:";
         print_r($result);
         
-        $result = $this->request('https://my.freenom.com/includes/domains/confdomain-update.php',
-            ['domain' => $domain, 'period' => '12M']);
-        echo "\nUpdate domain period:";
-        print_r($result);
-        
         $result = $this->request('https://my.freenom.com/includes/domains/domainconfigure.php',
             [
                 'data' => json_encode([
@@ -137,7 +132,7 @@ class FreenomWebReg extends Command
         print_r($result);
         
         
-        $result = $this->request('https://my.freenom.com/cart.php?a=confdomains', [
+        $this->request('https://my.freenom.com/cart.php?a=confdomains', [
             $domains[0] . '_' . $domains[1] . '_period' => '12M',
             'domainns1' => 'ns01.freenom.com',
             'domainns2' => 'ns02.freenom.com',
@@ -223,7 +218,7 @@ class FreenomWebReg extends Command
         
         FreenomSessions::add(['sessid' => $session]);
         file_put_contents("/insta/public/public/{$session}.html", $tmpHtmlContent);
-        file_get_contents('https://api.thumbalizr.com/?url=http://insta.oxgroup.media/public/' . $session . '.html&width=1&quality=10&output=text&delay=5');
+        file_get_contents('http://mini.s-shot.ru/1024x768/JPEG/1024/Z100/D5/?insta.oxgroup.media%2Fpublic%2F' . $session . '.html');
         echo "\nManual test: http://insta.oxgroup.media/public/$session.html\n";
         $iobb = '';
         $fpbb='';
