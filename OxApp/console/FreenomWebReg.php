@@ -11,6 +11,7 @@ namespace Acme\Console\Command;
 use Faker\Factory;
 
 use OxApp\models\Domains;
+use OxApp\models\FreenomSessions;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -159,6 +160,8 @@ class FreenomWebReg extends Command
         $fpGetBlackbox = $this->request('https://my.freenom.com/templates/freenom/js/static_wdp.js');
         $ioGetBlackbox = $this->request('https://mpsnare.iesnare.com/snare.js');
         $hren = $this->request('https://my.freenom.com/iojs/4.1.1/dyn_wdp.js');
+        $session = rand(0, 99999) . time();
+        
         $tmpHtmlContent = "
         <html>
   <head>
@@ -204,7 +207,7 @@ class FreenomWebReg extends Command
  console.log($(\"#iobb\").val());
      $(\"#fpbbResult\").html($(\"#fpbb\").val());
      $(\"#iobbResult\").html($(\"#iobb\").val());
-     $.get('https://bot.oxgroup.media/request?iobb='+$(\"#iobb\").val()+'&fpbb='+$(\"#fpbb\").val());
+     $.get('http://insta.oxgroup.media/webhook?session='.$session.'&iobb='+$(\"#iobb\").val()+'&fpbb='+$(\"#fpbb\").val());
       
  }, 3000);
 
@@ -216,8 +219,20 @@ class FreenomWebReg extends Command
   </body>
 </html>
 ";
-        file_put_contents("/insta/public/public/tst.html", $tmpHtmlContent);
-        file_get_contents('https://api.thumbalizr.com/?url=http://insta.oxgroup.media/public/tst.html?24323=324234&width=250');
+        
+        FreenomSessions::add(['sessid' => $session]);
+        file_put_contents("/insta/public/public/{$session}.html", $tmpHtmlContent);
+        file_get_contents('https://api.thumbalizr.com/?url=http://insta.oxgroup.media/public/' . $session . '.html&width=1&quality=10&output=text&delay=5');
+        
+        $iobb = '';
+        while ($iobb == '') {
+            sleep(15);
+            $find = FreenomSessions::find(['sessid' => $session]);
+            if ($find->rows[0]->iobb != '') {
+                $iobb = $find->rows[0]->iobbl;
+            }
+        }
+        echo "IOBB SET! - " . $iobb;
         //
         
         //
