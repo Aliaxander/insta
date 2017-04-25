@@ -60,22 +60,24 @@ require(__DIR__ . "/../OxApp/Routes.php");
 //}
 
 //$faker = Factory::create();
-//$result=[];
-//for($i=0;$i<1000;$i++) {
+//$result = [];
+//for ($i = 0; $i < 1000; $i++) {
 //    if (mt_rand(0, 4) == 1) {
 //        $name = $faker->userName . rand(1100, 2017);
 //    } elseif (mt_rand(0, 1) == 0) {
 //        $name = $faker->firstNameFemale . $faker->lastName . rand(1100, 2017);
-//    } else {
+//    } elseif (mt_rand(0, 3) == 1) {
 //        $name = $faker->lastName . $faker->firstNameFemale . rand(1100, 2017);
+//    } else {
+//        $name = $faker->userName;
 //    }
 //    $name = mb_strtolower($name);
 //    $name = str_replace([".", "'", "`"], ['', '', ''], $name);
 //    $subdomain = ['.tk', '.ml', '.ga', '.cf', '.gq'];
 //
-//    $domain= $name . $subdomain[rand(0, count($subdomain) - 1)];
-//    $result[$domain]=1;
+//    $domain = $name . $subdomain[rand(0, count($subdomain) - 1)];
+//    $result[$domain] = 1;
 //}
-//foreach ($result as $domain=>$val){
-//    echo $domain."\n";
+//foreach ($result as $domain => $val) {
+//    echo $domain . "\n";
 //}

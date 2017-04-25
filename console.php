@@ -4,6 +4,7 @@
 use Acme\Console\Command\BaseUploader;
 use Acme\Console\Command\EditProfile;
 use Acme\Console\Command\FreenomReger;
+use Acme\Console\Command\FreenomWebReg;
 use Acme\Console\Command\Likes;
 use Acme\Console\Command\ParseBase;
 use Acme\Console\Command\ParsePreBase;
@@ -30,6 +31,7 @@ $application->add(new BaseUploader());
 $application->add(new BaseUpload());
 $application->add(new ParseBase());
 $application->add(new ParsePreBase());
+$application->add(new FreenomWebReg());
 $application->addCommands(
     array(
         // Migrations Commands
