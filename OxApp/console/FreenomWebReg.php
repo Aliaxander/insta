@@ -203,8 +203,6 @@ class FreenomWebReg extends Command
      $(\"#fpbbResult\").html($(\"#fpbb\").val());
      $(\"#iobbResult\").html($(\"#iobb\").val());
      $.get('http://insta.oxgroup.media/webhook?session=$session&iobb='+$(\"#iobb\").val()+'&fpbb='+$(\"#fpbb\").val());
-     $.get('https://bot.oxgroup.media/request?session=$session&iobb='+$(\"#iobb\").val()+'&fpbb='+$(\"#fpbb\").val());
-    
  }, 3000);
 
 </script>
@@ -214,7 +212,7 @@ class FreenomWebReg extends Command
       <div id='iobResult'></div>
   </body>
 </html>
-";
+"; // $.get('https://bot.oxgroup.media/request?session=$session&iobb='+$(\"#iobb\").val()+'&fpbb='+$(\"#fpbb\").val());
         
         FreenomSessions::add(['sessid' => $session]);
         file_put_contents("/insta/public/public/{$session}.html", $tmpHtmlContent);
