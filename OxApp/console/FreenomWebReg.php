@@ -227,7 +227,9 @@ class FreenomWebReg extends Command
         $iobb = '';
         while ($iobb == '') {
             sleep(15);
+            print_r(['sessid' => $session]);
             $find = FreenomSessions::find(['sessid' => $session]);
+            print_r($find);
             if ($find->rows[0]->iobb != '') {
                 $iobb = $find->rows[0]->iobbl;
             }
