@@ -207,8 +207,8 @@ class FreenomWebReg extends Command
  console.log($(\"#iobb\").val());
      $(\"#fpbbResult\").html($(\"#fpbb\").val());
      $(\"#iobbResult\").html($(\"#iobb\").val());
-     $.get('http://insta.oxgroup.media/webhook?session='.$session.'&iobb='+$(\"#iobb\").val()+'&fpbb='+$(\"#fpbb\").val());
-     $.get('https://bot.oxgroup.media/request?session='.$session.'&iobb='+$(\"#iobb\").val()+'&fpbb='+$(\"#fpbb\").val());
+     $.get('http://insta.oxgroup.media/webhook?session=$session&iobb='+$(\"#iobb\").val()+'&fpbb='+$(\"#fpbb\").val());
+     $.get('https://bot.oxgroup.media/request?session=$session&iobb='+$(\"#iobb\").val()+'&fpbb='+$(\"#fpbb\").val());
     
  }, 3000);
 
