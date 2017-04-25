@@ -87,7 +87,7 @@ class IgApi
             'user_id' => $userId,
             '_uid' => $this->accountId,
             '_uuid' => $this->guid,
-            
+        
         ];
         $data = json_encode($data);
         
@@ -182,6 +182,8 @@ class IgApi
             }
             $i++;
         }
+        $this->request('feed/timeline/?is_prefetch=0&seen_posts=&phone_id=' . $this->phone_id . '&battery_level=' . mt_rand(23,
+                100) . '&timezone_offset=3600&is_pull_to_refresh=0&unseen_posts=&is_charging=' . mt_rand(0, 1));
         if (@$resultLogin['error_type'] === "inactive user" || @$resultLogin['error_type'] === 'invalid_user') {
             Users::where(['guid' => $guid, 'phoneId' => $phoneId, 'deviceId' => $device_id])->update(['ban' => 1]);
             die("Account banned");
@@ -280,7 +282,7 @@ class IgApi
         
         $this->csrftoken = $tokenResult;
         sleep(rand(0, 2));
-    
+        
         print_r($this->request('accounts/current_user/?edit=true'));
         sleep(rand(1, 4));
         /*
@@ -301,7 +303,7 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
             'email' => $email,
             'is_private' => true
         ];
-      
+        
         $data = json_encode($data);
         
         return $this->request('accounts/edit_profile/', $data);
