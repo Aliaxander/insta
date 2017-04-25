@@ -13,6 +13,7 @@ use OxApp\helpers\FreenomReg;
 use OxApp\helpers\IgApi;
 use OxApp\models\Domains;
 use OxApp\models\ProfileGenerate;
+use OxApp\models\SystemSettings;
 use OxApp\models\Users;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -52,7 +53,7 @@ class EditProfile extends Command
                 'login' => 0
             ]);
             if ($users->count > 0) {
-                $limitAccounts = 20;
+                $limitAccounts = SystemSettings::get('countThreadsForSubnet');
                 $user = $users->rows[0];
                 $proxy = explode(":", $user->proxy);
                 $findUsers = Users::find([

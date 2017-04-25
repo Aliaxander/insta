@@ -11,6 +11,7 @@ namespace Acme\Console\Command;
 use InstagramAPI\Checkpoint;
 use OxApp\helpers\IgApi;
 use OxApp\models\InstBase;
+use OxApp\models\SystemSettings;
 use OxApp\models\Users;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -156,7 +157,7 @@ class Likes extends Command
                         //                         Users::where(['id' => $user->id])->update(['ban' => 1]);
                         die();
                     } elseif (isset($result['1']['message']) && $result['1']['message'] === 'Not authorized to view user' && mt_rand(0,
-                            1) == 1
+                            1) == 1 && SystemSettings::get('massFollow') == 1
                     ) {
                         sleep(rand(10, 20));
                         print_r($api->follow($acc));
