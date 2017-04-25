@@ -80,19 +80,19 @@ class FreenomWebReg extends Command
         $domains = explode(".", $domain);
         $ip = '217.182.242.108';
         //Login:
-        //        $result = $this->request('https://my.freenom.com/clientarea.php');
-        //        preg_match('/<input type="hidden" name="token" value="(.*?)" \/>/mis',
-        //            $result[1], $results);
-        //        $token = $results[1];
-        //        $loginData = [
-        //            'password' => $password,
-        //            'rememberme' => 'on',
-        //            'token' => $token,
-        //            'username' => $email
-        //        ];
-        //        $result = $this->request('https://my.freenom.com/dologin.php', $loginData);
-        //        print_r($result);
-        //        $this->request('https://my.freenom.com/clientarea.php');
+                $result = $this->request('https://my.freenom.com/clientarea.php');
+                preg_match('/<input type="hidden" name="token" value="(.*?)" \/>/mis',
+                    $result[1], $results);
+                $token = $results[1];
+                $loginData = [
+                    'password' => $password,
+                    'rememberme' => 'on',
+                    'token' => $token,
+                    'username' => $email
+                ];
+                $result = $this->request('https://my.freenom.com/dologin.php', $loginData);
+                print_r($result);
+                $this->request('https://my.freenom.com/clientarea.php');
         
         //Search:
         $this->request('https://my.freenom.com/domains.php');
