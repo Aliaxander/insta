@@ -224,8 +224,9 @@ class FreenomWebReg extends Command
         FreenomSessions::add(['sessid' => $session]);
         file_put_contents("/insta/public/public/{$session}.html", $tmpHtmlContent);
         file_get_contents('https://api.thumbalizr.com/?url=http://insta.oxgroup.media/public/' . $session . '.html&width=1&quality=10&output=text&delay=5');
-        echo "\nManual test: {http://insta.oxgroup.media/public/' . $session . '.html}\n";
+        echo "\nManual test: http://insta.oxgroup.media/public/$session.html\n";
         $iobb = '';
+        $fpbb='';
         while ($iobb == '') {
             sleep(15);
             print_r(['sessid' => $session]);
@@ -233,60 +234,43 @@ class FreenomWebReg extends Command
             print_r($find);
             if ($find->rows[0]->iobb != '') {
                 $iobb = $find->rows[0]->iobb;
+                $fpbb = $find->rows[0]->fpbb;
             }
         }
-        echo "IOBB SET! - " . $iobb;
+        echo "\nIOBB SET! - " . $iobb;
+        echo "\n---------------------\nIOBB SET! - " . $fpbb;
         //
         
-        //
-        //        $postDataCart = [
-        //            'accepttos' => 'on',
-        //            'address1' => '',
-        //            'allidprot' => 'true',
-        //            'amount' => '0.00',
-        //            'city' => '',
-        //            'companyname' => '',
-        //            'country' => 'RU',
-        //            'custtype' => 'existing',
-        //            'firstname' => 'Name',
-        //            'fpbb' => '0400JapG4txqVP4Nf94lis1ztioT9A1DShgATTGvKpCeZlRwmEZ+z1fPZRcJnGLiky0W1+WpmjdizJJlHVB6chrI7oZc+cJURcFiYtBUbpa7l0GrVjpSL
-        ///tvtZ2bYY09+WmE2HRR5wgRl26U2N2a/ORKHzYTVKPARS34tCoeN+KAk0KAU1UNOVUCYlOzKIjzY0fFx+6o9j1+mLEsTM/hMBs0vL349852M7BfjNXsgMEghG3fMJhX2p2YpAkH
-        //+zgzCnlu0X36ReTqNZEVQA3ciQm23ingkdarUr4UDX8icOWPZcz7cCunQS9MKzlVT8kOFdaE7qymUKbVlbqorEHmj1pZZ66jmh7HDH8Z3TiDrbspxq
-        ///8mzNKPwis+lJO1SuKjjw/It0PAOMIkB0gqHxyPWh5igw/qy8utehWRgEqSehE5i27TsSmJARVzQoPjvWMTtkeBqVHq2r3awsrk4Sm95JfOSU310EOWxHkS0xurs1BeyDYXo3BTCX2hhsEKnBjBXXQTTGvKpCeZlRwmEZ
-        //+z1fPZRcJnGLiky0WfYy1Zukz1otMgGebJUzGia+yWXOuou6nMQSqs60pLstDdd59r5gHsvtXkZq1g5ksa0Yy5JnHYpPn/zvtFvKHdZX07Oxcz5OxtBIiUDT
-        //+wXnmaw339WCGxrgOZLQRI9CNThlVfDOx+sP4KoZyi5Ckp7Sr/aHivJZGxA9x3qRKbjNYX+cfTaApON3ndr+XTA056EuQOlw0fYYM0LX
-        ///nSTBMb8i3Z8peI9cv9eOvsyvTBVR12uX7A6i4tXh35GdB6Cc0rdKBra3m4YZeki9r6bxKbcyljLR/8M/2KjEnnx1FqeVT31SgfbGSTmiE0A1szM3YKVvBmottnFrnKVXAzuUK0avykFH13cJGZeFY7fsstiThR3pdL
-        ///pMeZpe1KXZSaa7EyASkeG+CQ=',
-        //            'iobb' => '0400NkFMpQRHXAMNf94lis1ztioT9A1DShgATTGvKpCeZlRwmEZ+z1fPZRcJnGLiky0WhxsJ3VO4EPgIzzvOlBUh9qRTaDjmUTl26LEtcYEgIDXyxDKJBqBicYLtctOBy5zsuLyMF4
-        //+8TBhgO962GbSLFcqAPNKVwml2GkVn5hklpTXQtVCYANQUGR45eVo3JvuIdsxrLQrKON3dOIOtuynGr2hCOHvr5Xx0WPy/tudaZOuBTvCYfZaHNdxnF72KhuoPujoZ8bICN3
-        ///xFYjpJeaAv5VPfVKB9sZJOlrwySt1/vVmzHI2bu+7e350EE3SzqcIPY+ZjHFE+SRu+9PtbjuR1NzZbnGgZgkGYYDWpT3oEwgMKXKx2z97
-        //+cvQykm6AmkM8cFCb3XpK0J64YAhG7JwvUJbQHdojpjM/H8neKkenzp9XcKQnr3kWmCaRYLawxXCP+g9ErKzWVLfHYTi14x8cCRQ3fV20ZNSdoDUv55HSoiXV
-        //+t2kWnHTwQQqAQBl9yd1FA6w+OwNTpYc0yoMxALJZUzACQ5swXPUbcRyxrNT/ny4H/m2pgQaXYgmYbwj+5bpiIn/4g7jAnC1AevYOBPe8UvRkxkPz1xoATgI259
-        //+wrAqvQx/6iBZk5svk/NHrqcgniPx9iG3QT4GxAs6buRZtT16TeM5diEHf7WUtiodkRUZMqNeDi7ksz35ywOyseXtSVPrbgATwhU
-        //w0i6DueeNaanp6x8og4dVguGdCj5lhdAXKA55lhYlzntEcVmW1kMcABGmc1oA9VPYfvE9ENyohfAGZGQxaNZrhG3DzdZA1kzqbwpmWa8I7abfHrNqSk8CnwUL5rYETzL9kaL85lzU9YPUST3gTYnndnF9oBO0Ev8evHAeToiq904g627Kcav
-        ///JszSj8IrPqSBBWhu07LmeicE+UPGuFo0G3hdncuVXi/TDp0UzLYSznlfv63gmmfLLQw4RnH+LuCCzeqH4yrtbsCyzUxPaqc3QhI1mrkCgZEnkf
-        //+WlBpJZrz4ssIJoqUgyEZRlhW6ydpIryDlK93uPgmNkcbYB5+/cvHTYDT6VBmHr10j7mvZbthumyR/sokQj48mXTdxmWvlw4u8V04El
-        ///+do8rKLboBQhNV0Xzfh2dtRE+K4Wh2DeGG4xIicZNYurc0fA5h8qymyA00KGWzPAI/riXj0GwLJdkRO+fBjo5zt1Gn4/kbg91wcO2q799SbUXZrXdkFbl0wt9PRt24l6qHpLcttv
-        ///NC2Q6knKdhtO1Tp84e7/t7sG8LFmZ++nZ4ClRX6W68W1YxhJDf2DYkqOaLbCpox1FHud/XjtdkQHRcCdmxGgsLKxGp8Rq1i7oaETk5
-        ///y1Q6V4UWDdKfC+AaRs9qV4RFT5C7RNAwoKI2zG2+QcNoQs5VPfVKB9sZJOlrwySt1/vVmzHI2bu+7e350EE3SzqcIPY+ZjHFE+SRu
-        //+9PtbjuR1NzZbnGgZgkGc0CA+UvacqlVQXB7goC+Ng==',
-        //            'lastname' => '',
-        //            'paymentmethod' => 'credit',
-        //            'phonenumber' => '',
-        //            'postcode' => '',
-        //            'state' => '',
-        //            'submit' => 'true',
-        //            'token' => $token
-        //        ];
-        //
-        //        $result = $this->request('https://my.freenom.com/cart.php?a=checkout', $postDataCart);
-        //        echo "CheckOut:\n";
-        //        print_r($result);
-        //
-        //        $result = $this->request('https://my.freenom.com/cart.php?a=complete');
-        //        print_r($result);
-        //        $result = $this->request('https://my.freenom.com/cart.php');
-        //        print_r($result);
+        
+                $postDataCart = [
+                    'accepttos' => 'on',
+                    'address1' => '',
+                    'allidprot' => 'true',
+                    'amount' => '0.00',
+                    'city' => '',
+                    'companyname' => '',
+                    'country' => 'RU',
+                    'custtype' => 'existing',
+                    'firstname' => 'Name',
+                    'fpbb' => $fpbb,
+                    'iobb' => $iobb,
+                    'lastname' => '',
+                    'paymentmethod' => 'credit',
+                    'phonenumber' => '',
+                    'postcode' => '',
+                    'state' => '',
+                    'submit' => 'true',
+                    'token' => $token
+                ];
+        
+                $result = $this->request('https://my.freenom.com/cart.php?a=checkout', $postDataCart);
+                echo "CheckOut:\n";
+                print_r($result);
+        
+                $result = $this->request('https://my.freenom.com/cart.php?a=complete');
+                print_r($result);
+                $result = $this->request('https://my.freenom.com/cart.php');
+                print_r($result);
         
         return $output->writeln("Complite");
     }
