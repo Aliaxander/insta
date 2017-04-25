@@ -40,6 +40,10 @@ Router::rout('/userGroup')->app('UserGroup')->save();
 Router::rout('/task')->app('Task')->save();
 Router::rout('/taskType')->app('TaskType')->save();
 
+//systemSettings
+Router::rout('/systemSettings')->app('SystemSettings')->save();
+
 Router::setMiddlewareGroup('Json', function () {
     Router::rout('/api/users')->app('api\\Users')->save();
+    Router::rout('/api/systemSettings')->app('api\\SystemSettings')->save();
 });
