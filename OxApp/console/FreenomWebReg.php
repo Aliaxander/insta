@@ -126,7 +126,15 @@ class FreenomWebReg extends Command
                         $uname = str_replace([".", "-", ")", "'", "`"], "", $uname);
                         $this->domain = $uname . $domainsSub[rand(0, 4)];
                         $this->domains = explode(".", $this->domain);
-                        $this->logic();
+                        $result = $this->logic();
+                        if ($result === false) {
+                            FreenomAccounts::where(['id' => $account->id])->update([
+                                'isWork' => 0
+                            ]);
+                            exit();
+                        } else {
+                            Domains::add(['domain' => $this->domain]);
+                        }
                     }
                     FreenomAccounts::where(['id' => $account->id])->update([
                         'isWork' => 0
@@ -321,8 +329,12 @@ class FreenomWebReg extends Command
         print_r($result);
         preg_match_all('/^Location:(.*)$/mi', $result[0], $matches);
         print_r($matches);
-        
-        // $status=;//https://my.freenom.com/failed_registration.php?e=flag
+        $locationUrl = str_replace(' ', '', @$matches[1][0]);
+        if ($locationUrl === 'https://my.freenom.com/failed_registration.php?e=flag') {
+            $status = false;
+        } else {
+            $status = true;
+        }
         $result = $this->request('https://my.freenom.com/cart.php?a=complete');
         print_r($result);
         $result = $this->request('https://my.freenom.com/cart.php');
