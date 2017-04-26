@@ -117,10 +117,22 @@ class FreenomWebReg extends Command
                     $this->proxy = $account->proxy;
                     $this->username = str_replace(['@', '.'], '', $this->email);
                     //Login:
-                    $result = $this->request('https://my.freenom.com/clientarea.php');
-                    preg_match('/<input type="hidden" name="token" value="(.*?)" \/>/mis',
-                        $result[1], $results);
-                    $token = $results[1];
+                    $token = '';
+                    $i = 0;
+                    while ($token == '') {
+                        $result = $this->request('https://my.freenom.com/clientarea.php');
+                        preg_match('/<input type="hidden" name="token" value="(.*?)" \/>/mis',
+                            $result[1], $results);
+                        $token = @$results[1];
+                        $i++;
+                        if ($i > 10) {
+                            echo "No isset token";
+                            FreenomAccounts::where(['id' => $account->id])->update([
+                                'isWork' => 0
+                            ]);
+                            exit();
+                        }
+                    }
                     $loginData = [
                         'password' => $this->password,
                         'rememberme' => 'on',
