@@ -32,6 +32,7 @@ class FreenomWebReg extends Command
     protected $domain;
     protected $domains;
     protected $userAgent;
+    protected $proxy = '';
     protected $debug = true;
     
     /**
@@ -113,6 +114,7 @@ class FreenomWebReg extends Command
                     echo "\nSet userAgent: {$this->userAgent}\n";
                     $this->email = $account->email;
                     $this->password = $account->password;
+                    $this->proxy = $account->proxy;
                     $this->username = str_replace(['@', '.'], '', $this->email);
                     //Login:
                     $result = $this->request('https://my.freenom.com/clientarea.php');
