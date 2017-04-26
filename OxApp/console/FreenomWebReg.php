@@ -360,37 +360,46 @@ class FreenomWebReg extends Command
     
     protected function request($url, $post = null, $headers = null)
     {
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_USERAGENT, $this->userAgent);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-        curl_setopt($ch, CURLOPT_HEADER, true);
-        if (!is_null($headers)) {
-            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        $i = 0;
+        $result = [];
+        $result[] = '';
+        while ($result[0] == '') {
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_USERAGENT, $this->userAgent);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+            curl_setopt($ch, CURLOPT_HEADER, true);
+            if (!is_null($headers)) {
+                curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+            }
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+            curl_setopt($ch, CURLOPT_COOKIEFILE, "/home/insta/cookies/freenom" . $this->username . '-cookies.dat');
+            curl_setopt($ch, CURLOPT_COOKIEJAR, "/home/insta/cookies/freenom" . $this->username . '-cookies.dat');
+            if ($post) {
+                curl_setopt($ch, CURLOPT_POST, count($post));
+                curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($post));
+            }
+            if (!empty($this->proxy)) {
+                curl_setopt($ch, CURLOPT_PROXY, $this->proxy);
+            }
+            $resp = curl_exec($ch);
+            $header_len = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
+            $header = substr($resp, 0, $header_len);
+            $body = substr($resp, $header_len);
+            curl_close($ch);
+            if ($this->debug) {
+                echo "\nREQUEST: $url\n";
+                print_r($post);
+            }
+            $result = [$header, $body];
+            echo "\n--------------Result--------------:\n";
+            $i++;
+            if ($i > 10) {
+                die('Proxy don\'t work');
+            }
         }
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-        curl_setopt($ch, CURLOPT_COOKIEFILE, "/home/insta/cookies/freenom" . $this->username . '-cookies.dat');
-        curl_setopt($ch, CURLOPT_COOKIEJAR, "/home/insta/cookies/freenom" . $this->username . '-cookies.dat');
-        if ($post) {
-            curl_setopt($ch, CURLOPT_POST, count($post));
-            curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($post));
-        }
-        if (!empty($this->proxy)) {
-            curl_setopt($ch, CURLOPT_PROXY, $this->proxy);
-        }
-        $resp = curl_exec($ch);
-        $header_len = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
-        $header = substr($resp, 0, $header_len);
-        $body = substr($resp, $header_len);
-        curl_close($ch);
-        if ($this->debug) {
-            echo "\nREQUEST: $url\n";
-            print_r($post);
-        }
-        $result = [$header, $body];
-        echo "\n--------------Result--------------:\n";
         
         return $result;
     }
