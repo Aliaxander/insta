@@ -23,7 +23,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * @package Acme\Console\Command
  */
-class ParseBase extends Command
+class ParseBaseIg extends Command
 {
     /**
      * @var IgApi

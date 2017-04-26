@@ -8,8 +8,6 @@
 
 namespace Acme\Console\Command;
 
-use InstagramAPI\Checkpoint;
-use Ox\DataBase\DbConfig;
 use OxApp\helpers\IgApi;
 use OxApp\models\HashTags;
 use OxApp\models\InstBase;
@@ -25,7 +23,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * @package Acme\Console\Command
  */
-class ParsePreBase extends Command
+class PreParseBase extends Command
 {
     /**
      * @var IgApi

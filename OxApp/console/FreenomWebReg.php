@@ -11,6 +11,7 @@ namespace Acme\Console\Command;
 use Faker\Factory;
 
 use OxApp\models\Domains;
+use OxApp\models\FreenomAccounts;
 use OxApp\models\FreenomSessions;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -25,6 +26,11 @@ use Symfony\Component\Console\Output\OutputInterface;
 class FreenomWebReg extends Command
 {
     protected $username;
+    protected $email;
+    protected $password;
+    protected $ip;
+    protected $domain;
+    protected $domains;
     protected $userAgent;
     protected $debug = true;
     
@@ -54,56 +60,114 @@ class FreenomWebReg extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $userAgents = [
-            "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36",
-            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2227.1 Safari/537.36",
-            "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2227.0 Safari/537.36",
-            "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2227.0 Safari/537.36",
-            "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2226.0 Safari/537.36",
-            "Mozilla/5.0 (Windows NT 6.4; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2225.0 Safari/537.36",
-            "Mozilla/5.0 (Windows NT 5.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2224.3 Safari/537.36",
-            "Mozilla/5.0 (Windows NT 10.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/40.0.2214.93 Safari/537.36",
-            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/37.0.2062.124 Safari/537.36",
-            "Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/37.0.2049.0 Safari/537.36",
-            "Mozilla/5.0 (Windows NT 4.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/37.0.2049.0 Safari/537.36",
-            "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1985.67 Safari/537.36",
-            "Mozilla/5.0 (Windows NT 5.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1985.67 Safari/537.36"
-        ];
-        $this->userAgent = $userAgents[mt_rand(0, count($userAgents) - 1)];
-        echo "\nSet userAgent: {$this->userAgent}\n";
-        $this->userAgent = 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2226.0 Safari/537.36';
-        //asdfghbvc@yahoo.com T3kWEuyVJBSL2ca2
-        $email = 'asdfghbvc@yahoo.com';
-        $password = 'T3kWEuyVJBSL2ca2';
-        $this->username = str_replace(['@', '.'], '', $email);
-        $domain = 'resultnonete.tk';
-        $domains = explode(".", $domain);
-        $ip = '217.182.242.108';
+        $this->ip = '217.182.242.108';
+        $faker = Factory::create();
+        $domainsSub = ['.tk', '.ml', '.ga', '.cf', '.gq'];
+        $accounts = FreenomAccounts::find(['isWork' => 0]);
+        if ($accounts->count > 0) {
+            foreach ($accounts->rows as $account) {
+                print_r($account);
+                $count = $account->countStarts;
+                if ($count == 0) {
+                    $count = 1;
+                }
+                $date1 = new \DateTime($account->dateCreate);
+                $date2 = new \DateTime($account->dateUpdate);
+                $diff = $date2->diff($date1);
+                $seconds = ($diff->y * 365 * 24 * 60 * 60) +
+                    ($diff->m * 30 * 24 * 60 * 60) +
+                    ($diff->d * 24 * 60 * 60) +
+                    ($diff->h * 60 * 60) +
+                    ($diff->i * 60) +
+                    $diff->s;
+                $hour = round($seconds / 60 / 60);
+                $work = $hour / $count;
+                if ($work >= 24) {
+                    FreenomAccounts::where(['id' => $account->id])->update([
+                        'isWork' => 1,
+                        'countStarts' => $count + 1
+                    ]);
+                    if ($account->userAgent === '') {
+                        $userAgents = [
+                            "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36",
+                            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2227.1 Safari/537.36",
+                            "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2227.0 Safari/537.36",
+                            "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2227.0 Safari/537.36",
+                            "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2226.0 Safari/537.36",
+                            "Mozilla/5.0 (Windows NT 6.4; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2225.0 Safari/537.36",
+                            "Mozilla/5.0 (Windows NT 5.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2224.3 Safari/537.36",
+                            "Mozilla/5.0 (Windows NT 10.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/40.0.2214.93 Safari/537.36",
+                            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/37.0.2062.124 Safari/537.36",
+                            "Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/37.0.2049.0 Safari/537.36",
+                            "Mozilla/5.0 (Windows NT 4.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/37.0.2049.0 Safari/537.36",
+                            "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1985.67 Safari/537.36",
+                            "Mozilla/5.0 (Windows NT 5.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1985.67 Safari/537.36"
+                        ];
+                        $this->userAgent = $userAgents[mt_rand(0, count($userAgents) - 1)];
+                        FreenomAccounts::where(['id' => $account->id])->update([
+                            'userAgent' => $this->userAgent
+                        ]);
+                    } else {
+                        $this->userAgent = $account->userAgent;
+                    }
+                    echo "\nSet userAgent: {$this->userAgent}\n";
+                    $this->email = $account->email;
+                    $this->password = $account->password;
+                    $this->username = str_replace(['@', '.'], '', $this->email);
+                    $randDomains = mt_rand(15, 20);
+                    for ($i = 0; $i < $randDomains; $i++) {
+                        if (mt_rand(0, 4) == 1) {
+                            $uname = $faker->userName . rand(0, 2017);
+                        } elseif (mt_rand(0, 1) == 0) {
+                            $uname = $faker->firstNameFemale . rand(0, 2017);
+                        } else {
+                            $uname = $faker->lastName . rand(0, 2017);
+                        }
+                        $uname = str_replace([".", "-", ")", "'", "`"], "", $uname);
+                        $this->domain = $uname . $domainsSub[rand(0, 4)];
+                        $this->domains = explode(".", $this->domain);
+                        $this->logic();
+                        
+                    }
+                    FreenomAccounts::where(['id' => $account->id])->update([
+                        'isWork' => 0
+                    ]);
+                    exit();
+                }
+            }
+        }
+        
+        return $output->writeln("Complite");
+    }
+    
+    protected function logic()
+    {
+        
         //Login:
-                $result = $this->request('https://my.freenom.com/clientarea.php');
-                preg_match('/<input type="hidden" name="token" value="(.*?)" \/>/mis',
-                    $result[1], $results);
-                $token = $results[1];
-                $loginData = [
-                    'password' => $password,
-                    'rememberme' => 'on',
-                    'token' => $token,
-                    'username' => $email
-                ];
-                $result = $this->request('https://my.freenom.com/dologin.php', $loginData);
-                print_r($result);
-                $this->request('https://my.freenom.com/clientarea.php');
+        $result = $this->request('https://my.freenom.com/clientarea.php');
+        preg_match('/<input type="hidden" name="token" value="(.*?)" \/>/mis',
+            $result[1], $results);
+        $token = $results[1];
+        $loginData = [
+            'password' => $this->password,
+            'rememberme' => 'on',
+            'token' => $token,
+            'username' => $this->email
+        ];
+        $result = $this->request('https://my.freenom.com/dologin.php', $loginData);
+        print_r($result);
+        $this->request('https://my.freenom.com/clientarea.php');
         
         //Search:
         $this->request('https://my.freenom.com/domains.php');
         $searchDomainData = [
-            'domain' => $domains[0],
-            'tld' => $domains[1]
+            'domain' => $this->domains[0],
+            'tld' => $this->domains[1]
         ];
         $this->request('https://my.freenom.com/includes/domains/fn-available.php', $searchDomainData);
         
         //Add to cart:
-        $addDomainData['domains'][] = $domain;
+        $addDomainData['domains'][] = $this->domain;
         $this->request('https://my.freenom.com/includes/domains/confdomain-pricing.php', $searchDomainData);
         
         $result = $this->request('https://my.freenom.com/cart.php?a=confdomains');
@@ -113,27 +177,26 @@ class FreenomWebReg extends Command
         echo "setToken:{$token}\n";
         
         $result = $this->request('https://my.freenom.com/includes/domains/confdomain-update.php',
-            ['domain' => $domain, 'period' => '12M']);
+            ['domain' => $this->domain, 'period' => '12M']);
         echo "\nUpdate domain period:";
         print_r($result);
         
         $result = $this->request('https://my.freenom.com/includes/domains/domainconfigure.php',
             [
                 'data' => json_encode([
-                    $domain => [
-                        'hn1' => $domain,
-                        'hi1' => $ip,
-                        'hn2' => 'www.' . $domain,
-                        'hi2' => $ip
+                    $this->domain => [
+                        'hn1' => $this->domain,
+                        'hi1' => $this->ip,
+                        'hn2' => 'www.' . $this->domain,
+                        'hi2' => $this->ip
                     ]
                 ])
             ]);
         echo "\nConfiguration domain:";
         print_r($result);
         
-        
         $this->request('https://my.freenom.com/cart.php?a=confdomains', [
-            $domains[0] . '_' . $domains[1] . '_period' => '12M',
+            $this->domains[0] . '_' . $this->domains[1] . '_period' => '12M',
             'domainns1' => 'ns01.freenom.com',
             'domainns2' => 'ns02.freenom.com',
             'domainns3' => 'ns03.freenom.com',
@@ -143,7 +206,6 @@ class FreenomWebReg extends Command
             'token' => $token,
             'update' => 'true'
         ]);
-        
         
         $result = $this->request('https://my.freenom.com/cart.php?a=view');
         echo "Cart view:\n";
@@ -219,7 +281,7 @@ class FreenomWebReg extends Command
         file_get_contents('http://mini.s-shot.ru/1024x768/JPEG/1024/Z100/D5/?insta.oxgroup.media%2Fpublic%2F' . $session . '.html');
         echo "\nManual test: http://insta.oxgroup.media/public/$session.html\n";
         $iobb = '';
-        $fpbb='';
+        $fpbb = '';
         while ($iobb == '') {
             sleep(5);
             print_r(['sessid' => $session]);
@@ -234,38 +296,35 @@ class FreenomWebReg extends Command
         echo "\n---------------------\nIOBB SET! - " . $fpbb;
         //
         
+        $postDataCart = [
+            'accepttos' => 'on',
+            'address1' => '',
+            'allidprot' => 'true',
+            'amount' => '0.00',
+            'city' => '',
+            'companyname' => '',
+            'country' => 'RU',
+            'custtype' => 'existing',
+            'firstname' => 'Name',
+            'fpbb' => $fpbb,
+            'iobb' => $iobb,
+            'lastname' => '',
+            'paymentmethod' => 'credit',
+            'phonenumber' => '',
+            'postcode' => '',
+            'state' => '',
+            'submit' => 'true',
+            'token' => $token
+        ];
         
-                $postDataCart = [
-                    'accepttos' => 'on',
-                    'address1' => '',
-                    'allidprot' => 'true',
-                    'amount' => '0.00',
-                    'city' => '',
-                    'companyname' => '',
-                    'country' => 'RU',
-                    'custtype' => 'existing',
-                    'firstname' => 'Name',
-                    'fpbb' => $fpbb,
-                    'iobb' => $iobb,
-                    'lastname' => '',
-                    'paymentmethod' => 'credit',
-                    'phonenumber' => '',
-                    'postcode' => '',
-                    'state' => '',
-                    'submit' => 'true',
-                    'token' => $token
-                ];
+        $result = $this->request('https://my.freenom.com/cart.php?a=checkout', $postDataCart);
+        echo "CheckOut:\n";
+        print_r($result);
         
-                $result = $this->request('https://my.freenom.com/cart.php?a=checkout', $postDataCart);
-                echo "CheckOut:\n";
-                print_r($result);
-        
-                $result = $this->request('https://my.freenom.com/cart.php?a=complete');
-                print_r($result);
-                $result = $this->request('https://my.freenom.com/cart.php');
-                print_r($result);
-        
-        return $output->writeln("Complite");
+        $result = $this->request('https://my.freenom.com/cart.php?a=complete');
+        print_r($result);
+        $result = $this->request('https://my.freenom.com/cart.php');
+        print_r($result);
     }
     
     protected function request($url, $post = null, $headers = null)

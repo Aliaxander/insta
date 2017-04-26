@@ -6,8 +6,8 @@ use Acme\Console\Command\EditProfile;
 use Acme\Console\Command\FreenomReger;
 use Acme\Console\Command\FreenomWebReg;
 use Acme\Console\Command\Likes;
-use Acme\Console\Command\ParseBase;
-use Acme\Console\Command\ParsePreBase;
+use Acme\Console\Command\ParseBaseIg;
+use Acme\Console\Command\PreParseBase;
 use Acme\Console\Command\Test;
 use Acme\Console\Command\BaseUpload;
 use Ox\DataBase\DbConfig;
@@ -23,15 +23,16 @@ DbConfig::$dbuserpass = $config["password"];
 
 
 $application = new Application();
+$application->add(new FreenomWebReg());
 $application->add(new Test());
 $application->add(new Likes());
 $application->add(new EditProfile());
 $application->add(new FreenomReger());
 $application->add(new BaseUploader());
 $application->add(new BaseUpload());
-$application->add(new ParseBase());
-$application->add(new ParsePreBase());
-$application->add(new FreenomWebReg());
+$application->add(new ParseBaseIg());
+$application->add(new PreParseBase());
+
 $application->addCommands(
     array(
         // Migrations Commands
