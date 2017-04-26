@@ -397,6 +397,9 @@ class FreenomWebReg extends Command
             echo "\n--------------Result--------------:\n";
             $i++;
             if ($i > 10) {
+                FreenomAccounts::where(['email' => $this->email])->update([
+                    'isWork' => 2
+                ]);
                 die('Proxy don\'t work');
             }
         }
