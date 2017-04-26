@@ -153,12 +153,12 @@ class FreenomWebReg extends Command
                             $uname = $faker->lastName . rand(0, 2017);
                         }
                         $uname = str_replace([".", "-", ")", "'", "`"], "", $uname);
-                        $this->domain = $uname . $domainsSub[rand(0, 4)];
+                        $this->domain = mb_strtolower($uname . $domainsSub[rand(0, 4)]);
                         $this->domains = explode(".", $this->domain);
                         $result = $this->logic();
                         if ($result === false) {
                             FreenomAccounts::where(['id' => $account->id])->update([
-                                'isWork' => 0
+                                'isWork' => 2
                             ]);
                             exit();
                         } else {
