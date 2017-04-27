@@ -144,8 +144,6 @@ class FreenomWebReg extends Command
                     ];
                     $result = $this->request('https://my.freenom.com/dologin.php', $loginData);
                     $this->request('https://my.freenom.com/clientarea.php');
-    
-                    
                     
                     $randDomains = mt_rand(15, 20);
                     for ($i = 0; $i < $randDomains; $i++) {
@@ -348,7 +346,7 @@ class FreenomWebReg extends Command
         print_r($matches);
         $locationUrl = str_replace([' ', "\n", "\t", "\r"], '', @$matches[1][0]);
         echo "Location Url: >" . $locationUrl . "<";
-        if (strripos($locationUrl, 'https://my.freenom.com/failed_registration.php') === true) {
+        if ($locationUrl == 'https://my.freenom.com/failed_registration.php?e=flag' || $locationUrl == 'https://my.freenom.com/failed_registration.php') {
             $status = false;
         } else {
             $status = true;
