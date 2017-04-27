@@ -380,8 +380,8 @@ class FreenomWebReg extends Command
             curl_setopt($ch, CURLOPT_INTERFACE, "5.196.146.51");
             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
             curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-            curl_setopt($ch, CURLOPT_COOKIEFILE, "/home/insta/cookies/freenom" . $this->username . '-cookies.dat');
-            curl_setopt($ch, CURLOPT_COOKIEJAR, "/home/insta/cookies/freenom" . $this->username . '-cookies.dat');
+            curl_setopt($ch, CURLOPT_COOKIEFILE, "/home/insta/cookies/freenom/" . $this->username . '-cookies.dat');
+            curl_setopt($ch, CURLOPT_COOKIEJAR, "/home/insta/cookies/freenom/" . $this->username . '-cookies.dat');
             if ($post) {
                 curl_setopt($ch, CURLOPT_POST, count($post));
                 curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($post));
