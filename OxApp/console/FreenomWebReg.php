@@ -240,21 +240,20 @@ class FreenomWebReg extends Command
             $token = @$results[1];
             $i++;
             if ($i > 10) {
-                echo "No isset token";
                 FreenomAccounts::where(['id' => $this->accountId])->update([
                     'isWork' => 0
                 ]);
-                die('No login');
             }
         }
-        $loginData = [
-            'password' => $this->password,
-            'rememberme' => 'on',
-            'token' => $token,
-            'username' => $this->email
-        ];
-        $this->request('https://my.freenom.com/dologin.php', $loginData);
-        
+        if (empty($token)) {
+            $loginData = [
+                'password' => $this->password,
+                'rememberme' => 'on',
+                'token' => $token,
+                'username' => $this->email
+            ];
+            $this->request('https://my.freenom.com/dologin.php', $loginData);
+        }
         $result = $this->request('https://my.freenom.com/cart.php?a=view');
         echo "Cart view:\n";
         preg_match('/<input type="hidden" name="token" value="(.*?)" \/>/mis',
