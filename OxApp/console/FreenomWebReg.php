@@ -199,7 +199,7 @@ class FreenomWebReg extends Command
         $result = $this->request('https://my.freenom.com/includes/domains/confdomain-update.php',
             ['domain' => $this->domain, 'period' => '12M']);
         echo "\nUpdate domain period:";
-        print_r($result);
+       // print_r($result);
         
         $result = $this->request('https://my.freenom.com/includes/domains/domainconfigure.php',
             [
@@ -213,7 +213,7 @@ class FreenomWebReg extends Command
                 ])
             ]);
         echo "\nConfiguration domain:";
-        print_r($result);
+       // print_r($result);
         
         $this->request('https://my.freenom.com/cart.php?a=confdomains', [
             $this->domains[0] . '_' . $this->domains[1] . '_period' => '12M',
@@ -339,7 +339,7 @@ class FreenomWebReg extends Command
         
         $result = $this->request('https://my.freenom.com/cart.php?a=checkout', $postDataCart);
         echo "CheckOut:\n";
-        print_r($result);
+       // print_r($result);
         preg_match_all('/^Location:(.*)$/mi', $result[0], $matches);
         print_r($matches);
         $locationUrl = str_replace([' ', "\n", "\t", "\r"], '', @$matches[1][0]);
@@ -351,9 +351,9 @@ class FreenomWebReg extends Command
         }
         var_dump($status);
         $result = $this->request('https://my.freenom.com/cart.php?a=complete');
-        print_r($result);
+       // print_r($result);
         $result = $this->request('https://my.freenom.com/cart.php');
-        print_r($result);
+       // print_r($result);
         
         return $status;
     }
@@ -395,6 +395,7 @@ class FreenomWebReg extends Command
             }
             $result = [$header, $body];
             echo "\n--------------Result--------------:\n";
+            print_r($result);
             $i++;
             if ($i > 10) {
                 FreenomAccounts::where(['email' => $this->email])->update([
