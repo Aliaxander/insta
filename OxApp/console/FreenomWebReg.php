@@ -210,7 +210,7 @@ class FreenomWebReg extends Command
                     $this->domain => [
                         'dn1'=>'a.dnspod.com',
                         'di1'=>'',
-                        'dn2'=>'v.dnspod.com',
+                        'dn2'=>'b.dnspod.com',
                         'di2'=>''
                     ]
 //                        [
