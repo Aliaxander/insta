@@ -376,6 +376,8 @@ class FreenomWebReg extends Command
             if (!is_null($headers)) {
                 curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
             }
+            
+            curl_setopt($ch, CURLOPT_INTERFACE, "5.196.146.51");
             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
             curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
             curl_setopt($ch, CURLOPT_COOKIEFILE, "/home/insta/cookies/freenom" . $this->username . '-cookies.dat');
