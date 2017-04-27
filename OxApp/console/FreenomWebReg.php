@@ -230,23 +230,25 @@ class FreenomWebReg extends Command
         ]);
         
         $result = $this->request('https://my.freenom.com/cart.php?a=view');
-        $this->request('https://my.freenom.com/clientarea.php?setcheckout=true');
-        
-        $result = $this->request('https://my.freenom.com/clientarea.php');
-        preg_match('/<input type="hidden" name="token" value="(.*?)" \/>/mis',
-            $result[1], $results);
-        $token = @$results[1];
-        
-        if (empty($token)) {
-            $loginData = [
-                'password' => $this->password,
-                'rememberme' => 'on',
-                'token' => $token,
-                'username' => $this->email
-            ];
-            $this->request('https://my.freenom.com/dologin.php', $loginData);
+        if (preg_match("/https:\/\/my.freenom.com\/clientarea.php\?setcheckout=true/i", $result[0])) {
+            $this->request('https://my.freenom.com/clientarea.php?setcheckout=true');
+            $result = $this->request('https://my.freenom.com/clientarea.php');
+            preg_match('/<input type="hidden" name="token" value="(.*?)" \/>/mis',
+                $result[1], $results);
+            $token = @$results[1];
+            
+            if (empty($token)) {
+                $loginData = [
+                    'password' => $this->password,
+                    'rememberme' => 'on',
+                    'token' => $token,
+                    'username' => $this->email
+                ];
+                $this->request('https://my.freenom.com/dologin.php', $loginData);
+            }
+            
+            $result = $this->request('https://my.freenom.com/cart.php?a=view');
         }
-        $result = $this->request('https://my.freenom.com/cart.php?a=view');
         echo "Cart view:\n";
         preg_match('/<input type="hidden" name="token" value="(.*?)" \/>/mis',
             $result[1], $results);
