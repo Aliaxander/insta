@@ -342,9 +342,9 @@ class FreenomWebReg extends Command
         print_r($result);
         preg_match_all('/^Location:(.*)$/mi', $result[0], $matches);
         print_r($matches);
-        $locationUrl = str_replace(' ', '', @$matches[1][0]);
+        $locationUrl = str_replace([' ', "\n", "\t", "\r"], '', @$matches[1][0]);
         echo "Location Url: >" . $locationUrl . "<";
-        if (strripos($locationUrl, 'https://my.freenom.com/failed_registration.php?e=flag') == true) {
+        if (strripos($locationUrl, 'https://my.freenom.com/failed_registration.php') === true) {
             $status = false;
         } else {
             $status = true;
