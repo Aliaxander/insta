@@ -86,6 +86,32 @@ class FreenomWebReg extends Command
                 $hour = round($seconds / 60 / 60);
                 $work = $hour / $count;
                 if ($work >= 24) {
+                    //Login:
+                    $token = '';
+                    $i = 0;
+                    while ($token == '') {
+                        $result = $this->request('https://my.freenom.com/clientarea.php');
+                        preg_match('/<input type="hidden" name="token" value="(.*?)" \/>/mis',
+                            $result[1], $results);
+                        $token = @$results[1];
+                        $i++;
+                        if ($i > 10) {
+                            echo "No isset token";
+                            FreenomAccounts::where(['id' => $this->accountId])->update([
+                                'isWork' => 0
+                            ]);
+                            exit();
+                        }
+                    }
+                    $loginData = [
+                        'password' => $this->password,
+                        'rememberme' => 'on',
+                        'token' => $token,
+                        'username' => $this->email
+                    ];
+                    $result = $this->request('https://my.freenom.com/dologin.php', $loginData);
+                    $this->request('https://my.freenom.com/clientarea.php');
+                    
                     FreenomAccounts::where(['id' => $account->id])->update([
                         'isWork' => 1,
                         'countStarts' => $count + 1
@@ -154,32 +180,6 @@ class FreenomWebReg extends Command
     
     protected function logic()
     {
-        //Login:
-        $token = '';
-        $i = 0;
-        while ($token == '') {
-            $result = $this->request('https://my.freenom.com/clientarea.php');
-            preg_match('/<input type="hidden" name="token" value="(.*?)" \/>/mis',
-                $result[1], $results);
-            $token = @$results[1];
-            $i++;
-            if ($i > 10) {
-                echo "No isset token";
-                FreenomAccounts::where(['id' => $this->accountId])->update([
-                    'isWork' => 0
-                ]);
-                exit();
-            }
-        }
-        $loginData = [
-            'password' => $this->password,
-            'rememberme' => 'on',
-            'token' => $token,
-            'username' => $this->email
-        ];
-        $result = $this->request('https://my.freenom.com/dologin.php', $loginData);
-        $this->request('https://my.freenom.com/clientarea.php');
-        
         //Search:
         $this->request('https://my.freenom.com/domains.php');
         $searchDomainData = [
