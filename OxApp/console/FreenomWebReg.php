@@ -145,7 +145,7 @@ class FreenomWebReg extends Command
                     $result = $this->request('https://my.freenom.com/dologin.php', $loginData);
                     $this->request('https://my.freenom.com/clientarea.php');
                     
-                    $randDomains = mt_rand(15, 20);
+                    $randDomains = mt_rand(5, 8);
                     for ($i = 0; $i < $randDomains; $i++) {
                         if (mt_rand(0, 4) == 1) {
                             $uname = $faker->userName . rand(0, 2017);
