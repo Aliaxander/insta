@@ -230,11 +230,37 @@ class FreenomWebReg extends Command
         ]);
         
         $result = $this->request('https://my.freenom.com/cart.php?a=view');
+        $this->request('https://my.freenom.com/clientarea.php?setcheckout=true');
+        $token = '';
+        $i = 0;
+        while ($token == '') {
+            $result = $this->request('https://my.freenom.com/clientarea.php');
+            preg_match('/<input type="hidden" name="token" value="(.*?)" \/>/mis',
+                $result[1], $results);
+            $token = @$results[1];
+            $i++;
+            if ($i > 10) {
+                echo "No isset token";
+                FreenomAccounts::where(['id' => $this->accountId])->update([
+                    'isWork' => 0
+                ]);
+                die('No login');
+            }
+        }
+        $loginData = [
+            'password' => $this->password,
+            'rememberme' => 'on',
+            'token' => $token,
+            'username' => $this->email
+        ];
+        $this->request('https://my.freenom.com/dologin.php', $loginData);
+        
+        $result = $this->request('https://my.freenom.com/cart.php?a=view');
         echo "Cart view:\n";
-        print_r($result);
         preg_match('/<input type="hidden" name="token" value="(.*?)" \/>/mis',
             $result[1], $results);
         $token = $results[1];
+        
         echo "setToken:{$token}\n";
         $fpGetBlackbox = $this->request('https://my.freenom.com/templates/freenom/js/static_wdp.js');
         $ioGetBlackbox = $this->request('https://mpsnare.iesnare.com/snare.js');
@@ -377,7 +403,6 @@ class FreenomWebReg extends Command
                 curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
             }
             
-            curl_setopt($ch, CURLOPT_INTERFACE, "5.196.146.51");
             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
             curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
             curl_setopt($ch, CURLOPT_COOKIEFILE, "/home/insta/cookies/freenom/" . $this->username . '-cookies.dat');
