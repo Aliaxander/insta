@@ -231,20 +231,12 @@ class FreenomWebReg extends Command
         
         $result = $this->request('https://my.freenom.com/cart.php?a=view');
         $this->request('https://my.freenom.com/clientarea.php?setcheckout=true');
-        $token = '';
-        $i = 0;
-        while ($token == '') {
-            $result = $this->request('https://my.freenom.com/clientarea.php');
-            preg_match('/<input type="hidden" name="token" value="(.*?)" \/>/mis',
-                $result[1], $results);
-            $token = @$results[1];
-            $i++;
-            if ($i > 10) {
-                FreenomAccounts::where(['id' => $this->accountId])->update([
-                    'isWork' => 0
-                ]);
-            }
-        }
+        
+        $result = $this->request('https://my.freenom.com/clientarea.php');
+        preg_match('/<input type="hidden" name="token" value="(.*?)" \/>/mis',
+            $result[1], $results);
+        $token = @$results[1];
+        
         if (empty($token)) {
             $loginData = [
                 'password' => $this->password,
