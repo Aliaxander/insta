@@ -166,6 +166,7 @@ class FreenomWebReg extends Command
                         } else {
                             Domains::add(['domain' => $this->domain]);
                         }
+                        sleep(rand(5, 10));
                     }
                     FreenomAccounts::where(['id' => $account->id])->update([
                         'isWork' => 0
