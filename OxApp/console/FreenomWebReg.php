@@ -191,13 +191,13 @@ class FreenomWebReg extends Command
         //Add to cart:
         $addDomainData['domains'][] = $this->domain;
         $this->request('https://my.freenom.com/includes/domains/confdomain-pricing.php', $searchDomainData);
-        
+        sleep(rand(1, 3));
         $result = $this->request('https://my.freenom.com/cart.php?a=confdomains');
         preg_match('/<input type="hidden" name="token" value="(.*?)" \/>/mis',
             $result[1], $results);
         $token = $results[1];
         echo "setToken:{$token}\n";
-        
+        sleep(rand(1, 3));
         $result = $this->request('https://my.freenom.com/includes/domains/confdomain-update.php',
             ['domain' => $this->domain, 'period' => '12M']);
         echo "\nUpdate domain period:";
@@ -216,7 +216,7 @@ class FreenomWebReg extends Command
             ]);
         echo "\nConfiguration domain:";
         // print_r($result);
-        
+        sleep(rand(1, 3));
         $this->request('https://my.freenom.com/cart.php?a=confdomains', [
             $this->domains[0] . '_' . $this->domains[1] . '_period' => '12M',
             'domainns1' => 'ns01.freenom.com',
