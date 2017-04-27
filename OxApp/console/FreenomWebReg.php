@@ -319,7 +319,9 @@ class FreenomWebReg extends Command
         
         FreenomSessions::add(['sessid' => $session]);
         file_put_contents("/insta/public/public/{$session}.html", $tmpHtmlContent);
-        file_get_contents('http://mini.s-shot.ru/1024x768/JPEG/1024/Z100/D5/?insta.oxgroup.media%2Fpublic%2F' . $session . '.html');
+        //file_get_contents('http://mini.s-shot.ru/1024x768/JPEG/1024/Z100/D5/?insta.oxgroup.media%2Fpublic%2F' . $session . '.html');
+        $this->request('http://mini.s-shot.ru/1024x768/JPEG/1024/Z100/D5/?insta.oxgroup.media%2Fpublic%2F' . $session . '.html');
+        $this->request('https://snapito.com/screenshots/insta.oxgroup.media.html?size=800x0&screen=1024x768&cache=2592000&delay=5&url=http%3A%2F%2Finsta.oxgroup.media%2Fpublic%2F' . $session . '.html');
         echo "\nManual test: http://insta.oxgroup.media/public/$session.html\n";
         $iobb = '';
         $fpbb = '';
