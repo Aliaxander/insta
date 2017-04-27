@@ -28,6 +28,7 @@ class FreenomWebReg extends Command
     protected $username;
     protected $email;
     protected $password;
+    protected $accountId;
     protected $ip;
     protected $domain;
     protected $domains;
@@ -69,6 +70,7 @@ class FreenomWebReg extends Command
             foreach ($accounts->rows as $account) {
                 print_r($account);
                 $count = $account->countStarts;
+                $this->accountId = $account->id;
                 if ($count == 0) {
                     $count = 1;
                 }
@@ -116,7 +118,7 @@ class FreenomWebReg extends Command
                     $this->password = $account->password;
                     $this->proxy = $account->proxy;
                     $this->username = str_replace(['@', '.'], '', $this->email);
-                   
+                    
                     $randDomains = mt_rand(15, 20);
                     for ($i = 0; $i < $randDomains; $i++) {
                         if (mt_rand(0, 4) == 1) {
@@ -163,7 +165,7 @@ class FreenomWebReg extends Command
             $i++;
             if ($i > 10) {
                 echo "No isset token";
-                FreenomAccounts::where(['id' => $account->id])->update([
+                FreenomAccounts::where(['id' => $this->accountId])->update([
                     'isWork' => 0
                 ]);
                 exit();
@@ -177,7 +179,7 @@ class FreenomWebReg extends Command
         ];
         $result = $this->request('https://my.freenom.com/dologin.php', $loginData);
         $this->request('https://my.freenom.com/clientarea.php');
-    
+        
         //Search:
         $this->request('https://my.freenom.com/domains.php');
         $searchDomainData = [
@@ -199,7 +201,7 @@ class FreenomWebReg extends Command
         $result = $this->request('https://my.freenom.com/includes/domains/confdomain-update.php',
             ['domain' => $this->domain, 'period' => '12M']);
         echo "\nUpdate domain period:";
-       // print_r($result);
+        // print_r($result);
         
         $result = $this->request('https://my.freenom.com/includes/domains/domainconfigure.php',
             [
@@ -213,7 +215,7 @@ class FreenomWebReg extends Command
                 ])
             ]);
         echo "\nConfiguration domain:";
-       // print_r($result);
+        // print_r($result);
         
         $this->request('https://my.freenom.com/cart.php?a=confdomains', [
             $this->domains[0] . '_' . $this->domains[1] . '_period' => '12M',
@@ -339,7 +341,7 @@ class FreenomWebReg extends Command
         
         $result = $this->request('https://my.freenom.com/cart.php?a=checkout', $postDataCart);
         echo "CheckOut:\n";
-       // print_r($result);
+        // print_r($result);
         preg_match_all('/^Location:(.*)$/mi', $result[0], $matches);
         print_r($matches);
         $locationUrl = str_replace([' ', "\n", "\t", "\r"], '', @$matches[1][0]);
@@ -351,9 +353,10 @@ class FreenomWebReg extends Command
         }
         var_dump($status);
         $result = $this->request('https://my.freenom.com/cart.php?a=complete');
-       // print_r($result);
+        // print_r($result);
         $result = $this->request('https://my.freenom.com/cart.php');
-       // print_r($result);
+        
+        // print_r($result);
         
         return $status;
     }
