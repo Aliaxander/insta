@@ -133,7 +133,7 @@ class FreenomWebReg extends Command
                             FreenomAccounts::where(['id' => $this->accountId])->update([
                                 'isWork' => 0
                             ]);
-                            exit();
+                            die('No login');
                         }
                     }
                     $loginData = [
