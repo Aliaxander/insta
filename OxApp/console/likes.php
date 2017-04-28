@@ -131,7 +131,7 @@ class Likes extends Command
             
             $status = true;
             while ($status = true) {
-                $userTest = Users::find(['id' => $user->id, 'ban' => 0]);
+                $userTest = Users::find(['id' => $user->id, 'ban' => 0, 'login' => 1]);
                 if ($userTest->count === 0) {
                     die();
                 }
