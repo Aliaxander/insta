@@ -207,18 +207,19 @@ class FreenomWebReg extends Command
         $result = $this->request('https://my.freenom.com/includes/domains/domainconfigure.php',
             [
                 'data' => json_encode([
-                    $this->domain => [
-                        'dn1'=>'a.dnspod.com',
-                        'di1'=>'',
-                        'dn2'=>'b.dnspod.com',
-                        'di2'=>''
-                    ]
+                    $this->domain =>
 //                        [
-//                        'hn1' => $this->domain,
-//                        'hi1' => $this->ip,
-//                        'hn2' => 'www.' . $this->domain,
-//                        'hi2' => $this->ip
+//                        'dn1'=>'a.dnspod.com',
+//                        'di1'=>'',
+//                        'dn2'=>'b.dnspod.com',
+//                        'di2'=>''
 //                    ]
+                        [
+                            'hn1' => $this->domain,
+                            'hi1' => $this->ip,
+                            'hn2' => 'www.' . $this->domain,
+                            'hi2' => $this->ip
+                        ]
                 ])
             ]);
         echo "\nConfiguration domain:";
