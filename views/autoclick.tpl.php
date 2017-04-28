@@ -8,5 +8,11 @@
     });
 </script>
 {% if sess %}
-<iframe width="1000" height="1000" src="http://insta.oxgroup.media/public/{{ sess }}.html"></iframe>
+<script>
+    $(document).ready(function () {
+        $("#result").load("http://insta.oxgroup.media/public/{{ sess }}.htm");
+    }
+</script>
+<div id="result"></div>
+<!--<iframe width="1000" height="1000" src="http://insta.oxgroup.media/public/{{ sess }}.html"></iframe>-->
 {% endif %}
