@@ -11,6 +11,7 @@ namespace Acme\Console\Command;
 use InstagramAPI\Checkpoint;
 use OxApp\helpers\IgApi;
 use OxApp\models\InstBase;
+use OxApp\models\SystemSettings;
 use OxApp\models\Users;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -100,34 +101,36 @@ class Likes extends Command
                 Users::where(['id' => $user->id])->update(['csrftoken' => $tokenResult]);
             }
             //$api->login($user->guid, $user->phoneId, $user->deviceId, $user->password);
-            //Follow my accouns:
-            $usersFollow = Users::orderBy(["id" => 'desc'])->find([
-                'login/in' => [1, 2],
-                'ban' => 0,
-                'userTask' => 3,
-                'accountId/>' => 0,
-                'id/!=' => $user->id,
-            ]);
-            if ($usersFollow->count > 0) {
-                $array = $usersFollow->rows;
-                if ($usersFollow->count < 8) {
-                    $count = $usersFollow->count;
-                } else {
-                    $count = 8;
-                }
-                $randUsers = mt_rand(1, $count);
-                for ($i = 0; $i < $randUsers; $i++) {
-                    $rand = mt_rand(0, count($array));
-                    $randUser = $array[$rand];
-                    sleep(rand(1, 3));
-                    print_r($api->follow($randUser->accountId));
-                    $followCou++;
-                    $requestCou += 2;
-                    unset($array[$rand]);
-                    sleep(rand(10, 20));
-                }
-            }
-            
+
+             //Follow my accouns:
+                        $usersFollow = Users::orderBy(["id" => 'desc'])->find([
+                            'login/in' => [1, 2],
+                            'ban' => 0,
+                            'userTask' => 3,
+                            'accountId/>' => 0,
+                            'id/!=' => $user->id,
+                        ]);
+                        if ($usersFollow->count > 0) {
+                            $array = $usersFollow->rows;
+                            if ($usersFollow->count < 8) {
+                                $count = $usersFollow->count;
+                            } else {
+                                $count = 8;
+                            }
+                            $randUsers = mt_rand(1, $count);
+                            for ($i = 0; $i < $randUsers; $i++) {
+                                $rand = mt_rand(0, count($array));
+                                $randUser = $array[$rand];
+                                sleep(rand(1, 3));
+                                print_r($api->follow($randUser->accountId));
+                                $followCou++;
+                                $requestCou += 2;
+                                unset($array[$rand]);
+                                sleep(rand(10, 20));
+                            }
+                        }
+
+
             $status = true;
             while ($status = true) {
                 $userTest = Users::find(['id' => $user->id, 'ban' => 0]);
@@ -182,22 +185,27 @@ class Likes extends Command
                         //                        echo "\n\nDone";
                         //                         Users::where(['id' => $user->id])->update(['ban' => 1]);
                         die();
-                    } elseif (isset($result['1']['message']) && $result['1']['message'] === 'Not authorized to view user') {
-                        //                                                sleep(rand(10, 20));
-                        //                                                print_r($api->follow($acc));
-                        //                                                InstBase::where(['id' => $accRow->rows[0]->id])->update(['follow' => round($accRow->rows[0]->follow + 1)]);
-                        //                                                $followCou++;
-                        //                                                $requestCou += 2;
+                    } elseif (isset($result['1']['message']) && $result['1']['message'] === 'Not authorized to view user' && mt_rand(0,
+                            1) == 1 && SystemSettings::get('massFollow') == 1
+                    ) {
+                        sleep(rand(SystemSettings::get('timeOutMin'), SystemSettings::get('timeOutMax')));
+                        print_r($api->follow($acc));
+                        InstBase::where(['id' => $accRow->rows[0]->id])->update(['follow' => round($accRow->rows[0]->follow + 1)]);
+                        $followCou++;
+                        $requestCou += 2;
                     } elseif (!empty($result[1]['items'])) {
                         sleep(rand(0, 1));
                         $rows = $result[1]['items'];
-                        $like1 = @$result[1]['items'][mt_rand(0, count($rows) - 1)]['id'];
+                        $rowMedia = @$result[1]['items'][mt_rand(0, count($rows) - 1)];
+                        $like1 = $rowMedia['id'];
+                        $userNameLike = $rowMedia['user']['username'];
+                        $mediaType = $rowMedia['media_type'];
                         if ($like1) {
                             InstBase::where(['id' => $accRow->rows[0]->id])->update(['likes' => round($accRow->rows[0]->likes + 1)]);
                             $createResult = '';
                             $i = 0;
                             while ($createResult === '') {
-                                $likes = $api->like($like1);
+                                $likes = $api->like($like1, $acc, $userNameLike, $mediaType);
                                 $createResult = $likes[1];
                                 if ($i === 3) {
                                     $createResult = false;
@@ -212,7 +220,7 @@ class Likes extends Command
                             }
                             $likeCou++;
                             $requestCou += 4;
-                            sleep(rand(10, 25));
+                            sleep(mt_rand(SystemSettings::get('timeOutMin'), SystemSettings::get('timeOutMax')));
                         }
                     } else {
                         $result = $api->getRecentActivityAll();
@@ -221,7 +229,7 @@ class Likes extends Command
                             die("Account banned");
                         }
                     }
-                    if (rand(0, 40) == 10) {
+                    if (mt_rand(0, 40) == 10) {
                         $api->getRecentActivityAll();
                     }
                     if ($requestCou !== 0) {
@@ -236,14 +244,14 @@ class Likes extends Command
                     $folLikSum = round($likeCou + $followCou);
                     
                     $resultLikesForTimeout = $folLikSum / $hour;
-                    if ($resultLikesForTimeout > rand(450, 500) && $resultLikesForTimeout < 600) {
+                    if ($resultLikesForTimeout > mt_rand(450, 500) && $resultLikesForTimeout < 600) {
                         $hour += 1;
                         Users::where(['id' => $user->id])->update(['hour' => $hour]);
                         echo "Sleep";
-                        sleep(rand(6000, 15000));
+                        sleep(mt_rand(2000, 9000));
                     }
                     if ($hour >= 4 && $likeCou > 700) {
-                        sleep(rand(500000, 600000));
+                        sleep(mt_rand(70000, 87000));
                     }
                 }
             }
