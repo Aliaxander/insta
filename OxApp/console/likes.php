@@ -104,7 +104,6 @@ class Likes extends Command
             
             //Follow my accouns:
             $usersFollow = Users::orderBy(["id" => 'desc'])->find([
-                'login/in' => [1, 2],
                 'ban' => 0,
                 'userTask' => 3,
                 'accountId/>' => 0,
@@ -113,7 +112,7 @@ class Likes extends Command
             if ($usersFollow->count > 0) {
                 $array = $usersFollow->rows;
                 if ($usersFollow->count < 8) {
-                    $count = $usersFollow->count-1;
+                    $count = $usersFollow->count - 1;
                 } else {
                     $count = 8;
                 }

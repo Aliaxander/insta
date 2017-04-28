@@ -99,7 +99,7 @@ class EditProfile extends Command
                     $i = 0;
                     while ($loginResult === '') {
                         $login = $api->login($user->guid, $user->phoneId, $user->deviceId, $user->password);
-                        $loginResult = $login[1];
+                        $loginResult = @$login[1];
                         if ($i === 5) {
                             $loginResult = false;
                         }
