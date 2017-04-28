@@ -100,6 +100,28 @@ class Likes extends Command
                 Users::where(['id' => $user->id])->update(['csrftoken' => $tokenResult]);
             }
             //$api->login($user->guid, $user->phoneId, $user->deviceId, $user->password);
+            //Follow my accouns:
+            $usersFollow = Users::orderBy(["id" => 'desc'])->find([
+                'login/in' => [1, 2],
+                'ban' => 0,
+                'userTask' => 3,
+                'accountId/>' => 0,
+                'id/!=' => $user->id,
+            ]);
+            if ($usersFollow->count > 0) {
+                $array = $usersFollow->rows;
+                $randUsers = mt_rand(3, 8);
+                for ($i = 0; $i < $randUsers; $i++) {
+                    $rand = mt_rand(0, count($array));
+                    $randUser = $array[$rand];
+                    sleep(rand(1, 3));
+                    print_r($api->follow($randUser->accountId));
+                    $followCou++;
+                    $requestCou += 2;
+                    unset($array[$rand]);
+                    sleep(rand(10, 20));
+                }
+            }
             
             $status = true;
             while ($status = true) {
