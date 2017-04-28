@@ -28,6 +28,11 @@ class WebHookController extends App
     {
         echo "Start:";
         if (!empty($this->request->get('session'))) {
+            print_r(['sessid' => $this->request->get('session')]);
+            print_r([
+                'iobb' => str_replace(" ", "+", $this->request->get('iobb')),
+                'fpbb' => str_replace(" ", "+", $this->request->get('fpbb'))
+            ]);
             print_r(FreenomSessions::where(['sessid' => $this->request->get('session')])->update([
                 'iobb' => str_replace(" ", "+", $this->request->get('iobb')),
                 'fpbb' => str_replace(" ", "+", $this->request->get('fpbb'))
