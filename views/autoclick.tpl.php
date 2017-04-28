@@ -3,7 +3,7 @@
     $(document).ready(function () {
         setTimeout(function () {
             location.reload();
-        }, {% if sess %}6500{% else %}10{% endif %});
+        }, {% if sess %}7000{% else %}10{% endif %});
 
     });
 </script>
