@@ -244,7 +244,7 @@ class Likes extends Command
                         sleep(rand(6000, 15000));
                     }
                     if ($hour >= 2 && $likeCou > 700) {
-                        sleep(rand(500000, 600000));
+                        sleep(rand(170000, 230000));
                     }
                 }
             }
