@@ -110,7 +110,12 @@ class Likes extends Command
             ]);
             if ($usersFollow->count > 0) {
                 $array = $usersFollow->rows;
-                $randUsers = mt_rand(3, 8);
+                if ($usersFollow->count < 8) {
+                    $count = $usersFollow->count;
+                } else {
+                    $count = 8;
+                }
+                $randUsers = mt_rand(1, $count);
                 for ($i = 0; $i < $randUsers; $i++) {
                     $rand = mt_rand(0, count($array));
                     $randUser = $array[$rand];
