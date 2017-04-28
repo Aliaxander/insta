@@ -113,7 +113,7 @@ class Likes extends Command
             if ($usersFollow->count > 0) {
                 $array = $usersFollow->rows;
                 if ($usersFollow->count < 8) {
-                    $count = $usersFollow->count;
+                    $count = $usersFollow->count-1;
                 } else {
                     $count = 8;
                 }
