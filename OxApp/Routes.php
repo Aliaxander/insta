@@ -22,6 +22,9 @@ Router::rout('/descriptionProfile')->app('DescriptionProfile')->save();
 Router::rout('/testMacros')->app('TestMacros')->save();
 Router::rout('/deleteProfile/:num=>id')->app('DeleteProfile')->save();
 
+
+Router::rout('/autoclick')->app('AutoClick')->save();
+
 ///webhook
 Router::rout('/webhook')->app('WebHook')->save();
 
