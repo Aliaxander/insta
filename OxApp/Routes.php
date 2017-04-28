@@ -6,11 +6,12 @@
  * Time: 12:49
  */
 
+use Ox\Router\RouteMiddleware;
 use Ox\Router\Router;
 use OxApp\helpers\DefaultRequest;
 
 Router::$requestDriver = DefaultRequest::getRequest();
-
+RouteMiddleware::$debug=true;
 Router::addMiddlewareGroup('Json', array(
     'ToJson' => [],
 ));
