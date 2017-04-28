@@ -24,7 +24,7 @@ class AutoClickController extends App
     {
         $clickUrls = FreenomSessions::limit([0 => 1])->find(['iobb' => '']);
         
-        View::build('autoclick', ['sess' => @$clickUrls->rows[0]->sessId]);
+        View::build('autoclick', ['sess' => @$clickUrls->rows[0]->sessid]);
     }
     
 }
