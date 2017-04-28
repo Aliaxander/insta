@@ -14,7 +14,7 @@ use OxApp\models\Users;
 
 class IgApi
 {
-    
+
     public $username;
     public $userAgent = 'Instagram 9.7.0 Android (17/4.2.2; 240dpi; 480x800; samsung; GT-S7270; logan; hawaii_ss_logan; ru_RU)';
     public $proxy = '46.105.124.207:5016';
@@ -29,7 +29,7 @@ class IgApi
     //protected $igKey = 'b03e0daaf2ab17cda2a569cace938d639d1288a1197f9ecf97efd0a4ec0874d7';
     protected $igVersion = '4';
     public $csrftoken;
-    
+
     public function __construct()
     {
         $device = new Device('9.7.0', 'en_US');
@@ -37,10 +37,10 @@ class IgApi
         //        $device = new Device('10.15.0', 'en_US');
         //        $this->userAgent = UserAgent::buildUserAgent('10.15.0', 'en_US', $device);
     }
-    
+
     public function getFeed($feedId, $maxId = '')
     {
-        
+
         $tst = $this->request("friendships/show/" . $feedId . "/");
         if (@$tst['1']['is_private'] == 1) {
             $result = [];
@@ -60,27 +60,40 @@ class IgApi
                 $result = $this->request("feed/user/" . $feedId . "/" . $maxId);
             }
         }
-        
+        $this->request("users/" . $feedId . "/info/");
         if (empty($result) && !empty($result2)) {
             $result = $result2;
         }
-        
+
         return $result;
     }
-    
-    public function like($mediaId)
+
+    public function like($mediaId, $userId, $userName, $moduleId)
     {
+        $moduleName = 'photo_view_profile';
+        switch ($moduleId) {
+            case (1):
+                $moduleName = 'photo_view_profile';
+                break;
+            case (2):
+                $moduleName = 'video_view_profile';
+                break;
+        }
         $data = [
+            'module_name' => $moduleName,
+            'media_id' => $mediaId,
+            '_csrftoken' => $this->csrftoken,
+            'username' => $userName,
+            'user_id' => $userId,
             '_uid' => $this->accountId,
             '_uuid' => $this->guid,
-            '_csrftoken' => $this->csrftoken,
-            'media_id' => $mediaId
+
         ];
         $data = json_encode($data);
-        
+
         return $this->request('media/' . $mediaId . '/like/', $data);
     }
-    
+
     public function follow($followUserId)
     {
         $data = [
@@ -92,15 +105,15 @@ class IgApi
         $data = json_encode($data);
         $result = $this->request('friendships/create/' . $followUserId . '/', $data);
         $this->request('feed/user/' . $followUserId . '/');
-        
+
         return $result;
     }
-    
+
     public function getRecentActivityAll()
     {
         return $this->request('news/inbox/?limited_activity=true&show_su=true');
     }
-    
+
     public function login($guid, $phoneId, $device_id, $password)
     {
         if (file_exists("/home/insta/cookies/" . $this->username . "-cookies.dat")) {
@@ -114,7 +127,7 @@ class IgApi
         while ($tokenResult === '') {
             $sync = $this->sync();
             print_r($sync);
-            
+
             if (preg_match('#Set-Cookie: csrftoken=([^;]+)#', $sync[0], $token)) {
                 $tokenResult = $token[1];
             }
@@ -134,27 +147,27 @@ class IgApi
                 Users::where(['guid' => $guid, 'phoneId' => $phoneId, 'deviceId' => $device_id])->update(['ban' => 1]);
                 die("Account banned");
             }
-            
+
             $i++;
         }
         if ($tokenResult == false || $tokenResult == '') {
             Users::where(['guid' => $guid, 'phoneId' => $phoneId, 'deviceId' => $device_id])->update(['ban' => 2]);
             exit('empty token');
         }
-        
+
         $this->csrftoken = $tokenResult;
         $this->fetchHeadersSingUp();
-        
+
         $data = [
             'phone_id' => $phoneId,
-            '_csrftoken' => $this->csrftoken,
+            //'_csrftoken' => $this->csrftoken,
             'username' => $this->username,
             'guid' => $this->guid,
             'device_id' => $device_id,
             'password' => $password,
             'login_attempt_count' => 0
         ];
-        
+
         $data = json_encode($data);
         $resultLogin = '';
         $i = 0;
@@ -169,6 +182,8 @@ class IgApi
             }
             $i++;
         }
+        $this->request('feed/timeline/?is_prefetch=0&seen_posts=&phone_id=' . $this->phone_id . '&battery_level=' . mt_rand(23,
+                100) . '&timezone_offset=3600&is_pull_to_refresh=0&unseen_posts=&is_charging=' . mt_rand(0, 1));
         if (@$resultLogin['error_type'] === "inactive user" || @$resultLogin['error_type'] === 'invalid_user') {
             Users::where(['guid' => $guid, 'phoneId' => $phoneId, 'deviceId' => $device_id])->update(['ban' => 1]);
             die("Account banned");
@@ -208,7 +223,7 @@ class IgApi
             //
             //                        print_r($checkPoint->request('https://i.instagram.com/challenge/?next=instagram://checkpoint/dismiss'));
             //                        print_r($checkPoint->request('https://www.instagram.com/challenge/?next=instagram://checkpoint/dismiss'));
-            
+
             $result = $checkPoint->request($newsInbox[1]['checkpoint_url']);
             if (preg_match("/Your phone number will be added\b/i", $result[1])) {
                 Users::where(['guid' => $guid, 'phoneId' => $phoneId, 'deviceId' => $device_id])->update(['ban' => 3]);
@@ -220,32 +235,11 @@ class IgApi
         } elseif (@$newsInbox[1]['message'] === 'login_required') {
             Users::where(['guid' => $guid, 'phoneId' => $phoneId, 'deviceId' => $device_id])->update(['ban' => 1]);
         }
-        
+
         return $resultLogin;
     }
-    
-    public function editProfile()
-    {
-        print_r($this->request('accounts/current_user/'));
-        sleep(rand(1, 4));
-        $data = [
-            '_uid' => $this->accountId,
-            '_uuid' => $this->guid,
-            '_csrftoken' => $this->csrftoken,
-            'external_url' => '',
-            'phone_number' => '',
-            'username' => $this->username,
-            'first_name' => 'Susan Zulauf',
-            'email' => 'glover.jayden46938@klocko.com',
-            'biography' => '!! Yeee. Power by OxGroup !!',
-            'gender' => 2,
-            // 'is_private' => true
-        ];
-        $data = json_encode($data);
-        $resultEdit = $this->request('accounts/edit_profile/', $data);
-        print_r($resultEdit);
-    }
-    
+
+
     public function changeProfilePicture($photo)
     {
         $resultEdit = true;
@@ -254,10 +248,10 @@ class IgApi
                 $photo);
             print_r($resultEdit);
         }
-        
+
         return $resultEdit;
     }
-    
+
     public function uploadPhoto($photo)
     {
         if (!empty($photo)) {
@@ -265,7 +259,7 @@ class IgApi
             print_r($resultEdit);
         }
     }
-    
+
     public function edit($biography, $url, $phoneId, $firstName, $email)
     {
         $tokenResult = '';
@@ -273,7 +267,7 @@ class IgApi
         while ($tokenResult === '') {
             $sync = $this->sync();
             print_r($sync);
-            
+
             if (preg_match('#Set-Cookie: csrftoken=([^;]+)#', $sync[0], $token)) {
                 $tokenResult = $token[1];
             }
@@ -285,27 +279,36 @@ class IgApi
         if ($tokenResult == false || $tokenResult == '') {
             die('no token');
         }
-        
+
         $this->csrftoken = $tokenResult;
         sleep(rand(0, 2));
+
+        print_r($this->request('accounts/current_user/?edit=true'));
+        sleep(rand(1, 4));
+        /*
+         * {"external_url":"https://price.yt/1f972c0d","gender":"3","phone_number":"","_csrfto
+ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abgymnic","_uid":"5374297804","biography":"Уникальный пояс для тренировки
+мышц","_uuid":"419fcce5-b663-4b31-80c0-5586609f730f","email":"bagirus11@gmail.com"}
+         */
         $data = [
-            'phone_id' => $phoneId,
+            'external_url' => $url,
+            'gender' => 2,
+            'phone_number' => '',
             '_csrftoken' => $this->csrftoken,
             'username' => $this->username,
-            '_uid' => $this->accountId,
             'first_name' => $firstName,
-            'email' => $email,
+            '_uid' => $this->accountId,
+            '_uuid' => $this->guid,
             'biography' => $biography,
-            'gender' => 2,
-            'external_url' => $url,
+            'email' => $email,
             //'is_private' => true
         ];
-        
+
         $data = json_encode($data);
-        
+
         return $this->request('accounts/edit_profile/', $data);
     }
-    
+
     public function create()
     {
         $domainMail = [
@@ -336,7 +339,7 @@ class IgApi
             if (rand(0, 1) == 1) {
                 $this->name .= " " . $faker->lastName;
             }
-            
+
             //$email = $faker->email;
             if (mt_rand(0, 2) == 0) {
                 $email = explode("@", $faker->email);
@@ -362,7 +365,7 @@ class IgApi
             $this->username = $user->results[0]->name->first . $user->results[0]->name->last . rand(1100,
                     2017);//$user->results[0]->login->username . rand(0, 9999);
             $this->password = strtolower(substr(md5(number_format(microtime(true), 7, '', '')), mt_rand(15, 20)));
-            
+
             $this->name = $user->results[0]->name->first;// . " " . $faker->lastName;
             if (rand(0, 1) == 1) {
                 $this->name .= " " . $user->results[0]->name->last;
@@ -372,14 +375,14 @@ class IgApi
         $usernameTmp2 = substr($usernameTmp1, 0, -round(1, mb_strlen($usernameTmp1) - 3));
         $usernameTmp3 = substr($usernameTmp2, 0, -round(1, mb_strlen($usernameTmp2) - 3));
         $usernameTmp4 = substr($usernameTmp3, 0, -round(1, mb_strlen($usernameTmp3) - 3));
-        
+
         $megaRandomHash = md5(number_format(microtime(true), 7, '', ''));
         $this->device_id = 'android-' . strtolower(substr($megaRandomHash, 16));
         $this->phone_id = strtolower($this->genUuid());
         $waterfall_id = strtolower($this->genUuid());
         $this->guid = strtolower($this->genUuid());
         $qe_id = strtolower($this->genUuid());
-        
+
         echo "Generate DATA:
         uName: {$this->username}
         name: {$this->name}
@@ -395,13 +398,13 @@ class IgApi
         proxy: {$this->proxy}
         Start...
         ";
-        
+
         $tokenResult = '';
         $i = 0;
         while ($tokenResult === '') {
             $sync = $this->sync();
             print_r($sync);
-            
+
             if (preg_match('#Set-Cookie: csrftoken=([^;]+)#', $sync[0], $token)) {
                 $tokenResult = $token[1];
             }
@@ -414,10 +417,10 @@ class IgApi
             die('empty token');
         }
         $this->csrftoken = $tokenResult;
-        
+
         sleep(rand(5, 15));
         $checkEmail = $this->checkEmail($email, $qe_id, $waterfall_id);
-        
+
         print_r($checkEmail);
         if (isset($checkEmail[1]['message']) && $checkEmail[1]['message'] == 'Sorry, an error occured') {
             die('Error. Ip ban?');
@@ -428,7 +431,7 @@ class IgApi
         while ($singTokenResult === '') {
             $token = $this->fetchHeadersSingUp();
             print_r($token);
-            
+
             if (preg_match('#Set-Cookie: csrftoken=([^;]+)#', $token[0], $token)) {
                 $singTokenResult = $token[1];
             }
@@ -441,7 +444,7 @@ class IgApi
             die('empty sigKey token');
         }
         $this->csrftoken = $singTokenResult;
-        
+
         if (rand(0, 1) == 1) {
             sleep(rand(5, 10));
             print_r($this->usernameSuggestions($usernameTmp4, $email, $waterfall_id));
@@ -452,7 +455,7 @@ class IgApi
         while ($singTokenResult === '') {
             $token = $this->fetchHeadersSingUp();
             print_r($token);
-            
+
             if (preg_match('#Set-Cookie: csrftoken=([^;]+)#', $token[0], $token)) {
                 $singTokenResult = $token[1];
             }
@@ -465,10 +468,10 @@ class IgApi
             die('empty sigKey token');
         }
         $this->csrftoken = $singTokenResult;
-        
+
         sleep(rand(3, 5));
         print_r($this->usernameSuggestions($usernameTmp3, $email, $waterfall_id));
-        
+
         //        sleep(rand(3, 7));
         //        print_r($this->usernameSuggestions($usernameTmp2, $email, $waterfall_id));
         //
@@ -483,7 +486,7 @@ class IgApi
         // $finalName = $this->usernameSuggestions($this->username, $email, $waterfall_id);
         print_r($finalName);
         echo "SET name: " . $this->username . "\n";
-        
+
         sleep(rand(1, 6));
         //register:
         $createResult = '';
@@ -496,7 +499,7 @@ class IgApi
             }
             $i++;
         }
-        
+
         print_r($create);
         //        if (empty($create[1])) {
         //  $create = $this->createAccount($email, $waterfall_id);
@@ -547,10 +550,10 @@ class IgApi
                 'dateCreate' => '//now()//'
             ]);
         }
-        
+
         return true;
     }
-    
+
     /**
      * @param $email
      * @param $waterfall_id
@@ -573,12 +576,56 @@ class IgApi
             'password' => $this->password,
             'force_sign_up_code' => '',
         ];
-        
+
         $data = json_encode($data);
-        
+
         return $this->request('accounts/create/', $data);
     }
-    
+
+    /**
+     * @param $latitude
+     * @param $longitude
+     * @param null $query
+     * @return array
+     */
+    public function searchLocation(
+        $latitude,
+        $longitude,
+        $query = null
+    ) {
+        $data = [
+            'rank_token' => $this->rank_token,
+            'latitude' => $latitude,
+            'longitude' => $longitude,
+        ];
+        if (is_null($query)) {
+            $data = array_merge($data, ['timestamp' => time()]);
+        } else {
+            $data = array_merge($data, ['search_query' => $query]);
+        }
+        return $this->request('location_search/', $data);
+    }
+
+    /**
+     * @param $query
+     * @param null $count
+     * @return array
+     */
+    public function searchFBLocation(
+        $query,
+        $count = null
+    ) {
+        $data = [
+            'rank_token' => $this->rank_token,
+            'query' => $query,
+        ];
+        if (!is_null($count)) {
+            $data = array_merge($data, ['count' => $count]);
+        }
+
+        return $this->request('fbsearch/places/', $data);
+    }
+
     /**
      * @param $username
      * @param $email
@@ -594,10 +641,10 @@ class IgApi
             'email' => $email,
             'waterfall_id' => $waterfall_id,
         ]);
-        
+
         return $this->request('accounts/username_suggestions/', $data);
     }
-    
+
     /**
      * @return array
      */
@@ -606,7 +653,7 @@ class IgApi
         return $this->request("si/fetch_headers/?guid=" . mb_strtolower(str_replace("-", "",
                 $this->guid)) . "&challenge_type=singup");
     }
-    
+
     /**
      * @param $email
      * @param $uuid
@@ -622,10 +669,10 @@ class IgApi
             'qe_id' => $uuid,
             'waterfall_id' => $waterfall_id,
         ]);
-        
+
         return $this->request('users/check_email/', $data);
     }
-    
+
     /**
      * @return array
      */
@@ -635,10 +682,10 @@ class IgApi
             "id" => $this->guid,
             "experiments" => 'ig_android_prefill_phone_email_login_m_devices,ig_android_username_hint_copy,ig_android_ci_opt_in_at_reg,ig_android_one_click_in_old_flow,ig_android_merge_fb_and_ci_friends_page,ig_android_reg_back_dialog,ig_android_profile_photo_nux,ig_android_remove_fb_nux_if_no_fb_installed,ig_android_non_fb_sso,ig_android_mandatory_full_name,ig_android_iconless_reg,ig_android_analytics_data_loss,ig_android_prefill_phone_email_login,ig_fbns_blocked,ig_android_contact_point_triage,ig_android_remove_ci_option_for_fb_reg,ig_android_auto_submit_verification_code,ig_android_prefill_phone_number,ig_android_show_fb_social_context_in_nux,ig_fbns_push,ig_android_background_phone_confirmation,ig_android_phoneid_sync_interval,ig_android_login_language_picker'
         ]);
-        
+
         return $this->request('qe/sync/', $syncData);
     }
-    
+
     /**
      * @param      $method
      * @param null $data
@@ -728,7 +775,7 @@ class IgApi
                     ],
                 ],
             ];
-            
+
             $data = $this->buildBody($bodies, $boundary);
             $headers = [
                 'Proxy-Connection: keep-alive',
@@ -764,7 +811,7 @@ class IgApi
             curl_setopt($ch, CURLOPT_POST, true);
             curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
         }
-        
+
         $pos = strripos($this->proxy, ';');
         if ($pos === false) {
             curl_setopt($ch, CURLOPT_PROXY, $this->proxy);
@@ -775,7 +822,7 @@ class IgApi
                 curl_setopt($ch, CURLOPT_PROXYUSERPWD, $proxy[1]);
             }
         }
-        
+
         if (!empty($this->proxyAuth)) {
         }
         $resp = curl_exec($ch);
@@ -784,13 +831,13 @@ class IgApi
         $body = substr($resp, $header_len);
         curl_close($ch);
         print_r($body);
-        
+
         //print_r(json_decode($body, true));
-        
+
         return [$header, json_decode($body, true)];
     }
-    
-    
+
+
     /**
      * @param $bodies
      * @param $boundary
@@ -816,10 +863,10 @@ class IgApi
             $body .= "\r\n\r\n" . $b['data'] . "\r\n";
         }
         $body .= '--' . $boundary . '--';
-        
+
         return $body;
     }
-    
+
     /**
      * @return array
      */
@@ -833,17 +880,17 @@ class IgApi
             'clock_seq_low' => 0,
             'node' => array()
         );
-        
+
         $uuid['time_low'] = mt_rand(0, 0xffff) + (mt_rand(0, 0xffff) << 16);
         $uuid['time_mid'] = mt_rand(0, 0xffff);
         $uuid['time_hi'] = (4 << 12) | (mt_rand(0, 0x1000));
         $uuid['clock_seq_hi'] = (1 << 7) | (mt_rand(0, 128));
         $uuid['clock_seq_low'] = mt_rand(0, 255);
-        
+
         for ($i = 0; $i < 6; $i++) {
             $uuid['node'][$i] = mt_rand(0, 255);
         }
-        
+
         $uuid = sprintf(
             '%08x-%04x-%04x-%02x%02x-%02x%02x%02x%02x%02x%02x',
             $uuid['time_low'],
@@ -858,8 +905,8 @@ class IgApi
             $uuid['node'][4],
             $uuid['node'][5]
         );
-        
+
         return $uuid;
     }
-    
+
 }
