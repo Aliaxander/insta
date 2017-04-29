@@ -149,12 +149,12 @@ class EditProfile extends Command
                     //$faker = Factory::create();
                     $domain = Domains::orderBy(['id' => 'asc'])->limit([0 => 1])->find(['status' => 0]);
                     if ($domain->count == 1) {
-                        Domains::where(['id' => $domain->rows[0]->id])->update(['status' => 1]);
-                        $domain = $domain->rows[0]->domain;
-                        //                        if (rand(0, 1) == 1) {
-                        //                            $domain = "http://" . $domain;
-                        //                        }
-                        $domain = str_replace([" ", "\n", "\r", "\t"], "", $domain);
+//                        Domains::where(['id' => $domain->rows[0]->id])->update(['status' => 1]);
+//                        $domain = $domain->rows[0]->domain;
+//                        //                        if (rand(0, 1) == 1) {
+//                        //                            $domain = "http://" . $domain;
+//                        //                        }
+//                        $domain = str_replace([" ", "\n", "\r", "\t"], "", $domain);
                         $profileResult = '';
                         $i = 0;
                         while ($profileResult === '') {
@@ -174,7 +174,7 @@ class EditProfile extends Command
                             //                        $domain = "http://" . $domain;
                             //                    }
                             
-                            $profile = $api->edit($biography, $domain, $user->phoneId, $user->firstName,
+                            $profile = $api->edit($biography, '', $user->phoneId, $user->firstName,
                                 $user->email);
                             $profileResult = $profile[1];
                             if (empty($profile[1])) {
@@ -201,7 +201,7 @@ class EditProfile extends Command
                             Users::where(['id' => $user->id])->update([
                                 'login' => 1,
                                 'biography' => $biography,
-                                'url' => $domain,
+                                'url' => '',
                                 'photo' => $profile[1]['user']['profile_pic_url']
                             ]);
                         }
