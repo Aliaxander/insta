@@ -205,7 +205,8 @@ class Likes extends Command
                             $createResult = '';
                             $i = 0;
                             while ($createResult === '') {
-                                $likes = $api->like($like1, $acc, $userNameLike, $mediaType);
+                                //$likes = $api->like($like1, $acc, $userNameLike, $mediaType);
+                                $likes = $api->oldLike($like1);
                                 $createResult = $likes[1];
                                 if ($i === 3) {
                                     $createResult = false;

@@ -68,6 +68,20 @@ class IgApi
         return $result;
     }
     
+    
+    public function oldLike($mediaId)
+    {
+        $data = [
+            '_uid' => $this->accountId,
+            '_uuid' => $this->guid,
+            '_csrftoken' => $this->csrftoken,
+            'media_id' => $mediaId
+        ];
+        $data = json_encode($data);
+        
+        return $this->request('media/' . $mediaId . '/like/', $data);
+    }
+    
     public function like($mediaId, $userId, $userName, $moduleId)
     {
         $moduleName = 'photo_view_profile';
