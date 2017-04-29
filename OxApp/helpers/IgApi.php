@@ -32,8 +32,8 @@ class IgApi
 
     public function __construct()
     {
-        $device = new Device('9.7.0', 'en_US');
-        $this->userAgent = UserAgent::buildUserAgent('9.7.0', 'en_US', $device);
+        $device = new Device('9.7.0', 'ru_RU');
+        $this->userAgent = UserAgent::buildUserAgent('9.7.0', 'ru_RU', $device);
         //        $device = new Device('10.15.0', 'en_US');
         //        $this->userAgent = UserAgent::buildUserAgent('10.15.0', 'en_US', $device);
     }
