@@ -137,7 +137,7 @@ class Likes extends Command
                 if ($userTest->count === 0) {
                     die();
                 }
-                $accRow = InstBase::limit([0 => 1])->find(['status' => 0]);
+                $accRow = InstBase::orderBy(['id'=>'desc'])->limit([0 => 1])->find(['status' => 0]);
                 $acc = @preg_replace("/[^0-9]/", '', $accRow->rows[0]->account);
                 if (!empty($acc)) {
                     InstBase::where(['id' => $accRow->rows[0]->id])->update(['status' => 1]);

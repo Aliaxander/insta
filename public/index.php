@@ -46,26 +46,20 @@ require(__DIR__ . "/../OxApp/Routes.php");
 //    }
 //}
 //
-//$domains='derentot.cu.cc
-//sandritert.cu.cc
-//tarejec.cu.cc
-//fortronleft.cu.cc
-//gotwilevent.cu.cc
-//lothatsu.cu.cc
-//ratressin.cu.cc
-//herbesin.cu.cc
-//rilighrol.cu.cc
-//hersthetrol.cu.cc
-//keddingthat.cu.cc
-//justrebled.cu.cc
-//rowbetrec.cu.cc
-//patithap.cu.cc
-//misparfa.cu.cc
-//orrophis.cu.cc
-//rangehar.cu.cc
-//titbite.cu.cc
-//persotont.cu.cc
-//useretrof.cu.cc';
+//$domains='gareput.cu.cc
+//parrabne.cu.cc
+//aningonetal.cu.cc
+//sodingwass.cu.cc
+//belacron.cu.cc
+//jushathen.cu.cc
+//tedronrep.cu.cc
+//tinfortet.cu.cc
+//titrollet.cu.cc
+//wronceron.cu.cc
+//rephanled.cu.cc
+//lacranno.cu.cc
+//butrethet.cu.cc
+//orfortred.cu.cc';
 //$domains = explode("\n", $domains);
 //foreach ($domains as $domain) {
 //    $proxy = str_replace(["\n", " "], "", $domain);

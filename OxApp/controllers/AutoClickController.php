@@ -23,8 +23,12 @@ class AutoClickController extends App
     public function get()
     {
         $clickUrls = FreenomSessions::limit([0 => 1])->find(['iobb' => '']);
-        
-        View::build('autoclick', ['sess' => @$clickUrls->rows[0]->sessid]);
+        $sessid = @$clickUrls->rows[0]->sessid;
+        $data = '';
+        if (!empty($sessid)) {
+            $data = file_get_contents('http://insta.oxgroup.media/public/' . $sessid . '.html');
+        }
+        View::build('autoclick', ['sess' => $sessid, 'data' => $data]);
     }
     
 }
