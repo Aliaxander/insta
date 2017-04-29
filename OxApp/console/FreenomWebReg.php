@@ -85,7 +85,7 @@ class FreenomWebReg extends Command
                     $diff->s;
                 $hour = round($seconds / 60 / 60);
                 $work = $hour / $count;
-                if ($work >= 24) {
+                if ($work >= 12) {
                     //Login:
                     FreenomAccounts::where(['id' => $account->id])->update([
                         'isWork' => 1,
