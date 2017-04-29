@@ -66,15 +66,8 @@ class Likes extends Command
             $api->csrftoken = $user->csrftoken;
             if (!file_exists("/home/insta/cookies/" . $user->userName . "-cookies.dat") || $user->logIn === 2) {
                 echo "login account:";
-                $login=$api->login($user->guid, $user->phoneId, $user->deviceId, $user->password);
-                $checkPoint = new Checkpoint($user->userName);
-                if (isset($login[1]['checkpoint_url'])) {
-                    $result = $checkPoint->request($login[1]['checkpoint_url']);
-                    if (preg_match("/Your phone number will be added\b/i", $result[1])) {
-                        Users::where(['id' => $user->id])->update(['ban' => 3]);
-                        die("SMS BAN!");
-                    }
-                }
+                $login = $api->login($user->guid, $user->phoneId, $user->deviceId, $user->password);
+                $this->checkPoint($login, $user);
             }
             
             if (empty($user->csrftoken)) {
@@ -91,15 +84,16 @@ class Likes extends Command
                     if ($i == 10) {
                         $tokenResult = false;
                     }
-                    if ($sync[1]['message'] === 'checkpoint_required') {
-                        $checkPoint = new Checkpoint($user->userName);
-                        $checkPoint->proxy = $user->proxy;
-                        $checkPoint->accountId = $user->accountId;
-                        $checkPoint->request($sync[1]['checkpoint_url']);
-                        Users::where(['id' => $user->id])->update(['ban' => 1]);
-                        die("Account banned");
-                    }
+                    //                    if ($sync[1]['message'] === 'checkpoint_required') {
+                    //                        $checkPoint = new Checkpoint($user->userName);
+                    //                        $checkPoint->proxy = $user->proxy;
+                    //                        $checkPoint->accountId = $user->accountId;
+                    //                        $checkPoint->request($sync[1]['checkpoint_url']);
+                    //                        Users::where(['id' => $user->id])->update(['ban' => 1]);
+                    //                        die("Account banned");
+                    //                    }
                     
+                    $this->checkPoint($sync, $user);
                     $i++;
                 }
                 if ($tokenResult == false || $tokenResult == '') {
@@ -156,29 +150,27 @@ class Likes extends Command
                         $api->getRecentActivityAll();
                     }
                     $result = $api->getFeed($acc);
+                    
+                    $this->checkPoint($result, $user);
+                    
                     if (isset($result['1']['message']) && $result['1']['message'] === 'login_required') {
                         echo "login_required";
                         $login = $api->login($user->guid, $user->phoneId, $user->deviceId, $user->password);
-                        $checkPoint = new Checkpoint($user->userName);
-                        if (isset($login[1]['checkpoint_url'])) {
-                            $result = $checkPoint->request($login[1]['checkpoint_url']);
-                            if (preg_match("/Your phone number will be added\b/i", $result[1])) {
-                                Users::where(['id' => $user->id])->update(['ban' => 3]);
-                                die("SMS BAN!");
-                            }
-                        }
+                        $this->checkPoint($login, $user);
+                        //                        $checkPoint = new Checkpoint($user->userName);
+                        //                        if (isset($login[1]['checkpoint_url'])) {
+                        //                            $result = $checkPoint->request($login[1]['checkpoint_url']);
+                        //                            if (preg_match("/Your phone number will be added\b/i", $result[1])) {
+                        //                                Users::where(['id' => $user->id])->update(['ban' => 3]);
+                        //                                die("SMS BAN!");
+                        //                            }
+                        //                        }
                     } elseif (isset($result['1']['message']) && $result['1']['message'] === 'checkpoint_required') {
                         echo "\nLogout user account\n";
                         unlink("/home/insta/cookies/" . $user->userName . "-cookies.dat");
                         $login = $api->login($user->guid, $user->phoneId, $user->deviceId, $user->password);
-                        $checkPoint = new Checkpoint($user->userName);
-                        if (isset($login[1]['checkpoint_url'])) {
-                            $result = $checkPoint->request($login[1]['checkpoint_url']);
-                            if (preg_match("/Your phone number will be added\b/i", $result[1])) {
-                                Users::where(['id' => $user->id])->update(['ban' => 1]);
-                                die("SMS BAN!");
-                            }
-                        }
+                        $this->checkPoint($login, $user);
+                        
                         //                        $checkPoint = new Checkpoint($user->userName);
                         //                        $checkPoint->proxy = $user->proxy;
                         //                        $checkPoint->accountId = $user->accountId;
@@ -224,20 +216,15 @@ class Likes extends Command
                             }
                             print_r($likes);
                             $feed = $api->getFeed($acc);
-                            if (@$feed[1]['message'] === 'checkpoint_required') {
-                                Users::where(['id' => $user->id])->update(['ban' => 1]);
-                                die("Account banned");
-                            }
+                            $this->checkPoint($feed, $user);
+                            
                             $likeCou++;
                             $requestCou += 4;
                             sleep(mt_rand(SystemSettings::get('timeOutMin'), SystemSettings::get('timeOutMax')));
                         }
                     } else {
                         $result = $api->getRecentActivityAll();
-                        if (@$result[1]['message'] === 'checkpoint_required') {
-                            Users::where(['id' => $user->id])->update(['ban' => 1]);
-                            die("Account banned");
-                        }
+                        $this->checkPoint($result, $user);
                     }
                     if (mt_rand(0, 40) == 10) {
                         $api->getRecentActivityAll();
@@ -283,5 +270,24 @@ class Likes extends Command
         }
         
         return $output->writeln("Complite");
+    }
+    
+    
+    protected function checkPoint($result, $user)
+    {
+        echo 'Checkpoint Test:';
+        print_r($result);
+        if ($result['message'] === 'checkpoint_required') {
+            echo "\n!!!!!!!!!!!!!!!!!>>>>>>>>>>>>Checkpoint detected:\n";
+            $checkPoint = new Checkpoint($user->userName);
+            if (isset($result['checkpoint_url'])) {
+                $result = $checkPoint->request($result['checkpoint_url']);
+                print_r($result);
+                if (preg_match("/Your phone number will be added\b/i", $result[1])) {
+                    Users::where(['id' => $user->id])->update(['ban' => 3]);
+                    die("SMS BAN!");
+                }
+            }
+        }
     }
 }
