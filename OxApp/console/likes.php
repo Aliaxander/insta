@@ -103,34 +103,35 @@ class Likes extends Command
             //$api->login($user->guid, $user->phoneId, $user->deviceId, $user->password);
             
             //Follow my accouns:
-            $usersFollow = Users::orderBy(["id" => 'desc'])->find([
-                'ban' => 0,
-                'userTask' => 3,
-                'accountId/>' => 0,
-                'id/!=' => $user->id,
-            ]);
-            if ($usersFollow->count > 0) {
-                $array = $usersFollow->rows;
-                if ($usersFollow->count < 8) {
-                    $count = $usersFollow->count - 1;
-                } else {
-                    $count = 8;
-                }
-                $randUsers = mt_rand(1, $count);
-                for ($i = 0; $i < $randUsers; $i++) {
-                    $rand = mt_rand(0, count($array));
-                    $randUser = $array[$rand];
-                    sleep(rand(1, 3));
-                    $result = $api->getFeed($randUser->accountId);
-                    print_r($result);
-                    print_r($api->follow($randUser->accountId));
-                    $followCou++;
-                    $requestCou += 2;
-                    unset($array[$rand]);
-                    sleep(rand(10, 20));
+            if (SystemSettings::get('followBot') === 1) {
+                $usersFollow = Users::orderBy(["id" => 'desc'])->find([
+                    'ban' => 0,
+                    'userTask' => 3,
+                    'accountId/>' => 0,
+                    'id/!=' => $user->id,
+                ]);
+                if ($usersFollow->count > 0) {
+                    $array = $usersFollow->rows;
+                    if ($usersFollow->count < 8) {
+                        $count = $usersFollow->count - 1;
+                    } else {
+                        $count = 8;
+                    }
+                    $randUsers = mt_rand(1, $count);
+                    for ($i = 0; $i < $randUsers; $i++) {
+                        $rand = mt_rand(0, count($array));
+                        $randUser = $array[$rand];
+                        sleep(rand(1, 3));
+                        $result = $api->getFeed($randUser->accountId);
+                        print_r($result);
+                        print_r($api->follow($randUser->accountId));
+                        $followCou++;
+                        $requestCou += 2;
+                        unset($array[$rand]);
+                        sleep(rand(10, 20));
+                    }
                 }
             }
-            
             $status = true;
             while ($status = true) {
                 $userTest = Users::find(['id' => $user->id, 'ban' => 0]);
