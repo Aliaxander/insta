@@ -66,7 +66,15 @@ class Likes extends Command
             $api->csrftoken = $user->csrftoken;
             if (!file_exists("/home/insta/cookies/" . $user->userName . "-cookies.dat") || $user->logIn === 2) {
                 echo "login account:";
-                $api->login($user->guid, $user->phoneId, $user->deviceId, $user->password);
+                $login=$api->login($user->guid, $user->phoneId, $user->deviceId, $user->password);
+                $checkPoint = new Checkpoint($user->userName);
+                if (isset($login[1]['checkpoint_url'])) {
+                    $result = $checkPoint->request($login[1]['checkpoint_url']);
+                    if (preg_match("/Your phone number will be added\b/i", $result[1])) {
+                        Users::where(['id' => $user->id])->update(['ban' => 3]);
+                        die("SMS BAN!");
+                    }
+                }
             }
             
             if (empty($user->csrftoken)) {
