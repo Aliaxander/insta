@@ -103,33 +103,33 @@ class Likes extends Command
             //$api->login($user->guid, $user->phoneId, $user->deviceId, $user->password);
             
             //Follow my accouns:
-//            $usersFollow = Users::orderBy(["id" => 'desc'])->find([
-//                'ban' => 0,
-//                'userTask' => 3,
-//                'accountId/>' => 0,
-//                'id/!=' => $user->id,
-//            ]);
-//            if ($usersFollow->count > 0) {
-//                $array = $usersFollow->rows;
-//                if ($usersFollow->count < 8) {
-//                    $count = $usersFollow->count - 1;
-//                } else {
-//                    $count = 8;
-//                }
-//                $randUsers = mt_rand(1, $count);
-//                for ($i = 0; $i < $randUsers; $i++) {
-//                    $rand = mt_rand(0, count($array));
-//                    $randUser = $array[$rand];
-//                    sleep(rand(1, 3));
-//                    $result = $api->getFeed($randUser->accountId);
-//                    print_r($result);
-//                    print_r($api->follow($randUser->accountId));
-//                    $followCou++;
-//                    $requestCou += 2;
-//                    unset($array[$rand]);
-//                    sleep(rand(10, 20));
-//                }
-//            }
+            $usersFollow = Users::orderBy(["id" => 'desc'])->find([
+                'ban' => 0,
+                'userTask' => 3,
+                'accountId/>' => 0,
+                'id/!=' => $user->id,
+            ]);
+            if ($usersFollow->count > 0) {
+                $array = $usersFollow->rows;
+                if ($usersFollow->count < 8) {
+                    $count = $usersFollow->count - 1;
+                } else {
+                    $count = 8;
+                }
+                $randUsers = mt_rand(1, $count);
+                for ($i = 0; $i < $randUsers; $i++) {
+                    $rand = mt_rand(0, count($array));
+                    $randUser = $array[$rand];
+                    sleep(rand(1, 3));
+                    $result = $api->getFeed($randUser->accountId);
+                    print_r($result);
+                    print_r($api->follow($randUser->accountId));
+                    $followCou++;
+                    $requestCou += 2;
+                    unset($array[$rand]);
+                    sleep(rand(10, 20));
+                }
+            }
             
             $status = true;
             while ($status = true) {
@@ -245,11 +245,26 @@ class Likes extends Command
                     $folLikSum = round($likeCou + $followCou);
                     
                     $resultLikesForTimeout = $folLikSum / $hour;
-                    if ($resultLikesForTimeout > mt_rand(450, 500) && $resultLikesForTimeout < 600) {
+    
+                    if ($resultLikesForTimeout > mt_rand(70, 90) && $resultLikesForTimeout < 91) {
                         $hour += 1;
                         Users::where(['id' => $user->id])->update(['hour' => $hour]);
                         echo "Sleep";
-                        sleep(mt_rand(4000, 12000));
+                        sleep(mt_rand(200, 300));
+                    }
+                    
+                    if ($resultLikesForTimeout > mt_rand(250, 400) && $resultLikesForTimeout < 401) {
+                        $hour += 1;
+                        Users::where(['id' => $user->id])->update(['hour' => $hour]);
+                        echo "Sleep";
+                        sleep(mt_rand(400, 600));
+                    }
+                    
+                    if ($resultLikesForTimeout > mt_rand(500, 650) && $resultLikesForTimeout < 651) {
+                        $hour += 1;
+                        Users::where(['id' => $user->id])->update(['hour' => $hour]);
+                        echo "Sleep";
+                        sleep(mt_rand(3000, 12000));
                     }
                     if ($hour >= 4 && $likeCou > 700) {
                         sleep(mt_rand(120000, 187000));
