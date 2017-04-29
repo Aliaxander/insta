@@ -137,7 +137,7 @@ class Likes extends Command
                 if ($userTest->count === 0) {
                     die();
                 }
-                $accRow = InstBase::orderBy(['id'=>'desc'])->limit([0 => 1])->find(['status' => 0]);
+                $accRow = InstBase::orderBy(['id' => 'desc'])->limit([0 => 1])->find(['status' => 0]);
                 $acc = @preg_replace("/[^0-9]/", '', $accRow->rows[0]->account);
                 if (!empty($acc)) {
                     InstBase::where(['id' => $accRow->rows[0]->id])->update(['status' => 1]);
@@ -205,8 +205,8 @@ class Likes extends Command
                             $createResult = '';
                             $i = 0;
                             while ($createResult === '') {
-                                //$likes = $api->like($like1, $acc, $userNameLike, $mediaType);
-                                $likes = $api->oldLike($like1);
+                                $likes = $api->like($like1, $acc, $userNameLike, $mediaType);
+                                // $likes = $api->oldLike($like1);
                                 $createResult = $likes[1];
                                 if ($i === 3) {
                                     $createResult = false;
@@ -245,7 +245,7 @@ class Likes extends Command
                     $folLikSum = round($likeCou + $followCou);
                     
                     $resultLikesForTimeout = $folLikSum / $hour;
-    
+                    
                     if ($resultLikesForTimeout > mt_rand(70, 90) && $resultLikesForTimeout < 91) {
                         $hour += 1;
                         Users::where(['id' => $user->id])->update(['hour' => $hour]);
