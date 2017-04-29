@@ -2,7 +2,7 @@
 {% if sess %}
         {% autoescape false %}
             {{ data }}
-        {% autoescape %}
+        {% endautoescape %}
 {% endif %}
 <script>
     $(document).ready(function () {
