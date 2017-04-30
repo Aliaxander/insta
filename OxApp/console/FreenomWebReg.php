@@ -145,7 +145,7 @@ class FreenomWebReg extends Command
                     $result = $this->request('https://my.freenom.com/dologin.php', $loginData);
                     $this->request('https://my.freenom.com/clientarea.php');
                     
-                    $randDomains = mt_rand(5, 8);
+                    $randDomains = mt_rand(8, 12);
                     for ($i = 0; $i < $randDomains; $i++) {
                         if (mt_rand(0, 4) == 1) {
                             $uname = $faker->userName . rand(0, 2017);
@@ -208,12 +208,12 @@ class FreenomWebReg extends Command
             [
                 'data' => json_encode([
                     $this->domain =>
-//                        [
-//                        'dn1'=>'a.dnspod.com',
-//                        'di1'=>'',
-//                        'dn2'=>'b.dnspod.com',
-//                        'di2'=>''
-//                    ]
+                    //                        [
+                    //                        'dn1'=>'a.dnspod.com',
+                    //                        'di1'=>'',
+                    //                        'dn2'=>'b.dnspod.com',
+                    //                        'di2'=>''
+                    //                    ]
                         [
                             'hn1' => $this->domain,
                             'hi1' => $this->ip,
@@ -328,7 +328,7 @@ class FreenomWebReg extends Command
         FreenomSessions::add(['sessid' => $session]);
         file_put_contents("/insta/public/public/{$session}.html", $tmpHtmlContent);
         //file_get_contents('http://mini.s-shot.ru/1024x768/JPEG/1024/Z100/D5/?insta.oxgroup.media%2Fpublic%2F' . $session . '.html');
-        $this->debug=false;
+        $this->debug = false;
         $this->request('http://mini.s-shot.ru/1024x768/JPEG/1024/Z100/D5/?insta.oxgroup.media%2Fpublic%2F' . $session . '.html');
         $this->request('https://snapito.com/screenshots/insta.oxgroup.media.html?size=800x0&screen=1024x768&cache=2592000&delay=5&url=http%3A%2F%2Finsta.oxgroup.media%2Fpublic%2F' . $session . '.html');
         $this->debug = true;
@@ -429,8 +429,8 @@ class FreenomWebReg extends Command
             echo "\nREQUEST: $url\n";
             print_r($post);
             if ($this->debug) {
-            echo "\n--------------Result--------------:\n";
-            print_r($result);
+                echo "\n--------------Result--------------:\n";
+                print_r($result);
             }
             $i++;
             if ($i > 10) {
