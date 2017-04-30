@@ -158,7 +158,19 @@ class IgApi
                 //
                 //
                 //                echo "\nEND Limit fixer----------------------------------------\n";
-                Users::where(['guid' => $guid, 'phoneId' => $phoneId, 'deviceId' => $device_id])->update(['ban' => 1]);
+                if ($sync[1]['error_type'] === 'inactive user') {
+                    Users::where([
+                        'guid' => $guid,
+                        'phoneId' => $phoneId,
+                        'deviceId' => $device_id
+                    ])->update(['ban' => 4]);
+                } else {
+                    Users::where([
+                        'guid' => $guid,
+                        'phoneId' => $phoneId,
+                        'deviceId' => $device_id
+                    ])->update(['ban' => 1]);
+                }
                 die("Account banned");
             }
             
@@ -199,7 +211,7 @@ class IgApi
         $this->request('feed/timeline/?is_prefetch=0&seen_posts=&phone_id=' . $this->phone_id . '&battery_level=' . mt_rand(23,
                 100) . '&timezone_offset=3600&is_pull_to_refresh=0&unseen_posts=&is_charging=' . mt_rand(0, 1));
         if (@$resultLogin['error_type'] === "inactive user" || @$resultLogin['error_type'] === 'invalid_user') {
-            Users::where(['guid' => $guid, 'phoneId' => $phoneId, 'deviceId' => $device_id])->update(['ban' => 1]);
+            Users::where(['guid' => $guid, 'phoneId' => $phoneId, 'deviceId' => $device_id])->update(['ban' => 4]);
             die("Account banned");
         }
         print_r($resultLogin);
