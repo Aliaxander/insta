@@ -51,7 +51,11 @@ class Checkpoint
                     //                    $result = $checkPoint->request('https://i.instagram.com' . $post, null,
                     //                        ['csrfmiddlewaretoken' => $token, 'phone_number' => '+79773230210']);
                     //                    print_r($result);
-                    Users::where(['accountId' => $user->accountId])->update(['ban' => 3]);
+                    if (!empty($user->id)) {
+                        Users::where(['id' => $user->id])->update(['ban' => 3]);
+                    } else {
+                        Users::where(['accountId' => $user->accountId])->update(['ban' => 3]);
+                    }
                     die("SMS BAN!");
                 }
             }
