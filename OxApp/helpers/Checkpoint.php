@@ -40,18 +40,18 @@ class Checkpoint
                 print_r($result);
                 if (preg_match("/Your phone number will be added\b/i", $result[1])) {
                     
-//                    preg_match('/<input type="hidden" name="csrfmiddlewaretoken" value="(.*?)"\/>/mis',
-//                        $result[1], $results);
-//                    $token = $results[1];
-//                    preg_match('/<form action="(.*?)" method="POST" accept-charset="utf-8" class="adjacent bordered">/mis',
-//                        $result[1], $results);
-//                    $post = $results[1];
-//                    echo "sand post on $post and token $token";
-//
-//                    $result = $checkPoint->request('https://i.instagram.com' . $post, null,
-//                        ['csrfmiddlewaretoken' => $token, 'phone_number' => '+79773230210']);
-//                    print_r($result);
-                    Users::where(['id' => $user->id])->update(['ban' => 3]);
+                    //                    preg_match('/<input type="hidden" name="csrfmiddlewaretoken" value="(.*?)"\/>/mis',
+                    //                        $result[1], $results);
+                    //                    $token = $results[1];
+                    //                    preg_match('/<form action="(.*?)" method="POST" accept-charset="utf-8" class="adjacent bordered">/mis',
+                    //                        $result[1], $results);
+                    //                    $post = $results[1];
+                    //                    echo "sand post on $post and token $token";
+                    //
+                    //                    $result = $checkPoint->request('https://i.instagram.com' . $post, null,
+                    //                        ['csrfmiddlewaretoken' => $token, 'phone_number' => '+79773230210']);
+                    //                    print_r($result);
+                    Users::where(['accountId' => $user->accountId])->update(['ban' => 3]);
                     die("SMS BAN!");
                 }
             }
