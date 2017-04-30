@@ -253,6 +253,46 @@ class IgApi
         }
     }
     
+    public function oldEdit($biography, $url, $phoneId, $firstName, $email)
+    {
+        $tokenResult = '';
+        $i = 0;
+        while ($tokenResult === '') {
+            $sync = $this->sync();
+            print_r($sync);
+            
+            if (preg_match('#Set-Cookie: csrftoken=([^;]+)#', $sync[0], $token)) {
+                $tokenResult = $token[1];
+            }
+            if ($i == 10) {
+                $tokenResult = false;
+            }
+            $i++;
+        }
+        if ($tokenResult == false || $tokenResult == '') {
+            die('no token');
+        }
+        
+        $this->csrftoken = $tokenResult;
+        sleep(rand(0, 2));
+        $data = [
+            'phone_id' => $phoneId,
+            '_csrftoken' => $this->csrftoken,
+            'username' => $this->username,
+            '_uid' => $this->accountId,
+            'first_name' => $firstName,
+            'email' => $email,
+            'biography' => $biography,
+            'gender' => 2,
+            'external_url' => $url,
+            //'is_private' => true
+        ];
+        
+        $data = json_encode($data);
+        
+        return $this->request('accounts/edit_profile/', $data);
+    }
+    
     public function edit($biography, $url, $phoneId, $firstName, $email)
     {
         $tokenResult = '';
