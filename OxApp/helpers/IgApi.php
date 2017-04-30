@@ -224,40 +224,7 @@ class IgApi
         ])->update(['csrftoken' => $tokenResult, 'accountId' => @$resultLogin['logged_in_user']['pk']]);
         $newsInbox = $this->request('news/inbox/?activity_module=all');
         if (@$newsInbox[1]['message'] === 'checkpoint_required') {
-            echo "\nLimit fixer----------------------------------------\n";
-            $checkPoint = new Checkpoint($this->username);
-            $checkPoint->proxy = $this->proxy;
-            $checkPoint->accountId = $this->accountId;
-            //            $result = $checkPoint->request($newsInbox[1]['checkpoint_url']);
-            //            print_r($result);
-            //            if (preg_match("/Your phone number will be added\b/i",
-            //                    $result[1]) || preg_match("/Introduce tu número de teléfono\b/i",
-            //                    $result[1])
-            //            ) {
-            //                echo "Search token:";
-            //                if (preg_match('# <input type="hidden" name="csrfmiddlewaretoken" value="(.*?)"/>#is', $result[1],
-            //                    $token)) {
-            //                    $token = $token[1];
-            //                }
-            //                echo $token . "\n";
-            //                echo "Set phone number:";
-            //                $data=[];
-            //                $data['phone_number'] = '79356658544';
-            //                $data['csrfmiddlewaretoken'] = $token;
-            //                print_r($checkPoint->request('https://i.instagram.com/challenge/', null, $data));
-            // }
-            //
-            //                        print_r($checkPoint->request('https://i.instagram.com/challenge/?next=instagram://checkpoint/dismiss'));
-            //                        print_r($checkPoint->request('https://www.instagram.com/challenge/?next=instagram://checkpoint/dismiss'));
-            
-            $result = $checkPoint->request($newsInbox[1]['checkpoint_url']);
-            if (preg_match("/Your phone number will be added\b/i", $result[1])) {
-                Users::where(['guid' => $guid, 'phoneId' => $phoneId, 'deviceId' => $device_id])->update(['ban' => 3]);
-                die("SMS BAN!");
-            }
-            echo "\nEND Limit fixer----------------------------------------\n";
-            //Users::where(['guid' => $guid, 'phoneId' => $phoneId, 'deviceId' => $device_id])->update(['ban' => 1]);
-            print("Account banned");
+            Checkpoint::checkPoint($newsInbox, $this);
         } elseif (@$newsInbox[1]['message'] === 'login_required') {
             Users::where(['guid' => $guid, 'phoneId' => $phoneId, 'deviceId' => $device_id])->update(['ban' => 1]);
         }
@@ -855,8 +822,6 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
             }
         }
         
-        if (!empty($this->proxyAuth)) {
-        }
         $resp = curl_exec($ch);
         $header_len = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
         $header = substr($resp, 0, $header_len);

@@ -1,6 +1,8 @@
 <?php
 namespace InstagramAPI;
 
+use OxApp\models\Users;
+
 class Checkpoint
 {
     public $username;
@@ -8,13 +10,52 @@ class Checkpoint
     public $accountId;
     public $proxy;
     protected $userAgent;
-    protected $debug;
+    protected $debug = true;
     
     public function __construct($username, $debug = false)
     {
         $this->username = $username;
         $this->debug = $debug;
-        $this->userAgent = 'Mozilla/5.0 (iPhone; CPU iPhone OS 9_3_3 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Mobile/13G34 Instagram 9.7.0 (iPhone5,2; iPhone OS 9_3_3; fr_FR; fr-FR; scale=2.00; 640x1136)';
+        $this->userAgent = 'Mozilla/5.0 (iPhone; CPU iPhone OS 9_3_3 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Mobile/13G34 Instagram 9.7.0 (iPhone5,2; iPhone OS 9_3_3; en_US; en-US; scale=2.00; 640x1136)';
+    }
+    
+    
+    public static function checkPoint($result, $user)
+    {
+        echo 'Checkpoint Test:';
+        print_r($result);
+        if (isset($result[1]['message'])) {
+            $result = $result[1];
+        }
+        if (@$result['message'] === 'checkpoint_required') {
+            echo "\n!!!!!!!!!!!!!!!!!>>>>>>>>>>>>Checkpoint detected:\n";
+            if (isset($user->username)) {
+                $user->userName = $user->username;
+            }
+            $checkPoint = new Checkpoint($user->userName);
+            $checkPoint->proxy = $user->proxy;
+            $checkPoint->accountId = $user->accountId;
+            if (isset($result['checkpoint_url'])) {
+                $result = $checkPoint->request($result['checkpoint_url']);
+                print_r($result);
+                if (preg_match("/Your phone number will be added\b/i", $result[1])) {
+                    
+//                    preg_match('/<input type="hidden" name="csrfmiddlewaretoken" value="(.*?)"\/>/mis',
+//                        $result[1], $results);
+//                    $token = $results[1];
+//                    preg_match('/<form action="(.*?)" method="POST" accept-charset="utf-8" class="adjacent bordered">/mis',
+//                        $result[1], $results);
+//                    $post = $results[1];
+//                    echo "sand post on $post and token $token";
+//
+//                    $result = $checkPoint->request('https://i.instagram.com' . $post, null,
+//                        ['csrfmiddlewaretoken' => $token, 'phone_number' => '+79773230210']);
+//                    print_r($result);
+                    Users::where(['id' => $user->id])->update(['ban' => 3]);
+                    die("SMS BAN!");
+                }
+            }
+        }
     }
     
     public function doCheckpoint()
@@ -89,13 +130,23 @@ class Checkpoint
         curl_setopt($ch, CURLOPT_VERBOSE, $this->debug);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-        curl_setopt($ch, CURLOPT_COOKIEFILE, "/home/insta/cookies/" .$this->username . '-cookies.dat');
-        curl_setopt($ch, CURLOPT_COOKIEJAR, "/home/insta/cookies/" .$this->username . '-cookies.dat');
+        curl_setopt($ch, CURLOPT_COOKIEFILE, "/home/insta/cookies/" . $this->username . '-cookies.dat');
+        curl_setopt($ch, CURLOPT_COOKIEJAR, "/home/insta/cookies/" . $this->username . '-cookies.dat');
         if ($post) {
             curl_setopt($ch, CURLOPT_POST, count($post));
             curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($post));
         }
-        curl_setopt($ch, CURLOPT_PROXY, $this->proxy);
+        $pos = strripos($this->proxy, ';');
+        if ($pos === false) {
+            curl_setopt($ch, CURLOPT_PROXY, $this->proxy);
+        } else {
+            $proxy = explode(";", $this->proxy);
+            curl_setopt($ch, CURLOPT_PROXY, $proxy[0]);
+            if (!empty($proxy[1])) {
+                curl_setopt($ch, CURLOPT_PROXYUSERPWD, $proxy[1]);
+            }
+        }
+        
         $resp = curl_exec($ch);
         $header_len = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
         $header = substr($resp, 0, $header_len);
