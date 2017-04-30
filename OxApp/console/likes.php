@@ -243,7 +243,7 @@ class Likes extends Command
                     
                     if ($resultLikesForTimeout > mt_rand(100, 150) && $resultLikesForTimeout < 155) {
                         echo "Sleep";
-                        sleep(mt_rand(600, 900));
+                        sleep(mt_rand(200, 700));
                     }
                     if ($hour >= 4 && $likeCou > mt_rand(600,700)) {
                         $hour += 1;
