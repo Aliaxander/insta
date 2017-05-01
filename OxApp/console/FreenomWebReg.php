@@ -34,6 +34,7 @@ class FreenomWebReg extends Command
     protected $domains;
     protected $userAgent;
     protected $proxy = '';
+    protected $addDomainData = [];
     protected $debug = true;
     
     /**
@@ -66,6 +67,7 @@ class FreenomWebReg extends Command
         $faker = Factory::create();
         $domainsSub = ['.tk', '.ml', '.ga', '.cf', '.gq'];
         $accounts = FreenomAccounts::find(['isWork' => 0]);
+        $resultDomains = [];
         if ($accounts->count > 0) {
             foreach ($accounts->rows as $account) {
                 print_r($account);
@@ -145,7 +147,7 @@ class FreenomWebReg extends Command
                     $result = $this->request('https://my.freenom.com/dologin.php', $loginData);
                     $this->request('https://my.freenom.com/clientarea.php');
                     
-                    $randDomains = mt_rand(8, 12);
+                    $randDomains = mt_rand(50, 70);
                     for ($i = 0; $i < $randDomains; $i++) {
                         if (mt_rand(0, 4) == 1) {
                             $uname = $faker->userName . rand(0, 2017);
@@ -156,119 +158,45 @@ class FreenomWebReg extends Command
                         }
                         $uname = str_replace([".", "-", ")", "'", "`"], "", $uname);
                         $this->domain = mb_strtolower($uname . $domainsSub[rand(0, 4)]);
+                        $resultDomains[] = $this->domain;
                         $this->domains = explode(".", $this->domain);
-                        $result = $this->logic();
-                        if ($result === false) {
-                            FreenomAccounts::where(['id' => $account->id])->update([
-                                'isWork' => 2
-                            ]);
-                            exit();
-                        } else {
-                            Domains::add(['domain' => $this->domain]);
-                        }
-                        sleep(rand(5, 10));
+                        $this->logic();
                     }
-                    FreenomAccounts::where(['id' => $account->id])->update([
-                        'isWork' => 0
-                    ]);
-                    exit();
-                }
-            }
-        }
-        
-        return $output->writeln("Complite");
-    }
-    
-    protected function logic()
-    {
-        //Search:
-        $this->request('https://my.freenom.com/domains.php');
-        $searchDomainData = [
-            'domain' => $this->domains[0],
-            'tld' => $this->domains[1]
-        ];
-        $this->request('https://my.freenom.com/includes/domains/fn-available.php', $searchDomainData);
-        
-        //Add to cart:
-        $addDomainData['domains'][] = $this->domain;
-        $this->request('https://my.freenom.com/includes/domains/confdomain-pricing.php', $searchDomainData);
-        sleep(rand(1, 3));
-        $result = $this->request('https://my.freenom.com/cart.php?a=confdomains');
-        preg_match('/<input type="hidden" name="token" value="(.*?)" \/>/mis',
-            $result[1], $results);
-        $token = $results[1];
-        echo "setToken:{$token}\n";
-        sleep(rand(1, 3));
-        $result = $this->request('https://my.freenom.com/includes/domains/confdomain-update.php',
-            ['domain' => $this->domain, 'period' => '12M']);
-        echo "\nUpdate domain period:";
-        // print_r($result);
-        
-        $result = $this->request('https://my.freenom.com/includes/domains/domainconfigure.php',
-            [
-                'data' => json_encode([
-                    $this->domain =>
-                    //                        [
-                    //                        'dn1'=>'a.dnspod.com',
-                    //                        'di1'=>'',
-                    //                        'dn2'=>'b.dnspod.com',
-                    //                        'di2'=>''
-                    //                    ]
-                        [
-                            'hn1' => $this->domain,
-                            'hi1' => $this->ip,
-                            'hn2' => 'www.' . $this->domain,
-                            'hi2' => $this->ip
-                        ]
-                ])
-            ]);
-        echo "\nConfiguration domain:";
-        // print_r($result);
-        sleep(rand(1, 3));
-        $this->request('https://my.freenom.com/cart.php?a=confdomains', [
-            $this->domains[0] . '_' . $this->domains[1] . '_period' => '12M',
-            'domainns1' => 'ns01.freenom.com',
-            'domainns2' => 'ns02.freenom.com',
-            'domainns3' => 'ns03.freenom.com',
-            'domainns4' => 'ns04.freenom.com',
-            'domainns5' => '',
-            'idprotection' => ['on'],
-            'token' => $token,
-            'update' => 'true'
-        ]);
-        
-        $result = $this->request('https://my.freenom.com/cart.php?a=view');
-        if (preg_match("/https:\/\/my.freenom.com\/clientarea.php\?setcheckout=true/i", $result[0])) {
-            $this->request('https://my.freenom.com/clientarea.php?setcheckout=true');
-            $result = $this->request('https://my.freenom.com/clientarea.php');
-            preg_match('/<input type="hidden" name="token" value="(.*?)" \/>/mis',
-                $result[1], $results);
-            $token = @$results[1];
-            
-            if (empty($token)) {
-                $loginData = [
-                    'password' => $this->password,
-                    'rememberme' => 'on',
-                    'token' => $token,
-                    'username' => $this->email
-                ];
-                $this->request('https://my.freenom.com/dologin.php', $loginData);
-            }
-            
-            $result = $this->request('https://my.freenom.com/cart.php?a=view');
-        }
-        echo "Cart view:\n";
-        preg_match('/<input type="hidden" name="token" value="(.*?)" \/>/mis',
-            $result[1], $results);
-        $token = $results[1];
-        
-        echo "setToken:{$token}\n";
-        $fpGetBlackbox = $this->request('https://my.freenom.com/templates/freenom/js/static_wdp.js');
-        $ioGetBlackbox = $this->request('https://mpsnare.iesnare.com/snare.js');
-        $hren = $this->request('https://my.freenom.com/iojs/4.1.1/dyn_wdp.js');
-        $session = rand(0, 99999) . time();
-        
-        $tmpHtmlContent = "
+                    $this->request('https://my.freenom.com/includes/domains/confdomain-pricing.php',
+                        $this->addDomainData);
+                    
+                    $result = $this->request('https://my.freenom.com/cart.php?a=view');
+                    if (preg_match("/https:\/\/my.freenom.com\/clientarea.php\?setcheckout=true/i", $result[0])) {
+                        $this->request('https://my.freenom.com/clientarea.php?setcheckout=true');
+                        $result = $this->request('https://my.freenom.com/clientarea.php');
+                        preg_match('/<input type="hidden" name="token" value="(.*?)" \/>/mis',
+                            $result[1], $results);
+                        $token = @$results[1];
+                        
+                        if (empty($token)) {
+                            $loginData = [
+                                'password' => $this->password,
+                                'rememberme' => 'on',
+                                'token' => $token,
+                                'username' => $this->email
+                            ];
+                            $this->request('https://my.freenom.com/dologin.php', $loginData);
+                        }
+                        
+                        $result = $this->request('https://my.freenom.com/cart.php?a=view');
+                    }
+                    echo "Cart view:\n";
+                    preg_match('/<input type="hidden" name="token" value="(.*?)" \/>/mis',
+                        $result[1], $results);
+                    $token = $results[1];
+                    
+                    echo "setToken:{$token}\n";
+                    $fpGetBlackbox = $this->request('https://my.freenom.com/templates/freenom/js/static_wdp.js');
+                    $ioGetBlackbox = $this->request('https://mpsnare.iesnare.com/snare.js');
+                    $hren = $this->request('https://my.freenom.com/iojs/4.1.1/dyn_wdp.js');
+                    $session = rand(0, 99999) . time();
+                    
+                    $tmpHtmlContent = "
         <html>
   <head>
     <script src=\"https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js\"></script>
@@ -324,72 +252,145 @@ class FreenomWebReg extends Command
   </body>
 </html>
 "; // $.get('https://bot.oxgroup.media/request?session=$session&iobb='+$(\"#iobb\").val()+'&fpbb='+$(\"#fpbb\").val());
-        
-        FreenomSessions::add(['sessid' => $session]);
-        file_put_contents("/insta/public/public/{$session}.html", $tmpHtmlContent);
-        //file_get_contents('http://mini.s-shot.ru/1024x768/JPEG/1024/Z100/D5/?insta.oxgroup.media%2Fpublic%2F' . $session . '.html');
-        $this->debug = false;
-        $this->request('http://mini.s-shot.ru/1024x768/JPEG/1024/Z100/D5/?insta.oxgroup.media%2Fpublic%2F' . $session . '.html');
-        $this->request('https://snapito.com/screenshots/insta.oxgroup.media.html?size=800x0&screen=1024x768&cache=2592000&delay=5&url=http%3A%2F%2Finsta.oxgroup.media%2Fpublic%2F' . $session . '.html');
-        $this->debug = true;
-        echo "\nManual test: http://insta.oxgroup.media/public/$session.html\n";
-        $iobb = '';
-        $fpbb = '';
-        while ($iobb == '') {
-            sleep(5);
-            print_r(['sessid' => $session]);
-            $find = FreenomSessions::find(['sessid' => $session]);
-            print_r($find);
-            if ($find->rows[0]->iobb != '') {
-                $iobb = $find->rows[0]->iobb;
-                $fpbb = $find->rows[0]->fpbb;
+                    
+                    FreenomSessions::add(['sessid' => $session]);
+                    file_put_contents("/insta/public/public/{$session}.html", $tmpHtmlContent);
+                    //file_get_contents('http://mini.s-shot.ru/1024x768/JPEG/1024/Z100/D5/?insta.oxgroup.media%2Fpublic%2F' . $session . '.html');
+                    $this->debug = false;
+                    $this->request('http://mini.s-shot.ru/1024x768/JPEG/1024/Z100/D5/?insta.oxgroup.media%2Fpublic%2F' . $session . '.html');
+                    $this->request('https://snapito.com/screenshots/insta.oxgroup.media.html?size=800x0&screen=1024x768&cache=2592000&delay=5&url=http%3A%2F%2Finsta.oxgroup.media%2Fpublic%2F' . $session . '.html');
+                    $this->debug = true;
+                    echo "\nManual test: http://insta.oxgroup.media/public/$session.html\n";
+                    $iobb = '';
+                    $fpbb = '';
+                    while ($iobb == '') {
+                        sleep(5);
+                        print_r(['sessid' => $session]);
+                        $find = FreenomSessions::find(['sessid' => $session]);
+                        print_r($find);
+                        if ($find->rows[0]->iobb != '') {
+                            $iobb = $find->rows[0]->iobb;
+                            $fpbb = $find->rows[0]->fpbb;
+                        }
+                    }
+                    echo "\nIOBB SET! - " . $iobb;
+                    echo "\n---------------------\nIOBB SET! - " . $fpbb;
+                    //
+                    
+                    $postDataCart = [
+                        'accepttos' => 'on',
+                        'address1' => '',
+                        'allidprot' => 'true',
+                        'amount' => '0.00',
+                        'city' => '',
+                        'companyname' => '',
+                        'country' => 'RU',
+                        'custtype' => 'existing',
+                        'firstname' => 'Name',
+                        'fpbb' => $fpbb,
+                        'iobb' => $iobb,
+                        'lastname' => '',
+                        'paymentmethod' => 'credit',
+                        'phonenumber' => '',
+                        'postcode' => '',
+                        'state' => '',
+                        'submit' => 'true',
+                        'token' => $token
+                    ];
+                    
+                    $result = $this->request('https://my.freenom.com/cart.php?a=checkout', $postDataCart);
+                    echo "CheckOut:\n";
+                    // print_r($result);
+                    preg_match_all('/^Location:(.*)$/mi', $result[0], $matches);
+                    print_r($matches);
+                    $locationUrl = str_replace([' ', "\n", "\t", "\r"], '', @$matches[1][0]);
+                    echo "Location Url: >" . $locationUrl . "<";
+                    if ($locationUrl == 'https://my.freenom.com/failed_registration.php?e=flag' || $locationUrl == 'https://my.freenom.com/failed_registration.php') {
+                        $status = false;
+                    } else {
+                        $status = true;
+                    }
+                    var_dump($status);
+                    $this->request('https://my.freenom.com/cart.php?a=complete');
+                    $this->request('https://my.freenom.com/cart.php');
+                    
+                    
+                    if ($status === false) {
+                        FreenomAccounts::where(['id' => $account->id])->update([
+                            'isWork' => 2
+                        ]);
+                        exit();
+                    } else {
+                        foreach ($resultDomains as $domain) {
+                            echo "$domain\n";
+                            Domains::add(['domain' => $domain]);
+                        }
+                    }
+                    
+                    FreenomAccounts::where(['id' => $account->id])->update([
+                        'isWork' => 0
+                    ]);
+                    exit();
+                }
             }
         }
-        echo "\nIOBB SET! - " . $iobb;
-        echo "\n---------------------\nIOBB SET! - " . $fpbb;
-        //
         
-        $postDataCart = [
-            'accepttos' => 'on',
-            'address1' => '',
-            'allidprot' => 'true',
-            'amount' => '0.00',
-            'city' => '',
-            'companyname' => '',
-            'country' => 'RU',
-            'custtype' => 'existing',
-            'firstname' => 'Name',
-            'fpbb' => $fpbb,
-            'iobb' => $iobb,
-            'lastname' => '',
-            'paymentmethod' => 'credit',
-            'phonenumber' => '',
-            'postcode' => '',
-            'state' => '',
-            'submit' => 'true',
-            'token' => $token
+        return $output->writeln("Complite");
+    }
+    
+    protected function logic()
+    {
+        //Search:
+        $this->request('https://my.freenom.com/domains.php');
+        $searchDomainData = [
+            'domain' => $this->domains[0],
+            'tld' => $this->domains[1]
         ];
+        $this->request('https://my.freenom.com/includes/domains/fn-available.php', $searchDomainData);
+        $this->request('https://my.freenom.com/includes/domains/fn-additional.php', $searchDomainData);
         
-        $result = $this->request('https://my.freenom.com/cart.php?a=checkout', $postDataCart);
-        echo "CheckOut:\n";
-        // print_r($result);
-        preg_match_all('/^Location:(.*)$/mi', $result[0], $matches);
-        print_r($matches);
-        $locationUrl = str_replace([' ', "\n", "\t", "\r"], '', @$matches[1][0]);
-        echo "Location Url: >" . $locationUrl . "<";
-        if ($locationUrl == 'https://my.freenom.com/failed_registration.php?e=flag' || $locationUrl == 'https://my.freenom.com/failed_registration.php') {
-            $status = false;
-        } else {
-            $status = true;
-        }
-        var_dump($status);
-        $result = $this->request('https://my.freenom.com/cart.php?a=complete');
-        // print_r($result);
-        $result = $this->request('https://my.freenom.com/cart.php');
+        //Add to cart:
+        $this->addDomainData['domains'][] = $this->domain;
         
+        /*
+        $result = $this->request('https://my.freenom.com/cart.php?a=confdomains');
+        preg_match('/<input type="hidden" name="token" value="(.*?)" \/>/mis',
+            $result[1], $results);
+        $token = $results[1];
+        echo "setToken:{$token}\n";
+        $this->request('https://my.freenom.com/includes/domains/confdomain-update.php',
+            ['domain' => $this->domain, 'period' => '12M']);
+        echo "\nUpdate domain period:";
         // print_r($result);
         
-        return $status;
+       $this->request('https://my.freenom.com/includes/domains/domainconfigure.php',
+            [
+                'data' => json_encode([
+                    $this->domain =>
+                        [
+                            'hn1' => $this->domain,
+                            'hi1' => $this->ip,
+                            'hn2' => 'www.' . $this->domain,
+                            'hi2' => $this->ip
+                        ]
+                ])
+            ]);
+        echo "\nConfiguration domain:";
+        
+        $this->request('https://my.freenom.com/cart.php?a=confdomains', [
+            $this->domains[0] . '_' . $this->domains[1] . '_period' => '12M',
+            'domainns1' => 'ns01.freenom.com',
+            'domainns2' => 'ns02.freenom.com',
+            'domainns3' => 'ns03.freenom.com',
+            'domainns4' => 'ns04.freenom.com',
+            'domainns5' => '',
+            'idprotection' => ['on'],
+            'token' => $token,
+            'update' => 'true'
+        ]);
+        */
+        
+        return true;
     }
     
     protected function request($url, $post = null, $headers = null)
