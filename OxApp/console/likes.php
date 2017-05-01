@@ -195,31 +195,28 @@ class Likes extends Command
                         $requestCou += 2;
                     } elseif (!empty($result[1]['items'])) {
                         sleep(rand(0, 1));
-                        $rows = $result[1]['items'];
-                        $rowMedia = @$result[1]['items'][mt_rand(0, count($rows) - 1)];
-                        $like1 = $rowMedia['id'];
-                        $userNameLike = $rowMedia['user']['username'];
-                        $mediaType = $rowMedia['media_type'];
-                        if ($like1) {
-                            InstBase::where(['id' => $accRow->rows[0]->id])->update(['likes' => round($accRow->rows[0]->likes + 1)]);
-                            $createResult = '';
-                            $i = 0;
-                            while ($createResult === '') {
+                        $randLikes = mt_rand(SystemSettings::get('likesForAccountMin'),
+                            SystemSettings::get('likesForAccountMax'));
+                        for ($i = 0; $i <= $randLikes; $i++) {
+                            $rows = $result[1]['items'];
+                            $rowMedia = @$result[1]['items'][mt_rand(0, count($rows) - 1)];
+                            $like1 = $rowMedia['id'];
+                            $userNameLike = $rowMedia['user']['username'];
+                            $mediaType = $rowMedia['media_type'];
+                            if ($like1) {
+                                InstBase::where(['id' => $accRow->rows[0]->id])->update(['likes' => round($accRow->rows[0]->likes + 1)]);
                                 $likes = $api->like($like1, $acc, $userNameLike, $mediaType);
+                                sleep(mt_rand(1, 2));
                                 //$likes = $api->oldLike($like1);
-                                $createResult = $likes[1];
-                                if ($i === 3) {
-                                    $createResult = false;
-                                }
-                                $i++;
+                                
+                                print_r($likes);
+                                $feed = $api->getFeed($acc);
+                                Checkpoint::checkPoint($feed, $user);
+                                
+                                $likeCou++;
+                                $requestCou += 4;
+                                sleep(mt_rand(SystemSettings::get('timeOutMin'), SystemSettings::get('timeOutMax')));
                             }
-                            print_r($likes);
-                            $feed = $api->getFeed($acc);
-                            Checkpoint::checkPoint($feed, $user);
-                            
-                            $likeCou++;
-                            $requestCou += 4;
-                            sleep(mt_rand(SystemSettings::get('timeOutMin'), SystemSettings::get('timeOutMax')));
                         }
                     } else {
                         $result = $api->getRecentActivityAll();
@@ -241,7 +238,7 @@ class Likes extends Command
                     
                     $resultLikesForTimeout = $folLikSum / $hour;
                     
-                    if ($resultLikesForTimeout > mt_rand(600,900)) {
+                    if ($resultLikesForTimeout > mt_rand(600, 900)) {
                         $hour += 1;
                         Users::where(['id' => $user->id])->update(['hour' => $hour]);
                         echo "Sleep";
