@@ -210,13 +210,14 @@ class Likes extends Command
                                 //$likes = $api->oldLike($like1);
                                 
                                 print_r($likes);
-                                $feed = $api->getFeed($acc);
-                                Checkpoint::checkPoint($feed, $user);
                                 
                                 $likeCou++;
-                                $requestCou += 4;
+                                $requestCou += 1;
                                 sleep(mt_rand(SystemSettings::get('timeOutMin'), SystemSettings::get('timeOutMax')));
                             }
+                            $feed = $api->getFeed($acc);
+                            Checkpoint::checkPoint($feed, $user);
+                            $requestCou += 4;
                         }
                     } else {
                         $result = $api->getRecentActivityAll();
