@@ -346,11 +346,16 @@ class FreenomWebReg extends Command
             'domain' => $this->domains[0],
             'tld' => $this->domains[1]
         ];
-        $this->request('https://my.freenom.com/includes/domains/fn-available.php', $searchDomainData);
-        $this->request('https://my.freenom.com/includes/domains/fn-additional.php', $searchDomainData);
+        $result = $this->request('https://my.freenom.com/includes/domains/fn-available.php', $searchDomainData);
+        // $this->request('https://my.freenom.com/includes/domains/fn-additional.php', $searchDomainData);
         
         //Add to cart:
-        $this->addDomainData['domains'][] = $this->domain;
+        $result = json_decode($result[1]);
+        print_r($result);
+        if ($result->status === 'OK') {
+            echo "\nOK!\n";
+            $this->addDomainData['domains'][] = $this->domain;
+        }
         
         /*
         $result = $this->request('https://my.freenom.com/cart.php?a=confdomains');
