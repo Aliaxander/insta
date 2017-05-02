@@ -29,7 +29,7 @@ class BaseUpload extends Command
                 'filename'
             );
     }
-
+    
     /**
      * @param InputInterface  $input
      * @param OutputInterface $output
@@ -39,26 +39,35 @@ class BaseUpload extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $start = microtime(true);
-        $text = "";
+        $text = [];
         try {
             $dsn = DbConfig::$dbDriver . ':dbname=' . DbConfig::$dbname . ';host=' . DbConfig::$dbhost;
             $db = new \PDO($dsn, DbConfig::$dbuser, DbConfig::$dbuserpass, [
-                \PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"]
+                    \PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"
+                ]
             );
         } catch (\PDOException $e) {
             throw new \PDOException($e);
         }
         $file = $input->getArgument('file');
         $file = file($file);
+        $i = 0;
+        $i2 = 0;
         foreach ($file as $item) {
+            $i++;
+            if ($i > 1000000) {
+                $i2++;
+            }
             $acc = @preg_replace("/[^0-9]/", '', $item);
-            $text .= "('$acc'),";
+            $text[$i2][] = "('$acc')";
         }
-        $text = mb_substr($text, 0, -1);
-        $count = $db->exec("INSERT INTO instBase (`account`) VALUE $text");
+        
+        foreach ($text as $sql) {
+            $count = $db->exec("INSERT INTO instBase (`account`) VALUE " . implode($sql, ','));
+        }
         $end = microtime(true);
         $time = round($end - $start, 4);
-
+        
         return $output->writeln("Complite {$count} time: {$time}s");
     }
 }
