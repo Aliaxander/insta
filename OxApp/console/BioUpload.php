@@ -22,7 +22,7 @@ class BioUpload extends Command
     protected function configure()
     {
         $this
-            ->setName('base:uploads')
+            ->setName('bio:uploads')
             ->setDescription('file')->addArgument(
                 'file',
                 InputArgument::OPTIONAL,
