@@ -450,14 +450,14 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
         }
         $this->csrftoken = $tokenResult;
         
-        sleep(rand(5, 15));
+        sleep(rand(10, 20));
         $checkEmail = $this->checkEmail($email, $qe_id, $waterfall_id);
         
         print_r($checkEmail);
         if (isset($checkEmail[1]['message']) && $checkEmail[1]['message'] == 'Sorry, an error occured') {
             die('Error. Ip ban?');
         }
-        sleep(rand(5, 10));
+        sleep(rand(10, 15));
         $singTokenResult = '';
         $i = 0;
         while ($singTokenResult === '') {
@@ -478,10 +478,10 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
         $this->csrftoken = $singTokenResult;
         
         if (rand(0, 1) == 1) {
-            sleep(rand(5, 10));
+            sleep(rand(10, 15));
             print_r($this->usernameSuggestions($usernameTmp4, $email, $waterfall_id));
         }
-        sleep(rand(5, 7));
+        sleep(rand(11, 19));
         $singTokenResult = '';
         $i = 0;
         while ($singTokenResult === '') {
@@ -508,10 +508,10 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
         //        print_r($this->usernameSuggestions($usernameTmp2, $email, $waterfall_id));
         //
         if (rand(0, 1) == 1) {
-            sleep(rand(2, 4));
+            sleep(rand(3, 8));
             print_r($this->usernameSuggestions($usernameTmp1, $email, $waterfall_id));
         }
-        sleep(rand(2, 5));
+        sleep(rand(4, 9));
         $finalName = $this->usernameSuggestions($this->username, $email, $waterfall_id);
         print_r($finalName);
         //$this->username = $finalName[1]['suggestions'][rand(0, 11)];
@@ -519,7 +519,7 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
         print_r($finalName);
         echo "SET name: " . $this->username . "\n";
         
-        sleep(rand(1, 6));
+        sleep(rand(2, 8));
         //register:
         $createResult = '';
         $i = 0;
