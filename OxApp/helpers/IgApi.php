@@ -285,7 +285,7 @@ class IgApi
             'biography' => $biography,
             'gender' => 2,
             'external_url' => $url,
-            //'is_private' => true
+            'is_private' => true
         ];
         
         $data = json_encode($data);
@@ -334,7 +334,7 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
             '_uuid' => $this->guid,
             'biography' => $biography,
             'email' => $email,
-            //'is_private' => true
+            'is_private' => true
         ];
         
         $data = json_encode($data);

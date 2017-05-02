@@ -239,7 +239,7 @@ class Likes extends Command
                     
                     $resultLikesForTimeout = $folLikSum / $hour;
                     
-                    if ($resultLikesForTimeout > mt_rand(600, 900)) {
+                    if ($resultLikesForTimeout > mt_rand(800, 1000)) {
                         $hour += 1;
                         Users::where(['id' => $user->id])->update(['hour' => $hour]);
                         echo "Sleep";

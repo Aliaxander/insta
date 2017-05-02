@@ -51,7 +51,7 @@ class BaseUpload extends Command
         }
         $file = $input->getArgument('file');
         $file = file($file);
-        $file = array_chunk($file, 1000000);
+        $file = array_chunk($file, 100000);
         foreach ($file as $value) {
             $text = '';
             foreach ($value as $item) {
