@@ -39,7 +39,7 @@ class BaseUpload extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $start = microtime(true);
-        $text = [];
+        $text = "";
         try {
             $dsn = DbConfig::$dbDriver . ':dbname=' . DbConfig::$dbname . ';host=' . DbConfig::$dbhost;
             $db = new \PDO($dsn, DbConfig::$dbuser, DbConfig::$dbuserpass, [
@@ -51,20 +51,17 @@ class BaseUpload extends Command
         }
         $file = $input->getArgument('file');
         $file = file($file);
-        $i = 0;
-        $i2 = 0;
-        foreach ($file as $item) {
-            $i++;
-            if ($i > 1000000) {
-                $i2++;
+        $file = array_chunk($file, 1000000);
+        foreach ($file as $value) {
+            $text = '';
+            foreach ($value as $item) {
+                $acc = @preg_replace("/[^0-9]/", '', $item);
+                $text .= "('$acc'),";
             }
-            $acc = @preg_replace("/[^0-9]/", '', $item);
-            $text[$i2][] = "('$acc')";
+            $text = mb_substr($text, 0, -1);
+            $count = $db->exec("INSERT INTO instBase (`account`) VALUE $text");
         }
         
-        foreach ($text as $sql) {
-            $count = $db->exec("INSERT INTO instBase (`account`) VALUE " . implode($sql, ','));
-        }
         $end = microtime(true);
         $time = round($end - $start, 4);
         
