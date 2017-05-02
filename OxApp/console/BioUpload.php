@@ -14,7 +14,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class BaseUpload extends Command
+class BioUpload extends Command
 {
     /**
      * configure
@@ -55,7 +55,7 @@ class BaseUpload extends Command
             $text .= "('$acc'),";
         }
         $text = mb_substr($text, 0, -1);
-        $count = $db->exec("INSERT INTO instBase (`account`) VALUE $text");
+        $count = $db->exec("INSERT INTO profileGenerate (`description`) VALUE $text");
         $end = microtime(true);
         $time = round($end - $start, 4);
 
