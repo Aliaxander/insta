@@ -56,9 +56,12 @@ class BaseUpload extends Command
             $text = '';
             foreach ($value as $item) {
                 $acc = @preg_replace("/[^0-9]/", '', $item);
-                $text .= "('$acc'),";
+                if (!empty($acc)) {
+                    $text .= "('$acc'),";
+                }
             }
             $text = mb_substr($text, 0, -1);
+            echo "INSERT INTO instBase (`account`) VALUE $text \n\n";
             $count = $db->exec("INSERT INTO instBase (`account`) VALUE $text");
         }
         
