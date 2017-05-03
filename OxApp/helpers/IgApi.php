@@ -356,16 +356,16 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
         ];
         $faker = Factory::create();
         if (mt_rand(0, 4) == 1) {
-            $uname = $faker->userName . range('a', 'z')[rand(0, 26)];
+            $uname = $faker->userName . range('a', 'z')[rand(0, 26)] . range('a', 'z')[rand(0, 26)];
         } elseif (mt_rand(0, 1) == 0) {
-            $uname = $faker->firstNameFemale . range('a', 'z')[rand(0, 26)] . $faker->lastName . range('a',
-                    'z')[rand(0, 26)];
+            $uname = $faker->firstNameFemale . range('a', 'z')[rand(0, 26)] . range('a', 'z')[rand(0, 26)] . $faker->lastName . range('a',
+                    'z')[rand(0, 26)] . range('a', 'z')[rand(0, 26)];
         } elseif (mt_rand(0, 1) == 0) {
             $uname = $faker->firstNameFemale . range('a',
-                    'z')[rand(0, 26)] . $faker->lastName;
+                    'z')[rand(0, 26)] . range('a', 'z')[rand(0, 26)] . $faker->lastName;
         } elseif (mt_rand(0, 1) == 0) {
             $uname = $faker->firstNameFemale . $faker->lastName . range('a',
-                    'z')[rand(0, 26)];
+                    'z')[rand(0, 26)] . range('a', 'z')[rand(0, 26)];
         } else {
             $uname = $faker->lastName . range('a',
                     'z')[rand(0, 26)] . $faker->firstNameFemale . rand(1100, 2017);
