@@ -22,7 +22,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary add-params" onclick="addDomains();">Add Domains</button>
+                <button type="button" class="btn btn-primary" onclick="addDomains();">Add Domains</button>
             </div>
         </div>
     </div>

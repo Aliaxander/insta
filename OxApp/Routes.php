@@ -60,4 +60,5 @@ Router::setMiddlewareGroup('Json', function () {
     Router::rout('/api/systemSettings')->app('api\\SystemSettings')->save();
     Router::rout('/api/gmail')->app('api\\Gmail')->save();
     Router::rout('/api/domains')->app('api\\Domains')->save();
+    Router::rout('/api/proxy')->app('api\Proxy')->save();
 });
