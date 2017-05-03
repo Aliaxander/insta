@@ -86,7 +86,7 @@ class EditProfile extends Command
                     }
                 }
                 if (!empty($user)) {
-                    Users::where(['id' => $user->id])->update(['userTask' => 3]);
+                    Users::where(['id' => $user->id])->update(['userTask' => SystemSettings::get('editSwitchTask')]);
                     $dir = scandir('/home/photos');
                     unset($dir[array_search('.', $dir)]);
                     unset($dir[array_search('..', $dir)]);
