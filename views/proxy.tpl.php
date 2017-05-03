@@ -52,19 +52,19 @@
 						<div class="col-md-12">
 							<div class="form-group">
 								<label for="ip" class="control-label">Proxy ip </label>
-								<textarea name="ip" class="form-control" placeholder="127.155.254.222"></textarea>
+								<textarea name="ip" id="ip-form" class="form-control" placeholder="127.155.254.222"></textarea>
 							</div>
 							<div class="form-group">
 								<label for="portIn" class="control-label">Port from </label>
-								<input type="text" class="form-control" name="portIn" placeholder="port from" value="">
+								<input type="text" class="form-control" id="portIn-form" name="portIn" placeholder="port from" value="">
 							</div>
 							<div class="form-group">
 								<label for="portOut" class="control-label">Port to </label>
-								<input type="text" class="form-control" name="portOut" placeholder="port to" value="">
+								<input type="text" class="form-control" id="portOut-form" name="portOut" placeholder="port to" value="">
 							</div>
 							<div class="form-group">
 								<label for="authData" class="control-label">Login:pass </label>
-								<input type="text" class="form-control" name="authData" placeholder="login:pass"
+								<input type="text" class="form-control" id="authData-form" name="authData" placeholder="login:pass"
 								       value="">
 							</div>
 						</div>
@@ -91,11 +91,14 @@
     });
 
     function addProxy() {
-        var domains = $('#domains-form').val();
+        var ip = $('#ip-form').val();
+        var portIn = $('#portIn-form').val();
+        var portOut = $('#portOut-form').val();
+        var authData = $('#authData-form').val();
         $.ajax({
             type: "post",
             url: "/api/proxy",
-            data: {domains: domains},
+            data: {ip: ip, portIn: portIn, portOut: portOut, authData: authData},
             success: function (data) {
                 if (data.status == '200') {
                     $('.alerts').html('<div class="alert alert-success alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button> <strong> Proxy add </strong>');

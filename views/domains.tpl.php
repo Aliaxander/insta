@@ -1,9 +1,5 @@
 {% include "global/head.tpl.php" %}
 <!-- modal addTask -->
-<div class="container">
-    <div class="row alerts">
-    </div>
-</div>
 <div class="modal fade modal-add" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
     <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
@@ -87,10 +83,10 @@
             url: "/api/domains",
             data: {domains: domains},
             success: function (data) {
-                if (data.status == 'success') {
-                    $('.alerts').html('<div class="alert alert-' + data.status + ' alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button> <strong>' + data.name + '</strong>');
+                if (data.status == '200') {
+                    $('.alerts').html('<div class="alert alert-success alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button> <strong> Domains add </strong>');
                 } else {
-                    $('.alerts').html('<div class="alert alert-danger alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button> <strong>' + data.name + '</strong>');
+                    $('.alerts').html('<div class="alert alert-danger alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button> <strong> Error add domains </strong>');
                 }
                 $('.modal-add').modal('hide');
                 $('#table').bootstrapTable('refresh');

@@ -67,20 +67,15 @@ class DomainsController extends App
             foreach ($domains as $item) {
                 $domains[] = Domains::data(['domain' => trim(str_replace('http://', '', $item))])->add();
             }
-
-            if ($count = count($domains) > 0) {
-                return json_encode([
-                    'name' => "Добавленно {$count} домен(ов)",
-                    'status' => 'success',
-                ]);
-            }
         }
 
+        if (count($domains) > 0) {
+            $result = ['status' => 200];
+        } else {
+            $result = ['status' => 500];
+        }
 
-        return json_encode([
-            'name' => 'Произошла ошибка',
-            'status' => 'danger',
-        ]);
+        return json_encode($result);
     }
 
     /**

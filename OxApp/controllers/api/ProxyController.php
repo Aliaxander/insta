@@ -60,15 +60,16 @@ class ProxyController extends App
      */
     public function post()
     {
-        $ips = explode("\n", $this->request->query->get('ip'));
+        $proxy = [];
+        $ips = explode("\n", $this->request->request->get('ip'));
         foreach ($ips as $ip) {
             $ip = str_replace("\n", "", $ip);
             $ip = str_replace("\r", "", $ip);
             $ip = str_replace(" ", "", $ip);
             if (!empty($ip)) {
-                for ($i = $this->request->query->get('portIn'); $i < $this->request->query->get('portOut'); $i++) {
+                for ($i = $this->request->request->get('portIn'); $i < $this->request->request->get('portOut'); $i++) {
                     $proxy[] = Proxy::add([
-                        'proxy' => $ip . ":" . $i . ";" . $this->request->query->get('authData'),
+                        'proxy' => $ip . ":" . $i . ";" . $this->request->request->get('authData'),
                     ]);
                 }
             }
