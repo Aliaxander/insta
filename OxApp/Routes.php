@@ -6,10 +6,13 @@
  * Time: 12:49
  */
 
+use Ox\Router\RouteMiddleware;
 use Ox\Router\Router;
 use OxApp\helpers\DefaultRequest;
 
 Router::$requestDriver = DefaultRequest::getRequest();
+RouteMiddleware::$debug=true;
+
 
 Router::addMiddlewareGroup('Json', array(
     'ToJson' => [],
@@ -21,6 +24,9 @@ Router::rout('/generateProfile')->app('GenerateProfile')->save();
 Router::rout('/descriptionProfile')->app('DescriptionProfile')->save();
 Router::rout('/testMacros')->app('TestMacros')->save();
 Router::rout('/deleteProfile/:num=>id')->app('DeleteProfile')->save();
+
+
+Router::rout('/autoclick')->app('AutoClick')->save();
 
 ///webhook
 Router::rout('/webhook')->app('WebHook')->save();

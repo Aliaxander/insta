@@ -2,6 +2,7 @@
 <?php
 // application.php
 use Acme\Console\Command\BaseUploader;
+use Acme\Console\Command\BioUpload;
 use Acme\Console\Command\EditProfile;
 use Acme\Console\Command\FreenomReger;
 use Acme\Console\Command\FreenomWebReg;
@@ -32,6 +33,7 @@ $application->add(new BaseUploader());
 $application->add(new BaseUpload());
 $application->add(new ParseBaseIg());
 $application->add(new PreParseBase());
+$application->add(new BioUpload());
 
 $application->addCommands(
     array(

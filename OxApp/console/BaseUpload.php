@@ -29,7 +29,7 @@ class BaseUpload extends Command
                 'filename'
             );
     }
-
+    
     /**
      * @param InputInterface  $input
      * @param OutputInterface $output
@@ -43,22 +43,31 @@ class BaseUpload extends Command
         try {
             $dsn = DbConfig::$dbDriver . ':dbname=' . DbConfig::$dbname . ';host=' . DbConfig::$dbhost;
             $db = new \PDO($dsn, DbConfig::$dbuser, DbConfig::$dbuserpass, [
-                \PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"]
+                    \PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"
+                ]
             );
         } catch (\PDOException $e) {
             throw new \PDOException($e);
         }
         $file = $input->getArgument('file');
         $file = file($file);
-        foreach ($file as $item) {
-            $acc = @preg_replace("/[^0-9]/", '', $item);
-            $text .= "('$acc'),";
+        $file = array_chunk($file, 100000);
+        foreach ($file as $value) {
+            $text = '';
+            foreach ($value as $item) {
+                $acc = @preg_replace("/[^0-9]/", '', $item);
+                if (!empty($acc)) {
+                    $text .= "('$acc'),";
+                }
+            }
+            $text = mb_substr($text, 0, -1);
+            echo "INSERT INTO instBase (`account`) VALUE $text \n\n";
+            $count = $db->exec("INSERT INTO instBase (`account`) VALUE $text");
         }
-        $text = mb_substr($text, 0, -1);
-        $count = $db->exec("INSERT INTO profile (`account`) VALUE $text");
+        
         $end = microtime(true);
         $time = round($end - $start, 4);
-
+        
         return $output->writeln("Complite {$count} time: {$time}s");
     }
 }

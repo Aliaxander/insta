@@ -45,8 +45,21 @@ require(__DIR__ . "/../OxApp/Routes.php");
 //        HashTags::add(['tag' => $domain]);
 //    }
 //}
-
-//$domains='';
+//
+//$domains='gareput.cu.cc
+//parrabne.cu.cc
+//aningonetal.cu.cc
+//sodingwass.cu.cc
+//belacron.cu.cc
+//jushathen.cu.cc
+//tedronrep.cu.cc
+//tinfortet.cu.cc
+//titrollet.cu.cc
+//wronceron.cu.cc
+//rephanled.cu.cc
+//lacranno.cu.cc
+//butrethet.cu.cc
+//orfortred.cu.cc';
 //$domains = explode("\n", $domains);
 //foreach ($domains as $domain) {
 //    $proxy = str_replace(["\n", " "], "", $domain);

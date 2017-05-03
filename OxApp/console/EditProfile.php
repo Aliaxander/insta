@@ -99,7 +99,7 @@ class EditProfile extends Command
                     $i = 0;
                     while ($loginResult === '') {
                         $login = $api->login($user->guid, $user->phoneId, $user->deviceId, $user->password);
-                        $loginResult = $login[1];
+                        $loginResult = @$login[1];
                         if ($i === 5) {
                             $loginResult = false;
                         }
@@ -147,14 +147,14 @@ class EditProfile extends Command
                     //                }
                     
                     //$faker = Factory::create();
-                    $domain = Domains::orderBy(['id' => 'desc'])->limit([0 => 1])->find(['status' => 0]);
+                    $domain = Domains::orderBy(['id' => 'asc'])->limit([0 => 1])->find(['status' => 0]);
                     if ($domain->count == 1) {
                         Domains::where(['id' => $domain->rows[0]->id])->update(['status' => 1]);
                         $domain = $domain->rows[0]->domain;
-                        if (rand(0, 1) == 1) {
-                            $domain = "http://" . $domain;
-                        }
-                        $domain = str_replace(" ", "", $domain);
+                        //                        if (rand(0, 1) == 1) {
+                        //                            $domain = "http://" . $domain;
+                        //                        }
+                        $domain = str_replace([" ", "\n", "\r", "\t"], "", $domain);
                         $profileResult = '';
                         $i = 0;
                         while ($profileResult === '') {

@@ -66,7 +66,8 @@ class Likes extends Command
             $api->csrftoken = $user->csrftoken;
             if (!file_exists("/home/insta/cookies/" . $user->userName . "-cookies.dat") || $user->logIn === 2) {
                 echo "login account:";
-                $api->login($user->guid, $user->phoneId, $user->deviceId, $user->password);
+                $login = $api->login($user->guid, $user->phoneId, $user->deviceId, $user->password);
+                Checkpoint::checkPoint($login, $user);
             }
             
             if (empty($user->csrftoken)) {
@@ -83,15 +84,16 @@ class Likes extends Command
                     if ($i == 10) {
                         $tokenResult = false;
                     }
-                    if ($sync[1]['message'] === 'checkpoint_required') {
-                        $checkPoint = new Checkpoint($user->userName);
-                        $checkPoint->proxy = $user->proxy;
-                        $checkPoint->accountId = $user->accountId;
-                        $checkPoint->request($sync[1]['checkpoint_url']);
-                        Users::where(['id' => $user->id])->update(['ban' => 1]);
-                        die("Account banned");
-                    }
+                    //                    if ($sync[1]['message'] === 'checkpoint_required') {
+                    //                        $checkPoint = new Checkpoint($user->userName);
+                    //                        $checkPoint->proxy = $user->proxy;
+                    //                        $checkPoint->accountId = $user->accountId;
+                    //                        $checkPoint->request($sync[1]['checkpoint_url']);
+                    //                        Users::where(['id' => $user->id])->update(['ban' => 1]);
+                    //                        die("Account banned");
+                    //                    }
                     
+                    Checkpoint::checkPoint($sync, $user);
                     $i++;
                 }
                 if ($tokenResult == false || $tokenResult == '') {
@@ -101,14 +103,43 @@ class Likes extends Command
                 Users::where(['id' => $user->id])->update(['csrftoken' => $tokenResult]);
             }
             //$api->login($user->guid, $user->phoneId, $user->deviceId, $user->password);
-            
+            //Follow my accouns:
+            if (SystemSettings::get('followBot') === 1) {
+                $usersFollow = Users::orderBy(["id" => 'desc'])->find([
+                    'ban' => 0,
+                    'userTask' => 3,
+                    'accountId/>' => 0,
+                    'id/!=' => $user->id,
+                ]);
+                if ($usersFollow->count > 0) {
+                    $array = $usersFollow->rows;
+                    if ($usersFollow->count < 8) {
+                        $count = $usersFollow->count - 1;
+                    } else {
+                        $count = 8;
+                    }
+                    $randUsers = mt_rand(1, $count);
+                    for ($i = 0; $i < $randUsers; $i++) {
+                        $rand = mt_rand(0, count($array));
+                        $randUser = $array[$rand];
+                        sleep(rand(1, 3));
+                        $result = $api->getFeed($randUser->accountId);
+                        print_r($result);
+                        print_r($api->follow($randUser->accountId));
+                        $followCou++;
+                        $requestCou += 2;
+                        unset($array[$rand]);
+                        sleep(rand(10, 20));
+                    }
+                }
+            }
             $status = true;
             while ($status = true) {
                 $userTest = Users::find(['id' => $user->id, 'ban' => 0]);
                 if ($userTest->count === 0) {
                     die();
                 }
-                $accRow = InstBase::limit([0 => 1])->find(['status' => 0]);
+                $accRow = InstBase::orderBy(['id' => 'desc'])->limit([0 => 1])->find(['status' => 0]);
                 $acc = @preg_replace("/[^0-9]/", '', $accRow->rows[0]->account);
                 if (!empty($acc)) {
                     InstBase::where(['id' => $accRow->rows[0]->id])->update(['status' => 1]);
@@ -118,29 +149,27 @@ class Likes extends Command
                         $api->getRecentActivityAll();
                     }
                     $result = $api->getFeed($acc);
+                    
+                    Checkpoint::checkPoint($result, $user);
+                    
                     if (isset($result['1']['message']) && $result['1']['message'] === 'login_required') {
                         echo "login_required";
                         $login = $api->login($user->guid, $user->phoneId, $user->deviceId, $user->password);
-                        $checkPoint = new Checkpoint($user->userName);
-                        if (isset($login[1]['checkpoint_url'])) {
-                            $result = $checkPoint->request($login[1]['checkpoint_url']);
-                            if (preg_match("/Your phone number will be added\b/i", $result[1])) {
-                                Users::where(['id' => $user->id])->update(['ban' => 3]);
-                                die("SMS BAN!");
-                            }
-                        }
+                        Checkpoint::checkPoint($login, $user);
+                        //                        $checkPoint = new Checkpoint($user->userName);
+                        //                        if (isset($login[1]['checkpoint_url'])) {
+                        //                            $result = $checkPoint->request($login[1]['checkpoint_url']);
+                        //                            if (preg_match("/Your phone number will be added\b/i", $result[1])) {
+                        //                                Users::where(['id' => $user->id])->update(['ban' => 3]);
+                        //                                die("SMS BAN!");
+                        //                            }
+                        //                        }
                     } elseif (isset($result['1']['message']) && $result['1']['message'] === 'checkpoint_required') {
                         echo "\nLogout user account\n";
                         unlink("/home/insta/cookies/" . $user->userName . "-cookies.dat");
                         $login = $api->login($user->guid, $user->phoneId, $user->deviceId, $user->password);
-                        $checkPoint = new Checkpoint($user->userName);
-                        if (isset($login[1]['checkpoint_url'])) {
-                            $result = $checkPoint->request($login[1]['checkpoint_url']);
-                            if (preg_match("/Your phone number will be added\b/i", $result[1])) {
-                                Users::where(['id' => $user->id])->update(['ban' => 1]);
-                                die("SMS BAN!");
-                            }
-                        }
+                        Checkpoint::checkPoint($login, $user);
+                        
                         //                        $checkPoint = new Checkpoint($user->userName);
                         //                        $checkPoint->proxy = $user->proxy;
                         //                        $checkPoint->accountId = $user->accountId;
@@ -166,41 +195,35 @@ class Likes extends Command
                         $requestCou += 2;
                     } elseif (!empty($result[1]['items'])) {
                         sleep(rand(0, 1));
-                        $rows = $result[1]['items'];
-                        $rowMedia = @$result[1]['items'][mt_rand(0, count($rows) - 1)];
-                        $like1 = $rowMedia['id'];
-                        $userNameLike = $rowMedia['user']['username'];
-                        $mediaType = $rowMedia['media_type'];
-                        if ($like1) {
-                            InstBase::where(['id' => $accRow->rows[0]->id])->update(['likes' => round($accRow->rows[0]->likes + 1)]);
-                            $createResult = '';
-                            $i = 0;
-                            while ($createResult === '') {
+                        $randLikes = mt_rand(SystemSettings::get('likesForAccountMin'),
+                            SystemSettings::get('likesForAccountMax'));
+                        for ($i = 0; $i <= $randLikes; $i++) {
+                            $rows = $result[1]['items'];
+                            $rowMedia = @$result[1]['items'][mt_rand(0, count($rows) - 1)];
+                            $like1 = $rowMedia['id'];
+                            $userNameLike = $rowMedia['user']['username'];
+                            $mediaType = $rowMedia['media_type'];
+                            if ($like1) {
+                                InstBase::where(['id' => $accRow->rows[0]->id])->update(['likes' => round($accRow->rows[0]->likes + 1)]);
                                 $likes = $api->like($like1, $acc, $userNameLike, $mediaType);
-                                $createResult = $likes[1];
-                                if ($i === 3) {
-                                    $createResult = false;
-                                }
-                                $i++;
+                                sleep(mt_rand(1, 2));
+                                //$likes = $api->oldLike($like1);
+                                
+                                print_r($likes);
+                                
+                                $likeCou++;
+                                $requestCou += 1;
+                                sleep(mt_rand(SystemSettings::get('timeOutMin'), SystemSettings::get('timeOutMax')));
                             }
-                            print_r($likes);
                             $feed = $api->getFeed($acc);
-                            if (@$feed[1]['message'] === 'checkpoint_required') {
-                                Users::where(['id' => $user->id])->update(['ban' => 1]);
-                                die("Account banned");
-                            }
-                            $likeCou++;
+                            Checkpoint::checkPoint($feed, $user);
                             $requestCou += 4;
-                            sleep(rand(SystemSettings::get('timeOutMin'), SystemSettings::get('timeOutMax')));
                         }
                     } else {
                         $result = $api->getRecentActivityAll();
-                        if (@$result[1]['message'] === 'checkpoint_required') {
-                            Users::where(['id' => $user->id])->update(['ban' => 1]);
-                            die("Account banned");
-                        }
+                        Checkpoint::checkPoint($result, $user);
                     }
-                    if (rand(0, 40) == 10) {
+                    if (mt_rand(0, 40) == 10) {
                         $api->getRecentActivityAll();
                     }
                     if ($requestCou !== 0) {
@@ -215,14 +238,12 @@ class Likes extends Command
                     $folLikSum = round($likeCou + $followCou);
                     
                     $resultLikesForTimeout = $folLikSum / $hour;
-                    if ($resultLikesForTimeout > rand(450, 500) && $resultLikesForTimeout < 600) {
+                    
+                    if ($resultLikesForTimeout > mt_rand(700, 900)) {
                         $hour += 1;
                         Users::where(['id' => $user->id])->update(['hour' => $hour]);
                         echo "Sleep";
-                        sleep(rand(2000, 9000));
-                    }
-                    if ($hour >= 4 && $likeCou > 700) {
-                        sleep(rand(70000, 87000));
+                        sleep(mt_rand(30000, 50000));
                     }
                 }
             }
@@ -230,4 +251,5 @@ class Likes extends Command
         
         return $output->writeln("Complite");
     }
+    
 }
