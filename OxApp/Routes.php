@@ -46,10 +46,19 @@ Router::rout('/userGroup')->app('UserGroup')->save();
 Router::rout('/task')->app('Task')->save();
 Router::rout('/taskType')->app('TaskType')->save();
 
+//gmail
+Router::rout('/gmail')->app('Gmail')->save();
+
+//domains
+Router::rout('/domains')->app('Domains')->save();
+
 //systemSettings
 Router::rout('/systemSettings')->app('SystemSettings')->save();
 
 Router::setMiddlewareGroup('Json', function () {
     Router::rout('/api/users')->app('api\\Users')->save();
     Router::rout('/api/systemSettings')->app('api\\SystemSettings')->save();
+    Router::rout('/api/gmail')->app('api\\Gmail')->save();
+    Router::rout('/api/domains')->app('api\\Domains')->save();
+    Router::rout('/api/proxy')->app('api\Proxy')->save();
 });

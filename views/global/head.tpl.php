@@ -64,6 +64,8 @@
                     <li><a href="/descriptionProfile">DescriptionProfile</a></li>
                     <li><a href="/testMacros">Test Template</a></li>
                     <li><a href="/systemSettings">SystemSettings</a></li>
+                    <li><a href="/gmail">Gmail</a></li>
+                    <li><a href="/domains">Domains</a></li>
 
                 </ul>
             </li>

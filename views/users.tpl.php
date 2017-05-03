@@ -15,9 +15,12 @@
             data-target=".modal-resetUsers" disabled><i
                 class="glyphicon glyphicon-refresh"></i> Reset
     </button>
-    <a href="#" class="btn btn-default disabled" role="button">Total likes: {{ likesSum }}</a>
-    <a href="#" class="btn btn-default disabled" role="button">Total users: {{ usersSum }}</a>
-
+    <button class="btn btn-primary" type="button">
+        Total likes: <span class="badge">{{ likesSum }}</span>
+    </button>
+    <button class="btn btn-primary" type="button">
+        Total users: <span class="badge">{{ usersSum }}</span>
+    </button>
 </div>
 <div class="panel panel-primary">
     <div class="panel-heading">
