@@ -50,13 +50,15 @@
                        data-show-refresh="true"
                        data-search="true"
                        data-sort-order="desc"
+                       data-filter-control="true"
                        data-url="/api/domains">
                     <thead>
                     <tr>
                         <th data-field="id" data-sortable="true">ID</th>
                         <th data-field="domain" data-sortable="true" data-formatter="domainFormatter">Domain</th>
                         <th data-field="dateCreate" data-sortable="true">dateCreate</th>
-                        <th data-field="status" data-editable="true" data-sortable="true">Status</th>
+                        <th data-field="status" data-filter-control="select" data-align="center"
+                            data-filter-data="var:statusId" data-editable="true" data-sortable="true">Status</th>
                     </tr>
                     </thead>
                 </table>
@@ -65,6 +67,11 @@
     </div>
 </div>
 <script>
+    var statusId = {
+        0: "0",
+        1: "1",
+        2: "2"
+    };
     $('#table').on('editable-save.bs.table', function (e, field, row, oldValue, $el) {
         //console.log(row);
         $.ajax({
