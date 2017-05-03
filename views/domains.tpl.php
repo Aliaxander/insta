@@ -54,7 +54,7 @@
                     <thead>
                     <tr>
                         <th data-field="id" data-sortable="true">ID</th>
-                        <th data-field="domain" data-sortable="true">Domain</th>
+                        <th data-field="domain" data-sortable="true" data-formatter="domainFormatter">Domain</th>
                         <th data-field="dateCreate" data-sortable="true">dateCreate</th>
                         <th data-field="status" data-editable="true" data-sortable="true">Status</th>
                     </tr>
@@ -75,6 +75,10 @@
             console.log(msg);
         });
     });
+
+    function domainFormatter(value) {
+        return '<a href="http://' + value + '" target="_blank"><i class="glyphicon glyphicon-link"></i> ' + value + '</a>';
+    }
 
     function addDomains() {
         var domains = $('#domains-form').val();
