@@ -8,9 +8,10 @@
 
 namespace OxApp\controllers;
 
+use Ox\App;
 use Ox\View;
 
-class GmailController
+class GmailController extends App
 {
      public function get()
      {
