@@ -60,30 +60,17 @@ class DomainsController extends App
      */
     public function post()
     {
-        $domain = $this->request->request->get('domain');
         $domains = $this->request->request->get('domains');
 
-        if (!empty($domain)) {
-            $domain = Domains::data(
-                [
-                    'domain' => trim(str_replace('http://', '', $domain)),
-                ]
-            )->add();
-            if ($domain->count === 1) {
-                return json_encode([
-                    'name' => $this->request->request->get('domain'),
-                    'status' => 'success',
-                ]);
-            }
-        } elseif (!empty($domains)) {
+        if (!empty($domains)) {
             $domains = explode("\n", $domains);
             foreach ($domains as $item) {
                 $domains[] = Domains::data(['domain' => trim(str_replace('http://', '', $item))])->add();
             }
 
-            if (count($domains) > 0) {
+            if ($count = count($domains) > 0) {
                 return json_encode([
-                    'name' => 'files upload',
+                    'name' => "Добавленно {$count} домен(ов)",
                     'status' => 'success',
                 ]);
             }
@@ -91,7 +78,7 @@ class DomainsController extends App
 
 
         return json_encode([
-            'name' => 'domain not upload',
+            'name' => 'Произошла ошибка',
             'status' => 'danger',
         ]);
     }
