@@ -65,7 +65,10 @@ class DomainsController extends App
         if (!empty($domains)) {
             $domains = explode("\n", $domains);
             foreach ($domains as $item) {
-                $domains[] = Domains::data(['domain' => trim(str_replace('http://', '', $item))])->add();
+                if (!empty($item)) {
+                    $domains[] = Domains::data(['domain' => trim(str_replace('http://', '', $item))])
+                        ->add();
+                }
             }
         }
 
