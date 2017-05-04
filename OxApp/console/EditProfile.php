@@ -205,7 +205,7 @@ class EditProfile extends Command
                                 $magic = new \Imagick();
                                 $magic->readimage($photo);
                                 $magic->flopImage();
-                                $magic->blurImage(rand(0, 50), rand(6, 10));
+                                $magic->blurImage(rand(0, 30), rand(7, 10));
                                 $magic->rotateImage('rgba(' . rand(0, 255) . ', ' . rand(0, 255) . ', ' . rand(0,
                                         255) . ')', rand(0, 5));
                                 // Создать новый шаблон
@@ -213,7 +213,7 @@ class EditProfile extends Command
                                 
                                 // Свойства шрифта
                                 //$draw->setFont('Arial');
-                                $draw->setFontSize(rand(40, 120));
+                                $draw->setFontSize(rand(40, 90));
                                 $draw->setFillColor('rgba(' . rand(0, 255) . ', ' . rand(0, 255) . ', ' . rand(0,
                                         255) . ')');
                                 
