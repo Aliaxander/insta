@@ -20,6 +20,7 @@
                        data-side-pagination="server"
                        data-pagination="true"
                        data-page-size="50"
+                       data-height="500"
                        data-page-list="[50, 100, 200, 500, 1000, 5000]"
                        data-sort-name="id"
                        data-show-refresh="true"
@@ -79,6 +80,13 @@
 </div>
 <!-- end moadal add-proxy -->
 <script>
+    $(function () {
+        // sometimes footer render error.
+        setTimeout(function () {
+            $table.bootstrapTable('resetView', {height: getHeight()});
+        }, 200);
+    });
+
     $('#table').on('editable-save.bs.table', function (e, field, row, oldValue, $el) {
         //console.log(row);
         $.ajax({
@@ -89,6 +97,10 @@
             console.log(msg);
         });
     });
+
+    function getHeight() {
+        return $(window).height() - $('nav').outerHeight(false);
+    }
 
     function addProxy() {
         var ip = $('#ip-form').val();
