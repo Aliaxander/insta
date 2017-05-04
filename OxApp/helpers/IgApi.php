@@ -339,9 +339,9 @@ class IgApi
         $body = substr($resp, $header_len);
         curl_close($ch);
         print_r($body);
-    
+        
         //print_r(json_decode($body, true));
-    
+        
         return [$header, json_decode($body, true)];
     }
     
@@ -378,9 +378,10 @@ class IgApi
             'biography' => $biography,
             'gender' => 2,
             'external_url' => $url,
-            'is_private' => true
         ];
-        
+        if (SystemSettings::get('isPrivate') === 1) {
+            $data['is_private'] = true;
+        }
         $data = json_encode($data);
         
         return $this->request('accounts/edit_profile/', $data);
@@ -872,15 +873,15 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
             ];
             curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
         } else {
-//            $headers = [
-//                'Connection: keep-alive',
-//                "X-IG-Connection-Type: WIFI",
-//                "X-IG-Capabilities: 3Ro=",
-//                'Accept-Encoding: gzip, deflate',
-//                'Accept-Language: en-US',
-//            ];
-//            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-//            curl_setopt($ch, CURLOPT_ENCODING, "gzip");
+            //            $headers = [
+            //                'Connection: keep-alive',
+            //                "X-IG-Connection-Type: WIFI",
+            //                "X-IG-Capabilities: 3Ro=",
+            //                'Accept-Encoding: gzip, deflate',
+            //                'Accept-Language: en-US',
+            //            ];
+            //            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+            //            curl_setopt($ch, CURLOPT_ENCODING, "gzip");
         }
         //
         curl_setopt($ch, CURLOPT_HEADER, true);

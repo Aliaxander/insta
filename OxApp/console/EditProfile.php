@@ -175,7 +175,7 @@ class EditProfile extends Command
                             //                        $domain = "http://" . $domain;
                             //                    }
                             
-                            $profile = $api->edit($biography, $domain, $user->phoneId, $user->firstName,
+                            $profile = $api->oldEdit($biography, $domain, $user->phoneId, $user->firstName,
                                 $user->email);
                             $profileResult = $profile[1];
                             if (empty($profile[1])) {
