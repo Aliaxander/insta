@@ -16,5 +16,5 @@ use Ox\DataBase\AbstractModel;
  */
 class Gmail extends AbstractModel
 {
-    protected static $from = 'banStatus';
+    protected static $from = 'gmail';
 }

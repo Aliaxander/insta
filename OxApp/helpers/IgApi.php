@@ -246,13 +246,105 @@ class IgApi
         return $resultEdit;
     }
     
-    public function uploadPhoto($photo)
-    {
-        if (!empty($photo)) {
-            $resultEdit = $this->request('upload/photo/', null, null, $photo);
-            print_r($resultEdit);
+    //    public function uploadPhoto($photo)
+    //    {
+    //        if (!empty($photo)) {
+    //            $resultEdit = $this->request('upload/photo/', null, null, $photo);
+    //            print_r($resultEdit);
+    //        }
+    //    }
+    
+    public function uploadPhoto(
+        $photo,
+        $caption = null,
+        $customPreview = null,
+        $location = null,
+        $filter = null,
+        $reel_flag = false
+    ) {
+        $endpoint = 'upload/photo/';
+        $boundary = $this->guid;
+        $upload_id = number_format(round(microtime(true) * 1000), 0, '', '');
+        $fileToUpload = file_get_contents($photo);
+        
+        $bodies = [
+            [
+                'type' => 'form-data',
+                'name' => 'upload_id',
+                'data' => $upload_id,
+            ],
+            [
+                'type' => 'form-data',
+                'name' => '_uuid',
+                'data' => $boundary,
+            ],
+            [
+                'type' => 'form-data',
+                'name' => '_csrftoken',
+                'data' => $this->csrftoken,
+            ],
+            [
+                'type' => 'form-data',
+                'name' => 'image_compression',
+                'data' => '{"lib_name":"jt","lib_version":"1.3.0","quality":"87"}',
+            ],
+            [
+                'type' => 'form-data',
+                'name' => 'photo',
+                'data' => $fileToUpload,
+                'filename' => 'pending_media_' . number_format(round(microtime(true) * 1000), 0, '', '') . '.jpg',
+                'headers' => [
+                    'Content-Transfer-Encoding: binary',
+                    'Content-Type: application/octet-stream',
+                ],
+            ],
+        ];
+        $data = $this->buildBody($bodies, $boundary);
+        $headers = [
+            'X-IG-Capabilities: 3Ro=',
+            'X-IG-Connection-Type: WIFI',
+            'Content-Type: multipart/form-data; boundary=' . $boundary,
+            'Content-Length: ' . strlen($data),
+            'Accept-Language: en-US',
+            'Accept-Encoding: gzip, deflate',
+            'Connection: close',
+        ];
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, 'https://i.instagram.com/api/v1/' . $endpoint);
+        curl_setopt($ch, CURLOPT_USERAGENT, $this->userAgent);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+        curl_setopt($ch, CURLOPT_HEADER, true);
+        curl_setopt($ch, CURLOPT_VERBOSE, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_COOKIEFILE, "/home/insta/cookies/" . $this->username . "-cookies.dat");
+        curl_setopt($ch, CURLOPT_COOKIEJAR, "/home/insta/cookies/" . $this->username . "-cookies.dat");
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+        $pos = strripos($this->proxy, ';');
+        if ($pos === false) {
+            curl_setopt($ch, CURLOPT_PROXY, $this->proxy);
+        } else {
+            $proxy = explode(";", $this->proxy);
+            curl_setopt($ch, CURLOPT_PROXY, $proxy[0]);
+            if (!empty($proxy[1])) {
+                curl_setopt($ch, CURLOPT_PROXYUSERPWD, $proxy[1]);
+            }
         }
+        $resp = curl_exec($ch);
+        $header_len = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
+        $header = substr($resp, 0, $header_len);
+        $body = substr($resp, $header_len);
+        curl_close($ch);
+        print_r($body);
+    
+        //print_r(json_decode($body, true));
+    
+        return [$header, json_decode($body, true)];
     }
+    
     
     public function oldEdit($biography, $url, $phoneId, $firstName, $email)
     {
@@ -335,6 +427,7 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
             '_uuid' => $this->guid,
             'biography' => $biography,
             'email' => $email,
+           // 'is_private' => true
         ];
         if (SystemSettings::get('isPrivate') === 1) {
             $data['is_private'] = true;
@@ -777,50 +870,6 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
                 'Accept: */*',
                 'Content-Type: multipart/form-data; boundary=' . $boundary,
                 'Accept-Language: en-en',
-            ];
-            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-        } elseif ($profilePhoto) {
-            $boundary = $this->guid;
-            $bodies = [
-                [
-                    'type' => 'form-data',
-                    'name' => 'upload_id',
-                    'data' => number_format(round(microtime(true) * 1000), 0, '', ''),
-                ],
-                [
-                    'type' => 'form-data',
-                    'name' => '_uuid',
-                    'data' => $boundary,
-                ],
-                [
-                    'type' => 'form-data',
-                    'name' => '_csrftoken',
-                    'data' => $this->csrftoken,
-                ],
-                [
-                    'type' => 'form-data',
-                    'name' => 'image_compression',
-                    'data' => '{"lib_name":"jt","lib_version":"1.3.0","quality":"87"}',
-                ],
-                [
-                    'type' => 'form-data',
-                    'name' => 'photo',
-                    'data' => file_get_contents($profilePhoto),
-                    'filename' => 'pending_media_' . number_format(round(microtime(true) * 1000), 0, '', '') . '.jpg',
-                    'headers' => [
-                        'Content-Transfer-Encoding: binary',
-                        'Content-Type: application/octet-stream',
-                    ],
-                ],
-            ];
-            
-            $data = $this->buildBody($bodies, $boundary);
-            $headers = [
-                'Proxy-Connection: keep-alive',
-                'Connection: keep-alive',
-                'Accept: */*',
-                'Content-Type: multipart/form-data; boundary=' . $boundary,
-                'Accept-Language: en-US',
             ];
             curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
         } else {
