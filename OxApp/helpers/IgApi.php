@@ -426,8 +426,7 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
             '_uid' => $this->accountId,
             '_uuid' => $this->guid,
             'biography' => $biography,
-            'email' => $email,
-           // 'is_private' => true
+            'email' => $email
         ];
         if (SystemSettings::get('isPrivate') === 1) {
             $data['is_private'] = true;
