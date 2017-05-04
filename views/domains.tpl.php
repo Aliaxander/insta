@@ -161,7 +161,7 @@
                 } else {
                     $('.alerts').html('<div class="alert alert-danger alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button> <strong> Error add domains </strong>');
                 }
-                $('.modal-delete').modal('hide');
+                $('.modal-add').modal('hide');
                 $('#table').bootstrapTable('refresh');
                 $('#name-form').val('');
                 $('#value-form').val('');
@@ -181,7 +181,7 @@
                 } else {
                     $('.alerts').html('<div class="alert alert-danger alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button> <strong> Error delete domains </strong>');
                 }
-                $('.modal-add').modal('hide');
+                $('.modal-delete').modal('hide');
                 $('#table').bootstrapTable('refresh');
             }
         })
