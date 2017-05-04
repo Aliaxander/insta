@@ -10,6 +10,7 @@ namespace OxApp\helpers;
 
 use Faker\Factory;
 use InstagramAPI\Checkpoint;
+use OxApp\models\SystemSettings;
 use OxApp\models\Users;
 
 class IgApi
@@ -334,9 +335,10 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
             '_uuid' => $this->guid,
             'biography' => $biography,
             'email' => $email,
-            'is_private' => true
         ];
-        
+        if (SystemSettings::get('isPrivate') === 1) {
+            $data['is_private'] = true;
+        }
         $data = json_encode($data);
         
         return $this->request('accounts/edit_profile/', $data);
@@ -358,7 +360,8 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
         if (mt_rand(0, 4) == 1) {
             $uname = $faker->userName . range('a', 'z')[rand(0, 26)] . range('a', 'z')[rand(0, 26)];
         } elseif (mt_rand(0, 1) == 0) {
-            $uname = $faker->firstNameFemale . range('a', 'z')[rand(0, 26)] . range('a', 'z')[rand(0, 26)] . $faker->lastName . range('a',
+            $uname = $faker->firstNameFemale . range('a', 'z')[rand(0, 26)] . range('a', 'z')[rand(0,
+                    26)] . $faker->lastName . range('a',
                     'z')[rand(0, 26)] . range('a', 'z')[rand(0, 26)];
         } elseif (mt_rand(0, 1) == 0) {
             $uname = $faker->firstNameFemale . range('a',
