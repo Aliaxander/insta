@@ -9,6 +9,7 @@
 namespace OxApp\controllers\api;
 
 use Ox\App;
+use OxApp\helpers\IsDomainAviable;
 use OxApp\models\Domains;
 
 class DomainsController extends App
@@ -54,12 +55,16 @@ class DomainsController extends App
             ->where($where)
             ->orderBy(["id" => "desc"])
             ->find();
-        $domains = Domains::orderBy($orderBy)
+        $domain = Domains::orderBy($orderBy)
             ->where($where)
             ->limit($paging)
             ->find()
             ->rows;
 
+        foreach ($domain as $key => $item) {
+            $domains[$key] = $item;
+            $domains[$key]->isAviable = IsDomainAviable::isAviable($item->domain);
+        }
         return json_encode([
             'total' => (int)@$total->rows[0]->count,
             'rows' => $domains,
