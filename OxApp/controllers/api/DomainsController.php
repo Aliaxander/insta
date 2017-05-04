@@ -11,7 +11,6 @@ namespace OxApp\controllers\api;
 use Ox\App;
 use OxApp\helpers\IsDomainAviable;
 use OxApp\models\Domains;
-use OxApp\models\SystemSettings;
 
 class DomainsController extends App
 {
@@ -61,6 +60,7 @@ class DomainsController extends App
             ->limit($paging)
             ->find()
             ->rows;
+        $domains = [];
         foreach ($domain as $key => $item) {
             $domains[$key] = $item;
             $domains[$key]->isAviable = IsDomainAviable::isAviable($item->domain);
@@ -121,5 +121,22 @@ class DomainsController extends App
             'name' => $this->request->request->get('domains'),
             'status' => 'danger'
         ]);
+    }
+
+    /**
+     * @return string
+     */
+    function delete()
+    {
+        $result = ['status' => 500];
+        $id = $this->request->request->get('id');
+        if (!empty($id)) {
+            $domains = Domains::delete(['id/in' => $id]);
+            if (count($domains) > 0) {
+                $result = ['status' => 200];
+            }
+        }
+
+        return json_encode($result);
     }
 }
