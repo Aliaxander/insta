@@ -189,7 +189,7 @@ class EditProfile extends Command
                         
                         print_r($profile);
                         
-                        if (SystemSettings::get('uploadPhotos') === 1) {
+                        if (SystemSettings::get('uploadPhotos') == 1) {
                             $dir = scandir('/home/feedPhoto/');
                             unset($dir[array_search('.', $dir)]);
                             unset($dir[array_search('..', $dir)]);
