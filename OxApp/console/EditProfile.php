@@ -196,11 +196,8 @@ class EditProfile extends Command
                             $dir = array_values($dir);
                             for ($i = 0; $i < SystemSettings::get('countFeedPhoto'); $i++) {
                                 $file = rand(0, count($dir) - 1);
-                                
                                 $resize = new Resize();
-                                $photo = $resize->check('/home/feedPhoto/' . $dir[$file]);//$photo
-                                unset($dir[$file]);
-                                $dir = array_values($dir);
+                                $photo= '/home/feedPhoto/' . $dir[$file];
                                 
                                 $magic = new \Imagick();
                                 $magic->readimage($photo);
@@ -224,6 +221,10 @@ class EditProfile extends Command
                                 $magic->annotateImage($draw, rand(10, 150), rand(12, 160), 0, $domain);
                                 
                                 $magic->writeimage($photo);
+                                
+                                $photo = $resize->check('/home/feedPhoto/' . $dir[$file]);//$photo
+                                unset($dir[$file]);
+                                $dir = array_values($dir);
                                 
                                 print_r($media = $api->uploadPhoto($photo));
                                 
