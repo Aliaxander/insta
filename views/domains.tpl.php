@@ -46,7 +46,7 @@
                        data-pagination="true"
                        data-page-size="50"
                        data-height="500"
-                       data-page-list="[50, 100, 200, 500, 1000, 5000]"
+                       data-page-list="[10, 50, 100, 200, 500, 1000, 5000]"
                        data-sort-name="id"
                        data-show-refresh="true"
                        data-search="true"
@@ -58,6 +58,7 @@
                         <th data-field="domain" data-sortable="true">Domain</th>
                         <th data-field="dateCreate" data-sortable="true">dateCreate</th>
                         <th data-field="status" data-editable="true" data-sortable="true">Status</th>
+                        <th data-field="isAviable" data-sortable="true">isAviable</th>
                     </tr>
                     </thead>
                 </table>
@@ -69,18 +70,18 @@
     $(function () {
         // sometimes footer render error.
         setTimeout(function () {
-            $table.bootstrapTable('resetView', {height: getHeight()});
+            $('#table').bootstrapTable('resetView', {height: getHeight()});
         }, 200);
-    });
 
-    $('#table').on('editable-save.bs.table', function (e, field, row, oldValue, $el) {
-        //console.log(row);
-        $.ajax({
-            type: "PUT",
-            url: "/api/domains",
-            data: row
-        }).done(function (msg) {
-            console.log(msg);
+
+        $('#table').on('editable-save.bs.table', function (e, field, row, oldValue, $el) {
+            $.ajax({
+                type: "PUT",
+                url: "/api/domains",
+                data: row
+            }).done(function (msg) {
+                console.log(msg);
+            })
         });
     });
 

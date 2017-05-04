@@ -83,7 +83,7 @@
     $(function () {
         // sometimes footer render error.
         setTimeout(function () {
-            $table.bootstrapTable('resetView', {height: getHeight()});
+            $('#table').bootstrapTable('resetView', {height: getHeight()});
         }, 200);
     });
 

@@ -11,6 +11,7 @@ namespace OxApp\controllers\api;
 use Ox\App;
 use OxApp\helpers\IsDomainAviable;
 use OxApp\models\Domains;
+use OxApp\models\SystemSettings;
 
 class DomainsController extends App
 {
@@ -61,10 +62,17 @@ class DomainsController extends App
             ->find()
             ->rows;
 
-        foreach ($domain as $key => $item) {
-            $domains[$key] = $item;
-            $domains[$key]->isAviable = IsDomainAviable::isAviable($item->domain);
+        $params = SystemSettings::find(['name' => 'isDomainAviable', 'value' => 1]);
+        if ($params->count > 0) {
+            foreach ($domain as $key => $item) {
+                $domains[$key] = $item;
+                $domains[$key]->isAviable = IsDomainAviable::isAviable($item->domain);
+            }
+        } else {
+            $domains = $domain;
         }
+
+
         return json_encode([
             'total' => (int)@$total->rows[0]->count,
             'rows' => $domains,
