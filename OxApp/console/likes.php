@@ -104,7 +104,7 @@ class Likes extends Command
             }
             //$api->login($user->guid, $user->phoneId, $user->deviceId, $user->password);
             //Follow my accouns:
-            if (SystemSettings::get('followBot') == 1) {
+            if (SystemSettings::get('followBot') == 1 and rand(0, 1) === 1) {
                 $usersFollow = Users::orderBy(["id" => 'desc'])->find([
                     'ban' => 0,
                     'userTask' => 3,
