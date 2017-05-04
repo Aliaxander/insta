@@ -16,25 +16,14 @@ class IsDomainAviable
 {
     public static function isAviable($domain)
     {
-//        if (!filter_var($domain, FILTER_VALIDATE_URL)) {
-//            return false;
-//        }
-
-        $curlInit = curl_init($domain);
-        curl_setopt($curlInit, CURLOPT_CONNECTTIMEOUT, 10);
-        curl_setopt($curlInit, CURLOPT_HEADER, true);
-        curl_setopt($curlInit, CURLOPT_NOBODY, true);
-        curl_setopt($curlInit, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($curlInit, CURLOPT_FOLLOWLOCATION, false);
-
-        curl_exec($curlInit);
-        if (!curl_errno($curlInit)) {
-            $http_code = curl_getinfo($curlInit, CURLINFO_PRIMARY_IP);
-            return $http_code;
+        $dns = dns_get_record($domain);
+        if (!empty($dns[0]['type']) && !empty($dns[0]['ip'])) {
+            $result = $dns[0]['type'] . ' ' . $dns[0]['ip'];
+        } else {
+            $result = false;
         }
-        curl_close($curlInit);
 
 
-        return false;
+        return $result;
     }
 }

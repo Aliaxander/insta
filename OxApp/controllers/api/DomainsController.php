@@ -61,17 +61,10 @@ class DomainsController extends App
             ->limit($paging)
             ->find()
             ->rows;
-
-        $params = SystemSettings::find(['name' => 'isDomainAviable', 'value' => 1]);
-        if ($params->count > 0) {
-            foreach ($domain as $key => $item) {
-                $domains[$key] = $item;
-                $domains[$key]->isAviable = IsDomainAviable::isAviable($item->domain);
-            }
-        } else {
-            $domains = $domain;
+        foreach ($domain as $key => $item) {
+            $domains[$key] = $item;
+            $domains[$key]->isAviable = IsDomainAviable::isAviable($item->domain);
         }
-
 
         return json_encode([
             'total' => (int)@$total->rows[0]->count,
@@ -82,7 +75,8 @@ class DomainsController extends App
     /**
      * @return string
      */
-    public function post()
+    public
+    function post()
     {
         $domains = $this->request->request->get('domains');
 
@@ -108,7 +102,8 @@ class DomainsController extends App
     /**
      * @return string
      */
-    public function put()
+    public
+    function put()
     {
 
         $domains = Domains::update(
