@@ -10,6 +10,7 @@ namespace OxApp\helpers;
 
 use Faker\Factory;
 use InstagramAPI\Checkpoint;
+use OxApp\models\SystemSettings;
 use OxApp\models\Users;
 
 class IgApi
@@ -425,10 +426,11 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
             '_uid' => $this->accountId,
             '_uuid' => $this->guid,
             'biography' => $biography,
-            'email' => $email,
-           // 'is_private' => true
+            'email' => $email
         ];
-        
+        if (SystemSettings::get('isPrivate') === 1) {
+            $data['is_private'] = true;
+        }
         $data = json_encode($data);
         
         return $this->request('accounts/edit_profile/', $data);
@@ -820,7 +822,7 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
      *
      * @return array
      */
-    public function request($method, $data = null, $file = null)
+    public function request($method, $data = null, $file = null, $profilePhoto = null)
     {
         echo "Request: \n";
         echo $method . "\n";
@@ -870,15 +872,15 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
             ];
             curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
         } else {
-            $headers = [
-                'Connection: keep-alive',
-                "X-IG-Connection-Type: WIFI",
-                "X-IG-Capabilities: 3Ro=",
-                'Accept-Encoding: gzip, deflate',
-                'Accept-Language: en-US',
-            ];
-            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-            curl_setopt($ch, CURLOPT_ENCODING, "gzip");
+//            $headers = [
+//                'Connection: keep-alive',
+//                "X-IG-Connection-Type: WIFI",
+//                "X-IG-Capabilities: 3Ro=",
+//                'Accept-Encoding: gzip, deflate',
+//                'Accept-Language: en-US',
+//            ];
+//            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+//            curl_setopt($ch, CURLOPT_ENCODING, "gzip");
         }
         //
         curl_setopt($ch, CURLOPT_HEADER, true);

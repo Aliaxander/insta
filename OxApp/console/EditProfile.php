@@ -194,13 +194,12 @@ class EditProfile extends Command
                             unset($dir[array_search('.', $dir)]);
                             unset($dir[array_search('..', $dir)]);
                             $dir = array_values($dir);
-                            for ($i = 0; $i < 3; $i++) {
+                            
+                            $randCount = mt_rand(1, 3);//SystemSettings::get('countFeedPhoto')
+                            for ($i = 0; $i < $randCount; $i++) {
                                 $file = rand(0, count($dir) - 1);
-                                
                                 $resize = new Resize();
-                                $photo = $resize->check('/home/feedPhoto/' . $dir[$file]);//$photo
-                                unset($dir[$file]);
-                                $dir = array_values($dir);
+                                $photo = '/home/feedPhoto/' . $dir[$file];
                                 
                                 $magic = new \Imagick();
                                 $magic->readimage($photo);
@@ -225,6 +224,9 @@ class EditProfile extends Command
                                 
                                 $magic->writeimage($photo);
                                 
+                                $photo = $resize->check('/home/feedPhoto/' . $dir[$file]);//$photo
+                                unset($dir[$file]);
+                                $dir = array_values($dir);
                                 
                                 print_r($media = $api->uploadPhoto($photo));
                                 
