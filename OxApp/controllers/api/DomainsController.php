@@ -18,7 +18,18 @@ class DomainsController extends App
      */
     public function get()
     {
+        $rule = [
+            'status'
+        ];
         $where = [];
+        if (!empty($this->request->query->get('filter'))) {
+            $filters = json_decode($this->request->query->get('filter'));
+            foreach ($filters as $key => $item) {
+                if (in_array($key, $rule) && $item != '') {
+                    $where[$key] = $item;
+                }
+            }
+        }
         if (!empty($this->request->query->get('order')) && !empty($this->request->query->get('sort'))) {
             $orderBy = [$this->request->query->get('sort') => $this->request->query->get('order')];
         } else {
