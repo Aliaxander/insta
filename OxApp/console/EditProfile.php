@@ -11,6 +11,7 @@ namespace Acme\Console\Command;
 use Faker\Factory;
 use OxApp\helpers\FreenomReg;
 use OxApp\helpers\IgApi;
+use OxApp\helpers\Resize;
 use OxApp\models\Domains;
 use OxApp\models\ProfileGenerate;
 use OxApp\models\SystemSettings;
@@ -188,15 +189,64 @@ class EditProfile extends Command
                         
                         print_r($profile);
                         
-                        //            $dir = scandir('/home/photos2');
-                        //            unset($dir[array_search('.', $dir)]);
-                        //            unset($dir[array_search('..', $dir)]);
-                        //            $dir = array_values($dir);
-                        //            $photo = '/home/photos2/' . $dir[rand(0, count($dir) - 1)];
-                        //
-                        //            $api->uploadPhoto($photo);
-                        //            unlink($photo);
-                        //            sleep(rand(3, 10));
+                        if (SystemSettings::get('uploadPhotos') === 1) {
+                            $dir = scandir('/home/irina/feedPhoto/');
+                            unset($dir[array_search('.', $dir)]);
+                            unset($dir[array_search('..', $dir)]);
+                            $dir = array_values($dir);
+                            for ($i = 0; $i < 3; $i++) {
+                                $file = rand(0, count($dir) - 1);
+                                
+                                $resize = new Resize();
+                                $photo = $resize->check('/home/feedPhoto/' . $dir[$file]);//$photo
+                                unset($dir[$file]);
+                                $dir = array_values($dir);
+                                
+                                $magic = new \Imagick();
+                                $magic->readimage($photo);
+                                $magic->blurImage(rand(0, 50), rand(6, 10));
+                                
+                                // Создать новый шаблон
+                                $draw = new \ImagickDraw();
+                                
+                                // Свойства шрифта
+                                //$draw->setFont('Arial');
+                                $draw->setFontSize(rand(40, 120));
+                                $draw->setFillColor('rgba(' . rand(0, 255) . ', ' . rand(0, 255) . ', ' . rand(0,
+                                        255) . ')');
+                                
+                                // Положение текста
+                                $draw->setGravity(\Imagick::GRAVITY_SOUTHEAST);
+                                
+                                // Нарисовать текст на изображении
+                                $magic->annotateImage($draw, rand(10, 150), rand(12, 160), 0, $domain);
+                                
+                                $magic->writeimage($photo);
+                                
+                                
+                                print_r($media = $api->uploadPhoto($photo));
+                                
+                                $media_id = $media[1]['upload_id'];
+                                $data = [
+                                    'device_id' => $user->deviceId,
+                                    'guid' => $user->guid,
+                                    'media_id' => "$media_id",
+                                    'caption' => '',
+                                    'device_timestamp' => "" . time() . "",
+                                    'source_type' => '5',
+                                    'filter_type' => '0',
+                                    'extra' => '{}',
+                                    "Content-Type" => "application/x-www-form-urlencoded; charset=UTF-8"
+                                
+                                ];
+                                $data = json_encode($data);
+                                
+                                $arr = $api->request('media/configure/', $data);
+                                print_r($arr);
+                                // unlink($photo);
+                                sleep(rand(5, 10));
+                            }
+                        }
                         if (!empty($user->id)) {
                             Users::where(['id' => $user->id])->update([
                                 'login' => 1,
