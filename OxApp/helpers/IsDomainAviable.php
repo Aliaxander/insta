@@ -17,12 +17,12 @@ class IsDomainAviable
     public static function isAviable($domain)
     {
         $dns = dns_get_record($domain);
-        if (!empty($dns[0]['type']) && !empty($dns[0]['ip'])) {
-            $result = $dns[0]['type'] . ' ' . $dns[0]['ip'];
-        } else {
-            $result = false;
+        $result = false;
+        foreach ($dns as $item) {
+            if (!empty($item['type']) && !empty($item['ip'])) {
+                $result = $item['type'] . ' ' . $item['ip'];
+            }
         }
-
 
         return $result;
     }
