@@ -48,9 +48,9 @@ class DomainsController extends App
         }
         $paging = array($offset => $limit);
 
-        if (!empty($this->request->query->get("search"))) {
-            $where['domain/like'] = '%' . $this->request->query->get("search") . '%';
-        }
+//        if (!empty($this->request->query->get("search"))) {
+//            $where['domain/like'] = '%' . $this->request->query->get("search") . '%';
+//        }
         $total = Domains::selectBy("count(id) as count")
             ->where($where)
             ->orderBy(["id" => "desc"])
