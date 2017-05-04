@@ -14,7 +14,7 @@ use Ox\DataBase\AbstractModel;
  * Class Gmail
  * @package OxApp\models
  */
-class Gmail extends AbstractModel
+class TechAccount extends AbstractModel
 {
-    protected static $from = 'gmail';
+    protected static $from = 'techAccount';
 }

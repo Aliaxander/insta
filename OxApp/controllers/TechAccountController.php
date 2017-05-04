@@ -11,10 +11,10 @@ namespace OxApp\controllers;
 use Ox\App;
 use Ox\View;
 
-class GmailController extends App
+class TechAccountController extends App
 {
      public function get()
      {
-         View::build('gmail');
+         View::build('techAccount');
      }
 }

@@ -6,7 +6,7 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                             aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="gridSystemModalLabel">Add gmail</h4>
+                <h4 class="modal-title" id="gridSystemModalLabel">Add techAccount</h4>
             </div>
             <div class="modal-body">
                 <div class="row">
@@ -15,12 +15,14 @@
                         <input type="text" class="form-control" id="name-form" name="name" required>
                         <label for="value" class="control-label">Password</label>
                         <input type="text" class="form-control" id="password-form" name="value" required>
+                        <label for="type" class="control-label">Type</label>
+                        <input type="text" class="form-control" id="type-form" name="type" required>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary add-params" onclick="addGmail();">Add Gmail</button>
+                <button type="button" class="btn btn-primary add-params" onclick="addTechAccount();">Add TechAccount</button>
             </div>
         </div>
     </div>
@@ -32,24 +34,25 @@
         <div id="toolbar">
             <button class="btn btn-success" data-toggle="modal"
                     data-target=".modal-add"><i
-                        class="glyphicon glyphicon-envelope"></i> Add Gmail
+                        class="glyphicon glyphicon-envelope"></i> Add TechAccount
             </button>
         </div>
         <div class="panel panel-primary">
             <div class="panel-heading">
                 <h3 class="panel-title"><i
-                            class="glyphicon glyphicon-envelope"></i> Gmail</h3>
+                            class="glyphicon glyphicon-envelope"></i> TechAccount</h3>
             </div>
             <div class="panel-body">
                 <table id="table"
                        data-toolbar="#toolbar"
                        data-toggle="table"
-                       data-url="/api/gmail">
+                       data-url="/api/techAccount">
                     <thead>
                     <tr>
                         <th data-field="id">ID</th>
                         <th data-field="name">Name</th>
                         <th data-field="password">Password</th>
+                        <th data-field="type">type</th>
                         <th data-field="status" data-editable="true">Status</th>
                     </tr>
                     </thead>
@@ -63,26 +66,28 @@
         //console.log(row);
         $.ajax({
             type: "PUT",
-            url: "/api/gmail",
+            url: "/api/techAccount",
             data: row
         }).done(function (msg) {
             console.log(msg);
         });
     });
 
-    function addGmail() {
+    function addTechAccount() {
         var name = $('#name-form').val();
         var password = $('#password-form').val();
+        var type = $('#type-form').val();
         $.ajax({
             type: "post",
-            url: "/api/gmail",
-            data: {name: name, password: password}
+            url: "/api/techAccount",
+            data: {name: name, password: password, type: type}
         }).done(function (msg) {
             console.log(msg);
             $('.modal-add').modal('hide');
             $('#table').bootstrapTable('refresh');
             $('#name-form').val('');
-            $('#value-form').val('');
+            $('#password-form').val('');
+            $('#type-form').val('');
         });
     };
 </script>

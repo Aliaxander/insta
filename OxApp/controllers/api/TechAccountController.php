@@ -9,16 +9,16 @@
 namespace OxApp\controllers\api;
 
 use Ox\App;
-use OxApp\models\Gmail;
+use OxApp\models\TechAccount;
 
-class GmailController extends App
+class TechAccountController extends App
 {
     /**
      * @return string
      */
     public function get()
     {
-        $result = Gmail::find()->rows;
+        $result = TechAccount::find()->rows;
 
         return json_encode([
             'data' => $result
@@ -30,10 +30,11 @@ class GmailController extends App
      */
     public function post()
     {
-        $gmail = Gmail::data(
+        $gmail = TechAccount::data(
             [
                 'name' => $this->request->request->get('name'),
-                'password' => $this->request->request->get('password')
+                'password' => $this->request->request->get('password'),
+                'type' => $this->request->request->get('type')
             ]
         )->add();
         if ($gmail->count === 1) {
@@ -56,7 +57,7 @@ class GmailController extends App
     public function put()
     {
 
-        $gmail = Gmail::update(
+        $gmail = TechAccount::update(
             ['status' => $this->request->request->get('status')],
             ['id' => $this->request->request->get('id')]
         );
