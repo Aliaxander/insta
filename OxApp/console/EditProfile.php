@@ -205,7 +205,7 @@ class EditProfile extends Command
                                 $magic = new \Imagick();
                                 $magic->readimage($photo);
                                 $magic->flopImage();
-                                $magic->blurImage(rand(0, 30), rand(7, 10));
+                                $magic->blurImage(0, rand(7, 10));
                                 $magic->rotateImage('rgba(' . rand(0, 255) . ', ' . rand(0, 255) . ', ' . rand(0,
                                         255) . ')', rand(0, 5));
                                 // Создать новый шаблон
