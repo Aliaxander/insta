@@ -40,31 +40,41 @@ class UploadPhoto extends Command
     {
         require(__DIR__ . "/../../config.php");
         $status = true;
-        
-//        $users = Users::find(['id' => 9894]);
-//        $user = @$users->rows[0];
-//        $proxy = explode(":", @$user->proxy);
-//        if (empty($user)) {
-//            die('No users');
-//        }
-//        $api = new IgApi();
-//        $api->proxy = $user->proxy;
-//        $api->username = $user->userName;
-//        $api->guid = $user->guid;
-//        $api->csrftoken = $user->csrftoken;
-//        $loginResult = '';
-//        $i = 0;
-//        while ($loginResult === '') {
-//            $login = $api->login($user->guid, $user->phoneId, $user->deviceId, $user->password);
-//            $loginResult = @$login[1];
-//            if ($i === 5) {
-//                $loginResult = false;
-//            }
-//            $i++;
-//        }
-//        //
-//
-        
+        $dir = scandir('/home/irina/feedPhoto/');
+        unset($dir[array_search('.', $dir)]);
+        unset($dir[array_search('..', $dir)]);
+        $dir = array_values($dir);
+        for ($i = 0; $i < 3; $i++) {
+            $file = rand(0, count($dir) - 1);
+    
+            $resize = new Resize();
+            $photo = $resize->check('/home/irina/feedPhoto/' . $dir[$file]);//$photo
+            unset($dir[$file]);
+            $dir = array_values($dir);
+    
+            $magic = new \Imagick();
+            $magic->readimage($photo);
+            $magic->flopImage();
+            $magic->blurImage(rand(0, 50), rand(6, 10));
+            $magic->rotateImage('rgba(' . rand(0, 255) . ', ' . rand(0, 255) . ', ' . rand(0,
+                    255) . ')', rand(0, 5));
+            // Создать новый шаблон
+            $draw = new \ImagickDraw();
+    
+            // Свойства шрифта
+            //$draw->setFont('Arial');
+            $draw->setFontSize(rand(40, 120));
+            $draw->setFillColor('rgba(' . rand(0, 255) . ', ' . rand(0, 255) . ', ' . rand(0,
+                    255) . ')');
+    
+            // Положение текста
+            $draw->setGravity(\Imagick::GRAVITY_SOUTHEAST);
+    
+            // Нарисовать текст на изображении
+          //  $magic->annotateImage($draw, rand(10, 150), rand(12, 160), 0, $domain);
+    
+            $magic->writeimage($photo);
+        }
      
         
         //EditProfile

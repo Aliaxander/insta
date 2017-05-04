@@ -190,7 +190,7 @@ class EditProfile extends Command
                         print_r($profile);
                         
                         if (SystemSettings::get('uploadPhotos') === 1) {
-                            $dir = scandir('/home/irina/feedPhoto/');
+                            $dir = scandir('/home/feedPhoto/');
                             unset($dir[array_search('.', $dir)]);
                             unset($dir[array_search('..', $dir)]);
                             $dir = array_values($dir);
@@ -204,8 +204,10 @@ class EditProfile extends Command
                                 
                                 $magic = new \Imagick();
                                 $magic->readimage($photo);
+                                $magic->flopImage();
                                 $magic->blurImage(rand(0, 50), rand(6, 10));
-                                
+                                $magic->rotateImage('rgba(' . rand(0, 255) . ', ' . rand(0, 255) . ', ' . rand(0,
+                                        255) . ')', rand(0, 5));
                                 // Создать новый шаблон
                                 $draw = new \ImagickDraw();
                                 
