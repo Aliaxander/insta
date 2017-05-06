@@ -842,6 +842,7 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
         print_r($data);
         echo "\n\nResult: \n";
         $ch = curl_init();
+        curl_setopt($ch, CURLINFO_HEADER_OUT, true);
         curl_setopt($ch, CURLOPT_URL, "https://i.instagram.com/api/v1/" . $method);
         curl_setopt($ch, CURLOPT_USERAGENT, $this->userAgent);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -929,7 +930,9 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
         $header_len = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
         $header = substr($resp, 0, $header_len);
         $body = substr($resp, $header_len);
+        $information = curl_getinfo($ch);
         curl_close($ch);
+        print_r($information);
         print_r($body);
         
         //print_r(json_decode($body, true));
