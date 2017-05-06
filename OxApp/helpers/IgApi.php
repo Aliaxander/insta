@@ -481,24 +481,26 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
         //$email = $faker->email;
         if (mt_rand(0, 2) == 0) {
             $email = explode("@", $faker->email);
-            $email = implode(range('a', 'z')[rand(0, 26)] . "@", $email);
+            $email = implode(range('a', 'z')[rand(0, 26)] . mt_rand(0, 999) ."@", $email);
         } elseif (mt_rand(0, 2) == 0) {
-            $email = str_replace(" ", ".", $this->name) . range('a', 'z')[rand(0, 26)] . "@gmail.com";
+            $email = str_replace(" ", ".", $this->name) . range('a', 'z')[rand(0, 26)] . mt_rand(0, 999) . "@gmail.com";
         } elseif (mt_rand(0, 1) == 0) {
             $email = str_replace(" ", ".", $this->username) . range('a', 'z')[rand(0,
-                    26)] . "@" . $domainMail[mt_rand(0,
+                    26)] . mt_rand(0, 999) . "@" . $domainMail[mt_rand(0,
                     count($domainMail) - 1)];
         } elseif (mt_rand(0, 1) == 0) {
             $email = str_replace(" ", ".", $this->name) . range('a', 'z')[rand(0,
-                    26)] . "@" . $domainMail[mt_rand(0,
+                    26)] . mt_rand(0, 999) . "@" . $domainMail[mt_rand(0,
                     count($domainMail) - 1)];
         } elseif (mt_rand(0, 1) == 0) {
             $email = str_replace(" ", ".", $this->name) . mt_rand(0, 9999) . "@" . $domainMail[mt_rand(0,
                     count($domainMail) - 1)];
         } else {
-            $email = $uname . range('a', 'z')[rand(0, 26)] . "@gmail.com";
+            $email = $uname . range('a', 'z')[rand(0, 26)] . mt_rand(0, 999) . "@gmail.com";
         }
-        
+        if (mt_rand(0, 1) === 1) {
+            $email = mb_strtolower($email);
+        }
         $usernameTmp1 = substr($this->username, 0, -round(1, mb_strlen($this->username) - 3));
         $usernameTmp2 = substr($usernameTmp1, 0, -round(1, mb_strlen($usernameTmp1) - 3));
         $usernameTmp3 = substr($usernameTmp2, 0, -round(1, mb_strlen($usernameTmp2) - 3));
