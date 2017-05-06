@@ -876,6 +876,7 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
             curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
         } else {
             $headers = [
+                'User-Agent: ' . $this->userAgent,
                 'Connection: keep-alive',
                 "X-FB-HTTP-Engine: Liger",
                 "X-IG-Connection-Type: WIFI",
