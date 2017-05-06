@@ -481,7 +481,7 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
         //$email = $faker->email;
         if (mt_rand(0, 2) == 0) {
             $email = explode("@", $faker->email);
-            $email = implode(range('a', 'z')[rand(0, 26)] . mt_rand(0, 999) ."@", $email);
+            $email = implode(range('a', 'z')[rand(0, 26)] . mt_rand(0, 999) . "@", $email);
         } elseif (mt_rand(0, 2) == 0) {
             $email = str_replace(" ", ".", $this->name) . range('a', 'z')[rand(0, 26)] . mt_rand(0, 999) . "@gmail.com";
         } elseif (mt_rand(0, 1) == 0) {
@@ -875,15 +875,16 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
             ];
             curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
         } else {
-            //            $headers = [
-            //                'Connection: keep-alive',
-            //                "X-IG-Connection-Type: WIFI",
-            //                "X-IG-Capabilities: 3Ro=",
-            //                'Accept-Encoding: gzip, deflate',
-            //                'Accept-Language: en-US',
-            //            ];
-            //            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-            //            curl_setopt($ch, CURLOPT_ENCODING, "gzip");
+            $headers = [
+                'Connection: keep-alive',
+                "X-FB-HTTP-Engine: Liger",
+                "X-IG-Connection-Type: WIFI",
+                "X-IG-Capabilities: 3ToAAA==",
+                'Accept-Encoding: gzip, deflate, sdch',
+                'Accept-Language: en-US',
+            ];
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+            curl_setopt($ch, CURLOPT_ENCODING, "gzip");
         }
         //
         curl_setopt($ch, CURLOPT_HEADER, true);
