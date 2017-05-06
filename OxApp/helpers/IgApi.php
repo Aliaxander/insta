@@ -887,7 +887,7 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
             curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
         } else {
             $headers = [
-                'User-Agent: ' . $this->userAgent,
+                //  'User-Agent: ' . $this->userAgent,
                 'Connection: keep-alive',
                 "X-FB-HTTP-Engine: Liger",
                 "X-IG-Connection-Type: WIFI",
@@ -898,9 +898,9 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
             curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
             curl_setopt($ch, CURLOPT_ENCODING, "gzip");
         }
-        //
+        
         curl_setopt($ch, CURLOPT_HEADER, true);
-        curl_setopt($ch, CURLOPT_VERBOSE, false);
+        curl_setopt($ch, CURLOPT_VERBOSE, true);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
         curl_setopt($ch, CURLOPT_COOKIEFILE, "/home/insta/cookies/" . $this->username . "-cookies.dat");
@@ -930,9 +930,11 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
         $header_len = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
         $header = substr($resp, 0, $header_len);
         $body = substr($resp, $header_len);
-        $information = curl_getinfo($ch);
+        $info = curl_getinfo($ch);
         curl_close($ch);
-        print_r($information);
+        echo "\n\nHeaders:\n";
+        print_r($info);
+        echo "\n\nBody:";
         print_r($body);
         
         //print_r(json_decode($body, true));
