@@ -140,18 +140,13 @@ class Checkpoint
             curl_setopt($ch, CURLOPT_POST, count($post));
             curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($post));
         }
-        $pos = strripos($this->proxy, ';');
-        if ($pos === false) {
-            curl_setopt($ch, CURLOPT_PROXY, $this->proxy);
-            curl_setopt($ch, CURLOPT_PROXYTYPE, CURLPROXY_SOCKS5);
-        } else {
-            $proxy = explode(";", $this->proxy);
-            curl_setopt($ch, CURLOPT_PROXY, $proxy[0]);
-            if (!empty($proxy[1])) {
-                curl_setopt($ch, CURLOPT_PROXYUSERPWD, $proxy[1]);
-            }
-            curl_setopt($ch, CURLOPT_PROXYTYPE, CURLPROXY_SOCKS5);
+        $proxy = explode(";", $this->proxy);
+        curl_setopt($ch, CURLOPT_PROXY, $proxy[0]);
+        if (!empty($proxy[1])) {
+            curl_setopt($ch, CURLOPT_PROXYUSERPWD, $proxy[1]);
         }
+        curl_setopt($ch, CURLOPT_PROXYTYPE, CURLPROXY_SOCKS5);
+        curl_setopt($ch, CURLOPT_PROXYTYPE, 7);
         
         $resp = curl_exec($ch);
         $header_len = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
