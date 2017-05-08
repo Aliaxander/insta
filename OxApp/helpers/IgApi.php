@@ -324,16 +324,14 @@ class IgApi
         curl_setopt($ch, CURLOPT_COOKIEJAR, "/home/insta/cookies/" . $this->username . "-cookies.dat");
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-        $pos = strripos($this->proxy, ';');
-        if ($pos === false) {
-            curl_setopt($ch, CURLOPT_PROXY, $this->proxy);
-        } else {
-            $proxy = explode(";", $this->proxy);
-            curl_setopt($ch, CURLOPT_PROXY, $proxy[0]);
-            if (!empty($proxy[1])) {
-                curl_setopt($ch, CURLOPT_PROXYUSERPWD, $proxy[1]);
-            }
+        
+        $proxy = explode(";", $this->proxy);
+        curl_setopt($ch, CURLOPT_PROXY, $proxy[0]);
+        if (!empty($proxy[1])) {
+            curl_setopt($ch, CURLOPT_PROXYUSERPWD, $proxy[1]);
         }
+        curl_setopt($ch, CURLOPT_PROXYTYPE, CURLPROXY_SOCKS5);
+        curl_setopt($ch, CURLOPT_PROXYTYPE, 7);
         $resp = curl_exec($ch);
         $header_len = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
         $header = substr($resp, 0, $header_len);
@@ -915,17 +913,14 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
             curl_setopt($ch, CURLOPT_POST, true);
             curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
         }
-        
-        $pos = strripos($this->proxy, ';');
-        if ($pos === false) {
-            curl_setopt($ch, CURLOPT_PROXY, $this->proxy);
-        } else {
-            $proxy = explode(";", $this->proxy);
-            curl_setopt($ch, CURLOPT_PROXY, $proxy[0]);
-            if (!empty($proxy[1])) {
-                curl_setopt($ch, CURLOPT_PROXYUSERPWD, $proxy[1]);
-            }
+    
+        $proxy = explode(";", $this->proxy);
+        curl_setopt($ch, CURLOPT_PROXY, $proxy[0]);
+        if (!empty($proxy[1])) {
+            curl_setopt($ch, CURLOPT_PROXYUSERPWD, $proxy[1]);
         }
+        curl_setopt($ch, CURLOPT_PROXYTYPE, CURLPROXY_SOCKS5);
+        curl_setopt($ch, CURLOPT_PROXYTYPE, 7);
         
         $resp = curl_exec($ch);
         $header_len = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
