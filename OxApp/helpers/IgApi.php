@@ -888,10 +888,10 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
             $headers = [
                 //  'User-Agent: ' . $this->userAgent,
                 'Connection: keep-alive',
-                "X-FB-HTTP-Engine: Liger",
+                //"X-FB-HTTP-Engine: Liger",
                 "X-IG-Connection-Type: WIFI",
                 "X-IG-Capabilities: " . $this->xIgCapabilities,
-                'Accept-Encoding: gzip, deflate, sdch',
+                'Accept-Encoding: gzip, deflate',
                 'Accept-Language: en-US',
             ];
             curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
