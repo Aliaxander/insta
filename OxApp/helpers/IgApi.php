@@ -473,7 +473,7 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
         if (rand(0, 1) == 1) {
             $this->name .= " " . $faker->lastName . range('a', 'z')[rand(0, 26)];
         }
-        
+    
         //$email = $faker->email;
         if (mt_rand(0, 2) == 0) {
             $email = explode("@", $faker->email);
@@ -501,14 +501,14 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
         $usernameTmp2 = substr($usernameTmp1, 0, -round(1, mb_strlen($usernameTmp1) - 3));
         $usernameTmp3 = substr($usernameTmp2, 0, -round(1, mb_strlen($usernameTmp2) - 3));
         $usernameTmp4 = substr($usernameTmp3, 0, -round(1, mb_strlen($usernameTmp3) - 3));
-        
+    
         $megaRandomHash = md5(number_format(microtime(true), 7, '', ''));
         $this->device_id = 'android-' . strtolower(substr($megaRandomHash, 16));
         $this->phone_id = strtolower($this->genUuid());
         $waterfall_id = strtolower($this->genUuid());
         $this->guid = strtolower($this->genUuid());
         $qe_id = strtolower($this->genUuid());
-        
+    
         echo "Generate DATA:
         uName: {$this->username}
         name: {$this->name}
@@ -524,13 +524,13 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
         proxy: {$this->proxy}
         Start...
         ";
-        
+    
         $tokenResult = '';
         $i = 0;
         while ($tokenResult === '') {
             $sync = $this->syncRegister();
             print_r($sync);
-            
+        
             if (preg_match('#Set-Cookie: csrftoken=([^;]+)#', $sync[0], $token)) {
                 $tokenResult = $token[1];
             }
@@ -543,10 +543,10 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
             die('empty token');
         }
         $this->csrftoken = $tokenResult;
-        
+    
         sleep(rand(10, 20));
         $checkEmail = $this->checkEmail($email, $qe_id, $waterfall_id);
-        
+    
         print_r($checkEmail);
         if (isset($checkEmail[1]['message']) && $checkEmail[1]['message'] == 'Sorry, an error occured') {
             die('Error. Ip ban?');
@@ -557,7 +557,7 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
         while ($singTokenResult === '') {
             $token = $this->fetchHeadersSingUp();
             print_r($token);
-            
+        
             if (preg_match('#Set-Cookie: csrftoken=([^;]+)#', $token[0], $token)) {
                 $singTokenResult = $token[1];
             }
@@ -570,18 +570,18 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
             die('empty sigKey token');
         }
         $this->csrftoken = $singTokenResult;
-        
-//                if (rand(0, 1) == 1) {
-//                    sleep(rand(10, 15));
-//        print_r($this->usernameSuggestions($usernameTmp4, $email, $waterfall_id));
-//                }
-//        sleep(rand(11, 19));
+    
+        //        if (rand(0, 1) == 1) {
+        //            sleep(rand(10, 15));
+        print_r($this->usernameSuggestions($usernameTmp4, $email, $waterfall_id));
+        //        }
+        sleep(rand(11, 19));
         $singTokenResult = '';
         $i = 0;
         while ($singTokenResult === '') {
             $token = $this->fetchHeadersSingUp();
             print_r($token);
-            
+        
             if (preg_match('#Set-Cookie: csrftoken=([^;]+)#', $token[0], $token)) {
                 $singTokenResult = $token[1];
             }
@@ -594,13 +594,13 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
             die('empty sigKey token');
         }
         $this->csrftoken = $singTokenResult;
-        
-                sleep(rand(3, 5));
-                print_r($this->usernameSuggestions($usernameTmp3, $email, $waterfall_id));
-        
-        //        sleep(rand(3, 7));
-        //        print_r($this->usernameSuggestions($usernameTmp2, $email, $waterfall_id));
-        //
+    
+        sleep(rand(3, 5));
+        print_r($this->usernameSuggestions($usernameTmp3, $email, $waterfall_id));
+    
+        sleep(rand(3, 7));
+        print_r($this->usernameSuggestions($usernameTmp2, $email, $waterfall_id));
+    
         //        if (rand(0, 1) == 1) {
         //            sleep(rand(3, 8));
         //            print_r($this->usernameSuggestions($usernameTmp1, $email, $waterfall_id));
@@ -612,7 +612,7 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
         // $finalName = $this->usernameSuggestions($this->username, $email, $waterfall_id);
         print_r($finalName);
         echo "SET name: " . $this->username . "\n";
-        
+    
         sleep(rand(2, 8));
         //register:
         $createResult = '';
@@ -625,7 +625,7 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
             }
             $i++;
         }
-        
+    
         print_r($create);
         //        if (empty($create[1])) {
         //  $create = $this->createAccount($email, $waterfall_id);
@@ -676,7 +676,7 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
                 'dateCreate' => '//now()//'
             ]);
         }
-        
+    
         return true;
     }
     
