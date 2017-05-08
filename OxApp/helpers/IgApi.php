@@ -931,6 +931,9 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
             echo "\n\nBody:";
             print_r($body);
             $resBody = $body;
+            if ($body == '') {
+                sleep(2);
+            }
             $i++;
             if ($i > 10) {
                 $resBody = ' ';
