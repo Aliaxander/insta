@@ -324,7 +324,7 @@ class IgApi
         curl_setopt($ch, CURLOPT_COOKIEJAR, "/home/insta/cookies/" . $this->username . "-cookies.dat");
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-
+        
         $proxy = explode(";", $this->proxy);
         curl_setopt($ch, CURLOPT_PROXY, $proxy[0]);
         if (!empty($proxy[1])) {
@@ -338,13 +338,13 @@ class IgApi
         $body = substr($resp, $header_len);
         curl_close($ch);
         print_r($body);
-
+        
         //print_r(json_decode($body, true));
-
+        
         return [$header, json_decode($body, true)];
     }
-
-
+    
+    
     public function oldEdit($biography, $url, $phoneId, $firstName, $email)
     {
         $tokenResult = '';
@@ -352,7 +352,7 @@ class IgApi
         while ($tokenResult === '') {
             $sync = $this->sync();
             print_r($sync);
-
+            
             if (preg_match('#Set-Cookie: csrftoken=([^;]+)#', $sync[0], $token)) {
                 $tokenResult = $token[1];
             }
@@ -364,7 +364,7 @@ class IgApi
         if ($tokenResult == false || $tokenResult == '') {
             die('no token');
         }
-
+        
         $this->csrftoken = $tokenResult;
         sleep(rand(0, 2));
         $data = [
@@ -382,10 +382,10 @@ class IgApi
             $data['is_private'] = true;
         }
         $data = json_encode($data);
-
+        
         return $this->request('accounts/edit_profile/', $data);
     }
-
+    
     public function edit($biography, $url, $phoneId, $firstName, $email)
     {
         $tokenResult = '';
@@ -393,7 +393,7 @@ class IgApi
         while ($tokenResult === '') {
             $sync = $this->sync();
             print_r($sync);
-
+            
             if (preg_match('#Set-Cookie: csrftoken=([^;]+)#', $sync[0], $token)) {
                 $tokenResult = $token[1];
             }
@@ -405,10 +405,10 @@ class IgApi
         if ($tokenResult == false || $tokenResult == '') {
             die('no token');
         }
-
+        
         $this->csrftoken = $tokenResult;
         sleep(rand(0, 2));
-
+        
         print_r($this->request('accounts/current_user/?edit=true'));
         sleep(rand(1, 4));
         /*
@@ -432,10 +432,10 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
             $data['is_private'] = true;
         }
         $data = json_encode($data);
-
+        
         return $this->request('accounts/edit_profile/', $data);
     }
-
+    
     public function create()
     {
         $domainMail = [
@@ -476,7 +476,7 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
         if (rand(0, 1) == 1) {
             $this->name .= " " . $faker->lastName . range('a', 'z')[rand(0, 26)];
         }
-
+        
         //$email = $faker->email;
         if (mt_rand(0, 2) == 0) {
             $email = explode("@", $faker->email);
@@ -504,14 +504,14 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
         $usernameTmp2 = substr($usernameTmp1, 0, -round(1, mb_strlen($usernameTmp1) - 3));
         $usernameTmp3 = substr($usernameTmp2, 0, -round(1, mb_strlen($usernameTmp2) - 3));
         $usernameTmp4 = substr($usernameTmp3, 0, -round(1, mb_strlen($usernameTmp3) - 3));
-
+        
         $megaRandomHash = md5(number_format(microtime(true), 7, '', ''));
         $this->device_id = 'android-' . strtolower(substr($megaRandomHash, 16));
         $this->phone_id = strtolower($this->genUuid());
         $waterfall_id = strtolower($this->genUuid());
         $this->guid = strtolower($this->genUuid());
         $qe_id = strtolower($this->genUuid());
-
+        
         echo "Generate DATA:
         uName: {$this->username}
         name: {$this->name}
@@ -527,13 +527,13 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
         proxy: {$this->proxy}
         Start...
         ";
-
+        
         $tokenResult = '';
         $i = 0;
         while ($tokenResult === '') {
             $sync = $this->syncRegister();
             print_r($sync);
-
+            
             if (preg_match('#Set-Cookie: csrftoken=([^;]+)#', $sync[0], $token)) {
                 $tokenResult = $token[1];
             }
@@ -546,10 +546,10 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
             die('empty token');
         }
         $this->csrftoken = $tokenResult;
-
+        
         sleep(rand(10, 20));
         $checkEmail = $this->checkEmail($email, $qe_id, $waterfall_id);
-
+        
         print_r($checkEmail);
         if (isset($checkEmail[1]['message']) && $checkEmail[1]['message'] == 'Sorry, an error occured') {
             die('Error. Ip ban?');
@@ -560,7 +560,7 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
         while ($singTokenResult === '') {
             $token = $this->fetchHeadersSingUp();
             print_r($token);
-
+            
             if (preg_match('#Set-Cookie: csrftoken=([^;]+)#', $token[0], $token)) {
                 $singTokenResult = $token[1];
             }
@@ -573,18 +573,18 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
             die('empty sigKey token');
         }
         $this->csrftoken = $singTokenResult;
-
-        if (rand(0, 1) == 1) {
-            sleep(rand(10, 15));
-            print_r($this->usernameSuggestions($usernameTmp4, $email, $waterfall_id));
-        }
+        
+        //        if (rand(0, 1) == 1) {
+        //            sleep(rand(10, 15));
+        print_r($this->usernameSuggestions($usernameTmp4, $email, $waterfall_id));
+        //        }
         sleep(rand(11, 19));
         $singTokenResult = '';
         $i = 0;
         while ($singTokenResult === '') {
             $token = $this->fetchHeadersSingUp();
             print_r($token);
-
+            
             if (preg_match('#Set-Cookie: csrftoken=([^;]+)#', $token[0], $token)) {
                 $singTokenResult = $token[1];
             }
@@ -597,25 +597,25 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
             die('empty sigKey token');
         }
         $this->csrftoken = $singTokenResult;
-
+        
         sleep(rand(3, 5));
         print_r($this->usernameSuggestions($usernameTmp3, $email, $waterfall_id));
-
-        //        sleep(rand(3, 7));
-        //        print_r($this->usernameSuggestions($usernameTmp2, $email, $waterfall_id));
-        //
-//        if (rand(0, 1) == 1) {
-//            sleep(rand(3, 8));
-//            print_r($this->usernameSuggestions($usernameTmp1, $email, $waterfall_id));
-//        }
-//        sleep(rand(4, 9));
+        
+        sleep(rand(3, 7));
+        print_r($this->usernameSuggestions($usernameTmp2, $email, $waterfall_id));
+        
+        //        if (rand(0, 1) == 1) {
+        //            sleep(rand(3, 8));
+        //            print_r($this->usernameSuggestions($usernameTmp1, $email, $waterfall_id));
+        //        }
+        //        sleep(rand(4, 9));
         $finalName = $this->usernameSuggestions($this->username, $email, $waterfall_id);
         print_r($finalName);
         //$this->username = $finalName[1]['suggestions'][rand(0, 11)];
         // $finalName = $this->usernameSuggestions($this->username, $email, $waterfall_id);
         print_r($finalName);
         echo "SET name: " . $this->username . "\n";
-
+        
         sleep(rand(2, 8));
         //register:
         $createResult = '';
@@ -628,7 +628,7 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
             }
             $i++;
         }
-
+        
         print_r($create);
         //        if (empty($create[1])) {
         //  $create = $this->createAccount($email, $waterfall_id);
@@ -679,10 +679,10 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
                 'dateCreate' => '//now()//'
             ]);
         }
-
+        
         return true;
     }
-
+    
     /**
      * @param $email
      * @param $waterfall_id
@@ -705,12 +705,12 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
             'qs_stamp' => "",
             'password' => $this->password,
         ];
-
+        
         $data = json_encode($data);
-
+        
         return $this->request('accounts/create/', $data);
     }
-
+    
     /**
      * @param      $latitude
      * @param      $longitude
@@ -733,10 +733,10 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
         } else {
             $data = array_merge($data, ['search_query' => $query]);
         }
-
+        
         return $this->request('location_search/', $data);
     }
-
+    
     /**
      * @param      $query
      * @param null $count
@@ -754,10 +754,10 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
         if (!is_null($count)) {
             $data = array_merge($data, ['count' => $count]);
         }
-
+        
         return $this->request('fbsearch/places/', $data);
     }
-
+    
     /**
      * @param $username
      * @param $email
@@ -773,10 +773,10 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
             'email' => $email,
             'waterfall_id' => $waterfall_id,
         ]);
-
+        
         return $this->request('accounts/username_suggestions/', $data);
     }
-
+    
     /**
      * @return array
      */
@@ -785,7 +785,7 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
         return $this->request("si/fetch_headers/?guid=" . mb_strtolower(str_replace("-", "",
                 $this->guid)) . "&challenge_type=singup");
     }
-
+    
     /**
      * @param $email
      * @param $uuid
@@ -801,10 +801,10 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
             'qe_id' => $uuid,
             'waterfall_id' => $waterfall_id,
         ]);
-
+        
         return $this->request('users/check_email/', $data);
     }
-
+    
     /**
      * @return array
      */
@@ -814,20 +814,20 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
             "id" => $this->guid,
             "experiments" => 'ig_android_analytics_data_loss,ig_android_gmail_oauth_in_reg,ig_android_phoneid_sync_interval,ig_android_non_fb_sso,ig_android_auto_submit_verification_code,ig_android_phone_prefill_for_m_in_reg,ig_android_confirmation_code_registration,ig_fbns_push,ig_android_profile_photo_nux_holdout,ig_android_background_phone_confirmation_v2,ig_android_remove_ci_option_for_fb_reg,ig_android_merge_fb_and_ci_friends_page,ig_fbns_blocked,ig_android_contact_point_triage,ig_android_gmail_oauth_in_access,ig_android_prefill_phone_email_login,ig_android_one_click_in_old_flow'
         ]);
-
+        
         return $this->request('qe/sync/', $syncData);
     }
-
+    
     public function sync()
     {
         $syncData = json_encode([
             "id" => $this->guid,
             "experiments" => 'ig_android_direct_mutually_exclusive_experiment_universe,ig_android_ads_heatmap_overlay_universe,ig_android_confirmation_code_edit_profile,ig_android_universe_video_production,ig_android_direct_composer,ig_android_capture_hands_free_mode,ig_android_show_your_story_when_empty_universe_2,ig_android_video_playback_bandwidth_threshold,ig_android_ad_drop_cookie_early,ig_android_search_null_state_2,ig_android_live_analytics,ig_android_snippets_feed_tooltip,ig_android_direct_link_preview,ig_android_video_captions_universe,ig_android_follow_request_text_buttons_v2,ig_android_ontact_invite_universe,ig_android_send_direct_typing_indicator,ig_android_business_conversion_value_prop_navigate,ig_android_ad_zero_latency_logging_universe,ig_android_checkbox_instead_of_button_as_follow_affordance_universe,ig_android_share_spinner,ig_android_pbia_normal_weight_universe,ig_android_etag_layer,ig_android_follow_button_redesign,ig_android_insta_video_jump_ahead,android_instagram_prefetch_suggestions_universe,ig_android_follow_search_bar,ig_android_insta_video_universe,ig_android_ad_rn_preload_universe,ig_ranking_following,ig_android_universe_reel_video_production,id_android_http_stack_experiment_2016,ig_android_sfplt,ig_offline_profile,ig_android_stories_weblink_consumption,ig_android_direct_blue_tab,ig_android_dynamic_image_disk_cache_size_mb,ig_android_async_network_tweak_universe,ig_video_copyright_whitelist,ig_android_feed_reshare_button_nux,ig_android_exoplayer_stories,ig_android_swipe_navigation_x_angle_universe,ig_android_offline_mode_holdout,ig_android_non_square_first,ig_android_insta_video_drawing,ig_android_react_native_usertag,ig_android_swipeablefilters_universe,ig_android_video_cache_policy,ig_fbns_preload_default,ig_android_blocked_list,ig_android_react_native_promote,ig_android_drafts_universe,ig_android_family_bridge_discover,ig_android_insta_video_consumption_prefetch,ig_android_profile,ig_android_high_res_upload_2,ig_android_inline_gallery_universe,ig_android_remove_followers_universe,ig_android_mentions_dismiss_rule,ig_android_ad_metadata_behavior_universe,ig_android_immersive_viewer,ig_android_mqtt_skywalker,ig_fbns_push,ig_android_search_client_matching,ig_android_feed_preview_blur_fix,ig_android_react_native_universe,ig_android_direct_drawing_in_quick_cam_universe,ig_android_boomerang_feed_attribution,ig_android_video_loopcount_int,ig_android_rendering_controls,ig_android_os_version_blocking,ig_android_use_software_layer_for_kc_drawing_universe,ig_android_ad_watchbrowse_universe,ig_android_react_native_ota,ig_android_snippets_profile_nux,ig_android_view_count_decouple_likes_universe,ig_android_disk_usage,ig_android_swipeable_filters_blacklist,ig_video_use_sve_universe,ig_android_mute_story,ig_fbns_blocked,ig_android_stories_teach_gallery_location,ig_feed_holdout_universe,ig_android_empty_feed_redesign,ig_android_pending_request_search_bar,ig_android_marauder_update_frequency,ig_android_fb_topsearch_sgp_fork_request,ig_android_exoplayer_http_stack,ig_android_organic_insights_django,ig_android_enable_share_to_messenger,ig_android_preview_capture,ig_android_activity_follow_button,ig_android_direct_raven,ig_android_su_activity_feed,ig_android_direct_send_auto_retry_universe,ig_android_media_favorites,ig_android_channels_home,ig_android_ad_holdout_16h2m1_universe,ig_android_boomerang_entry,ig_android_business_conversion_social_context,ig_android_video_reuse_surface,android_ig_fbns_kill_switch,ig_android_react_native_universe_kill_switch,ig_android_stories_book_universe,ig_android_business_promotion,liger_instagram_android_univ,ig_android_facebook_twitter_profile_photos,ig_android_ad_always_send_ad_attribution_id_universe,ig_android_anrwatchdog,ig_android_full_user_detail_endpoint,ig_android_2fac,ig_explore_v3_android_universe,ig_android_feed_like_social_context,ig_android_offline_likes_v2,ig_android_share_to_whatsapp,ig_fbns_dump_ids,ig_android_direct_typing_indicator,ig_android_search,ig_android_stories_max_video_duration,ig_android_capture_boomerang_mode,ig_android_http_stack_experiment_2016,ig_android_invite_popup_universe,ig_show_promote_button_in_feed,ig_android_ad_new_intent_to_highlight_universe,ig_video_max_duration_qe_preuniverse,ig_android_dv2_realtime_private_share,ig_creation_growth_holdout,ig_request_cache_layer,ig_android_direct_plus_button,ig_android_explore_stories,ig_android_mark_reel_seen_on_Swipe_forward,ig_fbns_shared,ig_android_capture_slowmo_mode,ig_android_chaining_teaser_animation,ig_android_video_single_surface,ig_android_asset_picker,ig_android_ad_new_sponsored_label_universe,ig_android_video_download_logging,ig_android_follows_you_badge,ig_android_last_edits,ig_android_exoplayer_4142,ig_android_feed_pill,ig_android_disable_chroma_subsampling,ig_android_feed_cold_start,ig_android_fix_ise_two_phase,ig_family_bridges_holdout_universe,ig_android_ad_video_autoplay_fix_universe,ig_android_following_follower_social_context,ig_android_ad_carousel_redesign_universe,ig_android_stories_use_gl_drawing,ig_android_profile_photo_as_media,ig_android_direct_emoji_picker,ig_android_promotion_toggle_v2,ig_android_newsfeed_large_avatar,ig_android_business_conversion_value_prop,ig_android_new_media_saver,ig_android_disable_comment_public_test,ig_android_user_detail_endpoint,ig_android_infinite_scrolling_launch,ig_android_insta_video_consumption_abr,ig_android_insta_video_consumption,ig_in_feed_commenting,ig_android_add_to_last_post,ig_android_snippets,ig_android_direct_swipe_to_inbox,ig_android_sidecar,ig_android_exoplayer_holdout,ig_android_stories_weblink_creation,ig_android_progressive_jpeg,ig_android_histogram_reporter,ig_android_contact_button_color,ig_invite_invite_in_nux_universe,ig_android_network_cancellation,ig_android_post_auto_retry_v7_21,ig_android_ad_holdout_16m5_universe,ig_android_memory_improve_universe,ig_android_samsung_app_badging,ig_android_family_bridge_bookmarks,ig_android_disable_comment,ig_android_fetch_reel_tray_on_resume_universe'
         ]);
-
+        
         return $this->request('qe/sync/', $syncData);
     }
-
+    
     /**
      * @param      $method
      * @param null $data
@@ -896,7 +896,7 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
             curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
             curl_setopt($ch, CURLOPT_ENCODING, "gzip");
         }
-
+        
         curl_setopt($ch, CURLOPT_HEADER, true);
         curl_setopt($ch, CURLOPT_VERBOSE, true);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
@@ -912,7 +912,7 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
             curl_setopt($ch, CURLOPT_POST, true);
             curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
         }
-
+        
         $proxy = explode(";", $this->proxy);
         curl_setopt($ch, CURLOPT_PROXY, $proxy[0]);
         if (!empty($proxy[1])) {
