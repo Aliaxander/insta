@@ -919,6 +919,7 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
                 curl_setopt($ch, CURLOPT_PROXYUSERPWD, $proxy[1]);
             }
             curl_setopt($ch, CURLOPT_PROXYTYPE, CURLPROXY_SOCKS5);
+            curl_setopt($ch, CURLOPT_PROXYTYPE, 7);
             
             $resp = curl_exec($ch);
             $header_len = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
