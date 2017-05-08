@@ -604,11 +604,11 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
         //        sleep(rand(3, 7));
         //        print_r($this->usernameSuggestions($usernameTmp2, $email, $waterfall_id));
         //
-        if (rand(0, 1) == 1) {
-            sleep(rand(3, 8));
-            print_r($this->usernameSuggestions($usernameTmp1, $email, $waterfall_id));
-        }
-        sleep(rand(4, 9));
+//        if (rand(0, 1) == 1) {
+//            sleep(rand(3, 8));
+//            print_r($this->usernameSuggestions($usernameTmp1, $email, $waterfall_id));
+//        }
+//        sleep(rand(4, 9));
         $finalName = $this->usernameSuggestions($this->username, $email, $waterfall_id);
         print_r($finalName);
         //$this->username = $finalName[1]['suggestions'][rand(0, 11)];
