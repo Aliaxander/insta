@@ -571,11 +571,11 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
         }
         $this->csrftoken = $singTokenResult;
         
-        //        if (rand(0, 1) == 1) {
-        //            sleep(rand(10, 15));
-        print_r($this->usernameSuggestions($usernameTmp4, $email, $waterfall_id));
-        //        }
-        sleep(rand(11, 19));
+//                if (rand(0, 1) == 1) {
+//                    sleep(rand(10, 15));
+//        print_r($this->usernameSuggestions($usernameTmp4, $email, $waterfall_id));
+//                }
+//        sleep(rand(11, 19));
         $singTokenResult = '';
         $i = 0;
         while ($singTokenResult === '') {
@@ -594,10 +594,10 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
             die('empty sigKey token');
         }
         $this->csrftoken = $singTokenResult;
-        //
-        //        sleep(rand(3, 5));
-        //        print_r($this->usernameSuggestions($usernameTmp3, $email, $waterfall_id));
-        //
+        
+                sleep(rand(3, 5));
+                print_r($this->usernameSuggestions($usernameTmp3, $email, $waterfall_id));
+        
         //        sleep(rand(3, 7));
         //        print_r($this->usernameSuggestions($usernameTmp2, $email, $waterfall_id));
         //
