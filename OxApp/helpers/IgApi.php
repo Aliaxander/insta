@@ -443,10 +443,7 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
             'gmail.com',
             'hotmail.com',
             'icloud.com',
-            'yahoo.com',
-            'free.fr',
-            'mail707.com',
-            'doanart.com'
+            'yahoo.com'
         ];
         $faker = Factory::create();
         if (mt_rand(0, 4) == 1) {
@@ -597,13 +594,13 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
             die('empty sigKey token');
         }
         $this->csrftoken = $singTokenResult;
-        
-        sleep(rand(3, 5));
-        print_r($this->usernameSuggestions($usernameTmp3, $email, $waterfall_id));
-        
-        sleep(rand(3, 7));
-        print_r($this->usernameSuggestions($usernameTmp2, $email, $waterfall_id));
-        
+//
+//        sleep(rand(3, 5));
+//        print_r($this->usernameSuggestions($usernameTmp3, $email, $waterfall_id));
+//
+//        sleep(rand(3, 7));
+//        print_r($this->usernameSuggestions($usernameTmp2, $email, $waterfall_id));
+//
         //        if (rand(0, 1) == 1) {
         //            sleep(rand(3, 8));
         //            print_r($this->usernameSuggestions($usernameTmp1, $email, $waterfall_id));
