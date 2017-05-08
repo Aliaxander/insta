@@ -26,16 +26,16 @@ class IgApi
     public $rank_token;
     protected $password;
     protected $device_id;
-    protected $igKey = 'fa558a0a4c9fd70e9c6a9a24811a59b62c6c0147ca8f93b9338f8283d6b4aa70';
-    protected $xIgCapabilities='3boBAA==';
+    protected $igKey = 'e1712d2f592becfdea858c4d0ad4e7c5f230c446094155a1663d612e1290c841';
+    protected $xIgCapabilities='3ToAAA==';
     //protected $igKey = 'b03e0daaf2ab17cda2a569cace938d639d1288a1197f9ecf97efd0a4ec0874d7';
     protected $igVersion = '4';
     public $csrftoken;
     
     public function __construct()
     {
-        $device = new Device('10.14.0', 'en_US');
-        $this->userAgent = UserAgent::buildUserAgent('10.14.0', 'en_US', $device);
+        $device = new Device('10.9.0', 'en_US');
+        $this->userAgent = UserAgent::buildUserAgent('10.9.0', 'en_US', $device);
         //        $device = new Device('10.15.0', 'en_US');
         //        $this->userAgent = UserAgent::buildUserAgent('10.15.0', 'en_US', $device);
     }
