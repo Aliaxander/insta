@@ -205,9 +205,9 @@ class Likes extends Command
                             $mediaType = $rowMedia['media_type'];
                             if ($like1) {
                                 InstBase::where(['id' => $accRow->rows[0]->id])->update(['likes' => round($accRow->rows[0]->likes + 1)]);
-                                $likes = $api->like($like1, $acc, $userNameLike, $mediaType);
+                                //$likes = $api->like($like1, $acc, $userNameLike, $mediaType);
                                 sleep(mt_rand(1, 2));
-                                //$likes = $api->oldLike($like1);
+                                $likes = $api->like($like1);
                                 
                                 print_r($likes);
                                 
