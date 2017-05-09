@@ -165,35 +165,11 @@ class Likes extends Command
                         echo "login_required";
                         $login = $api->login($user->guid, $user->phoneId, $user->deviceId, $user->password);
                         Checkpoint::checkPoint($login, $user);
-                        //                        $checkPoint = new Checkpoint($user->userName);
-                        //                        if (isset($login[1]['checkpoint_url'])) {
-                        //                            $result = $checkPoint->request($login[1]['checkpoint_url']);
-                        //                            if (preg_match("/Your phone number will be added\b/i", $result[1])) {
-                        //                                Users::where(['id' => $user->id])->update(['ban' => 3]);
-                        //                                die("SMS BAN!");
-                        //                            }
-                        //                        }
                     } elseif (isset($result['1']['message']) && $result['1']['message'] === 'checkpoint_required') {
                         echo "\nLogout user account\n";
                         unlink("/home/insta/cookies/" . $user->userName . "-cookies.dat");
                         $login = $api->login($user->guid, $user->phoneId, $user->deviceId, $user->password);
                         Checkpoint::checkPoint($login, $user);
-                        
-                        //                        $checkPoint = new Checkpoint($user->userName);
-                        //                        $checkPoint->proxy = $user->proxy;
-                        //                        $checkPoint->accountId = $user->accountId;
-                        //                        $checkPoint->request('https://i.instagram.com/challenge/?activity_module=all');
-                        
-                        //                        $checkPoint->request('https://i.instagram.com/checkpoint/dismiss');
-                        //                        $api->fetchHeadersSingUp();
-                        //
-                        //                        $token = $checkPoint->doCheckpoint();
-                        //                        echo "\n\nCode you have received via mail: ";
-                        //                        //$code = trim(fgets(STDIN));
-                        //                       // $checkPoint->checkpointThird($code, $token);
-                        //                        echo "\n\nDone";
-                        //                         Users::where(['id' => $user->id])->update(['ban' => 1]);
-                        die();
                     } elseif (isset($result['1']['message']) && $result['1']['message'] === 'Not authorized to view user' && mt_rand(0,
                             1) == 1 && $massFollow == 1
                     ) {
@@ -221,16 +197,13 @@ class Likes extends Command
                                 }
                                 //sleep(mt_rand(1, 2));
                                 //$likes = $api->oldLike($like1);
-                                
                                 print_r($likes);
-                                
                                 $likeCou++;
                                 $requestCou += 1;
                                 sleep(mt_rand($timeOutMin, $timeOutMax));
                             }
-                            
-                            //                            $feed = $api->getFeed($acc);
-                            //                            Checkpoint::checkPoint($feed, $user);
+                            $feed = $api->getFeed($acc);
+                            Checkpoint::checkPoint($feed, $user);
                             $requestCou += 4;
                         }
                     } else {

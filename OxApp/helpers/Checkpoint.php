@@ -57,7 +57,21 @@ class Checkpoint
                         Users::where(['accountId' => $user->accountId])->update(['ban' => 3]);
                     }
                     die("SMS BAN!");
+                }else{
+                    if (!empty($user->id)) {
+                        Users::where(['id' => $user->id])->update(['ban' => 1]);
+                    } else {
+                        Users::where(['accountId' => $user->accountId])->update(['ban' => 1]);
+                    }
+                    die("Checkpoint!");
                 }
+            } else {
+                if (!empty($user->id)) {
+                    Users::where(['id' => $user->id])->update(['ban' => 1]);
+                } else {
+                    Users::where(['accountId' => $user->accountId])->update(['ban' => 1]);
+                }
+                die("Checkpoint!");
             }
         }
     }
