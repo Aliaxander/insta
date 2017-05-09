@@ -69,7 +69,8 @@ class Likes extends Command
                 $login = $api->login($user->guid, $user->phoneId, $user->deviceId, $user->password);
                 Checkpoint::checkPoint($login, $user);
             }
-            
+            $timeOutMin = SystemSettings::get('timeOutMin');
+            $timeOutMax = SystemSettings::get('timeOutMax');
             if (empty($user->csrftoken)) {
                 $tokenResult = '';
                 $i = 0;
@@ -133,12 +134,18 @@ class Likes extends Command
                     }
                 }
             }
+            $likesForAccountMin = SystemSettings::get('likesForAccountMin');
+            $likesForAccountMax = SystemSettings::get('likesForAccountMax');
+            $massFollow= SystemSettings::get('massFollow');
+            $badRequest = 0;
             $status = true;
+            $allWhile = 0;
             while ($status = true) {
-                $userTest = Users::find(['id' => $user->id, 'ban' => 0]);
-                if ($userTest->count === 0) {
-                    die();
-                }
+                $allWhile++;
+                //                $userTest = Users::find(['id' => $user->id, 'ban' => 0]);
+                //                if ($userTest->count === 0) {
+                //                    die();
+                //                }
                 $accRow = InstBase::orderBy(['id' => 'desc'])->limit([0 => 1])->find(['status' => 0]);
                 $acc = @preg_replace("/[^0-9]/", '', $accRow->rows[0]->account);
                 if (!empty($acc)) {
@@ -151,7 +158,9 @@ class Likes extends Command
                     $result = $api->getFeed($acc);
                     
                     Checkpoint::checkPoint($result, $user);
-                    
+                    if (empty($result[1])) {
+                        $badRequest++;
+                    }
                     if (isset($result['1']['message']) && $result['1']['message'] === 'login_required') {
                         echo "login_required";
                         $login = $api->login($user->guid, $user->phoneId, $user->deviceId, $user->password);
@@ -186,17 +195,16 @@ class Likes extends Command
                         //                         Users::where(['id' => $user->id])->update(['ban' => 1]);
                         die();
                     } elseif (isset($result['1']['message']) && $result['1']['message'] === 'Not authorized to view user' && mt_rand(0,
-                            1) == 1 && SystemSettings::get('massFollow') == 1
+                            1) == 1 && $massFollow == 1
                     ) {
-                        sleep(rand(SystemSettings::get('timeOutMin'), SystemSettings::get('timeOutMax')));
+                        sleep(rand($timeOutMin, $timeOutMax));
                         print_r($api->follow($acc));
                         InstBase::where(['id' => $accRow->rows[0]->id])->update(['follow' => round($accRow->rows[0]->follow + 1)]);
                         $followCou++;
                         $requestCou += 2;
                     } elseif (!empty($result[1]['items'])) {
                         sleep(rand(0, 1));
-                        $randLikes = mt_rand(SystemSettings::get('likesForAccountMin'),
-                            SystemSettings::get('likesForAccountMax'));
+                        $randLikes = mt_rand($likesForAccountMin, $likesForAccountMax);
                         for ($i = 0; $i <= $randLikes; $i++) {
                             $rows = $result[1]['items'];
                             $rowMedia = @$result[1]['items'][mt_rand(0, count($rows) - 1)];
@@ -213,20 +221,21 @@ class Likes extends Command
                                     $likes = $api->like($like1, $acc, $userNameLike, $mediaType);
                                     $likesResult = $likes[0];
                                     if ($i > 5) {
+                                        $badRequest++;
                                         exit(1);
                                     }
                                 }
-                                sleep(mt_rand(1, 2));
+                                //sleep(mt_rand(1, 2));
                                 //$likes = $api->oldLike($like1);
                                 
                                 print_r($likes);
                                 
                                 $likeCou++;
                                 $requestCou += 1;
-                                sleep(mt_rand(SystemSettings::get('timeOutMin'), SystemSettings::get('timeOutMax')));
+                                sleep(mt_rand($timeOutMin, $timeOutMax));
                             }
-                            $feed = $api->getFeed($acc);
-                            Checkpoint::checkPoint($feed, $user);
+//                            $feed = $api->getFeed($acc);
+//                            Checkpoint::checkPoint($feed, $user);
                             $requestCou += 4;
                         }
                     } else {
@@ -236,7 +245,9 @@ class Likes extends Command
                     if (mt_rand(0, 40) == 10) {
                         $api->getRecentActivityAll();
                     }
-                    if ($requestCou !== 0) {
+                    
+                    if ($requestCou !== 0 && $allWhile > 10) {
+                        $allWhile = 0;
                         Users::where(['id' => $user->id])->update([
                             'requests' => $requestCou,
                             'follows' => $followCou,
@@ -255,6 +266,10 @@ class Likes extends Command
                         echo "Sleep";
                         sleep(mt_rand(30000, 50000));
                     }
+                }
+                if ($badRequest === 100) {
+                    Users::where(['id' => $user->id])->update(['requests' => 0]);
+                    die('Many bad requests');
                 }
             }
         }
