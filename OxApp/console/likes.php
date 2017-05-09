@@ -216,7 +216,7 @@ class Likes extends Command
                                 
                                 $likesResult = '';
                                 $i = 0;
-                                while ($likesResult === '') {
+                                while ($likesResult == '') {
                                     $i++;
                                     $likes = $api->like($like1, $acc, $userNameLike, $mediaType);
                                     $likesResult = $likes[0];
