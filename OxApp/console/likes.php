@@ -205,7 +205,17 @@ class Likes extends Command
                             $mediaType = $rowMedia['media_type'];
                             if ($like1) {
                                 InstBase::where(['id' => $accRow->rows[0]->id])->update(['likes' => round($accRow->rows[0]->likes + 1)]);
-                                $likes = $api->like($like1, $acc, $userNameLike, $mediaType);
+                                
+                                $likesResult = '';
+                                $i = 0;
+                                while ($likesResult === '') {
+                                    $i++;
+                                    $likes = $api->like($like1, $acc, $userNameLike, $mediaType);
+                                    $likesResult = $likes[0];
+                                    if ($i > 5) {
+                                        exit(1);
+                                    }
+                                }
                                 sleep(mt_rand(1, 2));
                                 //$likes = $api->oldLike($like1);
                                 
@@ -239,7 +249,7 @@ class Likes extends Command
                     
                     $resultLikesForTimeout = $folLikSum / $hour;
                     
-                    if ($resultLikesForTimeout > mt_rand(700, 900)) {
+                    if ($resultLikesForTimeout > mt_rand(500, 700)) {
                         $hour += 1;
                         Users::where(['id' => $user->id])->update(['hour' => $hour]);
                         echo "Sleep";
