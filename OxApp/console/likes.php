@@ -136,7 +136,7 @@ class Likes extends Command
             }
             $likesForAccountMin = SystemSettings::get('likesForAccountMin');
             $likesForAccountMax = SystemSettings::get('likesForAccountMax');
-            $massFollow= SystemSettings::get('massFollow');
+            $massFollow = SystemSettings::get('massFollow');
             $badRequest = 0;
             $status = true;
             $allWhile = 0;
@@ -214,16 +214,10 @@ class Likes extends Command
                             if ($like1) {
                                 InstBase::where(['id' => $accRow->rows[0]->id])->update(['likes' => round($accRow->rows[0]->likes + 1)]);
                                 
-                                $likesResult = '';
-                                $i = 0;
-                                while ($likesResult == '') {
-                                    $i++;
-                                    $likes = $api->like($like1, $acc, $userNameLike, $mediaType);
-                                    $likesResult = $likes[0];
-                                    if ($i > 5) {
-                                        $badRequest++;
-                                        exit(1);
-                                    }
+                                $likes = $api->like($like1, $acc, $userNameLike, $mediaType);
+                                $likesResult = $likes[0];
+                                if (empty($likesResult)) {
+                                    $badRequest++;
                                 }
                                 //sleep(mt_rand(1, 2));
                                 //$likes = $api->oldLike($like1);
@@ -234,8 +228,9 @@ class Likes extends Command
                                 $requestCou += 1;
                                 sleep(mt_rand($timeOutMin, $timeOutMax));
                             }
-//                            $feed = $api->getFeed($acc);
-//                            Checkpoint::checkPoint($feed, $user);
+                            
+                            //                            $feed = $api->getFeed($acc);
+                            //                            Checkpoint::checkPoint($feed, $user);
                             $requestCou += 4;
                         }
                     } else {
