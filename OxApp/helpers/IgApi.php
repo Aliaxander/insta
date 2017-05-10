@@ -482,11 +482,11 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
             $email = str_replace(" ", ".", $this->name) . range('a', 'z')[rand(0, 25)] . mt_rand(0, 999) . "@gmail.com";
         } elseif (mt_rand(0, 1) == 0) {
             $email = str_replace(" ", ".", $this->username) . range('a', 'z')[rand(0,
-                    26)] . mt_rand(0, 999) . "@" . $domainMail[mt_rand(0,
+                    25)] . mt_rand(0, 999) . "@" . $domainMail[mt_rand(0,
                     count($domainMail) - 1)];
         } elseif (mt_rand(0, 1) == 0) {
             $email = str_replace(" ", ".", $this->name) . range('a', 'z')[rand(0,
-                    26)] . mt_rand(0, 999) . "@" . $domainMail[mt_rand(0,
+                    25)] . mt_rand(0, 999) . "@" . $domainMail[mt_rand(0,
                     count($domainMail) - 1)];
         } elseif (mt_rand(0, 1) == 0) {
             $email = str_replace(" ", ".", $this->name) . mt_rand(0, 9999) . "@" . $domainMail[mt_rand(0,

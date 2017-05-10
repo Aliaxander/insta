@@ -46,30 +46,14 @@ require(__DIR__ . "/../OxApp/Routes.php");
 //    }
 //}
 //
-//$domains='gareput.cu.cc
-//parrabne.cu.cc
-//aningonetal.cu.cc
-//sodingwass.cu.cc
-//belacron.cu.cc
-//jushathen.cu.cc
-//tedronrep.cu.cc
-//tinfortet.cu.cc
-//titrollet.cu.cc
-//wronceron.cu.cc
-//rephanled.cu.cc
-//lacranno.cu.cc
-//butrethet.cu.cc
-//orfortred.cu.cc';
-//$domains = explode("\n", $domains);
-//foreach ($domains as $domain) {
-//    $proxy = str_replace(["\n", " "], "", $domain);
-//    Domains::add(['domain' => $domain]);
-//}
+//
 //$domains = "";
 //$domains = explode("\n", $domains);
 //foreach ($domains as $domain) {
-//    $proxy=str_replace(["\n"," "],"",$domain);
-//    Proxy::add(['proxy' => $proxy]);
+//    $proxy = str_replace(["\n", " "], "", $domain);
+//    if (Proxy::find(['proxy' => $proxy])->count == 0) {
+//        Proxy::add(['proxy' => $proxy]);
+//    }
 //}
 
 //$faker = Factory::create();
