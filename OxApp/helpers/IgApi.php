@@ -448,11 +448,11 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
         $faker = Factory::create();
         if (mt_rand(0, 4) == 1) {
             $uname = $faker->userName . range('a', 'z')[rand(0, 25)] . range('a', 'z')[rand(0, 25)];
-        } elseif (mt_rand(0, 1) == 0) {
+        } elseif (mt_rand(0, 3) == 0) {
             $uname = $faker->firstNameFemale . range('a', 'z')[rand(0, 25)] . range('a', 'z')[rand(0,
-                    26)] . $faker->lastName . range('a',
+                    25)] . $faker->lastName . range('a',
                     'z')[rand(0, 25)] . range('a', 'z')[rand(0, 25)];
-        } elseif (mt_rand(0, 1) == 0) {
+        } elseif (mt_rand(0, 2) == 0) {
             $uname = $faker->firstNameFemale . range('a',
                     'z')[rand(0, 25)] . range('a', 'z')[rand(0, 25)] . $faker->lastName;
         } elseif (mt_rand(0, 1) == 0) {
@@ -460,7 +460,7 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
                     'z')[rand(0, 25)] . range('a', 'z')[rand(0, 25)];
         } else {
             $uname = $faker->lastName . range('a',
-                    'z')[rand(0, 25)] . $faker->firstNameFemale . rand(1100, 2017);
+                    'z')[rand(0, 25)] . $faker->firstNameFemale . rand(0, 2017);
         }
         $uname = mb_strtolower($uname);
         if (rand(0, 1) == 1) {
@@ -571,10 +571,10 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
         }
         $this->csrftoken = $singTokenResult;
         
-        //        if (rand(0, 1) == 1) {
-        //            sleep(rand(10, 15));
+                if (rand(0, 1) == 1) {
+                    sleep(rand(10, 15));
         print_r($this->usernameSuggestions($usernameTmp4, $email, $waterfall_id));
-        //        }
+                }
         sleep(rand(11, 19));
         $singTokenResult = '';
         $i = 0;
@@ -601,10 +601,10 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
         sleep(rand(3, 7));
         print_r($this->usernameSuggestions($usernameTmp2, $email, $waterfall_id));
         
-        //        if (rand(0, 1) == 1) {
-        //            sleep(rand(3, 8));
-        //            print_r($this->usernameSuggestions($usernameTmp1, $email, $waterfall_id));
-        //        }
+//                if (rand(0, 1) == 1) {
+//                    sleep(rand(3, 8));
+//                    print_r($this->usernameSuggestions($usernameTmp1, $email, $waterfall_id));
+//                }
         //        sleep(rand(4, 9));
         $finalName = $this->usernameSuggestions($this->username, $email, $waterfall_id);
         print_r($finalName);
