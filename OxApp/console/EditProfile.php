@@ -13,6 +13,7 @@ use OxApp\helpers\FreenomReg;
 use OxApp\helpers\IgApi;
 use OxApp\helpers\Resize;
 use OxApp\models\Domains;
+use OxApp\models\HashTags;
 use OxApp\models\ProfileGenerate;
 use OxApp\models\SystemSettings;
 use OxApp\models\Users;
@@ -46,6 +47,13 @@ class EditProfile extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         require(__DIR__ . "/../../config.php");
+        if (SystemSettings::get('hashTagSpam') == 1) {
+            $hashTags = HashTags::find();
+            $hashTagsResult = [];
+            foreach ($hashTags->rows as $tag) {
+                $hashTagsResult[] = $tag->tag;
+            }
+        }
         $status = true;
         while ($status = true) {
             $users = Users::orderBy(["id" => 'desc'])->limit([0 => 1])->find([
@@ -87,7 +95,12 @@ class EditProfile extends Command
                     }
                 }
                 if (!empty($user)) {
-                    Users::where(['id' => $user->id])->update(['userTask' => 3]);
+                    if (SystemSettings::get('hashTagSpam') == 0) {
+                        Users::where(['id' => $user->id])->update(['userTask' => 3]);
+                    } else {
+                        Users::where(['id' => $user->id])->update(['userTask' => 9]);
+                    }
+                    
                     $dir = scandir('/home/photos');
                     unset($dir[array_search('.', $dir)]);
                     unset($dir[array_search('..', $dir)]);
@@ -195,7 +208,7 @@ class EditProfile extends Command
                             unset($dir[array_search('..', $dir)]);
                             $dir = array_values($dir);
                             
-                            $randCount = mt_rand(1, 3);//SystemSettings::get('countFeedPhoto')
+                            $randCount = mt_rand(1, 2);//SystemSettings::get('countFeedPhoto')
                             for ($i = 0; $i < $randCount; $i++) {
                                 $file = rand(0, count($dir) - 1);
                                 $resize = new Resize();
@@ -231,11 +244,23 @@ class EditProfile extends Command
                                 print_r($media = $api->uploadPhoto($photo));
                                 
                                 $media_id = $media[1]['upload_id'];
+                                $caption = '';
+                                if (SystemSettings::get('hashTagSpam') == 1) {
+                                    $hashTags = HashTags::find();
+                                    $hashTagsResult = [];
+                                    foreach ($hashTags->rows as $tag) {
+                                        $hashTagsResult[] = $tag->tag;
+                                    }
+                                    $caption = '#' . $hashTagsResult[mt_rand(0,
+                                            count($hashTagsResult) - 1)] . ' #' . $hashTagsResult[mt_rand(0,
+                                            count($hashTagsResult) - 1)] . ' #' . $hashTagsResult[mt_rand(0,
+                                            count($hashTagsResult) - 1)];
+                                }
                                 $data = [
                                     'device_id' => $user->deviceId,
                                     'guid' => $user->guid,
                                     'media_id' => "$media_id",
-                                    'caption' => '',
+                                    'caption' => $caption,
                                     'device_timestamp' => "" . time() . "",
                                     'source_type' => '5',
                                     'filter_type' => '0',

@@ -53,7 +53,7 @@
                         <th data-field="name">Name</th>
                         <th data-field="password">Password</th>
                         <th data-field="type">type</th>
-                        <th data-field="status" data-editable="true">Status</th>
+                        <th data-field="comment" data-editable="true">Comment</th>
                     </tr>
                     </thead>
                 </table>
