@@ -208,7 +208,7 @@ class EditProfile extends Command
                             unset($dir[array_search('..', $dir)]);
                             $dir = array_values($dir);
                             
-                            $randCount = mt_rand(1, 4);//SystemSettings::get('countFeedPhoto')
+                            $randCount = mt_rand(1, 2);//SystemSettings::get('countFeedPhoto')
                             for ($i = 0; $i < $randCount; $i++) {
                                 $file = rand(0, count($dir) - 1);
                                 $resize = new Resize();
