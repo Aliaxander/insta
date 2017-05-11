@@ -58,7 +58,7 @@ class TechAccountController extends App
     {
 
         $gmail = TechAccount::update(
-            ['status' => $this->request->request->get('status')],
+            ['comment' => $this->request->request->get('comment')],
             ['id' => $this->request->request->get('id')]
         );
         if ($gmail->count === 1) {
