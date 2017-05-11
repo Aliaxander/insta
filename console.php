@@ -11,6 +11,7 @@ use Acme\Console\Command\ParseBaseIg;
 use Acme\Console\Command\PreParseBase;
 use Acme\Console\Command\Test;
 use Acme\Console\Command\BaseUpload;
+use Acme\Console\Command\ThreadsControl;
 use Acme\Console\Command\UploadPhoto;
 use Ox\DataBase\DbConfig;
 use Symfony\Component\Console\Application;
@@ -36,6 +37,7 @@ $application->add(new ParseBaseIg());
 $application->add(new PreParseBase());
 $application->add(new BioUpload());
 $application->add(new UploadPhoto());
+$application->add(new ThreadsControl());
 
 $application->addCommands(
     array(
