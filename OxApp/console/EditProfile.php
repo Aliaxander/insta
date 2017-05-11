@@ -47,10 +47,12 @@ class EditProfile extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         require(__DIR__ . "/../../config.php");
-        $hashTags = HashTags::find();
-        $hashTagsResult = [];
-        foreach ($hashTags->rows as $tag) {
-            $hashTagsResult[] = $tag->tag;
+        if (SystemSettings::get('hashTagSpam') == 1) {
+            $hashTags = HashTags::find();
+            $hashTagsResult = [];
+            foreach ($hashTags->rows as $tag) {
+                $hashTagsResult[] = $tag->tag;
+            }
         }
         $status = true;
         while ($status = true) {
@@ -93,7 +95,12 @@ class EditProfile extends Command
                     }
                 }
                 if (!empty($user)) {
-                    Users::where(['id' => $user->id])->update(['userTask' => 9]);
+                    if (SystemSettings::get('hashTagSpam') == 0) {
+                        Users::where(['id' => $user->id])->update(['userTask' => 3]);
+                    } else {
+                        Users::where(['id' => $user->id])->update(['userTask' => 9]);
+                    }
+                    
                     $dir = scandir('/home/photos');
                     unset($dir[array_search('.', $dir)]);
                     unset($dir[array_search('..', $dir)]);
@@ -237,14 +244,23 @@ class EditProfile extends Command
                                 print_r($media = $api->uploadPhoto($photo));
                                 
                                 $media_id = $media[1]['upload_id'];
+                                $caption = '';
+                                if (SystemSettings::get('hashTagSpam') == 1) {
+                                    $hashTags = HashTags::find();
+                                    $hashTagsResult = [];
+                                    foreach ($hashTags->rows as $tag) {
+                                        $hashTagsResult[] = $tag->tag;
+                                    }
+                                    $caption = '#' . $hashTagsResult[mt_rand(0,
+                                            count($hashTagsResult) - 1)] . ' #' . $hashTagsResult[mt_rand(0,
+                                            count($hashTagsResult) - 1)] . ' #' . $hashTagsResult[mt_rand(0,
+                                            count($hashTagsResult) - 1)];
+                                }
                                 $data = [
                                     'device_id' => $user->deviceId,
                                     'guid' => $user->guid,
                                     'media_id' => "$media_id",
-                                    'caption' => '#' . $hashTagsResult[mt_rand(0,
-                                            count($hashTagsResult) - 1)] . ' #' . $hashTagsResult[mt_rand(0,
-                                            count($hashTagsResult) - 1)] . ' #' . $hashTagsResult[mt_rand(0,
-                                            count($hashTagsResult) - 1)],
+                                    'caption' => $caption,
                                     'device_timestamp' => "" . time() . "",
                                     'source_type' => '5',
                                     'filter_type' => '0',
