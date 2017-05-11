@@ -93,7 +93,7 @@ class EditProfile extends Command
                     }
                 }
                 if (!empty($user)) {
-                    Users::where(['id' => $user->id])->update(['userTask' => 3]);
+                    Users::where(['id' => $user->id])->update(['userTask' => 9]);
                     $dir = scandir('/home/photos');
                     unset($dir[array_search('.', $dir)]);
                     unset($dir[array_search('..', $dir)]);
