@@ -378,7 +378,7 @@ class IgApi
             'gender' => 2,
             'external_url' => $url,
         ];
-        if (SystemSettings::get('isPrivate') === 1) {
+        if (SystemSettings::get('isPrivate') == 1) {
             $data['is_private'] = true;
         }
         $data = json_encode($data);
@@ -428,7 +428,7 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
             'biography' => $biography,
             'email' => $email
         ];
-        if (SystemSettings::get('isPrivate') === 1) {
+        if (SystemSettings::get('isPrivate') == 1) {
             $data['is_private'] = true;
         }
         $data = json_encode($data);
