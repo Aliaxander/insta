@@ -11,7 +11,7 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-md-12">
-                        <label for="name" class="control-label">Email</label>
+                        <label for="name" class="control-label">Name</label>
                         <input type="text" class="form-control" id="name-form" name="name" required>
                         <label for="value" class="control-label">Password</label>
                         <input type="text" class="form-control" id="password-form" name="value" required>
@@ -89,7 +89,7 @@
             $('#password-form').val('');
             $('#type-form').val('');
         });
-    };
+    }
 </script>
 
 {% include "global/footer.tpl.php" %}

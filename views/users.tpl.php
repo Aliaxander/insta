@@ -33,7 +33,6 @@
                data-side-pagination="server"
                data-pagination="true"
                data-page-size="50"
-               data-height="500"
                data-page-list="[50, 100, 200, 500, 1000, 5000]"
                data-url="/api/users"
                data-show-columns="true"
@@ -243,10 +242,6 @@
         $remove = $('.check'),
         selections = [];
     $(function () {
-        // sometimes footer render error.
-        setTimeout(function () {
-            $table.bootstrapTable( 'resetView' , {height: getHeight()} );
-        }, 200);
         $table.on('check.bs.table uncheck.bs.table ' +
             'check-all.bs.table uncheck-all.bs.table', function () {
             $remove.prop('disabled', !$table.bootstrapTable('getSelections').length);
@@ -279,9 +274,6 @@
         return {};
     }
 
-    function getHeight() {
-        return $(window).height() - $('nav').outerHeight(false);
-    }
     function userNameFormatter(value) {
         return '<a href="https://instagram.com/' + value + '" target="_blank"><i class="glyphicon glyphicon-link"></i> ' + value + '</a>';
     }

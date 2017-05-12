@@ -18,7 +18,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" onclick="addDomains();">Add Domains</button>
+                <button type="button" id="add-domains" class="btn btn-primary" onclick="addDomains();">Add Domains</button>
             </div>
         </div>
     </div>
@@ -73,7 +73,6 @@
                        data-side-pagination="server"
                        data-pagination="true"
                        data-page-size="50"
-                       data-height="500"
                        data-page-list="[10, 50, 100, 200, 500, 1000, 5000]"
                        data-sort-name="id"
                        data-show-refresh="true"
@@ -109,11 +108,6 @@
         $remove = $('.check'),
         selections = [];
     $(function () {
-        // sometimes footer render error.
-        setTimeout(function () {
-            $('#table').bootstrapTable('resetView', {height: getHeight()});
-        }, 200);
-
         $table.on('check.bs.table uncheck.bs.table ' +
             'check-all.bs.table uncheck-all.bs.table', function () {
             $remove.prop('disabled', !$table.bootstrapTable('getSelections').length);
@@ -139,10 +133,6 @@
         });
     });
 
-    function getHeight() {
-        return $(window).height() - $('nav').outerHeight(false);
-    }
-
     function getIdSelections() {
         return $.map($table.bootstrapTable('getSelections'), function (row) {
             return row.id
@@ -151,6 +141,7 @@
 
     function addDomains() {
         var domains = $('#domains-form').val();
+        document.getElementById("add-domains").disabled = true;
         $.ajax({
             type: "post",
             url: "/api/domains",
@@ -161,10 +152,10 @@
                 } else {
                     $('.alerts').html('<div class="alert alert-danger alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button> <strong> Error add domains </strong>');
                 }
+                document.getElementById("add-domains").disabled = false;
                 $('.modal-add').modal('hide');
                 $('#table').bootstrapTable('refresh');
-                $('#name-form').val('');
-                $('#value-form').val('');
+                $('#domains-form').val('');
             }
         })
     }

@@ -23,7 +23,6 @@
                        data-side-pagination="server"
                        data-pagination="true"
                        data-page-size="50"
-                       data-height="500"
                        data-page-list="[50, 100, 200, 500, 1000, 5000]"
                        data-sort-name="id"
                        data-show-refresh="true"
@@ -118,10 +117,6 @@
         $remove = $('.check'),
         selections = [];
     $(function () {
-        // sometimes footer render error.
-        setTimeout(function () {
-            $('#table').bootstrapTable('resetView', {height: getHeight()});
-        }, 200);
 
         $table.on('check.bs.table uncheck.bs.table ' +
             'check-all.bs.table uncheck-all.bs.table', function () {
@@ -148,10 +143,6 @@
             });
         });
     });
-
-    function getHeight() {
-        return $(window).height() - $('nav').outerHeight(false);
-    }
 
     function getIdSelections() {
         return $.map($table.bootstrapTable('getSelections'), function (row) {
