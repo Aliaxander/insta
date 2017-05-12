@@ -92,7 +92,7 @@ class PreParseBase extends Command
                 if ($accRow->count > 0) {
                     HashTags::where(['id' => $accRow->rows[0]->id])->update(['status' => 1]);
                     $result = $api->request('tags/search?q=' . $accRow->rows[0]->tag);
-                    $api->request('feed/timeline/?is_prefetch=0&seen_posts=&phone_id=' . $user->phone_id . '&battery_level=' . mt_rand(90,
+                    $api->request('feed/timeline/?is_prefetch=0&seen_posts=&phone_id=' . $user->phoneId . '&battery_level=' . mt_rand(90,
                             100) . '&timezone_offset=3600&is_pull_to_refresh=0&unseen_posts=&is_charging=' . mt_rand(0,
                             1));
                     if (!empty($result[1]['results'])) {
