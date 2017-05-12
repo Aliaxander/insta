@@ -476,9 +476,6 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
         
         //$email = $faker->email;
         if (mt_rand(0, 2) == 0) {
-            $email = explode("@", $faker->email);
-            $email = implode(range('a', 'z')[rand(0, 25)] . mt_rand(0, 999) . "@", $email);
-        } elseif (mt_rand(0, 2) == 0) {
             $email = str_replace(" ", ".", $this->name) . range('a', 'z')[rand(0, 25)] . mt_rand(0, 999) . "@gmail.com";
         } elseif (mt_rand(0, 1) == 0) {
             $email = str_replace(" ", ".", $this->username) . range('a', 'z')[rand(0,
