@@ -41,6 +41,7 @@ class Likes extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         require(__DIR__ . "/../../config.php");
+        echo 1;
         $api = new IgApi();
         $users = Users::orderBy(["id" => 'desc'])->limit([0 => 1])->find([
             'login/in' => [1, 2],
@@ -48,6 +49,7 @@ class Likes extends Command
             'requests' => 0,
             'userTask' => 3
         ]);
+        echo 2;
         if ($users->count == 0) {
             die('no job');
         } else {
@@ -59,6 +61,7 @@ class Likes extends Command
             $day = $user->day + 1;
             $followCou = $user->follows;
             Users::where(['id' => $user->id])->update(['requests' => round($requestCou + 1)]);
+            echo 3;
             $api->proxy = $user->proxy;
             $api->username = $user->userName;
             $api->accountId = $user->accountId;
@@ -146,11 +149,14 @@ class Likes extends Command
                 //                if ($userTest->count === 0) {
                 //                    die();
                 //                }
+                echo 4;
                 $accRow = InstBase::orderBy(['id' => 'desc'])->limit([0 => 1])->find(['status' => 0]);
+                echo 5;
                 $acc = @preg_replace("/[^0-9]/", '', $accRow->rows[0]->account);
                 if (!empty($acc)) {
+                    echo 6;
                     InstBase::where(['id' => $accRow->rows[0]->id])->update(['status' => 1]);
-                    
+                    echo 7;
                     echo "Set acc $acc:\n";
                     if (rand(0, 30) == 10) {
                         $api->getRecentActivityAll();
