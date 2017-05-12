@@ -31,6 +31,7 @@ class IgApi
     //protected $igKey = 'b03e0daaf2ab17cda2a569cace938d639d1288a1197f9ecf97efd0a4ec0874d7';
     protected $igVersion = '4';
     public $csrftoken;
+    protected $curl = false;
     
     public function __construct()
     {
@@ -568,10 +569,10 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
         }
         $this->csrftoken = $singTokenResult;
         
-                if (rand(0, 1) == 1) {
-                    sleep(rand(10, 15));
-        print_r($this->usernameSuggestions($usernameTmp4, $email, $waterfall_id));
-                }
+        if (rand(0, 1) == 1) {
+            sleep(rand(10, 15));
+            print_r($this->usernameSuggestions($usernameTmp4, $email, $waterfall_id));
+        }
         sleep(rand(11, 19));
         $singTokenResult = '';
         $i = 0;
@@ -598,10 +599,10 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
         sleep(rand(3, 7));
         print_r($this->usernameSuggestions($usernameTmp2, $email, $waterfall_id));
         
-//                if (rand(0, 1) == 1) {
-//                    sleep(rand(3, 8));
-//                    print_r($this->usernameSuggestions($usernameTmp1, $email, $waterfall_id));
-//                }
+        //                if (rand(0, 1) == 1) {
+        //                    sleep(rand(3, 8));
+        //                    print_r($this->usernameSuggestions($usernameTmp1, $email, $waterfall_id));
+        //                }
         //        sleep(rand(4, 9));
         $finalName = $this->usernameSuggestions($this->username, $email, $waterfall_id);
         print_r($finalName);
@@ -830,19 +831,12 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
      */
     public function request($method, $data = null, $file = null, $profilePhoto = null)
     {
-        //        $i = 0;
-        //        $resBody = '';
-        //        while ($resBody == '') {
         echo "Request: \n";
         echo $method . "\n";
         print_r($data);
         echo "\n\nResult: \n";
-        $ch = curl_init();
-        curl_setopt($ch, CURLINFO_HEADER_OUT, true);
+        $ch = $this->initCurl();
         curl_setopt($ch, CURLOPT_URL, "https://i.instagram.com/api/v1/" . $method);
-        curl_setopt($ch, CURLOPT_USERAGENT, $this->userAgent);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
         if ($file) {
             $uData = json_encode([
                 '_csrftoken' => $this->csrftoken,
@@ -883,7 +877,6 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
             curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
         } else {
             $headers = [
-                //  'User-Agent: ' . $this->userAgent,
                 'Connection: keep-alive',
                 "X-IG-Connection-Type: WIFI",
                 "X-IG-Capabilities: " . $this->xIgCapabilities,
@@ -894,12 +887,6 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
             curl_setopt($ch, CURLOPT_ENCODING, "gzip");
         }
         
-        curl_setopt($ch, CURLOPT_HEADER, true);
-        curl_setopt($ch, CURLOPT_VERBOSE, true);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-        curl_setopt($ch, CURLOPT_COOKIEFILE, "/home/insta/cookies/" . $this->username . "-cookies.dat");
-        curl_setopt($ch, CURLOPT_COOKIEJAR, "/home/insta/cookies/" . $this->username . "-cookies.dat");
         if ($file) {
             curl_setopt($ch, CURLOPT_POST, true);
             curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
@@ -909,39 +896,47 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
             curl_setopt($ch, CURLOPT_POST, true);
             curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
         }
-        
-        $proxy = explode(";", $this->proxy);
-        curl_setopt($ch, CURLOPT_PROXY, $proxy[0]);
-        if (!empty($proxy[1])) {
-            curl_setopt($ch, CURLOPT_PROXYUSERPWD, $proxy[1]);
-        }
-        curl_setopt($ch, CURLOPT_PROXYTYPE, CURLPROXY_SOCKS5);
-        curl_setopt($ch, CURLOPT_PROXYTYPE, 7);
-        
         $resp = curl_exec($ch);
         $header_len = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
         $header = substr($resp, 0, $header_len);
         $body = substr($resp, $header_len);
         $info = curl_getinfo($ch);
-        curl_close($ch);
+        // curl_close($ch);
         echo "\n\nHeaders:\n";
         print_r($info);
         echo "\n\nBody:";
         print_r($body);
-        //            $resBody = $body;
-        //            if ($body == '') {
-        //                sleep(2);
-        //            }
-        //            $i++;
-        //            if ($i > 10) {
-        //                $resBody = ' ';
-        //            }
-        //            //print_r(json_decode($body, true));
-        //        }
-        //
+        
         return [$header, json_decode($body, true)];
     }
     
+    protected function initCurl()
+    {
+        if ($this->curl === false) {
+            $ch = curl_init();
+            curl_setopt($ch, CURLINFO_HEADER_OUT, true);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+            curl_setopt($ch, CURLOPT_HEADER, true);
+            curl_setopt($ch, CURLOPT_VERBOSE, true);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+            curl_setopt($ch, CURLOPT_COOKIEFILE, "/home/insta/cookies/" . $this->username . "-cookies.dat");
+            curl_setopt($ch, CURLOPT_COOKIEJAR, "/home/insta/cookies/" . $this->username . "-cookies.dat");
+            curl_setopt($ch, CURLOPT_USERAGENT, $this->userAgent);
+            
+            $proxy = explode(";", $this->proxy);
+            curl_setopt($ch, CURLOPT_PROXY, $proxy[0]);
+            if (!empty($proxy[1])) {
+                curl_setopt($ch, CURLOPT_PROXYUSERPWD, $proxy[1]);
+            }
+            curl_setopt($ch, CURLOPT_PROXYTYPE, CURLPROXY_SOCKS5);
+            curl_setopt($ch, CURLOPT_PROXYTYPE, 7);
+            $this->curl = $ch;
+        }
+        
+        return $this->curl;
+    }
     
     /**
      * @param $bodies
