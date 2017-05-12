@@ -192,6 +192,7 @@ class EditProfile extends Command
                                 $user->email);
                             $profileResult = $profile[1];
                             if (empty($profile[1])) {
+                                Domains::where(['id' => $domain->rows[0]->id])->update(['status' => 0]);
                                 $profileResult = '';
                             }
                             if ($i === 5) {
