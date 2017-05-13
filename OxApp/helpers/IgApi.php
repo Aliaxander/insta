@@ -13,6 +13,11 @@ use InstagramAPI\Checkpoint;
 use OxApp\models\SystemSettings;
 use OxApp\models\Users;
 
+/**
+ * Class IgApi
+ *
+ * @package OxApp\helpers
+ */
 class IgApi
 {
     
@@ -29,6 +34,9 @@ class IgApi
     public $csrftoken;
     protected $curl = false;
     
+    /**
+     * IgApi constructor.
+     */
     public function __construct()
     {
         $languages = array(
@@ -87,6 +95,12 @@ class IgApi
         //        $this->userAgent = UserAgent::buildUserAgent('10.15.0', 'en_US', $device);
     }
     
+    /**
+     * @param        $feedId
+     * @param string $maxId
+     *
+     * @return array
+     */
     public function getFeed($feedId, $maxId = '')
     {
         
@@ -117,7 +131,11 @@ class IgApi
         return $result;
     }
     
-    
+    /**
+     * @param $mediaId
+     *
+     * @return array
+     */
     public function oldLike($mediaId)
     {
         $data = [
@@ -131,6 +149,14 @@ class IgApi
         return $this->request('media/' . $mediaId . '/like/', $data);
     }
     
+    /**
+     * @param $mediaId
+     * @param $userId
+     * @param $userName
+     * @param $moduleId
+     *
+     * @return array
+     */
     public function like($mediaId, $userId, $userName, $moduleId)
     {
         $moduleName = 'photo_view_profile';
@@ -157,6 +183,11 @@ class IgApi
         return $this->request('media/' . $mediaId . '/like/', $data);
     }
     
+    /**
+     * @param $followUserId
+     *
+     * @return array
+     */
     public function follow($followUserId)
     {
         $data = [
@@ -172,11 +203,22 @@ class IgApi
         return $result;
     }
     
+    /**
+     * @return array
+     */
     public function getRecentActivityAll()
     {
         return $this->request('news/inbox/?limited_activity=true&show_su=true');
     }
     
+    /**
+     * @param $guid
+     * @param $phoneId
+     * @param $device_id
+     * @param $password
+     *
+     * @return bool|mixed|string
+     */
     public function login($guid, $phoneId, $device_id, $password)
     {
         if (file_exists("/home/insta/cookies/" . $this->username . "-cookies.dat")) {
@@ -281,7 +323,11 @@ class IgApi
         return $resultLogin;
     }
     
-    
+    /**
+     * @param $photo
+     *
+     * @return array|bool
+     */
     public function changeProfilePicture($photo)
     {
         $resultEdit = true;
@@ -301,7 +347,16 @@ class IgApi
     //            print_r($resultEdit);
     //        }
     //    }
-    
+    /**
+     * @param      $photo
+     * @param null $caption
+     * @param null $customPreview
+     * @param null $location
+     * @param null $filter
+     * @param bool $reel_flag
+     *
+     * @return array
+     */
     public function uploadPhoto(
         $photo,
         $caption = null,
@@ -391,7 +446,15 @@ class IgApi
         return [$header, json_decode($body, true)];
     }
     
-    
+    /**
+     * @param $biography
+     * @param $url
+     * @param $phoneId
+     * @param $firstName
+     * @param $email
+     *
+     * @return array
+     */
     public function oldEdit($biography, $url, $phoneId, $firstName, $email)
     {
         $tokenResult = '';
@@ -433,6 +496,15 @@ class IgApi
         return $this->request('accounts/edit_profile/', $data);
     }
     
+    /**
+     * @param $biography
+     * @param $url
+     * @param $phoneId
+     * @param $firstName
+     * @param $email
+     *
+     * @return array
+     */
     public function edit($biography, $url, $phoneId, $firstName, $email)
     {
         $tokenResult = '';
@@ -483,6 +555,9 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
         return $this->request('accounts/edit_profile/', $data);
     }
     
+    /**
+     * @return bool
+     */
     public function create()
     {
         $domainMail = [
@@ -697,7 +772,8 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
                 'photo' => '',
                 'biography' => '',
                 'proxy' => $this->proxy,
-                'userAgent' => $this->userAgent
+                'userAgent' => $this->userAgent,
+                'dateCreate' => '//now()//'
             ]);
         } elseif (empty($create[1])) {
             Users::add([
@@ -859,6 +935,9 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
         return $this->request('qe/sync/', $syncData);
     }
     
+    /**
+     * @return array
+     */
     public function sync()
     {
         $syncData = json_encode([
@@ -956,6 +1035,9 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
         return [$header, json_decode($body, true)];
     }
     
+    /**
+     * @return bool|resource
+     */
     protected function initCurl()
     {
         if ($this->curl === false) {
