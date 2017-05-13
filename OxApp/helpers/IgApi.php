@@ -45,7 +45,6 @@ class IgApi
             'de_DE',
             'de_LI',
             'de_LU',
-            'es_ES',
             'eu_ES',
             'en_US',
             'fr_BE',
