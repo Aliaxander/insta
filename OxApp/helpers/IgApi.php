@@ -26,17 +26,141 @@ class IgApi
     public $rank_token;
     protected $password;
     protected $device_id;
-    protected $igKey = 'f6bcd0639ea3d279c10d4ffe49bd59f1f5045cf73c62fc33c9e45766f6cf6c63';
-    protected $xIgCapabilities = '3ToAAA==';
-    //protected $igKey = 'b03e0daaf2ab17cda2a569cace938d639d1288a1197f9ecf97efd0a4ec0874d7';
-    protected $igVersion = '4';
     public $csrftoken;
     protected $curl = false;
     
     public function __construct()
     {
-        $device = new Device('10.1.0', 'en_US');
-        $this->userAgent = UserAgent::buildUserAgent('10.1.0', 'en_US', $device);
+        $languages = array(
+            'af_ZA',
+            'ar_AE',
+            'ar_BH',
+            'ar_DZ',
+            'ar_EG',
+            'ar_IQ',
+            'ar_JO',
+            'ar_KW',
+            'ar_LB',
+            'ar_LY',
+            'ar_MA',
+            'ar_OM',
+            'ar_QA',
+            'ar_SA',
+            'ar_SY',
+            'ar_TN',
+            'ar_YE',
+            'be_BY',
+            'bg_BG',
+            'ca_ES',
+            'cs_CZ',
+            'da_DK',
+            'de_AT',
+            'de_CH',
+            'de_DE',
+            'de_LI',
+            'de_LU',
+            'el_GR',
+            'en_AU',
+            'en_BZ',
+            'en_CA',
+            'en_CB',
+            'en_GB',
+            'en_IE',
+            'en_JM',
+            'en_NZ',
+            'en_PH',
+            'en_TT',
+            'en_US',
+            'en_ZA',
+            'en_ZW',
+            'es_AR',
+            'es_BO',
+            'es_CL',
+            'es_CO',
+            'es_CR',
+            'es_DO',
+            'es_EC',
+            'es_ES',
+            'es_GT',
+            'es_HN',
+            'es_MX',
+            'es_NI',
+            'es_PA',
+            'es_PE',
+            'es_PR',
+            'es_PY',
+            'es_SV',
+            'es_UY',
+            'es_VE',
+            'et_EE',
+            'eu_ES',
+            'fa_IR',
+            'fi_FI',
+            'fo_FO',
+            'fr_BE',
+            'fr_CA',
+            'fr_CH',
+            'fr_FR',
+            'fr_LU',
+            'fr_MC',
+            'gl_ES',
+            'gu_IN',
+            'he_IL',
+            'hi_IN',
+            'hr_HR',
+            'hu_HU',
+            'hy_AM',
+            'id_ID',
+            'is_IS',
+            'it_CH',
+            'it_IT',
+            'ja_JP',
+            'ka_GE',
+            'kk_KZ',
+            'kn_IN',
+            'ko_KR',
+            'ky_KZ',
+            'lt_LT',
+            'lv_LV',
+            'mk_MK',
+            'mn_MN',
+            'mr_IN',
+            'ms_BN',
+            'ms_MY',
+            'nb_NO',
+            'nl_BE',
+            'nl_NL',
+            'nn_NO',
+            'pa_IN',
+            'pl_PL',
+            'pt_BR',
+            'pt_PT',
+            'ro_RO',
+            'ru_RU',
+            'sa_IN',
+            'sk_SK',
+            'sl_SI',
+            'sq_AL',
+            'sv_FI',
+            'sv_SE',
+            'sw_KE',
+            'ta_IN',
+            'te_IN',
+            'th_TH',
+            'tr_TR',
+            'tt_RU',
+            'uk_UA',
+            'ur_PK',
+            'vi_VN',
+            'zh_CN',
+            'zh_HK',
+            'zh_MO',
+            'zh_SG',
+            'zh_TW',
+        );
+        $lang = $languages[mt_rand(0, count($languages) - 1)];
+        $device = new Device(Constants::igVersion, $lang);
+        $this->userAgent = UserAgent::buildUserAgent(Constants::igVersion, $lang, $device);
         //        $device = new Device('10.15.0', 'en_US');
         //        $this->userAgent = UserAgent::buildUserAgent('10.15.0', 'en_US', $device);
     }
@@ -848,12 +972,12 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
                 [
                     'type' => 'form-data',
                     'name' => 'ig_sig_key_version',
-                    'data' => $this->igVersion,
+                    'data' => Constants::igKeyVersion,
                 ],
                 [
                     'type' => 'form-data',
                     'name' => 'signed_body',
-                    'data' => hash_hmac('sha256', $uData, $this->igKey) . $uData,
+                    'data' => hash_hmac('sha256', $uData, Constants::igKey) . $uData,
                 ],
                 [
                     'type' => 'form-data',
@@ -879,7 +1003,7 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
             $headers = [
                 'Connection: keep-alive',
                 "X-IG-Connection-Type: WIFI",
-                "X-IG-Capabilities: " . $this->xIgCapabilities,
+                "X-IG-Capabilities: " . Constants::xIgCapabilities,
                 'Accept-Encoding: gzip, deflate',
                 'Accept-Language: en-US',
             ];
@@ -891,8 +1015,8 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
             curl_setopt($ch, CURLOPT_POST, true);
             curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
         } elseif ($data) {
-            $hash = hash_hmac('sha256', $data, $this->igKey);
-            $postData = 'signed_body=' . $hash . '.' . urlencode($data) . '&ig_sig_key_version=' . $this->igVersion;
+            $hash = hash_hmac('sha256', $data, Constants::igKey);
+            $postData = 'signed_body=' . $hash . '.' . urlencode($data) . '&ig_sig_key_version=' . Constants::igKeyVersion;
             curl_setopt($ch, CURLOPT_POST, true);
             curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
         }
