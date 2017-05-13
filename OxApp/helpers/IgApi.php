@@ -40,6 +40,8 @@ class IgApi
     public function __construct()
     {
         $languages = array(
+            'fr_MC',
+            'fr_LU',
             'de_CH',
             'es_PR',
             'es_SV',

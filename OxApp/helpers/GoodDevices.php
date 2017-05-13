@@ -21,16 +21,13 @@ class GoodDevices
      * 
    */
     const DEVICES = [
-        '24/7.0; 640dpi; 1440x2560; HUAWEI; LON-L29; HWLON; hi3660',
         '23/6.0.1; 640dpi; 1440x2560; samsung; SM-G935F; hero2lte; samsungexynos8890',
         '23/6.0.1; 640dpi; 1440x2560; samsung; SM-G930F; herolte; samsungexynos8890',
         '23/6.0.1; 480dpi; 1080x1920; samsung; SM-C5000; c5ltechn; qcom',
         '23/6.0.1; 640dpi; 1440x2560; samsung; SM-G925F; zerolte; samsungexynos7420',
         '23/6.0.1; 640dpi; 1440x2560; samsung; SAMSUNG-SM-G935A; hero2qlteatt; qcom',
         '21/5.0.1; 480dpi; 1080x1920; samsung; GT-I9505; jflte; qcom',
-        '24/7.0; 480dpi; 1080x1920; samsung; SM-G930K; heroltektt; samsungexynos8890',
         '23/6.0.1; 480dpi; 1080x1920; samsung; SM-G900F; klte; qcom',
-        '24/7.0; 640dpi; 1440x2560; samsung; SM-G920F; zeroflte; samsungexynos7420',
         '23/6.0.1; 480dpi; 1080x1920; ZTE; Z981; urd; qcom',
         '23/6.0.1; 640dpi; 1440x2560; ZTE; ZTE A2017U; ailsa_ii; qcom',
         '23/6.0.1; 640dpi; 1440x2392; LGE/lge; RS988; h1; h1',
