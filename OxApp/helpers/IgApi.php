@@ -40,19 +40,12 @@ class IgApi
     public function __construct()
     {
         $languages = array(
-            'de_AT',
             'de_CH',
-            'de_DE',
-            'de_LI',
-            'de_LU',
+            'es_PR',
+            'es_SV',
             'eu_ES',
             'en_US',
-            'fr_BE',
-            'fr_CA',
             'fr_CH',
-            'fr_FR',
-            'fr_LU',
-            'fr_MC',
             'uk_UA',
         );
         $lang = $languages[mt_rand(0, count($languages) - 1)];
@@ -536,20 +529,21 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
         ];
         $faker = Factory::create();
         if (mt_rand(0, 4) == 1) {
-            $uname = $faker->userName . range('a', 'z')[rand(0, 25)] . range('a', 'z')[rand(0, 25)];
+            $uname = $faker->userName . mt_rand(0, 2017);
         } elseif (mt_rand(0, 3) == 0) {
-            $uname = $faker->firstNameFemale . range('a', 'z')[rand(0, 25)] . range('a', 'z')[rand(0,
+            $uname = $faker->firstNameFemale . range('a', 'z')[mt_rand(0, 25)] . range('a', 'z')[mt_rand(0,
                     25)] . $faker->lastName . range('a',
-                    'z')[rand(0, 25)] . range('a', 'z')[rand(0, 25)];
+                    'z')[mt_rand(0, 25)] . range('a', 'z')[mt_rand(0, 25)];
         } elseif (mt_rand(0, 2) == 0) {
             $uname = $faker->firstNameFemale . range('a',
-                    'z')[rand(0, 25)] . range('a', 'z')[rand(0, 25)] . $faker->lastName;
+                    'z')[mt_rand(0, 25)] . range('a', 'z')[mt_rand(0, 25)] . $faker->lastName;
         } elseif (mt_rand(0, 1) == 0) {
             $uname = $faker->firstNameFemale . $faker->lastName . range('a',
-                    'z')[rand(0, 25)] . range('a', 'z')[rand(0, 25)];
+                    'z')[mt_rand(0, 25)] . range('a', 'z')[mt_rand(0, 25)];
         } else {
             $uname = $faker->lastName . range('a',
-                    'z')[rand(0, 25)] . $faker->firstNameFemale . rand(0, 2017);
+                    'z')[mt_rand(0, 25)] . $faker->firstNameFemale . range('a',
+                    'z')[mt_rand(0, 25)]. rand(0, 2017);
         }
         $uname = mb_strtolower($uname);
         if (rand(0, 1) == 1) {
@@ -558,27 +552,27 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
             $this->username = $uname;
         }
         $this->password = strtolower(substr(md5(number_format(microtime(true), 7, '', '')), mt_rand(15, 20)));
-        $this->name = $faker->firstNameFemale . range('a', 'z')[rand(0, 25)];// . " " . $faker->lastName;
+        $this->name = $faker->firstNameFemale . range('a', 'z')[mt_rand(0, 25)] . range('a', 'z')[mt_rand(0, 25)];// . " " . $faker->lastName;
         if (rand(0, 1) == 1) {
-            $this->name .= " " . $faker->lastName . range('a', 'z')[rand(0, 25)];
+            $this->name .= " " . $faker->lastName . range('a', 'z')[mt_rand(0, 25)] . range('a', 'z')[mt_rand(0, 25)];
         }
         
         //$email = $faker->email;
         if (mt_rand(0, 2) == 0) {
-            $email = str_replace(" ", ".", $this->name) . range('a', 'z')[rand(0, 25)] . mt_rand(0, 999) . "@gmail.com";
+            $email = str_replace(" ", ".", $this->name) . range('a', 'z')[mt_rand(0, 25)] . mt_rand(0, 999) . "@gmail.com";
         } elseif (mt_rand(0, 1) == 0) {
-            $email = str_replace(" ", ".", $this->username) . range('a', 'z')[rand(0,
+            $email = str_replace(" ", ".", $this->username) . range('a', 'z')[mt_rand(0,
                     25)] . mt_rand(0, 999) . "@" . $domainMail[mt_rand(0,
                     count($domainMail) - 1)];
         } elseif (mt_rand(0, 1) == 0) {
-            $email = str_replace(" ", ".", $this->name) . range('a', 'z')[rand(0,
+            $email = str_replace(" ", ".", $this->name) . range('a', 'z')[mt_rand(0,
                     25)] . mt_rand(0, 999) . "@" . $domainMail[mt_rand(0,
                     count($domainMail) - 1)];
         } elseif (mt_rand(0, 1) == 0) {
             $email = str_replace(" ", ".", $this->name) . mt_rand(0, 9999) . "@" . $domainMail[mt_rand(0,
                     count($domainMail) - 1)];
         } else {
-            $email = $uname . range('a', 'z')[rand(0, 25)] . mt_rand(0, 999) . "@gmail.com";
+            $email = $uname . range('a', 'z')[mt_rand(0, 25)] . mt_rand(0, 999) . "@gmail.com";
         }
         if (mt_rand(0, 1) === 1) {
             $email = mb_strtolower($email);
@@ -694,7 +688,7 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
         //        sleep(rand(4, 9));
         $finalName = $this->usernameSuggestions($this->username, $email, $waterfall_id);
         print_r($finalName);
-        //$this->username = $finalName[1]['suggestions'][rand(0, 11)];
+        //$this->username = $finalName[1]['suggestions'][mt_rand(0, 11)];
         // $finalName = $this->usernameSuggestions($this->username, $email, $waterfall_id);
         print_r($finalName);
         echo "SET name: " . $this->username . "\n";
