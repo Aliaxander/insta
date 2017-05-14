@@ -56,7 +56,7 @@ class EditProfile extends Command
         }
         $status = true;
         while ($status = true) {
-            $users = Users::orderBy(["id" => 'desc'])->limit([0 => 1])->find([
+            $users = Users::orderBy(['userName' => 'desc'])->limit([0 => 1])->find([
                 'ban' => 0,
                 'userTask' => 2,
                 'login' => 0
