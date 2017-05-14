@@ -1,4 +1,5 @@
 <?php
+
 namespace InstagramAPI;
 
 use OxApp\models\Users;
@@ -35,8 +36,14 @@ class Checkpoint
             $checkPoint = new Checkpoint($user->userName);
             $checkPoint->proxy = $user->proxy;
             $checkPoint->accountId = $user->accountId;
-            if (isset($result['checkpoint_url'])) {
-                $result = $checkPoint->request($result['checkpoint_url']);
+            if (isset($result['checkpoint_url']) || isset($result['checkpoint']['url'])) {
+                echo "Redirect checkpoint UPL:";
+                if (isset($result['checkpoint_url'])) {
+                    $url = $result['checkpoint_url'];
+                } else {
+                    $url = $result['checkpoint']['url'];
+                }
+                $result = $checkPoint->request($url);
                 print_r($result);
                 if (preg_match("/Your phone number will be added\b/i", $result[1])) {
                     
@@ -57,7 +64,7 @@ class Checkpoint
                         Users::where(['accountId' => $user->accountId])->update(['ban' => 3]);
                     }
                     die("SMS BAN!");
-                }else{
+                } else {
                     if (!empty($user->id)) {
                         Users::where(['id' => $user->id])->update(['ban' => 1]);
                     } else {

@@ -65,7 +65,6 @@ class IgApi
      */
     public function getFeed($feedId, $maxId = '')
     {
-        
         $tst = $this->request("friendships/show/" . $feedId . "/");
         if (@$tst['1']['is_private'] == 1) {
             $result = [];
@@ -85,11 +84,22 @@ class IgApi
                 $result = $this->request("feed/user/" . $feedId . "/" . $maxId);
             }
         }
-        $this->request("users/" . $feedId . "/info/");
+      
+        $resultTst=$this->request("users/" . $feedId . "/info/");
+        Checkpoint::checkPoint($resultTst,$this);
         if (empty($result) && !empty($result2)) {
             $result = $result2;
         }
-        
+        return $result;
+    }
+    
+    public function getFollows($feedId, $maxId = ''){
+        if (!empty($maxId)) {
+            $maxId = '?max_id=' . $maxId;
+        }
+        $result = $this->request("friendships/" . $feedId . "/following/". $maxId);
+        Checkpoint::checkPoint($result, $this);
+    
         return $result;
     }
     
@@ -545,7 +555,7 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
         } else {
             $uname = $faker->lastName . range('a',
                     'z')[mt_rand(0, 25)] . $faker->firstNameFemale . range('a',
-                    'z')[mt_rand(0, 25)]. rand(0, 2017);
+                    'z')[mt_rand(0, 25)] . rand(0, 2017);
         }
         $uname = mb_strtolower($uname);
         if (rand(0, 1) == 1) {
@@ -554,14 +564,16 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
             $this->username = $uname;
         }
         $this->password = strtolower(substr(md5(number_format(microtime(true), 7, '', '')), mt_rand(15, 20)));
-        $this->name = $faker->firstNameFemale . range('a', 'z')[mt_rand(0, 25)] . range('a', 'z')[mt_rand(0, 25)];// . " " . $faker->lastName;
+        $this->name = $faker->firstNameFemale . range('a', 'z')[mt_rand(0, 25)] . range('a', 'z')[mt_rand(0,
+                25)];// . " " . $faker->lastName;
         if (rand(0, 1) == 1) {
             $this->name .= " " . $faker->lastName . range('a', 'z')[mt_rand(0, 25)] . range('a', 'z')[mt_rand(0, 25)];
         }
         
         //$email = $faker->email;
         if (mt_rand(0, 2) == 0) {
-            $email = str_replace(" ", ".", $this->name) . range('a', 'z')[mt_rand(0, 25)] . mt_rand(0, 999) . "@gmail.com";
+            $email = str_replace(" ", ".", $this->name) . range('a', 'z')[mt_rand(0, 25)] . mt_rand(0,
+                    999) . "@gmail.com";
         } elseif (mt_rand(0, 1) == 0) {
             $email = str_replace(" ", ".", $this->username) . range('a', 'z')[mt_rand(0,
                     25)] . mt_rand(0, 999) . "@" . $domainMail[mt_rand(0,

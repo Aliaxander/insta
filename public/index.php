@@ -7,6 +7,7 @@
  */
 
 use Faker\Factory;
+use InstagramAPI\Checkpoint;
 use OxApp\helpers\IgApi;
 use OxApp\models\Domains;
 use OxApp\models\HashTags;
@@ -26,6 +27,36 @@ header('Access-Control-Allow-Origin: *');
 $loader = require __DIR__ . '/../vendor/autoload.php';
 require(__DIR__ . "/../config.php");
 require(__DIR__ . "/../OxApp/Routes.php");
+//
+//$users = Users::find(['id' => 13353]);
+//$user = $users->rows[0];
+//print_r($user);
+//$requestCou = $user->requests;
+//$api = new IgApi();
+//$api->proxy = $user->proxy;
+//$api->username = $user->userName;
+//$api->accountId = $user->accountId;
+//$api->guid = $user->guid;
+//$api->csrftoken = $user->csrftoken;
+//Users::where(['id' => $user->id])->update(['login' => 1]);
+//if (!file_exists("/home/insta/cookies/" . $user->userName . "-cookies.dat") || $user->logIn === 2) {
+//    echo "login account:";
+//    $result = $api->login($user->guid, $user->phoneId, $user->deviceId, $user->password);
+//    Checkpoint::checkPoint($result, $user);
+//}
+//
+//
+//$accRow = \OxApp\models\ParseBase::limit([0 => 1])->find(['status' => 0]);
+//if ($accRow->count > 0) {
+//    $acc = @preg_replace("/[^0-9]/", '', $accRow->rows[0]->account);
+//    if (!empty($acc)) {
+//        // \OxApp\models\ParseBase::where(['id' => $accRow->rows[0]->id])->update(['status' => 1]);
+////        $result = $api->getFeed($acc);
+////        print_r($result);
+//        //friendships/{$userId}/following/
+//        print_r($api->getFollows($acc));
+//    }
+//}
 
 //$accounts = "";
 //$domains = explode("\n", $accounts);

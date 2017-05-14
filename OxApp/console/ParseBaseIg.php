@@ -76,26 +76,20 @@ class ParseBaseIg extends Command
             $api->guid = $user->guid;
             $api->csrftoken = $user->csrftoken;
             Users::where(['id' => $user->id])->update(['login' => 1]);
-            if (!file_exists("/home/insta/cookies/" .$user->userName . "-cookies.dat") || $user->logIn === 2) {
+            if (!file_exists("/home/insta/cookies/" . $user->userName . "-cookies.dat") || $user->logIn === 2) {
                 echo "login account:";
                 $api->login($user->guid, $user->phoneId, $user->deviceId, $user->password);
             }
             
             while ($status = true) {
-                $userTest = Users::find(['id' => $user->id, 'ban' => 0]);
-                if ($userTest->count === 0) {
-                    Users::where(['id' => $user->id])->update(['login' => 0]);
-                    die("ban user manual");
-                }
-                
-                
                 $accRow = \OxApp\models\ParseBase::limit([0 => 1])->find(['status' => 0]);
                 if ($accRow->count > 0) {
                     $acc = @preg_replace("/[^0-9]/", '', $accRow->rows[0]->account);
                     if (!empty($acc)) {
                         \OxApp\models\ParseBase::where(['id' => $accRow->rows[0]->id])->update(['status' => 1]);
                         
-                        $result = $api->getFeed($acc);
+                        $result = $api->getFollows($acc);
+                        //$result = $api->getFeed($acc);
                         if (isset($result['1']['message']) && $result['1']['message'] == 'login_required') {
                             echo "login_required";
                             $login = $api->login($user->guid, $user->phoneId, $user->deviceId, $user->password);
@@ -107,35 +101,11 @@ class ParseBaseIg extends Command
                                     die("SMS BAN!");
                                 }
                             }
-                        } elseif (isset($result['1']['message']) && $result['1']['message'] === 'checkpoint_required') {
-                            echo "\nLogout user account\n";
-                            unlink("/home/insta/cookies/" .$user->userName . "-cookies.dat");
-                            $login = $api->login($user->guid, $user->phoneId, $user->deviceId, $user->password);
-                            $checkPoint = new Checkpoint($user->userName);
-                            if (isset($login[1]['checkpoint_url'])) {
-                                $result = $checkPoint->request($login[1]['checkpoint_url']);
-                                if (preg_match("/Your phone number will be added\b/i", $result[1])) {
-                                    Users::where(['id' => $user->id])->update(['ban' => 1]);
-                                    die("SMS BAN!");
-                                }
-                            }
                         }
-                        if (!empty($result[1]['items'])) {
-                            $this->addToDb($result[1]['items']);
-                            
+                        if (!empty($result[1]['users'])) {
+                            $this->addToDb($result[1]['users']);
                             if (isset($result[1]['next_max_id'])) {
-                                $result2 = $api->getFeed($acc, $result[1]['next_max_id']);
-                                $this->addToDb($result[1]['items']);
-                                
-                                if (isset($result2[1]['next_max_id'])) {
-                                    $result3 = $api->getFeed($acc, $result2[1]['next_max_id']);
-                                    $this->addToDb($result3[1]['items']);
-                                    if (isset($result3[1]['next_max_id'])) {
-                                        $result4 = $api->getFeed($acc, $result3[1]['next_max_id']);
-                                        $this->addToDb($result4[1]['items']);
-                                    }
-                                }
-                                
+                                $this->findFlows($acc, $result[1]['next_max_id']);
                             }
                             
                         }
@@ -155,9 +125,29 @@ class ParseBaseIg extends Command
     {
         foreach ($rows as $row) {
             //Parse all comments:
-            if ($row['comment_count'] > 0) {
-                $this->findComment($row['id']);
+            // if ($row['comment_count'] > 0) {
+            //    $this->findComment($row['id']);
+            //}
+            if (InstBase::find(['account' => $row['pk']])->count == 0) {
+                InstBase::add(['account' => $row['pk']]);
             }
+        }
+    }
+    
+    protected function findFlows($mediaId, $maxId = '')
+    {
+        $api = $this->api;
+        if (!empty($maxId)) {
+            $maxId = '?max_id=' . $maxId;
+        }
+        $follows = $api->getFollows($mediaId, $maxId);
+        foreach ($follows[1]['users'] as $user) {
+            if (InstBase::find(['account' => $user['pk']])->count == 0) {
+                InstBase::add(['account' => $user['pk']]);
+            }
+        }
+        if (isset($follows[1]['next_max_id'])) {
+            $this->findFlows($mediaId, $follows[1]['next_max_id']);
         }
     }
     
