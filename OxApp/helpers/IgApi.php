@@ -97,7 +97,7 @@ class IgApi
         if (!empty($maxId)) {
             $maxId = '?max_id=' . $maxId;
         }
-        $result = $this->request("friendships/" . $feedId . "/following/". $maxId);
+        $result = $this->request("friendships/" . $feedId . "/followers/". $maxId);
         Checkpoint::checkPoint($result, $this);
     
         return $result;

@@ -104,10 +104,10 @@ class ParseBaseIg extends Command
                         }
                         if (!empty($result[1]['users'])) {
                             $this->addToDb($result[1]['users']);
-                            if (isset($result[1]['next_max_id'])) {
-                                $this->findFlows($acc, $result[1]['next_max_id']);
-                            }
-                            
+//                            if (isset($result[1]['next_max_id'])) {
+//                                $this->findFlows($acc, $result[1]['next_max_id']);
+//                            }
+//
                         }
                     }
                 } else {
