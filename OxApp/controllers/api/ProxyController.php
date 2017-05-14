@@ -35,7 +35,7 @@ class ProxyController extends App
             $offset = 0;
         }
         $paging = array($offset => $limit);
-
+        
         if (!empty($this->request->query->get("search"))) {
             $where['proxy/like'] = '%' . $this->request->query->get("search") . '%';
         }
@@ -48,13 +48,13 @@ class ProxyController extends App
             ->limit($paging)
             ->find()
             ->rows;
-
+        
         return json_encode([
             'total' => (int)@$total->rows[0]->count,
             'rows' => $proxy,
         ]);
     }
-
+    
     /**
      * POST method
      */
@@ -70,6 +70,7 @@ class ProxyController extends App
                 for ($i = $this->request->request->get('portIn'); $i < $this->request->request->get('portOut'); $i++) {
                     $proxy[] = Proxy::add([
                         'proxy' => $ip . ":" . $i . ";" . $this->request->request->get('authData'),
+                        'rand' => rand(0, 1000)
                     ]);
                 }
             }
@@ -79,16 +80,16 @@ class ProxyController extends App
         } else {
             $result = ['status' => 500];
         }
-
+        
         return json_encode($result);
     }
-
+    
     /**
      * @return string
      */
     public function put()
     {
-
+        
         $proxy = Proxy::update(
             ['status' => $this->request->request->get('status')],
             ['id' => $this->request->request->get('id')]
@@ -98,12 +99,11 @@ class ProxyController extends App
         } else {
             $result = ['status' => 500];
         }
-
-
-
+        
+        
         return json_encode($result);
     }
-
+    
     /**
      * @return string
      */
@@ -117,7 +117,7 @@ class ProxyController extends App
                 $result = ['status' => 200];
             }
         }
-
+        
         return json_encode($result);
     }
 }
