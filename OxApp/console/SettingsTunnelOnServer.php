@@ -72,7 +72,7 @@ class SettingsTunnelOnServer extends Command
             echo stream_get_contents($stream_out);
             
             $name = '48sub';
-            $exc = './fastProxy.sh ' . $tunnel->$name;
+            $exc = 'sh fastProxy.sh ' . $tunnel->$name;
             echo "\n\n>" . $exc . "<\n\n";
             $stream = ssh2_exec($connection, $exc);
             stream_set_blocking($stream, true);
