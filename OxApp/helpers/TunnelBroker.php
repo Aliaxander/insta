@@ -183,7 +183,7 @@ class TunnelBroker
         $body = substr($resp, $header_len);
         curl_close($ch);
         
-        $result = [$header, $body];
+        $result = [$header, $body, $post, $url];
         //        echo "\n--------------Result--------------:\n";
         //        print_r($result);
         //
