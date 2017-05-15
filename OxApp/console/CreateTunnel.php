@@ -54,10 +54,17 @@ class CreateTunnel extends Command
         if ($tunnels->count > 0) {
             $tunnel = $tunnels->rows[0];
             Tunnels::where(['id' => $tunnel->id])->update(['status' => 1]);
-            $tunelLogin = TechAccount::find(['id' => 10]);
+            
+            $tunelLogin = TechAccount::find(['count/<' => 3]);
             if ($tunelLogin->count === 0) {
-                die('account limit');
-            } else {
+                $tunelLogin = TechAccount::find(['dateUpdate/>=' => '//now()-interval 1 day//']);
+                if ($tunelLogin->count === 0) {
+                    die('account limit');
+                }else{
+                    TechAccount::where(['id' => $tunelLogin->rows[0]->id])->update(['count' => 1]);
+                }
+            }
+            
                 $tunelLogin = $tunelLogin->rows[0];
                 $tunnelClass = new TunnelBroker();
                 $tunnelClass->login($tunelLogin->name, $tunelLogin->password);
@@ -68,7 +75,8 @@ class CreateTunnel extends Command
                     'v6route' => $result['v6route'],
                     '48sub' => $result['48sub'],
                 ]);
-            }
+                TechAccount::where(['id' => $tunelLogin->id])->update(['count' => $tunelLogin->count + 1]);
+            
         }
         
         return $output->writeln("Complite");
