@@ -84,4 +84,21 @@ class TunnelsController extends App
 
         return json_encode($result);
     }
+
+    /**
+     * @return string
+     */
+    function delete()
+    {
+        $result = ['status' => 500];
+        $id = $this->request->request->get('id');
+        if (!empty($id)) {
+            $domains = Tunnels::delete(['id/in' => $id]);
+            if (count($domains) > 0) {
+                $result = ['status' => 200];
+            }
+        }
+
+        return json_encode($result);
+    }
 }
