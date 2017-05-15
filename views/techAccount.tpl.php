@@ -54,6 +54,8 @@
                         <th data-field="password">Password</th>
                         <th data-field="type">type</th>
                         <th data-field="comment" data-editable="true">Comment</th>
+                        <th data-field="count" data-editable="true">Count</th>
+                        <th data-field="dateUpdate">Update</th>
                     </tr>
                     </thead>
                 </table>

@@ -19,12 +19,12 @@ class TechAccountController extends App
     public function get()
     {
         $result = TechAccount::find()->rows;
-
+        
         return json_encode([
             'data' => $result
         ]);
     }
-
+    
     /**
      * @return string
      */
@@ -44,30 +44,38 @@ class TechAccountController extends App
                 'password' => $this->request->request->get('password')
             ]);
         }
-
+        
         return json_encode([
             'name' => $this->request->request->get('name'),
             'status' => 'danger',
         ]);
     }
-
+    
     /**
      * @return string
      */
     public function put()
     {
-
-        $gmail = TechAccount::update(
-            ['comment' => $this->request->request->get('comment')],
-            ['id' => $this->request->request->get('id')]
-        );
+        
+        if (@empty($this->request->request->get('comment'))) {
+            $gmail = TechAccount::update(
+                ['comment' => $this->request->request->get('comment')],
+                ['id' => $this->request->request->get('id')]
+            );
+        }
+        if (@empty($this->request->request->get('count'))) {
+            $gmail = TechAccount::update(
+                ['count' => $this->request->request->get('count')],
+                ['id' => $this->request->request->get('id')]
+            );
+        }
         if ($gmail->count === 1) {
             return json_encode([
                 'name' => $this->request->request->get('name'),
                 'status' => 'success',
             ]);
         }
-
+        
         return json_encode([
             'name' => $this->request->request->get('name'),
             'status' => 'danger'
