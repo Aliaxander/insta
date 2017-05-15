@@ -84,7 +84,7 @@ class TunnelBroker
     public function login($login, $password)
     {
         $this->username = $login;
-        unlink("/home/insta/cookies/" . $this->username . '-tunel.dat');
+        @unlink("/home/insta/cookies/" . $this->username . '-tunel.dat');
         
         return $this->request('https://tunnelbroker.net/login.php',
             ['f_user' => $login, 'f_pass' => $password, 'redir' => '', 'Login' => 'Login']);
