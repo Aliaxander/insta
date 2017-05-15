@@ -28,7 +28,7 @@ class TunnelsController extends App
         return View::build("tunnel");
     }
     
-    public function resetTunnel()
+    public function post()
     {
         $id = $this->request->request->get('id');
         $tunnel = Tunnels::find(['id' => $id]);
