@@ -40,15 +40,14 @@ class IgApi
     public function __construct()
     {
         $languages = array(
-            'ru_RU'
-            //            'fr_MC',
-            //            'fr_LU',
-            //            'de_CH',
-            //            'es_PR',
-            //            'eu_ES',
-            //            'en_US',
-            //            'fr_CH',
-            //            'uk_UA',
+            'fr_MC',
+            'fr_LU',
+            'de_CH',
+            'es_PR',
+            'eu_ES',
+            'en_US',
+            'fr_CH',
+            'uk_UA',
         );
         $lang = $languages[mt_rand(0, count($languages) - 1)];
         $device = new Device(Constants::igVersion, $lang);
@@ -382,7 +381,7 @@ class IgApi
             'X-IG-Connection-Type: WIFI',
             'Content-Type: multipart/form-data; boundary=' . $boundary,
             'Content-Length: ' . strlen($data),
-            'Accept-Language: en-US; ru-RU',
+            'Accept-Language: en-US',
             'Accept-Encoding: gzip, deflate',
             'Connection: close',
         ];
@@ -974,7 +973,7 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
                 'Connection: keep-alive',
                 'Accept: */*',
                 'Content-Type: multipart/form-data; boundary=' . $boundary,
-                'Accept-Language: en-US; ru-RU',
+                'Accept-Language: en-US',
             ];
             curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
         } else {
@@ -983,7 +982,7 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
                 "X-IG-Connection-Type: WIFI",
                 "X-IG-Capabilities: " . Constants::xIgCapabilities,
                 'Accept-Encoding: gzip, deflate',
-                'Accept-Language: en-US; ru-RU',
+                'Accept-Language: en-US',
             ];
             curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
             curl_setopt($ch, CURLOPT_ENCODING, "gzip");
