@@ -57,7 +57,7 @@ class CreateTunnel extends Command
             
             $tunelLogin = TechAccount::find(['count/<' => 3]);
             if ($tunelLogin->count === 0) {
-                $tunelLogin = TechAccount::find(['dateUpdate/>=' => '//now()-interval 1 day//']);
+                $tunelLogin = TechAccount::find(['dateUpdate/<=' => '//now()-interval 1 day//']);
                 if ($tunelLogin->count === 0) {
                     die('account limit');
                 } else {
