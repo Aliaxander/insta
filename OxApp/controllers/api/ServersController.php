@@ -55,4 +55,27 @@ class ServersController extends App
             'rows' => $proxy,
         ]);
     }
+
+    /**
+     * POST method
+     */
+    public function post()
+    {
+        $server = [];
+        $ip = trim($this->request->request->get('ip'));
+        $password = trim($this->request->request->get('password'));
+        if (!empty($ip) && !empty($password)) {
+            $server[] = Servers::add([
+                'ip' => $ip,
+                'password' => $password
+            ]);
+        }
+        if (count($server) > 0) {
+            $result = ['status' => 200];
+        } else {
+            $result = ['status' => 500];
+        }
+
+        return json_encode($result);
+    }
 }
