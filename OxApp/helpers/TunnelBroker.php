@@ -62,7 +62,7 @@ class TunnelBroker
             $ip = $this->ips[rand(0, count($this->ips) - 1)];
         }
         $html = $this->createTunnel($ip, $serverIp);
-        
+        print_r($html);
         preg_match_all('/<span class=\"fr\">(.*?)<\/span>/s', $html[1], $estimates);
         $result = $estimates[1];
         
@@ -70,6 +70,7 @@ class TunnelBroker
         $remoteIp = $result[3];
         $v6route = strip_tags($result[5]);
         $result = $this->create48($tunnelId);
+        print_r($result);
         $sub48 = str_replace('::/48', '', $result[1]);
         
         return ['tunnelId' => $tunnelId, 'remoteIp' => $remoteIp, 'v6route' => $v6route, '48sub' => $sub48];

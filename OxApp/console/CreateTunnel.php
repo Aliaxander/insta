@@ -67,7 +67,7 @@ class CreateTunnel extends Command
             
                 $tunelLogin = $tunelLogin->rows[0];
                 $tunnelClass = new TunnelBroker();
-                $tunnelClass->login($tunelLogin->name, $tunelLogin->password);
+                print_r($tunnelClass->login($tunelLogin->name, $tunelLogin->password));
                 $result = $tunnelClass->createNewTunnel($tunnel->serverIp);
                 if($result['v6route']!=='[1500]') {
                     Tunnels::where(['id' => $tunnel->id])->update([
