@@ -36,7 +36,12 @@
                         <th data-field="v6route">v6route</th>
                         <th data-field="48sub">48sub</th>
                         <th data-field="tunnelAccountId">tunnelAccountId</th>
-                        <th data-field="status" data-editable="true" data-type="select">status</th>
+                        <th data-field="status" data-editable="true" data-editable-type="select"
+                            data-editable-source="[{value:'0',text:'Delete'},{value:'1',text:'Wait Create'},{value:'2',text:'Wait settings server'},{value:'3',text:'Settings server'},{value:'4',text:'Work'}]">status
+                        </th>
+                        <th data-field="status" data-editable="true" data-editable-type="select"
+                            data-editable-source="var:statUss">status
+                        </th>
                     </tr>
                     </thead>
                 </table>
@@ -70,6 +75,11 @@
 </div>
 <!-- end moadal delete -->
 <script>
+    var statUss = [
+        {value: 1, text: 'Male'},
+        {value: 2, text: 'Female'}
+    ];
+
     var $table = $('#table'),
         $remove = $('.check'),
         selections = [];
