@@ -65,19 +65,15 @@ class SettingsTunnelOnServer extends Command
             ssh2_exec($connection, 'ip addr add ' . $tunnel->v6route . ' dev he-ipv6');
             ssh2_exec($connection, 'ip route add ::/0 dev he-ipv6');
             
+            $name = '48sub';
+            $exc = './fastProxy.sh ' . $tunnel->$name;
+            ssh2_exec($connection, $exc);
             
             $stream = ssh2_exec($connection, 'ifconfig');
             stream_set_blocking($stream, true);
             $stream_out = ssh2_fetch_stream($stream, SSH2_STREAM_STDIO);
             echo stream_get_contents($stream_out);
             
-            $name = '48sub';
-            $exc = 'sh fastProxy.sh ' . $tunnel->$name;
-            echo "\n\n>" . $exc . "<\n\n";
-            $stream = ssh2_exec($connection, $exc);
-            stream_set_blocking($stream, true);
-            $stream_out = ssh2_fetch_stream($stream, SSH2_STREAM_STDIO);
-            echo stream_get_contents($stream_out);
             
             Tunnels::where(['id' => $tunnel->id])->update([
                 'status' => 4,
