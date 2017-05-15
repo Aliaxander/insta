@@ -44,7 +44,7 @@ class RestartTunnelControl extends Command
     }
     
     /**
-     * @param InputInterface  $input
+     * @param InputInterface $input
      * @param OutputInterface $output
      *
      * @return mixed
@@ -52,11 +52,17 @@ class RestartTunnelControl extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         require(__DIR__ . "/../../config.php");
-        $servers=Servers::find();
-        foreach ($servers->rows as $row){
-            $users=Users::find(['ban'=>0, 'userTask/!=' => 8, 'userGroup/!=' => 2,'proxy/like'=> $row->ip.':%']);
-            $proxy=Proxy::find(['status'=>0,'proxy/like'=> $row->ip . ':%']);
-            if($users->count===0 && $proxy->count===0){
+        $servers = Servers::find();
+        foreach ($servers->rows as $row) {
+            $tunnels = Tunnels::find(['serverIp' => $row->ip, 'status' => 4]);
+            $users = Users::find([
+                'ban' => 0,
+                'userTask/!=' => 8,
+                'userGroup/!=' => 2,
+                'proxy/like' => $row->ip . ':%'
+            ]);
+            $proxy = Proxy::find(['status' => 0, 'proxy/like' => $row->ip . ':%']);
+            if ($users->count === 0 && $proxy->count === 0 && $tunnels->count === 1) {
                 $tunnel = Tunnels::find(['serverIp' => $row->ip]);
                 if ($tunnel->count > 0) {
                     $tunnel = $tunnel->rows[0];
@@ -69,6 +75,7 @@ class RestartTunnelControl extends Command
                 }
             }
         }
+        
         return $output->writeln("Complite");
     }
 }
