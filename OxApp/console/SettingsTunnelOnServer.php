@@ -47,12 +47,12 @@ class SettingsTunnelOnServer extends Command
             Tunnels::where(['id' => $tunnel->id])->update([
                 'status' => 3,
             ]);
-            if ($tunnel->v6route !== '[1500]' && $tunnel->remoteIp !== '[1500]' && $tunnel->remoteIp !== '') {
+            if ($tunnel->v6route !== '[1500]' && $tunnel->remoteIp !== '[1500]' && $tunnel->remoteIp !== '' && $tunnel->v6route !== '') {
                 $server = Servers::find(['ip' => $tunnel->serverIp])->rows[0];
                 print_r($server);
                 $connection = ssh2_connect($server->ip, 22);
                 var_dump(ssh2_auth_password($connection, 'root', $server->password));
-    
+                
                 /**
                  *
                  * ulimit -n 600000
@@ -66,13 +66,13 @@ class SettingsTunnelOnServer extends Command
                  * ip addr add $2 dev he-ipv6
                  * ip route add ::/0 dev he-ipv6
                  * ip -f inet6 addr
- */
+                 */
                 //ssh2_exec($connection, 'sh 1.sh '. $tunnel->remoteIp.' '. $tunnel->v6route);
                 
                 ssh2_exec($connection, 'ulimit -n 600000');
                 ssh2_exec($connection, 'ulimit -u 600000');
                 ssh2_exec($connection, 'pkill 3proxy');
-//                ssh2_exec($connection, 'ip link delete he-ipv6');
+                //                ssh2_exec($connection, 'ip link delete he-ipv6');
                 ssh2_exec($connection, 'ifconfig he-ipv6 down');
                 ssh2_exec($connection, 'ip -6 route del default');
                 ssh2_exec($connection, 'modprobe ipv6');
@@ -85,7 +85,7 @@ class SettingsTunnelOnServer extends Command
                 
                 echo "\n>" . 'ip addr add ' . $tunnel->v6route . ' dev he-ipv6' . "<\n";
                 ssh2_exec($connection, 'ip addr add ' . $tunnel->v6route . ' dev he-ipv6');
-    
+                
                 ssh2_exec($connection, 'ip route add ::/0 dev he-ipv6');
                 
                 $name = '48sub';

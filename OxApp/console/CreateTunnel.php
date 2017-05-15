@@ -78,9 +78,9 @@ class CreateTunnel extends Command
                     'tunnelId' => $result['tunnelId'],
                     'tunnelAccountId' => $tunelLogin->id
                 ]);
+                
+                TechAccount::where(['id' => $tunelLogin->id])->update(['count' => $tunelLogin->count + 1]);
             }
-            TechAccount::where(['id' => $tunelLogin->id])->update(['count' => $tunelLogin->count + 1]);
-            
         }
         
         return $output->writeln("Complite");

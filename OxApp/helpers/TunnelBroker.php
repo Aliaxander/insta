@@ -104,7 +104,7 @@ class TunnelBroker
         $count = 5;
         $ips = [];
         while ($count < 34) {
-            $ips[] = $result_rows->item($count)->textContent;
+            $ips[] = @$result_rows->item($count)->textContent;
             $count++;
         }
         
