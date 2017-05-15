@@ -3,6 +3,7 @@
 // application.php
 use Acme\Console\Command\BaseUploader;
 use Acme\Console\Command\BioUpload;
+use Acme\Console\Command\CreateTunnel;
 use Acme\Console\Command\EditProfile;
 use Acme\Console\Command\FreenomReger;
 use Acme\Console\Command\FreenomWebReg;
@@ -40,6 +41,7 @@ $application->add(new BioUpload());
 $application->add(new UploadPhoto());
 $application->add(new HashTagParser());
 $application->add(new ThreadsControl());
+$application->add(new CreateTunnel());
 
 $application->addCommands(
     array(

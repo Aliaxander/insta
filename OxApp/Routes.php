@@ -25,6 +25,8 @@ Router::rout('/descriptionProfile')->app('DescriptionProfile')->save();
 Router::rout('/testMacros')->app('TestMacros')->save();
 Router::rout('/deleteProfile/:num=>id')->app('DeleteProfile')->save();
 
+Router::rout('/tunnels')->app('Tunnels')->save();
+
 
 Router::rout('/autoclick')->app('AutoClick')->save();
 
