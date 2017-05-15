@@ -10,6 +10,7 @@ namespace OxApp\controllers\api;
 
 use Ox\App;
 use OxApp\helpers\TunnelBroker;
+use OxApp\models\Proxy;
 use OxApp\models\TechAccount;
 use OxApp\models\Tunnels;
 use OxApp\models\Users;
@@ -38,7 +39,7 @@ class TunnelsController extends App
             $offset = 0;
         }
         $paging = array($offset => $limit);
-
+        
         if (!empty($this->request->query->get("search"))) {
             $where['proxy/like'] = '%' . $this->request->query->get("search") . '%';
         }
@@ -51,13 +52,13 @@ class TunnelsController extends App
             ->limit($paging)
             ->find()
             ->rows;
-
+        
         return json_encode([
             'total' => (int)@$total->rows[0]->count,
             'rows' => $proxy,
         ]);
     }
-
+    
     /**
      * @return string
      */
@@ -68,23 +69,23 @@ class TunnelsController extends App
         if ($tunnel->count > 0) {
             $tunnel = $tunnel->rows[0];
             Users::delete(['proxy/like' => $tunnel->serverIp . ':%', 'userGroup' => 1, 'ban' => 0]);
+            Proxy::delete(['proxy/like' => $tunnel->serverIp . ':%']);
             $tunnelData = TechAccount::find(['id' => $tunnel->tunnelAccountId])->rows[0];
             $tunel = new TunnelBroker();
             $tunel->login($tunnelData->name, $tunnelData->password);
             $tunel->deleteTunnel($tunnel->tunnelId);
             $tunels = Tunnels::where(['id' => $id])->update(['status' => 0]);
         }
-
+        
         if (!empty($tunels->count) && $tunels->count === 1) {
             $result = ['status' => 200];
         } else {
             $result = ['status' => 500];
         }
-
-
+        
         return json_encode($result);
     }
-
+    
     /**
      * @return string
      */
@@ -98,7 +99,7 @@ class TunnelsController extends App
                 $result = ['status' => 200];
             }
         }
-
+        
         return json_encode($result);
     }
 }
