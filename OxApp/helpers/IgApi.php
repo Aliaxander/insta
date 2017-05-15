@@ -639,14 +639,14 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
         }
         $this->csrftoken = $tokenResult;
         
-        sleep(rand(10, 20));
+        sleep(rand(15, 25));
         $checkEmail = $this->checkEmail($email, $qe_id, $waterfall_id);
         
         print_r($checkEmail);
         if (isset($checkEmail[1]['message']) && $checkEmail[1]['message'] == 'Sorry, an error occured') {
             die('Error. Ip ban?');
         }
-        sleep(rand(10, 15));
+        sleep(rand(15, 20));
         $singTokenResult = '';
         $i = 0;
         while ($singTokenResult === '') {
@@ -667,10 +667,10 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
         $this->csrftoken = $singTokenResult;
         
         if (rand(0, 1) == 1) {
-            sleep(rand(10, 15));
+            sleep(rand(15, 20));
             print_r($this->usernameSuggestions($usernameTmp4, $email, $waterfall_id));
         }
-        sleep(rand(11, 19));
+        sleep(rand(16, 24));
         $singTokenResult = '';
         $i = 0;
         while ($singTokenResult === '') {
@@ -690,10 +690,10 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
         }
         $this->csrftoken = $singTokenResult;
         
-        sleep(rand(3, 5));
+        sleep(rand(5, 6));
         print_r($this->usernameSuggestions($usernameTmp3, $email, $waterfall_id));
         
-        sleep(rand(3, 7));
+        sleep(rand(4, 8));
         print_r($this->usernameSuggestions($usernameTmp2, $email, $waterfall_id));
         
         //                if (rand(0, 1) == 1) {
@@ -708,7 +708,7 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
         print_r($finalName);
         echo "SET name: " . $this->username . "\n";
         
-        sleep(rand(2, 8));
+        sleep(rand(5, 11));
         //register:
         $createResult = '';
         $i = 0;
