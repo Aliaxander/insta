@@ -69,12 +69,14 @@ class CreateTunnel extends Command
                 $tunnelClass = new TunnelBroker();
                 $tunnelClass->login($tunelLogin->name, $tunelLogin->password);
                 $result = $tunnelClass->createNewTunnel($tunnel->serverIp);
-                Tunnels::where(['id' => $tunnel->id])->update([
-                    'status' => 2,
-                    'remoteIp' => $result['remoteIp'],
-                    'v6route' => $result['v6route'],
-                    '48sub' => $result['48sub'],
-                ]);
+                if($result['v6route']!=='[1500]') {
+                    Tunnels::where(['id' => $tunnel->id])->update([
+                        'status' => 2,
+                        'remoteIp' => $result['remoteIp'],
+                        'v6route' => $result['v6route'],
+                        '48sub' => $result['48sub'],
+                    ]);
+                }
                 TechAccount::where(['id' => $tunelLogin->id])->update(['count' => $tunelLogin->count + 1]);
             
         }
