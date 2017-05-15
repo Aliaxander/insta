@@ -60,25 +60,26 @@ class CreateTunnel extends Command
                 $tunelLogin = TechAccount::find(['dateUpdate/>=' => '//now()-interval 1 day//']);
                 if ($tunelLogin->count === 0) {
                     die('account limit');
-                }else{
+                } else {
                     TechAccount::where(['id' => $tunelLogin->rows[0]->id])->update(['count' => 1]);
                 }
             }
             
-                $tunelLogin = $tunelLogin->rows[0];
-                $tunnelClass = new TunnelBroker();
-                print_r($tunnelClass->login($tunelLogin->name, $tunelLogin->password));
-                $result = $tunnelClass->createNewTunnel($tunnel->serverIp);
-                if($result['v6route']!=='[1500]') {
-                    Tunnels::where(['id' => $tunnel->id])->update([
-                        'status' => 2,
-                        'remoteIp' => $result['remoteIp'],
-                        'v6route' => $result['v6route'],
-                        '48sub' => $result['48sub'],
-                        'tunnelAccountId'=> $tunelLogin->id
-                    ]);
-                }
-                TechAccount::where(['id' => $tunelLogin->id])->update(['count' => $tunelLogin->count + 1]);
+            $tunelLogin = $tunelLogin->rows[0];
+            $tunnelClass = new TunnelBroker();
+            print_r($tunnelClass->login($tunelLogin->name, $tunelLogin->password));
+            $result = $tunnelClass->createNewTunnel($tunnel->serverIp);
+            if ($result['v6route'] !== '[1500]') {
+                Tunnels::where(['id' => $tunnel->id])->update([
+                    'status' => 2,
+                    'remoteIp' => $result['remoteIp'],
+                    'v6route' => $result['v6route'],
+                    '48sub' => $result['48sub'],
+                    'tunnelId' => $result['tunnelId'],
+                    'tunnelAccountId' => $tunelLogin->id
+                ]);
+            }
+            TechAccount::where(['id' => $tunelLogin->id])->update(['count' => $tunelLogin->count + 1]);
             
         }
         
