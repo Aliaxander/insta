@@ -34,7 +34,7 @@ class TunnelsController extends App
         $tunnel = Tunnels::find(['id' => $id]);
         if ($tunnel->count > 0) {
             $tunnel = $tunnel->rows[0];
-            Users::delete(['proxy/likes' => $tunnel->serverIp . ':%', 'userTask/>' => 1, 'userGroup' => 1, 'ban' => 0]);
+            Users::delete(['proxy/likes' => $tunnel->serverIp . ':%', 'userGroup' => 1, 'ban' => 0]);
             $tunnelData = TechAccount::find(['id' => $tunnel->tunnelAccountId])->rows[0];
             $tunel = new TunnelBroker();
             $tunel->login($tunnelData->name, $tunnelData->password);
