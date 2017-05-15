@@ -52,11 +52,11 @@ class SettingsTunnelOnServer extends Command
                 print_r($server);
                 $connection = ssh2_connect($server->ip, 22);
                 var_dump(ssh2_auth_password($connection, 'root', $server->password));
-    
-                ssh2_exec($connection, 'pkill 3proxy');
+                
                 //ssh2_exec($connection, 'sh 1.sh '. $tunnel->remoteIp.' '. $tunnel->v6route);
                 ssh2_exec($connection, 'ulimit -n 600000');
                 ssh2_exec($connection, 'ulimit -u 600000');
+                ssh2_exec($connection, 'pkill 3proxy');
                 ssh2_exec($connection, 'ip link delete he-ipv6');
                 ssh2_exec($connection, 'ifconfig he-ipv6 down');
                 ssh2_exec($connection, 'ip -6 route del default');
@@ -68,7 +68,7 @@ class SettingsTunnelOnServer extends Command
                 echo "\n>". 'ip addr add ' . $tunnel->v6route . ' dev he - ipv6'."<\n";
                 ssh2_exec($connection, 'ip addr add ' . $tunnel->v6route . ' dev he-ipv6');
                 ssh2_exec($connection, 'ip route add ::/0 dev he-ipv6');
-    
+  
                 $name = '48sub';
                 $exc = './fastProxy.sh ' . $tunnel->$name;
                 ssh2_exec($connection, $exc);
