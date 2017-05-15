@@ -40,14 +40,15 @@ class IgApi
     public function __construct()
     {
         $languages = array(
-            'fr_MC',
-            'fr_LU',
-            'de_CH',
-            'es_PR',
-            'eu_ES',
-            'en_US',
-            'fr_CH',
-            'uk_UA',
+            'ru_RU'
+            //            'fr_MC',
+            //            'fr_LU',
+            //            'de_CH',
+            //            'es_PR',
+            //            'eu_ES',
+            //            'en_US',
+            //            'fr_CH',
+            //            'uk_UA',
         );
         $lang = $languages[mt_rand(0, count($languages) - 1)];
         $device = new Device(Constants::igVersion, $lang);
@@ -83,22 +84,24 @@ class IgApi
                 $result = $this->request("feed/user/" . $feedId . "/" . $maxId);
             }
         }
-      
-        $resultTst=$this->request("users/" . $feedId . "/info/");
-        Checkpoint::checkPoint($resultTst,$this);
+        
+        $resultTst = $this->request("users/" . $feedId . "/info/");
+        Checkpoint::checkPoint($resultTst, $this);
         if (empty($result) && !empty($result2)) {
             $result = $result2;
         }
+        
         return $result;
     }
     
-    public function getFollows($feedId, $maxId = ''){
+    public function getFollows($feedId, $maxId = '')
+    {
         if (!empty($maxId)) {
             $maxId = '?max_id=' . $maxId;
         }
-        $result = $this->request("friendships/" . $feedId . "/followers/". $maxId);
+        $result = $this->request("friendships/" . $feedId . "/followers/" . $maxId);
         Checkpoint::checkPoint($result, $this);
-    
+        
         return $result;
     }
     
