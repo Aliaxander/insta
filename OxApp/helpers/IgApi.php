@@ -382,7 +382,7 @@ class IgApi
             'X-IG-Connection-Type: WIFI',
             'Content-Type: multipart/form-data; boundary=' . $boundary,
             'Content-Length: ' . strlen($data),
-            'Accept-Language: en-US',
+            'Accept-Language: en-US; ru-RU',
             'Accept-Encoding: gzip, deflate',
             'Connection: close',
         ];
@@ -974,7 +974,7 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
                 'Connection: keep-alive',
                 'Accept: */*',
                 'Content-Type: multipart/form-data; boundary=' . $boundary,
-                'Accept-Language: en-en',
+                'Accept-Language: en-US; ru-RU',
             ];
             curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
         } else {
@@ -983,7 +983,7 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
                 "X-IG-Connection-Type: WIFI",
                 "X-IG-Capabilities: " . Constants::xIgCapabilities,
                 'Accept-Encoding: gzip, deflate',
-                'Accept-Language: en-US',
+                'Accept-Language: en-US; ru-RU',
             ];
             curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
             curl_setopt($ch, CURLOPT_ENCODING, "gzip");
