@@ -75,6 +75,7 @@ class CreateTunnel extends Command
                         'remoteIp' => $result['remoteIp'],
                         'v6route' => $result['v6route'],
                         '48sub' => $result['48sub'],
+                        'tunnelAccountId'=> $tunelLogin->id
                     ]);
                 }
                 TechAccount::where(['id' => $tunelLogin->id])->update(['count' => $tunelLogin->count + 1]);

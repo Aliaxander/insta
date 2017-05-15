@@ -234,7 +234,7 @@ class Likes extends Command
                     
                     $resultLikesForTimeout = $folLikSum / $hour;
                     
-                    if ($resultLikesForTimeout > mt_rand(500, 550)) {
+                    if ($resultLikesForTimeout > mt_rand(500, 700)) {
                         $hour += 1;
                         //Users::where(['id' => $user->id])->update(['hour' => $hour]);
                         Users::where(['id' => $user->id])->update(['userTask' => 8]);
