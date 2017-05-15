@@ -25,7 +25,7 @@ class TunnelsController extends App
 {
     public function get()
     {
-        return View::build("tunnels");
+        return View::build("tunnel");
     }
     
     public function resetTunnel()
