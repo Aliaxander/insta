@@ -51,7 +51,7 @@ class SettingsTunnelOnServer extends Command
             print_r($server);
             $connection = ssh2_connect($server->ip, 22);
             var_dump(ssh2_auth_password($connection, 'root', $server->password));
-        
+            
             ssh2_exec($connection, 'pkill 3proxy');
             ssh2_exec($connection, 'ulimit -n 600000');
             ssh2_exec($connection, 'ulimit -u 600000');
@@ -65,14 +65,16 @@ class SettingsTunnelOnServer extends Command
             ssh2_exec($connection, 'ip addr add ' . $tunnel->v6route . ' dev he-ipv6');
             ssh2_exec($connection, 'ip route add ::/0 dev he-ipv6');
             
-
+            
             $stream = ssh2_exec($connection, 'ifconfig');
             stream_set_blocking($stream, true);
             $stream_out = ssh2_fetch_stream($stream, SSH2_STREAM_STDIO);
             echo stream_get_contents($stream_out);
             
             $name = '48sub';
-            $stream = ssh2_exec($connection, './fastProxy.sh ' . $tunnel->$name);
+            $exc = './fastProxy.sh ' . $tunnel->$name;
+            echo "\n\n>" . $exc . "<\n\n";
+            $stream = ssh2_exec($connection, $exc);
             stream_set_blocking($stream, true);
             $stream_out = ssh2_fetch_stream($stream, SSH2_STREAM_STDIO);
             echo stream_get_contents($stream_out);
@@ -80,15 +82,15 @@ class SettingsTunnelOnServer extends Command
             Tunnels::where(['id' => $tunnel->id])->update([
                 'status' => 4,
             ]);
-            Proxy::delete(['proxy/like'=> $tunnel->serverIp.':%']);
+            Proxy::delete(['proxy/like' => $tunnel->serverIp . ':%']);
             for ($i = 30000; $i < 30200; $i++) {
                 $proxy[] = Proxy::add([
                     'proxy' => $tunnel->serverIp . ":" . $i . ";",
                     'rand' => rand(0, 1000)
                 ]);
             }
-    
-    
+            
+            
         }
         
         return $output->writeln("Complite");
