@@ -155,7 +155,7 @@
         var ids = getIdSelections();
         $.ajax({
             type: "delete",
-            url: "/api/server",
+            url: "/api/servers",
             data: {id: ids},
             success: function (data) {
                 if (data.status == '200') {
