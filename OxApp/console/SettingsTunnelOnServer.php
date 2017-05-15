@@ -52,21 +52,40 @@ class SettingsTunnelOnServer extends Command
                 print_r($server);
                 $connection = ssh2_connect($server->ip, 22);
                 var_dump(ssh2_auth_password($connection, 'root', $server->password));
-                
+    
+                /**
+                 *
+                 * ulimit -n 600000
+                 * ulimit -u 600000
+                 * pkill 3proxy
+                 * #service network restart
+                 * ip -6 route del default
+                 * modprobe ipv6
+                 * ip tunnel add he-ipv6 mode sit remote $1 local 91.211.116.248 ttl 255
+                 * ip link set he-ipv6 up
+                 * ip addr add $2 dev he-ipv6
+                 * ip route add ::/0 dev he-ipv6
+                 * ip -f inet6 addr
+ */
                 //ssh2_exec($connection, 'sh 1.sh '. $tunnel->remoteIp.' '. $tunnel->v6route);
+                
                 ssh2_exec($connection, 'ulimit -n 600000');
                 ssh2_exec($connection, 'ulimit -u 600000');
                 ssh2_exec($connection, 'pkill 3proxy');
-                ssh2_exec($connection, 'ip link delete he-ipv6');
+//                ssh2_exec($connection, 'ip link delete he-ipv6');
                 ssh2_exec($connection, 'ifconfig he-ipv6 down');
                 ssh2_exec($connection, 'ip -6 route del default');
                 ssh2_exec($connection, 'modprobe ipv6');
+                
                 echo "\n>" . 'ip tunnel add he-ipv6 mode sit remote ' . $tunnel->remoteIp . ' local ' . $tunnel->serverIp . ' ttl 255' . "<\n";
                 ssh2_exec($connection,
                     'ip tunnel add he-ipv6 mode sit remote ' . $tunnel->remoteIp . ' local ' . $tunnel->serverIp . ' ttl 255');
+                
                 ssh2_exec($connection, 'ip link set he-ipv6 up');
-                echo "\n>" . 'ip addr add ' . $tunnel->v6route . ' dev he - ipv6' . "<\n";
+                
+                echo "\n>" . 'ip addr add ' . $tunnel->v6route . ' dev he-ipv6' . "<\n";
                 ssh2_exec($connection, 'ip addr add ' . $tunnel->v6route . ' dev he-ipv6');
+    
                 ssh2_exec($connection, 'ip route add ::/0 dev he-ipv6');
                 
                 $name = '48sub';
