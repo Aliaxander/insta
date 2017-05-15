@@ -70,6 +70,7 @@
                     <li><a href="/techAccount">TechAccount</a></li>
                     <li><a href="/domains">Domains</a></li>
                     <li><a href="/tunnels">Tunnels</a></li>
+                    <li><a href="/servers">Servers</a></li>
 
                 </ul>
             </li>

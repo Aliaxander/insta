@@ -48,8 +48,11 @@ Router::rout('/userGroup')->app('UserGroup')->save();
 Router::rout('/task')->app('Task')->save();
 Router::rout('/taskType')->app('TaskType')->save();
 
-//gmail
+//techAccount
 Router::rout('/techAccount')->app('TechAccount')->save();
+
+//servers
+Router::rout('/servers')->app('Servers')->save();
 
 //domains
 Router::rout('/domains')->app('Domains')->save();
@@ -63,4 +66,6 @@ Router::setMiddlewareGroup('Json', function () {
     Router::rout('/api/techAccount')->app('api\\TechAccount')->save();
     Router::rout('/api/domains')->app('api\\Domains')->save();
     Router::rout('/api/proxy')->app('api\Proxy')->save();
+    Router::rout('/api/tunnels')->app('api\Tunnels')->save();
+    Router::rout('/api/servers')->app('api\Servers')->save();
 });
