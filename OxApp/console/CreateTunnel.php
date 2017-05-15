@@ -69,7 +69,7 @@ class CreateTunnel extends Command
             $tunnelClass = new TunnelBroker();
             print_r($tunnelClass->login($tunelLogin->name, $tunelLogin->password));
             $result = $tunnelClass->createNewTunnel($tunnel->serverIp);
-            if ($result['v6route'] !== '[1500]') {
+            if ($result['v6route'] !== '[1500]' && $result['v6route'] !== '') {
                 Tunnels::where(['id' => $tunnel->id])->update([
                     'status' => 2,
                     'remoteIp' => $result['remoteIp'],

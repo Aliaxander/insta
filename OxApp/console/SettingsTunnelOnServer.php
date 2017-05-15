@@ -47,7 +47,7 @@ class SettingsTunnelOnServer extends Command
             Tunnels::where(['id' => $tunnel->id])->update([
                 'status' => 3,
             ]);
-            if ($tunnel->v6route !== '[1500]' && $tunnel->remoteIp !== '[1500]') {
+            if ($tunnel->v6route !== '[1500]' && $tunnel->remoteIp !== '[1500]' && $tunnel->remoteIp !== '') {
                 $server = Servers::find(['ip' => $tunnel->serverIp])->rows[0];
                 print_r($server);
                 $connection = ssh2_connect($server->ip, 22);
@@ -61,24 +61,23 @@ class SettingsTunnelOnServer extends Command
                 ssh2_exec($connection, 'ifconfig he-ipv6 down');
                 ssh2_exec($connection, 'ip -6 route del default');
                 ssh2_exec($connection, 'modprobe ipv6');
-                echo "\n>".'ip tunnel add he-ipv6 mode sit remote ' . $tunnel->remoteIp . ' local ' . $tunnel->serverIp . ' ttl 255'."<\n";
+                echo "\n>" . 'ip tunnel add he-ipv6 mode sit remote ' . $tunnel->remoteIp . ' local ' . $tunnel->serverIp . ' ttl 255' . "<\n";
                 ssh2_exec($connection,
                     'ip tunnel add he-ipv6 mode sit remote ' . $tunnel->remoteIp . ' local ' . $tunnel->serverIp . ' ttl 255');
                 ssh2_exec($connection, 'ip link set he-ipv6 up');
-                echo "\n>". 'ip addr add ' . $tunnel->v6route . ' dev he - ipv6'."<\n";
+                echo "\n>" . 'ip addr add ' . $tunnel->v6route . ' dev he - ipv6' . "<\n";
                 ssh2_exec($connection, 'ip addr add ' . $tunnel->v6route . ' dev he-ipv6');
                 ssh2_exec($connection, 'ip route add ::/0 dev he-ipv6');
-  
+                
                 $name = '48sub';
                 $exc = './fastProxy.sh ' . $tunnel->$name;
                 ssh2_exec($connection, $exc);
-    
+                
                 $stream = ssh2_exec($connection, 'ifconfig');
                 stream_set_blocking($stream, true);
                 $stream_out = ssh2_fetch_stream($stream, SSH2_STREAM_STDIO);
                 echo stream_get_contents($stream_out);
-    
-    
+                
                 Tunnels::where(['id' => $tunnel->id])->update([
                     'status' => 4,
                 ]);
@@ -90,7 +89,6 @@ class SettingsTunnelOnServer extends Command
                     ]);
                 }
             }
-            
         }
         
         return $output->writeln("Complite");
