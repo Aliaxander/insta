@@ -378,7 +378,7 @@ class IgApi
         ];
         $data = $this->buildBody($bodies, $boundary);
         $headers = [
-            'X-IG-Capabilities: ' . $this->xIgCapabilities,
+            'X-IG-Capabilities: ' . Constants::xIgCapabilities,
             'X-IG-Connection-Type: WIFI',
             'Content-Type: multipart/form-data; boundary=' . $boundary,
             'Content-Length: ' . strlen($data),
