@@ -9,7 +9,10 @@
 namespace OxApp\controllers\api;
 
 use Ox\App;
+use OxApp\helpers\TunnelBroker;
+use OxApp\models\TechAccount;
 use OxApp\models\Tunnels;
+use OxApp\models\Users;
 
 class TunnelsController extends App
 {
@@ -60,12 +63,19 @@ class TunnelsController extends App
      */
     public function put()
     {
+        $id = $this->request->request->get('id');
+        $tunnel = Tunnels::find(['id' => $id]);
+        if ($tunnel->count > 0) {
+            $tunnel = $tunnel->rows[0];
+            Users::delete(['proxy/like' => $tunnel->serverIp . ':%', 'userGroup' => 1, 'ban' => 0]);
+            $tunnelData = TechAccount::find(['id' => $tunnel->tunnelAccountId])->rows[0];
+            $tunel = new TunnelBroker();
+            $tunel->login($tunnelData->name, $tunnelData->password);
+            $tunel->deleteTunnel($tunnel->tunnelId);
+            $tunels = Tunnels::where(['id' => $id])->update(['status' => 0]);
+        }
 
-        $proxy = Tunnels::update(
-            ['status' => $this->request->request->get('status')],
-            ['id' => $this->request->request->get('id')]
-        );
-        if ($proxy->count === 1) {
+        if (!empty($tunels->count) && $tunels->count === 1) {
             $result = ['status' => 200];
         } else {
             $result = ['status' => 500];
