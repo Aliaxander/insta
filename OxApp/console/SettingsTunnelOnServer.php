@@ -1,0 +1,90 @@
+<?php
+/**
+ * Created by OxGroup.
+ * User: aliaxander
+ * Date: 15.08.15
+ * Time: 15:16
+ */
+
+namespace Acme\Console\Command;
+
+use OxApp\models\Proxy;
+use OxApp\models\Servers;
+use OxApp\models\Tunnels;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+
+/**
+ * Class SettingsTunnelOnServer
+ *
+ * @package Acme\Console\Command
+ */
+class SettingsTunnelOnServer extends Command
+{
+    /**
+     * configure
+     */
+    protected function configure()
+    {
+        $this
+            ->setName('setting:server')
+            ->setDescription('Cron jobs');
+    }
+    
+    /**
+     * @param InputInterface  $input
+     * @param OutputInterface $output
+     *
+     * @return mixed
+     */
+    protected function execute(InputInterface $input, OutputInterface $output)
+    {
+        require(__DIR__ . "/../../config.php");
+        $tunnels = Tunnels::find(['status' => 2]);
+        if ($tunnels->count > 0) {
+            $tunnel = $tunnels->rows[0];
+            Tunnels::where(['id' => $tunnel->id])->update([
+                'status' => 3,
+            ]);
+            $server = Servers::find(['ip' => $tunnel->serverIp])->rows[0];
+            print_r($server);
+            $connection = ssh2_connect($server->ip, 22);
+            var_dump(ssh2_auth_password($connection, 'root', $server->password));
+        
+            ssh2_exec($connection, 'pkill 3proxy');
+            ssh2_exec($connection, 'ulimit -n 600000');
+            ssh2_exec($connection, 'ulimit -u 600000');
+            ssh2_exec($connection, 'ip link delete he-ipv6');
+            ssh2_exec($connection, 'ifconfig he-ipv6 down');
+            ssh2_exec($connection, 'ip -6 route del default');
+            ssh2_exec($connection, 'modprobe ipv6');
+            ssh2_exec($connection,
+                'ip tunnel add he-ipv6 mode sit remote ' . $tunnel->remoteIp . ' local ' . $tunnel->serverIp . ' ttl 255');
+            ssh2_exec($connection, 'ip link set he-ipv6 up');
+            ssh2_exec($connection, 'ip addr add ' . $tunnel->v6route . ' dev he-ipv6');
+            ssh2_exec($connection, 'ip route add ::/0 dev he-ipv6');
+            
+            $name = '48sub';
+            $stream = ssh2_exec($connection, './fastProxy.sh ' . $tunnel->$name);
+            stream_set_blocking($stream, true);
+            $stream_out = ssh2_fetch_stream($stream, SSH2_STREAM_STDIO);
+            echo stream_get_contents($stream_out);
+            
+            Tunnels::where(['id' => $tunnel->id])->update([
+                'status' => 4,
+            ]);
+            Proxy::delete(['proxy/like'=> $tunnel->serverIp.':%']);
+            for ($i = 30000; $i < 30200; $i++) {
+                $proxy[] = Proxy::add([
+                    'proxy' => $tunnel->serverIp . ":" . $i . ";",
+                    'rand' => rand(0, 1000)
+                ]);
+            }
+    
+    
+        }
+        
+        return $output->writeln("Complite");
+    }
+}

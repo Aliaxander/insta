@@ -11,6 +11,7 @@ use Acme\Console\Command\HashTagParser;
 use Acme\Console\Command\Likes;
 use Acme\Console\Command\ParseBaseIg;
 use Acme\Console\Command\PreParseBase;
+use Acme\Console\Command\SettingsTunnelOnServer;
 use Acme\Console\Command\Test;
 use Acme\Console\Command\BaseUpload;
 use Acme\Console\Command\ThreadsControl;
@@ -42,6 +43,7 @@ $application->add(new UploadPhoto());
 $application->add(new HashTagParser());
 $application->add(new ThreadsControl());
 $application->add(new CreateTunnel());
+$application->add(new SettingsTunnelOnServer());
 
 $application->addCommands(
     array(

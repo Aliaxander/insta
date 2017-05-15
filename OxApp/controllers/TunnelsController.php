@@ -25,6 +25,15 @@ class TunnelsController extends App
 {
     public function get()
     {
+        /*
+         * Status:
+         * 0 - Delete
+         * 1 - Wait Create
+         * 2 - Wait settings server
+         * 3 - Settings server
+         * 4 - Work
+         *
+         */
         return View::build("tunnel");
     }
     
@@ -34,7 +43,7 @@ class TunnelsController extends App
         $tunnel = Tunnels::find(['id' => $id]);
         if ($tunnel->count > 0) {
             $tunnel = $tunnel->rows[0];
-            Users::delete(['proxy/likes' => $tunnel->serverIp . ':%', 'userGroup' => 1, 'ban' => 0]);
+            Users::delete(['proxy/like' => $tunnel->serverIp . ':%', 'userGroup' => 1, 'ban' => 0]);
             $tunnelData = TechAccount::find(['id' => $tunnel->tunnelAccountId])->rows[0];
             $tunel = new TunnelBroker();
             $tunel->login($tunnelData->name, $tunnelData->password);
