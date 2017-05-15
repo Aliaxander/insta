@@ -54,7 +54,7 @@ class RestartTunnelControl extends Command
         require(__DIR__ . "/../../config.php");
         $servers=Servers::find();
         foreach ($servers->rows as $row){
-            $users=Users::find(['ban'=>0,'userTask/!='=>8,'proxy/like'=> $row->ip.':%']);
+            $users=Users::find(['ban'=>0, 'userTask/!=' => 8, 'userGroup/!=' => 2,'proxy/like'=> $row->ip.':%']);
             $proxy=Proxy::find(['status'=>0,'proxy/like'=> $row->ip . ':%']);
             if($users->count===0 && $proxy->count===0){
                 $tunnel = Tunnels::find(['serverIp' => $row->ip]);
