@@ -34,7 +34,7 @@ class EditProfile extends Command
     protected function configure()
     {
         $this
-            ->setName('test:edit')
+            ->setName('edit:start')
             ->setDescription('Cron jobs');
     }
     
