@@ -61,11 +61,15 @@ class CreateTunnel extends Command
                 if ($tunelLogin->count === 0) {
                     die('account limit');
                 } else {
-                    TechAccount::where(['id' => $tunelLogin->rows[0]->id])->update(['count' => 1]);
+                    TechAccount::where(['id' => $tunelLogin->rows[0]->id])->update(['count' => 0]);
+                    $count = 0;
                 }
             }
             
             $tunelLogin = $tunelLogin->rows[0];
+            if (!isset($count)) {
+                $count = $tunelLogin->count;
+            }
             $tunnelClass = new TunnelBroker();
             print_r($tunnelClass->login($tunelLogin->name, $tunelLogin->password));
             $result = $tunnelClass->createNewTunnel($tunnel->serverIp);
@@ -79,7 +83,7 @@ class CreateTunnel extends Command
                     'tunnelAccountId' => $tunelLogin->id
                 ]);
                 
-                TechAccount::where(['id' => $tunelLogin->id])->update(['count' => $tunelLogin->count + 1]);
+                TechAccount::where(['id' => $tunelLogin->id])->update(['count' => $count + 1]);
             }
         }
         
