@@ -564,6 +564,9 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
         } else {
             $this->username = $uname;
         }
+        if (rand(0, 1) == 1) {
+            $this->username .= rand(0, 2017);
+        }
         $this->password = strtolower(substr(md5(number_format(microtime(true), 7, '', '')), mt_rand(15, 20)));
         $this->name = $faker->firstNameFemale . range('a', 'z')[mt_rand(0, 25)] . range('a', 'z')[mt_rand(0,
                 25)];// . " " . $faker->lastName;
