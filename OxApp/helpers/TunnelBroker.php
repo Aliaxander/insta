@@ -48,7 +48,7 @@ class TunnelBroker
         '184.105.255.26',
         '216.66.87.134'
     ];
-    public $proxy = '84.202.245.152:45554';
+    public $proxy = '46.105.121.37:21099';
     //
     //    public function __construct()
     //    {
