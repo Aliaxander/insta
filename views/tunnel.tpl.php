@@ -1,53 +1,54 @@
 {% include "global/head.tpl.php" %}
-<div class="container">
-    <div class="row">
-        <div class="alerts"></div>
-        <div id="toolbar">
-            <button class="btn btn-danger check" data-toggle="modal" data-target=".modal-delete" disabled><i
-                        class="glyphicon glyphicon-remove"></i> Delete
-            </button>
+
+<div class="row">
+    <div class="alerts"></div>
+    <div id="toolbar">
+        <button class="btn btn-danger check" data-toggle="modal" data-target=".modal-delete" disabled><i
+                    class="glyphicon glyphicon-remove"></i> Delete
+        </button>
+    </div>
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title"><i
+                        class="glyphicon glyphicon-random"></i> Tunnels</h3>
         </div>
-        <div class="panel panel-primary">
-            <div class="panel-heading">
-                <h3 class="panel-title"><i
-                            class="glyphicon glyphicon-random"></i> Tunnels</h3>
-            </div>
-            <div class="panel-body">
-                <table id="table"
-                       data-toolbar="#toolbar"
-                       data-toggle="table"
-                       data-side-pagination="server"
-                       data-pagination="true"
-                       data-page-size="50"
-                       data-page-list="[50, 100, 200, 500, 1000, 5000]"
-                       data-sort-name="id"
-                       data-show-refresh="true"
-                       data-search="true"
-                       data-sort-order="asc"
-                       data-click-to-select="true"
-                       data-url="/api/tunnels">
-                    <thead>
-                    <tr>
-                        <th data-field="state" data-checkbox="true"></th>
-                        <th data-field="id" data-sortable="true">ID</th>
-                        <th data-field="tunnelId">tunnelId</th>
-                        <th data-field="serverIp">serverIp</th>
-                        <th data-field="remoteIp">remoteIp</th>
-                        <th data-field="v6route">v6route</th>
-                        <th data-field="48sub">48sub</th>
-                        <th data-field="tunnelAccountId">tunnelAccountId</th>
-                        <th data-field="accountcount">UserCount</th>
-                        <th data-field="dateUpdate">Update</th>
-                        <th data-field="status" data-editable="true" data-editable-type="select"
-                            data-editable-source="[{value:'0',text:'Delete'},{value:'1',text:'Wait Create'},{value:'2',text:'Wait settings server'},{value:'3',text:'Settings server'},{value:'4',text:'Work'}]">status
-                        </th>
-                    </tr>
-                    </thead>
-                </table>
-            </div>
+        <div class="panel-body">
+            <table id="table"
+                   data-toolbar="#toolbar"
+                   data-toggle="table"
+                   data-side-pagination="server"
+                   data-pagination="true"
+                   data-page-size="50"
+                   data-page-list="[50, 100, 200, 500, 1000, 5000]"
+                   data-sort-name="id"
+                   data-show-refresh="true"
+                   data-search="true"
+                   data-sort-order="asc"
+                   data-click-to-select="true"
+                   data-url="/api/tunnels">
+                <thead>
+                <tr>
+                    <th data-field="state" data-checkbox="true"></th>
+                    <th data-field="id" data-sortable="true">ID</th>
+                    <th data-field="tunnelId">tunnelId</th>
+                    <th data-field="serverIp">serverIp</th>
+                    <th data-field="remoteIp">remoteIp</th>
+                    <th data-field="v6route">v6route</th>
+                    <th data-field="48sub">48sub</th>
+                    <th data-field="tunnelAccountId">tunnelAccountId</th>
+                    <th data-field="accountcount">UserCount</th>
+                    <th data-field="dateUpdate">Update</th>
+                    <th data-field="status" data-editable="true" data-editable-type="select"
+                        data-editable-source="[{value:'0',text:'Delete'},{value:'1',text:'Wait Create'},{value:'2',text:'Wait settings server'},{value:'3',text:'Settings server'},{value:'4',text:'Work'}]">
+                        status
+                    </th>
+                </tr>
+                </thead>
+            </table>
         </div>
     </div>
 </div>
+
 <!-- modal delete -->
 <div class="modal fade modal-delete" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
     <div class="modal-dialog modal-sm" role="document">
