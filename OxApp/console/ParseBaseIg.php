@@ -132,7 +132,9 @@ class ParseBaseIg extends Command
                 if (@$tst['1']['num_results'] >= 10) {
                     $resultTst = $api->request("users/" . $row['pk'] . "/info/");
                     $biography = $resultTst[1]['biography'];
-                    if (!preg_match("/(http(s)?:\/\/)?([\\w-]+\\.)+[\\w-]+(\/[\\w- ;,.\/?%&=]*)?/", $biography)) {
+                    if (empty($resultTst[1]['external_url']) && !preg_match("/(http(s)?:\/\/)?([\\w-]+\\.)+[\\w-]+(\/[\\w- ;,.\/?%&=]*)?/",
+                            $biography)
+                    ) {
                         InstBase::add(['account' => $row['pk']]);
                     }
                 }
