@@ -55,7 +55,7 @@ class TunnelsController extends App
 
         foreach ($tunels as $key => $item) {
             $tunels[$key]->accountcount = Users::selectBy(['count(id) as count'])
-                ->find(['proxy/like' => $item->serverIp . '%', 'ban' => 0])
+                ->find(['proxy/like' => $item->serverIp . '%', 'ban' => 0, 'userGroup/not in' => [2]])
                 ->rows[0]->count;
         }
         

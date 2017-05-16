@@ -53,7 +53,7 @@ class ServersController extends App
 
         foreach ($server as $key => $item) {
             $server[$key]->accountcount = Users::selectBy(['count(id) as count'])
-                ->find(['proxy/like' => $item->ip . '%', 'ban' => 0])
+                ->find(['proxy/like' => $item->ip . '%', 'ban' => 0, 'userGroup/not in' => [2]])
                 ->rows[0]->count;
         }
 
