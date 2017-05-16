@@ -36,7 +36,7 @@
                         <th data-field="v6route">v6route</th>
                         <th data-field="48sub">48sub</th>
                         <th data-field="tunnelAccountId">tunnelAccountId</th>
-                        <th data-field="accountcount">AccountCount</th>
+                        <th data-field="accountcount">UserCount</th>
                         <th data-field="status" data-editable="true" data-editable-type="select"
                             data-editable-source="[{value:'0',text:'Delete'},{value:'1',text:'Wait Create'},{value:'2',text:'Wait settings server'},{value:'3',text:'Settings server'},{value:'4',text:'Work'}]">status
                         </th>
