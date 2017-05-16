@@ -57,7 +57,7 @@ class AutoStartEdit extends Command
             'ban' => 0,
             'userTask' => 1,
             'userGroup/!=' => 2,
-            'dateCreate/<=' => '//now()-interval ' . mt_rand(30, 70) . ' MINUTE//'
+            'dateCreate/<=' => '//now()-interval ' . mt_rand(20, 70) . ' MINUTE//'
         ])->update(['userTask' => 2]);
         
         
