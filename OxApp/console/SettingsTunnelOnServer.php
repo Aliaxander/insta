@@ -112,7 +112,7 @@ class SettingsTunnelOnServer extends Command
                 for ($i = 30000; $i < 30248; $i++) {
                     $proxy[] = Proxy::add([
                         'proxy' => $tunnel->serverIp . ":" . $i . ";",
-                        'rand' => rand(0, 1000)
+                        'rand' => rand(0, 10000)
                     ]);
                 }
             }

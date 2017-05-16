@@ -70,7 +70,7 @@ class ProxyController extends App
                 for ($i = $this->request->request->get('portIn'); $i < $this->request->request->get('portOut'); $i++) {
                     $proxy[] = Proxy::add([
                         'proxy' => $ip . ":" . $i . ";" . $this->request->request->get('authData'),
-                        'rand' => rand(0, 1000)
+                        'rand' => rand(0, 10000)
                     ]);
                 }
             }
