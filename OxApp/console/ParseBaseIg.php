@@ -104,10 +104,9 @@ class ParseBaseIg extends Command
                         }
                         if (!empty($result[1]['users'])) {
                             $this->addToDb($result[1]['users']);
-//                            if (isset($result[1]['next_max_id'])) {
-//                                $this->findFlows($acc, $result[1]['next_max_id']);
-//                            }
-//
+                            if (isset($result[1]['next_max_id'])) {
+                                $this->findFlows($acc, $result[1]['next_max_id']);
+                            }
                         }
                     }
                 } else {
@@ -115,7 +114,6 @@ class ParseBaseIg extends Command
                     die("no jobs");
                 }
             }
-            
         }
         
         return $output->writeln("Complite");
@@ -123,13 +121,21 @@ class ParseBaseIg extends Command
     
     protected function addToDb($rows)
     {
+        $api = $this->api;
         foreach ($rows as $row) {
             //Parse all comments:
             // if ($row['comment_count'] > 0) {
             //    $this->findComment($row['id']);
             //}
             if (InstBase::find(['account' => $row['pk']])->count == 0) {
-                InstBase::add(['account' => $row['pk']]);
+                $tst = $api->request("feed/user/" . $row['pk']);
+                if (@$tst['1']['num_results'] >= 10) {
+                    $resultTst = $api->request("users/" . $row['pk'] . "/info/");
+                    $biography = $resultTst[1]['biography'];
+                    if (!preg_match("/(http(s)?:\/\/)?([\\w-]+\\.)+[\\w-]+(\/[\\w- ;,.\/?%&=]*)?/", $biography)) {
+                        InstBase::add(['account' => $row['pk']]);
+                    }
+                }
             }
         }
     }
@@ -141,11 +147,8 @@ class ParseBaseIg extends Command
             $maxId = '?max_id=' . $maxId;
         }
         $follows = $api->getFollows($mediaId, $maxId);
-        foreach ($follows[1]['users'] as $user) {
-            if (InstBase::find(['account' => $user['pk']])->count == 0) {
-                InstBase::add(['account' => $user['pk']]);
-            }
-        }
+        $this->addToDb($follows[1]['users']);
+        
         if (isset($follows[1]['next_max_id'])) {
             $this->findFlows($mediaId, $follows[1]['next_max_id']);
         }
