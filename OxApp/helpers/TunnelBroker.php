@@ -101,6 +101,7 @@ class TunnelBroker
             '46.162.125.10:45554'
         ];
         $this->proxy = $proxy[mt_rand(0, count($proxy) - 1)];
+        echo "SET proxy: ". $this->proxy;
     }
     
     /**
