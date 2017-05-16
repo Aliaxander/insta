@@ -72,12 +72,15 @@ class SettingsTunnelOnServer extends Command
                 ssh2_exec($connection, 'ulimit -n 600000');
                 ssh2_exec($connection, 'ulimit -u 600000');
                 ssh2_exec($connection, 'pkill 3proxy');
+                
+                ssh2_exec($connection, 'ip -6 addr flush dev he-ipv6');
                 ssh2_exec($connection, 'ip link delete he-ipv6');
                 ssh2_exec($connection, 'ifconfig he-ipv6 down');
-                ssh2_exec($connection, 'nohup service network restart &');
-                sleep(7);
-                $connection = ssh2_connect($server->ip, 22);
-                var_dump(ssh2_auth_password($connection, 'root', $server->password));
+                ssh2_exec($connection, 'ip link delete sit');
+                ssh2_exec($connection, 'ip link delete sit0');
+                ssh2_exec($connection, 'ip link delete sit');
+                ssh2_exec($connection, 'ip link delete sit0');
+                
                 ssh2_exec($connection, 'ip -6 route del default');
                 ssh2_exec($connection, 'modprobe ipv6');
                 
