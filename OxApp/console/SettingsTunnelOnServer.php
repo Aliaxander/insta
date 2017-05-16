@@ -80,7 +80,8 @@ class SettingsTunnelOnServer extends Command
                 ssh2_exec($connection, 'ip link delete sit0');
                 ssh2_exec($connection, 'ip link delete sit');
                 ssh2_exec($connection, 'ip link delete sit0');
-                
+                ssh2_exec($connection, 'ip tunnel del he-ipv6');
+               
                 ssh2_exec($connection, 'ip -6 route del default');
                 ssh2_exec($connection, 'modprobe ipv6');
                 
