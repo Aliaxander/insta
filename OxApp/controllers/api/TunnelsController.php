@@ -47,15 +47,21 @@ class TunnelsController extends App
             ->where($where)
             ->orderBy(["id" => "desc"])
             ->find();
-        $proxy = Tunnels::orderBy($orderBy)
+        $tunels = Tunnels::orderBy($orderBy)
             ->where($where)
             ->limit($paging)
             ->find()
             ->rows;
+
+        foreach ($tunels as $key => $item) {
+            $tunels[$key]->accountcount = Users::selectBy(['count(id) as count'])
+                ->find(['proxy/like' => $item->serverIp . '%', 'ban' => 0])
+                ->rows[0]->count;
+        }
         
         return json_encode([
             'total' => (int)@$total->rows[0]->count,
-            'rows' => $proxy,
+            'rows' => $tunels,
         ]);
     }
     

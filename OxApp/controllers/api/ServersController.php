@@ -11,6 +11,7 @@ namespace OxApp\controllers\api;
 
 use Ox\App;
 use OxApp\models\Servers;
+use OxApp\models\Users;
 
 class ServersController extends App
 {
@@ -44,15 +45,21 @@ class ServersController extends App
             ->where($where)
             ->orderBy(["id" => "desc"])
             ->find();
-        $proxy = Servers::orderBy($orderBy)
+        $server = Servers::orderBy($orderBy)
             ->where($where)
             ->limit($paging)
             ->find()
             ->rows;
 
+        foreach ($server as $key => $item) {
+            $server[$key]->accountcount = Users::selectBy(['count(id) as count'])
+                ->find(['proxy/like' => $item->ip . '%', 'ban' => 0])
+                ->rows[0]->count;
+        }
+
         return json_encode([
             'total' => (int)@$total->rows[0]->count,
-            'rows' => $proxy,
+            'rows' => $server,
         ]);
     }
 

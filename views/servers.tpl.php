@@ -36,6 +36,7 @@
                         <th data-field="id" data-sortable="true">ID</th>
                         <th data-field="ip">IP</th>
                         <th data-field="password">Password</th>
+                        <th data-field="accountcount">AccountCount</th>
                     </tr>
                     </thead>
                 </table>
