@@ -137,6 +137,11 @@ class Likes extends Command
                     }
                 }
             }
+            
+            $api->request('feed/timeline/?is_prefetch=0&seen_posts=&phone_id=' . $user->phoneId . '&battery_level=' . mt_rand(90,
+                    100) . '&timezone_offset=3600&is_pull_to_refresh=0&unseen_posts=&is_charging=' . mt_rand(0,
+                    1));
+            
             $likesForAccountMin = SystemSettings::get('likesForAccountMin');
             $likesForAccountMax = SystemSettings::get('likesForAccountMax');
             $massFollow = SystemSettings::get('massFollow');
