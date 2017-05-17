@@ -63,7 +63,7 @@ class TunnelBroker
             '217.182.242.108:80543',
         ];
         $this->proxy = $proxy[mt_rand(0, count($proxy) - 1)];
-        echo "SET proxy: ". $this->proxy;
+        echo "SET proxy: " . $this->proxy;
     }
     
     /**
@@ -87,10 +87,10 @@ class TunnelBroker
             $status = true;
         }
         print_r($html);
-        if($status===true) {
+        if ($status === true) {
             preg_match_all('/<span class=\"fr\">(.*?)<\/span>/s', $html[1], $estimates);
             $result = $estimates[1];
-    
+            
             $tunnelId = preg_replace('/\D/', '', $result[0]);
             $remoteIp = $result[3];
             $v6route = strip_tags($result[5]);
@@ -98,7 +98,14 @@ class TunnelBroker
             print_r($result);
             $sub48 = str_replace('::/48', '', $result[1]);
         }
-        return ['tunnelId' => @$tunnelId, 'remoteIp' => @$remoteIp, 'v6route' => @$v6route, '48sub' => @$sub48,'status'=>$status];
+        
+        return [
+            'tunnelId' => @$tunnelId,
+            'remoteIp' => @$remoteIp,
+            'v6route' => @$v6route,
+            '48sub' => @$sub48,
+            'status' => $status
+        ];
     }
     
     /**
