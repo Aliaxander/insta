@@ -22,7 +22,8 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary add-params" onclick="addTechAccount();">Add TechAccount</button>
+                <button type="button" class="btn btn-primary add-params" onclick="addTechAccount();">Add TechAccount
+                </button>
             </div>
         </div>
     </div>
@@ -46,6 +47,7 @@
                 <table id="table"
                        data-toolbar="#toolbar"
                        data-toggle="table"
+                       data-show-refresh="true"
                        data-url="/api/techAccount">
                     <thead>
                     <tr>
@@ -65,33 +67,38 @@
 </div>
 <script>
     $('#table').on('editable-save.bs.table', function (e, field, row, oldValue, $el) {
-        //console.log(row);
         $.ajax({
             type: "PUT",
             url: "/api/techAccount",
-            data: row
-        }).done(function (msg) {
-            console.log(msg);
-        });
+            data: row,
+            success: function (data) {
+                if (data.status == '200') {
+                    $('.alerts').html('<div class="alert alert-success alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button> <strong> Update success </strong>');
+                } else {
+                    $('.alerts').html('<div class="alert alert-danger alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button> <strong> Update error </strong>');
+                }
+                console.log(data);
+            }
+        })
     });
 
-    function addTechAccount() {
-        var name = $('#name-form').val();
-        var password = $('#password-form').val();
-        var type = $('#type-form').val();
-        $.ajax({
-            type: "post",
-            url: "/api/techAccount",
-            data: {name: name, password: password, type: type}
-        }).done(function (msg) {
-            console.log(msg);
-            $('.modal-add').modal('hide');
-            $('#table').bootstrapTable('refresh');
-            $('#name-form').val('');
-            $('#password-form').val('');
-            $('#type-form').val('');
-        });
-    }
+        function addTechAccount() {
+            var name = $('#name-form').val();
+            var password = $('#password-form').val();
+            var type = $('#type-form').val();
+            $.ajax({
+                type: "post",
+                url: "/api/techAccount",
+                data: {name: name, password: password, type: type}
+            }).done(function (msg) {
+                console.log(msg);
+                $('.modal-add').modal('hide');
+                $('#table').bootstrapTable('refresh');
+                $('#name-form').val('');
+                $('#password-form').val('');
+                $('#type-form').val('');
+            });
+        }
 </script>
 
 {% include "global/footer.tpl.php" %}
