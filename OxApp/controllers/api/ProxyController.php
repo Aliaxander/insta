@@ -35,7 +35,7 @@ class ProxyController extends App
             $offset = 0;
         }
         $paging = array($offset => $limit);
-        
+
         if (!empty($this->request->query->get("search"))) {
             $where['proxy/like'] = '%' . $this->request->query->get("search") . '%';
         }
@@ -48,13 +48,13 @@ class ProxyController extends App
             ->limit($paging)
             ->find()
             ->rows;
-        
+
         return json_encode([
             'total' => (int)@$total->rows[0]->count,
             'rows' => $proxy,
         ]);
     }
-    
+
     /**
      * POST method
      */
@@ -62,16 +62,30 @@ class ProxyController extends App
     {
         $proxy = [];
         $ips = explode("\n", $this->request->request->get('ip'));
-        foreach ($ips as $ip) {
-            $ip = str_replace("\n", "", $ip);
-            $ip = str_replace("\r", "", $ip);
-            $ip = str_replace(" ", "", $ip);
-            if (!empty($ip)) {
-                for ($i = $this->request->request->get('portIn'); $i < $this->request->request->get('portOut'); $i++) {
-                    $proxy[] = Proxy::add([
-                        'proxy' => $ip . ":" . $i . ";" . $this->request->request->get('authData'),
-                        'rand' => rand(0, 10000)
-                    ]);
+
+        if (!empty($ips)
+            && empty($this->request->request->get('portOut'))
+            && empty($this->request->request->get('portIn'))
+            && empty($this->request->request->get('authData'))
+        ) {
+            foreach ($ips as $ip) {
+                if (!empty($ip)) {
+                    $proxy[] = Proxy::data(['proxy' => trim($ip), 'rand' => mt_rand(0, 10000)])
+                        ->add();
+                }
+            }
+        } else {
+            foreach ($ips as $ip) {
+                $ip = str_replace("\n", "", $ip);
+                $ip = str_replace("\r", "", $ip);
+                $ip = str_replace(" ", "", $ip);
+                if (!empty($ip)) {
+                    for ($i = $this->request->request->get('portIn'); $i < $this->request->request->get('portOut'); $i++) {
+                        $proxy[] = Proxy::add([
+                            'proxy' => $ip . ":" . $i . ";" . $this->request->request->get('authData'),
+                            'rand' => mt_rand(0, 10000)
+                        ]);
+                    }
                 }
             }
         }
@@ -80,16 +94,16 @@ class ProxyController extends App
         } else {
             $result = ['status' => 500];
         }
-        
+
         return json_encode($result);
     }
-    
+
     /**
      * @return string
      */
     public function put()
     {
-        
+
         $proxy = Proxy::update(
             ['status' => $this->request->request->get('status')],
             ['id' => $this->request->request->get('id')]
@@ -99,11 +113,11 @@ class ProxyController extends App
         } else {
             $result = ['status' => 500];
         }
-        
-        
+
+
         return json_encode($result);
     }
-    
+
     /**
      * @return string
      */
@@ -117,7 +131,7 @@ class ProxyController extends App
                 $result = ['status' => 200];
             }
         }
-        
+
         return json_encode($result);
     }
 }
