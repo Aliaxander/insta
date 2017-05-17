@@ -62,7 +62,9 @@ class CreateTunnel extends Command
                     die('account limit');
                 } else {
                     TechAccount::where(['id' => $tunelLogin->rows[0]->id])->update(['count' => 0]);
-                    $count = 0;
+                    if ($tunelLogin->rows[0]->count == 3) {
+                        $count = 0;
+                    }
                 }
             }
             
