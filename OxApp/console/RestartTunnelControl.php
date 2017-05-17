@@ -62,7 +62,7 @@ class RestartTunnelControl extends Command
                 'proxy/like' => $row->ip . ':%'
             ]);
             $proxy = Proxy::find(['status' => 0, 'proxy/like' => $row->ip . ':%']);
-            if ($users->count === 0 && $proxy->count === 0 && $tunnels->count === 1) {
+            if ($users->count <= 5 && $proxy->count === 0 && $tunnels->count === 1) {
                 $tunnel = Tunnels::find(['serverIp' => $row->ip]);
                 if ($tunnel->count > 0) {
                     $tunnel = $tunnel->rows[0];

@@ -109,10 +109,10 @@ class SettingsTunnelOnServer extends Command
                     'status' => 4,
                 ]);
                 Proxy::delete(['proxy/like' => $tunnel->serverIp . ':%']);
-                for ($i = 30000; $i < 30200; $i++) {
+                for ($i = 30000; $i < 30248; $i++) {
                     $proxy[] = Proxy::add([
                         'proxy' => $tunnel->serverIp . ":" . $i . ";",
-                        'rand' => rand(0, 1000)
+                        'rand' => rand(0, 10000)
                     ]);
                 }
             }

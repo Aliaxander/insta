@@ -34,7 +34,7 @@ class EditProfile extends Command
     protected function configure()
     {
         $this
-            ->setName('test:edit')
+            ->setName('edit:start')
             ->setDescription('Cron jobs');
     }
     
@@ -192,7 +192,7 @@ class EditProfile extends Command
                                 $user->email);
                             $profileResult = $profile[1];
                             if (empty($profile[1])) {
-                                Domains::where(['id' => $domain->rows[0]->id])->update(['status' => 0]);
+                                Domains::where(['domain' => $domain])->update(['status' => 0]);
                                 $profileResult = '';
                             }
                             if ($i === 5) {

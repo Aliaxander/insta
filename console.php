@@ -1,6 +1,7 @@
 #!/usr/bin/env php
 <?php
 // application.php
+use Acme\Console\Command\AutoStartEdit;
 use Acme\Console\Command\BaseUploader;
 use Acme\Console\Command\BioUpload;
 use Acme\Console\Command\CreateTunnel;
@@ -46,6 +47,7 @@ $application->add(new ThreadsControl());
 $application->add(new CreateTunnel());
 $application->add(new SettingsTunnelOnServer());
 $application->add(new RestartTunnelControl());
+$application->add(new AutoStartEdit());
 
 $application->addCommands(
     array(

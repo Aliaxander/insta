@@ -8,28 +8,39 @@
 
 namespace Acme\Console\Command;
 
-use InstagramAPI\Checkpoint;
+use Faker\Factory;
+use OxApp\helpers\FreenomReg;
 use OxApp\helpers\IgApi;
-use OxApp\models\InstBase;
+use OxApp\helpers\Resize;
+use OxApp\helpers\TunnelBroker;
+use OxApp\models\Domains;
+use OxApp\models\HashTags;
+use OxApp\models\ProfileGenerate;
+use OxApp\models\Proxy;
+use OxApp\models\Servers;
 use OxApp\models\SystemSettings;
+use OxApp\models\TechAccount;
+use OxApp\models\Tunnels;
 use OxApp\models\Users;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Class ThreadsControl
+ * Class AutoStartEdit
  *
  * @package Acme\Console\Command
  */
-class ThreadsControl extends Command
+class AutoStartEdit extends Command
 {
     /**
      * configure
      */
     protected function configure()
     {
-        $this->setName('start:threads')->setDescription('Cron jobs');
+        $this
+            ->setName('edit:autostart')
+            ->setDescription('Cron jobs');
     }
     
     /**
@@ -41,13 +52,15 @@ class ThreadsControl extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         require(__DIR__ . "/../../config.php");
-        for ($i = 0; $i < 5; $i++) {
-            system('nohup /usr/bin/php /insta/console.php test:likes > /dev/null &');
-            system('nohup /usr/bin/php /insta/console.php edit:start > /dev/null &');
-            sleep(mt_rand(5, 14));
-        }
+        
+        Users::where([
+            'ban' => 0,
+            'userTask' => 1,
+            'userGroup/!=' => 2,
+            'dateCreate/<=' => '//now()-interval ' . mt_rand(20, 30) . ' MINUTE//'
+        ])->update(['userTask' => 2]);
+        
         
         return $output->writeln("Complite");
     }
-    
 }

@@ -137,6 +137,11 @@ class Likes extends Command
                     }
                 }
             }
+            
+            $api->request('feed/timeline/?is_prefetch=0&seen_posts=&phone_id=' . $user->phoneId . '&battery_level=' . mt_rand(90,
+                    100) . '&timezone_offset=3600&is_pull_to_refresh=0&unseen_posts=&is_charging=' . mt_rand(0,
+                    1));
+            
             $likesForAccountMin = SystemSettings::get('likesForAccountMin');
             $likesForAccountMax = SystemSettings::get('likesForAccountMax');
             $massFollow = SystemSettings::get('massFollow');
@@ -145,13 +150,7 @@ class Likes extends Command
             $allWhile = 0;
             while ($status = true) {
                 $allWhile++;
-                //                $userTest = Users::find(['id' => $user->id, 'ban' => 0]);
-                //                if ($userTest->count === 0) {
-                //                    die();
-                //                }
-                echo 4;
                 $accRow = InstBase::orderBy(['id' => 'desc'])->limit([0 => 1])->find(['status' => 0]);
-                echo 5;
                 $acc = @preg_replace("/[^0-9]/", '', $accRow->rows[0]->account);
                 if (!empty($acc)) {
                     echo 6;
@@ -220,13 +219,17 @@ class Likes extends Command
                         $api->getRecentActivityAll();
                     }
                     
-                    if ($requestCou !== 0 && $allWhile > 10) {
+                    if ($requestCou > 0 && $allWhile > 10) {
                         $allWhile = 0;
                         Users::where(['id' => $user->id])->update([
                             'requests' => $requestCou,
                             'follows' => $followCou,
                             'likes' => $likeCou
                         ]);
+                        $userTest = Users::find(['id' => $user->id, 'ban' => 0]);
+                        if ($userTest->count === 0) {
+                            die();
+                        }
                     }
                     $requestCou++;
                     echo "Requests: $requestCou | Likes: $likeCou | Follows: $followCou\n";
