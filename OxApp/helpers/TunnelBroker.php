@@ -8,6 +8,8 @@
 
 namespace OxApp\helpers;
 
+use OxApp\models\Tunnels;
+
 /**
  * Class TunnelBroker
  *
@@ -100,7 +102,7 @@ class TunnelBroker
             '46.162.125.10:45554'
         ];
         $this->proxy = $proxy[mt_rand(0, count($proxy) - 1)];
-        echo "SET proxy: ". $this->proxy;
+        echo "SET proxy: " . $this->proxy;
     }
     
     /**
@@ -116,18 +118,26 @@ class TunnelBroker
             $ip = $this->ips[rand(0, count($this->ips) - 1)];
         }
         $html = $this->createTunnel($ip, $serverIp);
+        
+        if (preg_match('/You have already created the maximum number of tunnels today.  Please try again later./s',
+            $html[1])) {
+            $status = false;
+        } else {
+            $status = true;
+        }
         print_r($html);
-        preg_match_all('/<span class=\"fr\">(.*?)<\/span>/s', $html[1], $estimates);
-        $result = $estimates[1];
-        
-        $tunnelId = preg_replace('/\D/', '', $result[0]);
-        $remoteIp = $result[3];
-        $v6route = strip_tags($result[5]);
-        $result = $this->create48($tunnelId);
-        print_r($result);
-        $sub48 = str_replace('::/48', '', $result[1]);
-        
-        return ['tunnelId' => $tunnelId, 'remoteIp' => $remoteIp, 'v6route' => $v6route, '48sub' => $sub48];
+        if($status===true) {
+            preg_match_all('/<span class=\"fr\">(.*?)<\/span>/s', $html[1], $estimates);
+            $result = $estimates[1];
+    
+            $tunnelId = preg_replace('/\D/', '', $result[0]);
+            $remoteIp = $result[3];
+            $v6route = strip_tags($result[5]);
+            $result = $this->create48($tunnelId);
+            print_r($result);
+            $sub48 = str_replace('::/48', '', $result[1]);
+        }
+        return ['tunnelId' => @$tunnelId, 'remoteIp' => @$remoteIp, 'v6route' => @$v6route, '48sub' => @$sub48,'status'];
     }
     
     /**
