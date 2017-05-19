@@ -54,6 +54,12 @@ class CreateTunnel extends Command
         if ($tunnels->count > 0) {
             $tunnel = $tunnels->rows[0];
             Tunnels::where(['id' => $tunnel->id])->update(['status' => 1]);
+            echo "deleteTunnel:\n";
+            
+            $tunnelData = TechAccount::find(['id' => $tunnel->tunnelAccountId])->rows[0];
+            $tunel = new TunnelBroker();
+            print_r($tunel->login($tunnelData->name, $tunnelData->password));
+            print_r($tunel->deleteTunnel($tunnel->tunnelId));
             
             $tunelLogin = TechAccount::find(['count/<' => 3]);
             if ($tunelLogin->count === 0) {

@@ -76,10 +76,6 @@ class TunnelsController extends App
             $tunnel = $tunnel->rows[0];
             Users::delete(['proxy/like' => $tunnel->serverIp . ':%', 'userGroup' => 1, 'ban' => 0]);
             Proxy::delete(['proxy/like' => $tunnel->serverIp . ':%']);
-            $tunnelData = TechAccount::find(['id' => $tunnel->tunnelAccountId])->rows[0];
-            $tunel = new TunnelBroker();
-            $tunel->login($tunnelData->name, $tunnelData->password);
-            $tunel->deleteTunnel($tunnel->tunnelId);
             $tunels = Tunnels::where(['id' => $id])->update(['status' => 0]);
         }
         
