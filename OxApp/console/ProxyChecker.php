@@ -8,10 +8,8 @@
 
 namespace Acme\Console\Command;
 
-use Ox\DataBase\DbConfig;
 use OxApp\models\Proxy;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -39,7 +37,7 @@ class ProxyChecker extends Command
         $deleted = 0;
         $proxy = Proxy::find(['status' => 0]);
         foreach ($proxy->rows as $row) {
-            $status = request($row->proxy)['http_code'];
+            $status = $this->request($row->proxy)['http_code'];
             if ($status == '200' || $status == '301') {
                 echo 'Ok - ' . $row->proxy . "\n";
                 $count++;
