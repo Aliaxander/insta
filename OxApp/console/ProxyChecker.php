@@ -24,11 +24,7 @@ class ProxyChecker extends Command
     {
         $this
             ->setName('proxy:check')
-            ->setDescription('file')->addArgument(
-                'file',
-                InputArgument::OPTIONAL,
-                'filename'
-            );
+            ->setDescription('file');
     }
     
     /**
