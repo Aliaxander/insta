@@ -42,7 +42,7 @@ class ProxyChecker extends Command
                 echo 'Ok - ' . $row->proxy . "\n";
                 $count++;
             } else {
-                Proxy::data(['id' => $row->id]);
+                Proxy::delete(['id' => $row->id]);
                 echo "DEL " . $row->proxy . "\n";
                 $deleted++;
             }
