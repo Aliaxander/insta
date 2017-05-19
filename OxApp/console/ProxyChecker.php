@@ -38,7 +38,7 @@ class ProxyChecker extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $page = $file = $input->getArgument('file');
+        $page = $file = $input->getArgument('thread');
         $start = 0;
         $stop = 100;
         if (!empty($page)) {
