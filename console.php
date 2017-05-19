@@ -12,6 +12,7 @@ use Acme\Console\Command\HashTagParser;
 use Acme\Console\Command\Likes;
 use Acme\Console\Command\ParseBaseIg;
 use Acme\Console\Command\PreParseBase;
+use Acme\Console\Command\ProxyChecker;
 use Acme\Console\Command\RestartTunnelControl;
 use Acme\Console\Command\SettingsTunnelOnServer;
 use Acme\Console\Command\Test;
@@ -48,6 +49,7 @@ $application->add(new CreateTunnel());
 $application->add(new SettingsTunnelOnServer());
 $application->add(new RestartTunnelControl());
 $application->add(new AutoStartEdit());
+$application->add(new ProxyChecker());
 
 $application->addCommands(
     array(
