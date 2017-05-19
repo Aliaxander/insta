@@ -10,6 +10,7 @@ namespace Acme\Console\Command;
 
 use OxApp\models\Proxy;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -22,7 +23,11 @@ class ProxyChecker extends Command
     {
         $this
             ->setName('proxy:check')
-            ->setDescription('file');
+            ->setDescription('proxy')->addArgument(
+                'thread',
+                InputArgument::OPTIONAL,
+                'thread'
+            );
     }
     
     /**
@@ -33,9 +38,16 @@ class ProxyChecker extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $page = $file = $input->getArgument('file');
+        $start = 0;
+        $stop = 100;
+        if (!empty($page)) {
+            $start = $page * 100 + 1;
+            $stop = $start + 100;
+        }
         $count = 0;
         $deleted = 0;
-        $proxy = Proxy::find(['status' => 0]);
+        $proxy = Proxy::limit([$start => $stop])->find(['status' => 0]);
         foreach ($proxy->rows as $row) {
             $status = $this->request($row->proxy)['http_code'];
             if ($status == '200' || $status == '301') {
