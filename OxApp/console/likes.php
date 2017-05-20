@@ -152,7 +152,19 @@ class Likes extends Command
             $allWhile = 0;
             while ($status = true) {
                 $allWhile++;
-                $accRow = InstBase::orderBy(['id' => 'desc'])->limit([0 => 1])->find(['status' => 0]);
+                if (isset($parentId)) {
+                    $accRow = InstBase::orderBy(['id' => 'desc'])->limit([0 => 1])->find([
+                        'status' => 0,
+                        'parentId' => $parentId
+                    ]);
+                } else {
+                    $accRow = InstBase::orderBy(['id' => 'desc'])->limit([0 => 1])->find(['status' => 0]);
+                    $parentId = $accRow->rows[0]->parentId;
+                }
+                if ($accRow->count == 0) {
+                    Users::where(['id' => $user->id])->update(['requests' => 0]);
+                    die('No accounts');
+                }
                 $acc = @preg_replace("/[^0-9]/", '', $accRow->rows[0]->account);
                 if (!empty($acc)) {
                     echo 6;
