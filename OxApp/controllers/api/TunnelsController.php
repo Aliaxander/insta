@@ -74,7 +74,11 @@ class TunnelsController extends App
         $tunnel = Tunnels::find(['id' => $id]);
         if ($tunnel->count > 0) {
             $tunnel = $tunnel->rows[0];
-            Users::delete(['proxy/like' => $tunnel->serverIp . ':%', 'userGroup' => 1, 'ban' => 0]);
+            Users::where([
+                'proxy/like' => $tunnel->serverIp . ':%',
+                'userGroup' => 1,
+                'ban' => 0
+            ])->update(['userGroup' => 18]);
             Proxy::delete(['proxy/like' => $tunnel->serverIp . ':%']);
             $tunels = Tunnels::where(['id' => $id])->update(['status' => 0]);
         }
