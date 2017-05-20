@@ -607,7 +607,9 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
         $waterfall_id = strtolower($this->genUuid());
         $this->guid = strtolower($this->genUuid());
         $qe_id = strtolower($this->genUuid());
-        
+        if (mt_rand(0, 3) == 3) {
+            $this->name = '';
+        }
         echo "Generate DATA:
         uName: {$this->username}
         name: {$this->name}
@@ -679,13 +681,50 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
             sleep(rand(15, 20));
             print_r($this->usernameSuggestions($usernameTmp4, $email, $waterfall_id));
         }
-        sleep(rand(16, 24));
+//        sleep(rand(16, 24));
+//        $singTokenResult = '';
+//        $i = 0;
+//        while ($singTokenResult === '') {
+//            $token = $this->fetchHeadersSingUp();
+//            print_r($token);
+//
+//            if (preg_match('#Set-Cookie: csrftoken=([^;]+)#', $token[0], $token)) {
+//                $singTokenResult = $token[1];
+//            }
+//            if ($i == 10) {
+//                $singTokenResult = false;
+//            }
+//            $i++;
+//        }
+//        if ($singTokenResult == false || $singTokenResult == '') {
+//            die('empty sigKey token');
+//        }
+//        $this->csrftoken = $singTokenResult;
+//
+//        sleep(rand(5, 6));
+//        print_r($this->usernameSuggestions($usernameTmp3, $email, $waterfall_id));
+//
+//        sleep(rand(4, 8));
+//        print_r($this->usernameSuggestions($usernameTmp2, $email, $waterfall_id));
+//
+//        //                if (rand(0, 1) == 1) {
+//        //                    sleep(rand(3, 8));
+//        //                    print_r($this->usernameSuggestions($usernameTmp1, $email, $waterfall_id));
+//        //                }
+//        //        sleep(rand(4, 9));
+//        $finalName = $this->usernameSuggestions($this->username, $email, $waterfall_id);
+//        print_r($finalName);
+//        //$this->username = $finalName[1]['suggestions'][mt_rand(0, 11)];
+//        // $finalName = $this->usernameSuggestions($this->username, $email, $waterfall_id);
+//        print_r($finalName);
+        echo "SET name: " . $this->username . "\n";
+    
         $singTokenResult = '';
         $i = 0;
         while ($singTokenResult === '') {
             $token = $this->fetchHeadersSingUp();
             print_r($token);
-            
+        
             if (preg_match('#Set-Cookie: csrftoken=([^;]+)#', $token[0], $token)) {
                 $singTokenResult = $token[1];
             }
@@ -698,25 +737,7 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
             die('empty sigKey token');
         }
         $this->csrftoken = $singTokenResult;
-        
-        sleep(rand(5, 6));
-        print_r($this->usernameSuggestions($usernameTmp3, $email, $waterfall_id));
-        
-        sleep(rand(4, 8));
-        print_r($this->usernameSuggestions($usernameTmp2, $email, $waterfall_id));
-        
-        //                if (rand(0, 1) == 1) {
-        //                    sleep(rand(3, 8));
-        //                    print_r($this->usernameSuggestions($usernameTmp1, $email, $waterfall_id));
-        //                }
-        //        sleep(rand(4, 9));
-        $finalName = $this->usernameSuggestions($this->username, $email, $waterfall_id);
-        print_r($finalName);
-        //$this->username = $finalName[1]['suggestions'][mt_rand(0, 11)];
-        // $finalName = $this->usernameSuggestions($this->username, $email, $waterfall_id);
-        print_r($finalName);
-        echo "SET name: " . $this->username . "\n";
-        
+    
         sleep(rand(5, 11));
         //register:
         $createResult = '';
@@ -885,7 +906,7 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
     public function fetchHeadersSingUp()
     {
         return $this->request("si/fetch_headers/?guid=" . mb_strtolower(str_replace("-", "",
-                $this->guid)) . "&challenge_type=singup");
+                $this->guid)) . "&challenge_type=signup");//signup
     }
     
     /**

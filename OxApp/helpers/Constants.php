@@ -15,8 +15,8 @@ namespace OxApp\helpers;
  */
 class Constants
 {
-    const igKey = 'f6bcd0639ea3d279c10d4ffe49bd59f1f5045cf73c62fc33c9e45766f6cf6c63';
+    const igKey = '5ad7d6f013666cc93c88fc8af940348bd067b68f0dce3c85122a923f4f74b251';
     const xIgCapabilities = '3ToAAA==';
     const igKeyVersion = '4';
-    const igVersion = '10.1.0';
+    const igVersion = '10.3.2';
 }
