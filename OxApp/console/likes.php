@@ -71,6 +71,8 @@ class Likes extends Command
                 echo "login account:";
                 $login = $api->login($user->guid, $user->phoneId, $user->deviceId, $user->password);
                 Checkpoint::checkPoint($login, $user);
+            }else{
+                $api->request('news/inbox/?limited_activity=true&show_su=true');
             }
             $timeOutMin = SystemSettings::get('timeOutMin');
             $timeOutMax = SystemSettings::get('timeOutMax');
@@ -239,8 +241,7 @@ class Likes extends Command
                     
                     if ($resultLikesForTimeout > mt_rand(520, 700)) {
                         $hour += 1;
-                        //Users::where(['id' => $user->id])->update(['hour' => $hour]);
-                        Users::where(['id' => $user->id])->update(['userTask' => 8]);
+                        Users::where(['id' => $user->id])->update(['userTask' => 8, 'hour' => $hour]);
                         echo "Sleep";
                         //sleep(mt_rand(30000, 50000));
                         die('Complite');
