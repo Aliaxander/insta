@@ -160,6 +160,7 @@ class Likes extends Command
                 } else {
                     $accRow = InstBase::orderBy(['id' => 'desc'])->limit([0 => 1])->find(['status' => 0]);
                     $parentId = $accRow->rows[0]->parentId;
+                    Users::where(['id' => $user->id])->update(['parentAccs' => $user->parentAccs . ',' . $parentId]);
                 }
                 if ($accRow->count == 0) {
                     Users::where(['id' => $user->id])->update(['requests' => 0]);
