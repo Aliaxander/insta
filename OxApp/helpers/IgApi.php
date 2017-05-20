@@ -1036,7 +1036,7 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
             curl_setopt($ch, CURLOPT_COOKIEFILE, "/home/insta/cookies/" . $this->username . "-cookies.dat");
             curl_setopt($ch, CURLOPT_COOKIEJAR, "/home/insta/cookies/" . $this->username . "-cookies.dat");
             curl_setopt($ch, CURLOPT_USERAGENT, $this->userAgent);
-            
+            curl_setopt($ch, CURLOPT_TIMEOUT, 20);
             $proxy = explode(";", $this->proxy);
             curl_setopt($ch, CURLOPT_PROXY, $proxy[0]);
             if (!empty($proxy[1])) {
