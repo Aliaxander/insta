@@ -533,27 +533,6 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
      */
     public function create()
     {
-        //
-        //        $tokenResult = '';
-        //        $i = 0;
-        //        while ($tokenResult === '') {
-        //            $sync = $this->syncRegister();
-        //            print_r($sync);
-        //
-        //            if (preg_match('#Set-Cookie: csrftoken=([^;]+)#', $sync[0], $token)) {
-        //                $tokenResult = $token[1];
-        //            }
-        //            if ($i == 10) {
-        //                $tokenResult = false;
-        //            }
-        //            $i++;
-        //        }
-        //        if ($tokenResult == false || $tokenResult == '') {
-        //            die('empty token');
-        //        }
-        //        $this->csrftoken = $tokenResult;
-        //
-        //
         $domainMail = [
             'mail.com',
             'gmail.com',
@@ -626,8 +605,8 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
         $this->device_id = 'android-' . strtolower(substr($megaRandomHash, 16));
         $this->phone_id = strtolower($this->genUuid());
         $waterfall_id = strtolower($this->genUuid());
-        $this->guid = strtolower($this->genUuid());
-        $qe_id = strtolower($this->genUuid());
+        //$this->guid = strtolower($this->genUuid());
+        $this->guid = $qe_id = strtolower($this->genUuid());
         if (mt_rand(0, 3) == 3) {
             $this->name = '';
         }
@@ -746,7 +725,7 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
 //        }
 //        $this->csrftoken = $singTokenResult;
 //
-        sleep(rand(5, 11));
+        sleep(rand(3, 10));
         //register:
         $createResult = '';
         $i = 0;
