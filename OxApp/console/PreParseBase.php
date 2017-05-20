@@ -10,7 +10,6 @@ namespace Acme\Console\Command;
 
 use OxApp\helpers\IgApi;
 use OxApp\models\HashTags;
-use OxApp\models\InstBase;
 use OxApp\models\ParseBase;
 use OxApp\models\Users;
 use Symfony\Component\Console\Command\Command;
@@ -100,7 +99,11 @@ class PreParseBase extends Command
                                 foreach ($result[1]['ranked_items'] as $row) {
                                     if ($row['like_count'] >= 50) {
                                         if (ParseBase::find(['account' => $row['user']['pk']])->count === 0) {
-                                            ParseBase::add(['account' => $row['user']['pk']]);
+                                            ParseBase::add([
+                                                'account' => $row['user']['pk'],
+                                                'hashTag' => $accRow->rows[0]->tag,
+                                                'setHashTag' => $tag['name']
+                                            ]);
                                         }
                                     }
                                 }
@@ -116,32 +119,5 @@ class PreParseBase extends Command
         }
         
         return $output->writeln("Complite");
-    }
-    
-    protected function addToDb($rows)
-    {
-        foreach ($rows as $row) {
-            //Parse all comments:
-            if ($row['comment_count'] > 0) {
-                $this->findComment($row['id']);
-            }
-        }
-    }
-    
-    protected function findComment($mediaId, $maxId = '')
-    {
-        $api = $this->api;
-        if (!empty($maxId)) {
-            $maxId = '?max_id=' . $maxId;
-        }
-        $comments = $api->request("media/{$mediaId}/comments/" . $maxId);
-        foreach ($comments[1]['comments'] as $comment) {
-            if (InstBase::find(['account' => $comment['user_id']])->count == 0) {
-                InstBase::add(['account' => $comment['user_id']]);
-            }
-        }
-        if (isset($comments[1]['next_max_id'])) {
-            $this->findComment($mediaId, $comments[1]['next_max_id']);
-        }
     }
 }

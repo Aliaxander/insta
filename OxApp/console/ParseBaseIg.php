@@ -9,7 +9,6 @@
 namespace Acme\Console\Command;
 
 use InstagramAPI\Checkpoint;
-use Ox\DataBase\DbConfig;
 use OxApp\helpers\IgApi;
 use OxApp\models\InstBase;
 use OxApp\models\Users;
@@ -29,6 +28,7 @@ class ParseBaseIg extends Command
      * @var IgApi
      */
     public $api;
+    protected $parentId;
     
     /**
      * configure
@@ -86,6 +86,7 @@ class ParseBaseIg extends Command
                 if ($accRow->count > 0) {
                     $acc = @preg_replace("/[^0-9]/", '', $accRow->rows[0]->account);
                     if (!empty($acc)) {
+                        $this->parentId = $acc;
                         \OxApp\models\ParseBase::where(['id' => $accRow->rows[0]->id])->update(['status' => 1]);
                         
                         $result = $api->getFollows($acc);
@@ -129,13 +130,13 @@ class ParseBaseIg extends Command
             //}
             if (InstBase::find(['account' => $row['pk']])->count == 0) {
                 $tst = $api->request("feed/user/" . $row['pk']);
-                if (@$tst['1']['num_results'] >= 10) {
+                if (@$tst['1']['num_results'] >= 4) {
                     $resultTst = $api->request("users/" . $row['pk'] . "/info/");
                     $biography = $resultTst[1]['biography'];
                     if (empty($resultTst[1]['external_url']) && !preg_match("/(http(s)?:\/\/)?([\\w-]+\\.)+[\\w-]+(\/[\\w- ;,.\/?%&=]*)?/",
                             $biography)
                     ) {
-                        InstBase::add(['account' => $row['pk']]);
+                        InstBase::add(['account' => $row['pk'],'parentId'=> $this->parentId]);
                     }
                 }
             }
