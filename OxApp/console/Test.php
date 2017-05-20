@@ -52,6 +52,7 @@ class Test extends Command
                     Proxy::where(['id' => $row->id])->update(['status' => 1]);
                     $api->proxy = $row->proxy;
                     $api->create();
+                    sleep(mt_rand(10,30));
                 }
             }
         }
