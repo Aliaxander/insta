@@ -72,10 +72,9 @@ class FilterBaseIg extends Command
                     @$tst->biography)) {//(isset($tst->media_count) && $tst->media_count <= 3) ||
                     InstBase::delete(['account' => $account]);
                     echo "Delete $account ".$tst->external_url." ".$tst->biography."\n";
-             }echo{
+            }
              
             }
-        }
         
         return $output->writeln("Complite");
     }
