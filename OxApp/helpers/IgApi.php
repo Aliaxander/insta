@@ -100,7 +100,7 @@ class IgApi
         }
         $result = $this->request("friendships/" . $feedId . "/followers/" . $maxId);
         Checkpoint::checkPoint($result, $this);
-        
+        sleep(mt_rand(1, 2));
         return $result;
     }
     

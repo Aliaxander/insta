@@ -126,6 +126,7 @@ class ParseBaseIg extends Command
                     Users::where(['id' => $user->id])->update(['login' => 0, 'requests' => 0]);
                     die("no jobs");
                 }
+                sleep(mt_rand(2, 5));
             }
         }
         
@@ -182,7 +183,7 @@ class ParseBaseIg extends Command
         if (isset($follows[1]['next_max_id'])) {
             $this->findFlows($mediaId, $follows[1]['next_max_id']);
         }
-        sleep(rand(1,2));
+        sleep(mt_rand(2,5));
     }
     
     //    protected function findComment($mediaId, $maxId = '')
