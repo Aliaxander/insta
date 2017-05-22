@@ -61,18 +61,18 @@ class FilterBaseIg extends Command
             $start = $page * 100 + 1;
             $stop = $start + 100;
         }
-        $proxy = InstBase::limit([$start => $stop])->find(['status' => 0]);
-        foreach ($proxy->rows as $row) {
+        $base = InstBase::limit([$start => $stop])->find(['status' => 0]);
+        foreach ($base->rows as $row) {
+//            print_r($row);
             $account = $row->account;
             $tst = @json_decode(file_get_contents('https://i.instagram.com/api/v1/users/' . $account . '/info/'));
-            if (@$tst['"media_count'] <= 3) {
-                if (!empty($tst['external_url']) || preg_match("/(http(s)?:\/\/)?([\\w-]+\\.)+[\\w-]+(\/[\\w- ;,.\/?%&=]*)?/",
-                        $tst['biography'])
-                ) {
+            print_r($tst);
+            $tst= @$tst->user;
+            if ($tst->media_count <= 3 || !empty($tst->external_url) || preg_match("/(http(s)?:\/\/)?([\\w-]+\\.)+[\\w-]+(\/[\\w- ;,.\/?%&=]*)?/",
+                    $tst->biography)) {
                     InstBase::delete(['account' => $account]);
                     echo "Delete $account\n";
-                }
-            }
+             }
         }
         
         return $output->writeln("Complite");
