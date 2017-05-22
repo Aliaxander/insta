@@ -56,10 +56,10 @@ class FilterBaseIg extends Command
     {
         $page = $file = $input->getArgument('thread');
         $start = 0;
-        $stop = 1000;
+        $stop = 10000;
         if (!empty($page)) {
-            $start = $page * 1000 + 1;
-            $stop = $start + 1000;
+            $start = $page * $stop + 1;
+            $stop = $start + $stop;
         }
         $base = InstBase::limit([$start => $stop])->find(['status' => 0]);
         foreach ($base->rows as $row) {
