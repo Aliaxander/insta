@@ -174,9 +174,7 @@ class ParseBaseIg extends Command
     protected function findFlows($mediaId, $maxId = '')
     {
         $api = $this->api;
-        if (!empty($maxId)) {
-            $maxId = '?max_id=' . $maxId;
-        }
+ 
         $follows = $api->getFollows($mediaId, $maxId);
         print_r($follows);
         $this->addToDb($follows[1]['users']);
