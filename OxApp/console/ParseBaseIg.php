@@ -153,8 +153,11 @@ class ParseBaseIg extends Command
         //                }
         //            }
         //        }
-    
-        $file = array_chunk($rows, 100000);
+        if(count($rows)> 100000) {
+            $file = array_chunk($rows, 100000);
+        }else{
+            $file[]= $rows;
+        }
         foreach ($file as $value) {
             $text = '';
             foreach ($value as $row) {
