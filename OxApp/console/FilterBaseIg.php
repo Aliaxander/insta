@@ -71,8 +71,10 @@ class FilterBaseIg extends Command
             if (!empty(@$tst->external_url) || preg_match("/(http(s)?:\/\/)?([\\w-]+\\.)+[\\w-]+(\/[\\w- ;,.\/?%&=]*)?/",
                     @$tst->biography)) {//(isset($tst->media_count) && $tst->media_count <= 3) ||
                     InstBase::delete(['account' => $account]);
-                    echo "Delete $account\n";
-             }
+                    echo "Delete $account {$tst->external_url} {$tst->biography}\n";
+             }echo{
+             
+            }
         }
         
         return $output->writeln("Complite");
