@@ -181,6 +181,7 @@ class ParseBaseIg extends Command
         if (isset($follows[1]['next_max_id'])) {
             $this->findFlows($mediaId, $follows[1]['next_max_id']);
         }
+        sleep(rand(1,2));
     }
     
     //    protected function findComment($mediaId, $maxId = '')
