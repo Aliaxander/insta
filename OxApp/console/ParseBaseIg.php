@@ -164,7 +164,7 @@ class ParseBaseIg extends Command
                 }
             }
             $text = mb_substr($text, 0, -1);
-            $this->db->exec("INSERT INTO instBase (`account`,`parentId`) VALUE $text");
+            print_r($this->db->exec("INSERT INTO instBase (`account`,`parentId`) VALUE $text"));
         }
     }
     
@@ -175,6 +175,7 @@ class ParseBaseIg extends Command
             $maxId = '?max_id=' . $maxId;
         }
         $follows = $api->getFollows($mediaId, $maxId);
+        print_r($follows);
         $this->addToDb($follows[1]['users']);
         
         if (isset($follows[1]['next_max_id'])) {

@@ -68,8 +68,8 @@ class FilterBaseIg extends Command
             $tst = @json_decode(file_get_contents('https://i.instagram.com/api/v1/users/' . $account . '/info/'));
             print_r($tst);
             $tst= @$tst->user;
-            if ($tst->media_count <= 3 || !empty($tst->external_url) || preg_match("/(http(s)?:\/\/)?([\\w-]+\\.)+[\\w-]+(\/[\\w- ;,.\/?%&=]*)?/",
-                    $tst->biography)) {
+            if (@$tst->media_count <= 3 || !empty(@$tst->external_url) || preg_match("/(http(s)?:\/\/)?([\\w-]+\\.)+[\\w-]+(\/[\\w- ;,.\/?%&=]*)?/",
+                    @$tst->biography)) {
                     InstBase::delete(['account' => $account]);
                     echo "Delete $account\n";
              }

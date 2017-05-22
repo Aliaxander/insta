@@ -6,6 +6,8 @@
  * Time: 10:34
  */
 
+use OxApp\models\ParseBase;
+
 ini_set("allow_url_fopen", true);
 ini_set('display_errors', '1');
 date_default_timezone_set('Europe/Moscow');
