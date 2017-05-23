@@ -9,8 +9,6 @@
 namespace OxApp\helpers;
 
 use Faker\Factory;
-use InstagramAPI\Checkpoint;
-use OxApp\models\SystemSettings;
 use OxApp\models\Users;
 
 /**
@@ -56,6 +54,65 @@ class IgApiWeb
         //        $this->userAgent = UserAgent::buildUserAgent('10.15.0', 'en_US', $device);
     }
     
+    public function start(){
+        
+        //$api->proxy()
+        $this->username = 'sdfsdfsf12321';
+        $this->userAgent = 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.4 (KHTML, like Gecko) Chrome/22.0.1229.94 Safari/537.4';
+        $result = $this->request('https://www.instagram.com/');
+        print_r($result);
+        preg_match('/{"csrf_token": "(.*?)", "viewer": null}/mis',
+            $result[1], $results);
+    
+        $token = $results[1];
+        $email = 'sdfsd4fsaaadf34@gmail.com';
+        $password = 'sdfsdfsdf34sdfsd';
+        $uname = 'sdfgkfjgo433';
+        $firstName = 'sdfsdfsdf34sdfsd';
+        $password = 'dfdg54fref';
+        
+        $email = 'sdfsdfsaaadf34@gmail.com';
+        $password = 'sdfsdfsdf34sdfsd';
+        $uname = 'sdfsdfsdf34sdfsd';
+        $firstName= 'sdfsdfsdf34sdfsd';
+        $password='dfdg54fref';
+        //sleep(3);
+        //$result = $api->request('https://www.instagram.com/accounts/web_create_ajax/', [
+        //    'email' => $email,
+        //    'first_name' => $firstName,
+        //    'password' => $password,
+        //    'name' => $uname
+        //],1);
+        //$result = $api->request('https://www.instagram.com/accounts/web_create_ajax/attempt/',
+        //    ['email' => $email, 'first_name' => '', 'password' => '', 'username' => '']);
+        //print_r($result);
+        //
+        //
+        ////sleep(3);
+        //$result = $api->request('https://www.instagram.com/accounts/web_create_ajax/attempt/',
+        //    ['email' => $email, 'first_name' => '', 'password' => '', 'username' => '']);
+        //print_r($result);
+        //
+        //sleep(3);
+        //$result = $api->request('https://www.instagram.com/accounts/web_create_ajax/attempt/',
+        //    ['email' => $email, 'first_name' => $firstName, 'password' => '', 'username' => $uname]);
+        //print_r($result);
+        //
+        //sleep(3);
+        //$result = $api->request('https://www.instagram.com/accounts/web_create_ajax/attempt/',
+        //    ['email' => $email, 'first_name' => $firstName, 'password' => $password, 'username' => $uname]);
+        //print_r($result);
+        //
+        //
+        $result = $api->request('https://www.instagram.com/accounts/web_create_ajax/', [
+            'email' => $email,
+            'first_name' => $firstName,
+            'password' => $password,
+            'name' => $uname
+        ],1);
+        print_r($result);
+    
+    }
     
     /**
      * @return bool
@@ -151,123 +208,7 @@ class IgApiWeb
         proxy: {$this->proxy}
         Start...
         ";
-        
-        $tokenResult = '';
-        $i = 0;
-        while ($tokenResult === '') {
-            $sync = $this->syncRegister();
-            print_r($sync);
-            
-            if (preg_match('#Set-Cookie: csrftoken=([^;]+)#', $sync[0], $token)) {
-                $tokenResult = $token[1];
-            }
-            if ($i == 10) {
-                $tokenResult = false;
-            }
-            $i++;
-        }
-        if ($tokenResult == false || $tokenResult == '') {
-            die('empty token');
-        }
-        $this->csrftoken = $tokenResult;
-        
-        sleep(rand(15, 25));
-        $checkEmail = $this->checkEmail($email, $qe_id, $waterfall_id);
-        
-        print_r($checkEmail);
-        if (isset($checkEmail[1]['message']) && $checkEmail[1]['message'] == 'Sorry, an error occured') {
-            die('Error. Ip ban?');
-        }
-        sleep(rand(15, 20));
-        $singTokenResult = '';
-        $i = 0;
-        while ($singTokenResult === '') {
-            $token = $this->fetchHeadersSingUp();
-            print_r($token);
-            
-            if (preg_match('#Set-Cookie: csrftoken=([^;]+)#', $token[0], $token)) {
-                $singTokenResult = $token[1];
-            }
-            if ($i == 10) {
-                $singTokenResult = false;
-            }
-            $i++;
-        }
-        if ($singTokenResult == false || $singTokenResult == '') {
-            die('empty sigKey token');
-        }
-        $this->csrftoken = $singTokenResult;
-        
-        $this->request('feed/timeline/?is_prefetch=0&seen_posts=&phone_id=' . $this->phone_id . '&battery_level=' . mt_rand(90,
-                100) . '&timezone_offset=3600&is_pull_to_refresh=0&unseen_posts=&is_charging=' . mt_rand(0,
-                1));
-        
-        
-        if (rand(0, 1) == 1) {
-            sleep(rand(15, 20));
-            print_r($this->usernameSuggestions($usernameTmp4, $email, $waterfall_id));
-        }
-        sleep(rand(16, 24));
-        $singTokenResult = '';
-        $i = 0;
-        while ($singTokenResult === '') {
-            $token = $this->fetchHeadersSingUp();
-            print_r($token);
-            
-            if (preg_match('#Set-Cookie: csrftoken=([^;]+)#', $token[0], $token)) {
-                $singTokenResult = $token[1];
-            }
-            if ($i == 10) {
-                $singTokenResult = false;
-            }
-            $i++;
-        }
-        if ($singTokenResult == false || $singTokenResult == '') {
-            die('empty sigKey token');
-        }
-        $this->csrftoken = $singTokenResult;
-        
-        sleep(rand(5, 6));
-        print_r($this->usernameSuggestions($usernameTmp3, $email, $waterfall_id));
-        
-        sleep(rand(4, 8));
-        print_r($this->usernameSuggestions($usernameTmp2, $email, $waterfall_id));
-        
-        //                if (rand(0, 1) == 1) {
-        //                    sleep(rand(3, 8));
-        //                    print_r($this->usernameSuggestions($usernameTmp1, $email, $waterfall_id));
-        //                }
-        //        sleep(rand(4, 9));
-        $finalName = $this->usernameSuggestions($this->username, $email, $waterfall_id);
-        print_r($finalName);
-        //$this->username = $finalName[1]['suggestions'][mt_rand(0, 11)];
-        // $finalName = $this->usernameSuggestions($this->username, $email, $waterfall_id);
-        print_r($finalName);
-        echo "SET name: " . $this->username . "\n";
-        
-        sleep(rand(5, 11));
-        //register:
-        $createResult = '';
-        $i = 0;
-        while ($createResult === '') {
-            $create = $this->createAccount($email, $waterfall_id);
-            $createResult = $create[1];
-            if ($i === 5) {
-                $createResult = false;
-            }
-            $i++;
-        }
-        
-        print_r($create);
-        //        if (empty($create[1])) {
-        //  $create = $this->createAccount($email, $waterfall_id);
-        //        } elseif (isset($create[1]['errors']['username'])) {
-        //            $this->username = $this->username . rand(0, 999999);
-        //            $finalName = $this->usernameSuggestions($this->username, $email, $waterfall_id);
-        //            print_r($finalName);
-        //            $create = $this->createAccount($email, $waterfall_id);
-        //        }
-        //
+       
         if (isset($create[1]['created_user']['pk'])) {
             Users::add([
                 'userName' => $this->username,
@@ -360,7 +301,7 @@ class IgApiWeb
      *
      * @return array
      */
-    public function request($url, $data = null)
+    public function request($url, $data = null, $create = null)
     {
         echo "Request: \n";
         echo $url . "\n";
@@ -377,31 +318,42 @@ class IgApiWeb
         curl_setopt($ch, CURLOPT_COOKIEFILE, "/home/insta/cookies/" . $this->username . "-webcookies.dat");
         curl_setopt($ch, CURLOPT_COOKIEJAR, "/home/insta/cookies/" . $this->username . "-webcookies.dat");
         curl_setopt($ch, CURLOPT_USERAGENT, $this->userAgent);
-        
-        $proxy = explode(";", $this->proxy);
-        curl_setopt($ch, CURLOPT_PROXY, $proxy[0]);
-        if (!empty($proxy[1])) {
-            curl_setopt($ch, CURLOPT_PROXYUSERPWD, $proxy[1]);
-        }
-        curl_setopt($ch, CURLOPT_PROXYTYPE, CURLPROXY_SOCKS5);
-        curl_setopt($ch, CURLOPT_PROXYTYPE, 7);
-        
+        //
+        //        $proxy = explode(";", $this->proxy);
+        //        curl_setopt($ch, CURLOPT_PROXY, $proxy[0]);
+        //        if (!empty($proxy[1])) {
+        //            curl_setopt($ch, CURLOPT_PROXYUSERPWD, $proxy[1]);
+        //        }
+        //        curl_setopt($ch, CURLOPT_PROXYTYPE, CURLPROXY_SOCKS5);
+        //        curl_setopt($ch, CURLOPT_PROXYTYPE, 7);
+    
         curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_REFERER, ' https://www.instagram.com/');
+    
+        if ($create) {
+            $headers = [
+                'X-CSRFToken: ' . $create,
+                'X-Instagram-AJAX: 1',
+                'X-Requested-With: XMLHttpRequest',
+                'x-insight: activate'
+            ];
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+            //            curl_setopt($ch, CURLOPT_ENCODING, "gzip");
+        }
+    
+        if ($data) {
+            //            if ($json) {
+            //                $data = json_encode($data);
+            //                curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+            //                        'Content-Type: application/json',
+            //                        'Content-Length: ' . strlen($data)
+            //                    )
+            //                );
+            //            }
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
         
-        //            $headers = [
-        //                'Connection: keep-alive',
-        //                "X-IG-Connection-Type: WIFI",
-        //                "X-IG-Capabilities: " . Constants::xIgCapabilities,
-        //                'Accept-Encoding: gzip, deflate',
-        //                'Accept-Language: en-US',
-        //            ];
-        //            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-        //            curl_setopt($ch, CURLOPT_ENCODING, "gzip");
-        
-        
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-        
+        }
         $resp = curl_exec($ch);
         $header_len = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
         $header = substr($resp, 0, $header_len);
@@ -412,8 +364,8 @@ class IgApiWeb
         print_r($info);
         echo "\n\nBody:";
         print_r($body);
-        
-        return [$header, json_decode($body, true)];
+    
+        return [$header, $body];
     }
     
     
