@@ -89,6 +89,7 @@ class PreParseBase extends Command
                 if ($accRow->count > 0) {
                     HashTags::where(['id' => $accRow->rows[0]->id])->update(['status' => 1]);
                     $result = $api->request('tags/search?q=' . $accRow->rows[0]->tag);
+                    sleep(rand(10, 30));
                     $api->request('feed/timeline/?is_prefetch=0&seen_posts=&phone_id=' . $user->phoneId . '&battery_level=' . mt_rand(90,
                             100) . '&timezone_offset=3600&is_pull_to_refresh=0&unseen_posts=&is_charging=' . mt_rand(0,
                             1));
@@ -108,6 +109,7 @@ class PreParseBase extends Command
                                     }
                                 }
                             }
+                            sleep(rand(10, 30));
                         }
                     }
                     
@@ -115,6 +117,7 @@ class PreParseBase extends Command
                     Users::where(['id' => $user->id])->update(['login' => 0, 'requests' => 0]);
                     die("no jobs");
                 }
+                sleep(rand(10,30));
             }
         }
         
