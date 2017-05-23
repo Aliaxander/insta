@@ -17,4 +17,8 @@ header('Access-Control-Allow-Methods: POST, GET, DELETE, PUT, OPTIONS');
 header('Access-Control-Allow-Origin: *');
 $loader = require __DIR__ . '/../vendor/autoload.php';
 require(__DIR__ . "/../config.php");
-require(__DIR__ . "/../OxApp/Routes.php");
+//require(__DIR__ . "/../OxApp/Routes.php");
+$url="sdfas  facebook.caom sfsdfas";
+if(preg_match("/facebook.com/",$url)){
+    echo "ok";
+}

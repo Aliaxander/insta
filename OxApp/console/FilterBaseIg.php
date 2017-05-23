@@ -69,9 +69,14 @@ class FilterBaseIg extends Command
             print_r($tst);
             $tst= @$tst->user;
             if (!empty(@$tst->external_url) || preg_match("/(http(s)?:\/\/)?([\\w-]+\\.)+[\\w-]+(\/[\\w- ;,.\/?%&=]*)?/",
-                    @$tst->biography)) {//(isset($tst->media_count) && $tst->media_count <= 3) ||
+                    @$tst->biography) || (isset($tst->media_count) && $tst->media_count <= 3)
+            ) {
+                if (!preg_match("/facebook.com/", $tst->external_url) && !preg_match("/youtube.com/",
+                        $tst->external_url) && !preg_match("/google.com/", $tst->external_url)
+                ) {
                     InstBase::delete(['account' => $account]);
-                    echo "Delete $account ".$tst->external_url." ".$tst->biography."\n";
+                    echo "Delete $account " . $tst->external_url . " " . $tst->biography . "\n";
+                }
             }
              
             }
