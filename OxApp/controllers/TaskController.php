@@ -53,6 +53,11 @@ class TaskController extends App
         Users::where([
             'id/in' => explode(",", $this->request->request->get('id'))
         ])->update(['userTask' => $this->request->request->get('taskTypeId')]);
+        if ($this->request->request->get('taskTypeId') == 3) {
+            Users::where([
+                'id/in' => explode(",", $this->request->request->get('id'))
+            ])->update(['login' => 1]);
+        }
         header("Location: /users");
     }
 }
