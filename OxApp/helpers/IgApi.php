@@ -629,8 +629,12 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
        
         
         $checkEmail = $this->checkEmail($email, $qe_id, $waterfall_id);
-    
         print_r($checkEmail);
+        if($checkEmail[1]==""){
+            $checkEmail = $this->checkEmail($email, $qe_id, $waterfall_id);
+            print_r($checkEmail);
+        }
+        
         if (isset($checkEmail[1]['message']) && $checkEmail[1]['message'] == 'Sorry, an error occured') {
             die('Error. Ip ban?');
         }
@@ -657,7 +661,7 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
         $this->csrftoken = $singTokenResult;
         
         print_r($this->usernameSuggestions('', $email, $waterfall_id));
-        sleep(rand(15, 20));
+        sleep(mt_rand(30, 40));
 //        $this->request('feed/timeline/?is_prefetch=0&seen_posts=&phone_id=' . $this->phone_id . '&battery_level=' . mt_rand(90,
 //                100) . '&timezone_offset=3600&is_pull_to_refresh=0&unseen_posts=&is_charging=' . mt_rand(0,
 //                1));
@@ -686,8 +690,8 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
             die('empty sigKey token');
         }
         $this->csrftoken = $singTokenResult;
-
-        sleep(rand(0, 2));
+    
+        sleep(mt_rand(10, 20));
         print_r($this->usernameSuggestions('', $email, $waterfall_id));
 
 //        sleep(rand(4, 8));
@@ -706,24 +710,24 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
         
         echo "SET name: " . $this->username . "\n";
     
-//        $singTokenResult = '';
-//        $i = 0;
-//        while ($singTokenResult === '') {
-//            $token = $this->fetchHeadersSingUp();
-//            print_r($token);
-//
-//            if (preg_match('#Set-Cookie: csrftoken=([^;]+)#', $token[0], $token)) {
-//                $singTokenResult = $token[1];
-//            }
-//            if ($i == 10) {
-//                $singTokenResult = false;
-//            }
-//            $i++;
-//        }
-//        if ($singTokenResult == false || $singTokenResult == '') {
-//            die('empty sigKey token');
-//        }
-//        $this->csrftoken = $singTokenResult;
+        $singTokenResult = '';
+        $i = 0;
+        while ($singTokenResult === '') {
+            $token = $this->fetchHeadersSingUp();
+            print_r($token);
+
+            if (preg_match('#Set-Cookie: csrftoken=([^;]+)#', $token[0], $token)) {
+                $singTokenResult = $token[1];
+            }
+            if ($i == 10) {
+                $singTokenResult = false;
+            }
+            $i++;
+        }
+        if ($singTokenResult == false || $singTokenResult == '') {
+            die('empty sigKey token');
+        }
+        $this->csrftoken = $singTokenResult;
 //
         sleep(rand(3, 10));
         //register:
