@@ -9,8 +9,8 @@
 namespace Acme\Console\Command;
 
 use InstagramAPI\Checkpoint;
+use Ox\DataBase\DbConfig;
 use OxApp\helpers\IgApi;
-use OxApp\models\InstBase;
 use OxApp\models\Users;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -29,7 +29,7 @@ class ParseBaseIg extends Command
      */
     public $api;
     protected $parentId;
-    
+    protected $db;
     /**
      * configure
      */
@@ -56,6 +56,18 @@ class ParseBaseIg extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        try {
+            $dsn = DbConfig::$dbDriver . ':dbname=' . DbConfig::$dbname . ';host=' . DbConfig::$dbhost;
+            $db = new \PDO($dsn, DbConfig::$dbuser, DbConfig::$dbuserpass, [
+                    \PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"
+                ]
+            );
+        } catch (\PDOException $e) {
+            throw new \PDOException($e);
+        }
+        $this->db = $db;
+        
+        
         $api = $this->api;
         $users = Users::orderBy(["id" => 'desc'])->limit([0 => 1])->find([
             'ban' => 0,
@@ -114,6 +126,7 @@ class ParseBaseIg extends Command
                     Users::where(['id' => $user->id])->update(['login' => 0, 'requests' => 0]);
                     die("no jobs");
                 }
+                sleep(mt_rand(2, 5));
             }
         }
         
@@ -122,55 +135,71 @@ class ParseBaseIg extends Command
     
     protected function addToDb($rows)
     {
-        $api = $this->api;
-        foreach ($rows as $row) {
+        //  $api = $this->api;
+        //        foreach ($rows as $row) {
             //Parse all comments:
             // if ($row['comment_count'] > 0) {
             //    $this->findComment($row['id']);
             //}
-            if (InstBase::find(['account' => $row['pk']])->count == 0) {
-                $tst = $api->request("feed/user/" . $row['pk']);
-                if (@$tst['1']['num_results'] >= 4) {
-                    $resultTst = $api->request("users/" . $row['pk'] . "/info/");
-                    $biography = $resultTst[1]['biography'];
-                    if (empty($resultTst[1]['external_url']) && !preg_match("/(http(s)?:\/\/)?([\\w-]+\\.)+[\\w-]+(\/[\\w- ;,.\/?%&=]*)?/",
-                            $biography)
-                    ) {
-                        InstBase::add(['account' => $row['pk'],'parentId'=> $this->parentId]);
-                    }
+        //            if (InstBase::find(['account' => $row['pk']])->count == 0) {
+        //                $tst = $api->request("feed/user/" . $row['pk']);
+        //                if (@$tst['1']['num_results'] >= 4) {
+        //                    $resultTst = $api->request("users/" . $row['pk'] . "/info/");
+        //                    $biography = $resultTst[1]['biography'];
+        //                    if (empty($resultTst[1]['external_url']) && !preg_match("/(http(s)?:\/\/)?([\\w-]+\\.)+[\\w-]+(\/[\\w- ;,.\/?%&=]*)?/",
+        //                            $biography)
+        //                    ) {
+        //                        InstBase::add(['account' => $row['pk'],'parentId'=> $this->parentId]);
+        //                    }
+        //                }
+        //            }
+        //        }
+        if(count($rows)> 100000) {
+            $file = array_chunk($rows, 100000);
+        }else{
+            $file[]= $rows;
+        }
+        foreach ($file as $value) {
+            $text = '';
+            foreach ($value as $row) {
+                $acc = @preg_replace("/[^0-9]/", '', $row['pk']);
+                if (!empty($acc)) {
+                    $text .= "('$acc','" . $this->parentId . "'),";
                 }
             }
+            $text = mb_substr($text, 0, -1);
+            print_r($this->db->exec("INSERT INTO instBase (`account`,`parentId`) VALUE $text"));
         }
     }
     
     protected function findFlows($mediaId, $maxId = '')
     {
         $api = $this->api;
-        if (!empty($maxId)) {
-            $maxId = '?max_id=' . $maxId;
-        }
+ 
         $follows = $api->getFollows($mediaId, $maxId);
+        print_r($follows);
         $this->addToDb($follows[1]['users']);
         
         if (isset($follows[1]['next_max_id'])) {
             $this->findFlows($mediaId, $follows[1]['next_max_id']);
         }
+        sleep(mt_rand(2,5));
     }
     
-    protected function findComment($mediaId, $maxId = '')
-    {
-        $api = $this->api;
-        if (!empty($maxId)) {
-            $maxId = '?max_id=' . $maxId;
-        }
-        $comments = $api->request("media/{$mediaId}/comments/" . $maxId);
-        foreach ($comments[1]['comments'] as $comment) {
-            if (InstBase::find(['account' => $comment['user_id']])->count == 0) {
-                InstBase::add(['account' => $comment['user_id']]);
-            }
-        }
-        if (isset($comments[1]['next_max_id'])) {
-            $this->findComment($mediaId, $comments[1]['next_max_id']);
-        }
-    }
+    //    protected function findComment($mediaId, $maxId = '')
+    //    {
+    //        $api = $this->api;
+    //        if (!empty($maxId)) {
+    //            $maxId = '?max_id=' . $maxId;
+    //        }
+    //        $comments = $api->request("media/{$mediaId}/comments/" . $maxId);
+    //        foreach ($comments[1]['comments'] as $comment) {
+    //            if (InstBase::find(['account' => $comment['user_id']])->count == 0) {
+    //                InstBase::add(['account' => $comment['user_id']]);
+    //            }
+    //        }
+    //        if (isset($comments[1]['next_max_id'])) {
+    //            $this->findComment($mediaId, $comments[1]['next_max_id']);
+    //        }
+    //    }
 }

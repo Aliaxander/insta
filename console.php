@@ -6,6 +6,7 @@ use Acme\Console\Command\BaseUploader;
 use Acme\Console\Command\BioUpload;
 use Acme\Console\Command\CreateTunnel;
 use Acme\Console\Command\EditProfile;
+use Acme\Console\Command\FilterBaseIg;
 use Acme\Console\Command\FreenomReger;
 use Acme\Console\Command\FreenomWebReg;
 use Acme\Console\Command\HashTagParser;
@@ -50,6 +51,7 @@ $application->add(new SettingsTunnelOnServer());
 $application->add(new RestartTunnelControl());
 $application->add(new AutoStartEdit());
 $application->add(new ProxyChecker());
+$application->add(new FilterBaseIg());
 
 $application->addCommands(
     array(
