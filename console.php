@@ -2,9 +2,11 @@
 <?php
 // application.php
 use Acme\Console\Command\AutoStartEdit;
+use Acme\Console\Command\BaseUpload;
 use Acme\Console\Command\BaseUploader;
 use Acme\Console\Command\BioUpload;
 use Acme\Console\Command\CreateTunnel;
+use Acme\Console\Command\CreateWeb;
 use Acme\Console\Command\EditProfile;
 use Acme\Console\Command\FilterBaseIg;
 use Acme\Console\Command\FreenomReger;
@@ -17,7 +19,6 @@ use Acme\Console\Command\ProxyChecker;
 use Acme\Console\Command\RestartTunnelControl;
 use Acme\Console\Command\SettingsTunnelOnServer;
 use Acme\Console\Command\Test;
-use Acme\Console\Command\BaseUpload;
 use Acme\Console\Command\ThreadsControl;
 use Acme\Console\Command\UploadPhoto;
 use Ox\DataBase\DbConfig;
@@ -52,6 +53,7 @@ $application->add(new RestartTunnelControl());
 $application->add(new AutoStartEdit());
 $application->add(new ProxyChecker());
 $application->add(new FilterBaseIg());
+$application->add(new CreateWeb());
 
 $application->addCommands(
     array(

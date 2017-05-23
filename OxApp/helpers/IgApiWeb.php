@@ -49,9 +49,7 @@ class IgApiWeb
         );
         $lang = $languages[mt_rand(0, count($languages) - 1)];
         $device = new Device(Constants::igVersion, $lang);
-        $this->userAgent = UserAgent::buildUserAgent(Constants::igVersion, $lang, $device);
-        //        $device = new Device('10.15.0', 'en_US');
-        //        $this->userAgent = UserAgent::buildUserAgent('10.15.0', 'en_US', $device);
+        $this->userAgentMob = UserAgent::buildUserAgent(Constants::igVersion, $lang, $device);
     }
     
     /**
@@ -149,8 +147,9 @@ class IgApiWeb
         Start...
         ";
     
+        $userAgent = new RandomUserAgent();
+        $this->userAgent = $userAgent->random_uagent();
     
-        $this->userAgent = 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.4 (KHTML, like Gecko) Chrome/22.0.1229.94 Safari/537.4';
     
         $result = $this->request('https://www.instagram.com/');
         print_r($result);
@@ -168,7 +167,6 @@ class IgApiWeb
         $uname = $this->username;
         $firstName = $this->name;
         $password = $this->password;
-        
         $result = $this->request('https://www.instagram.com/accounts/web_create_ajax/attempt/',
             ['email' => $email, 'first_name' => '', 'password' => '', 'username' => ''], $token);
         print_r($result);
@@ -197,90 +195,29 @@ class IgApiWeb
             'username' => $uname
         ], $token);
         print_r($result);
-//
-//        if (isset($create[1]['created_user']['pk'])) {
-//            Users::add([
-//                'userName' => $this->username,
-//                'firstName' => $this->name,
-//                'email' => $email,
-//                'password' => $this->password,
-//                'deviceId' => $this->device_id,
-//                'phoneId' => $this->phone_id,
-//                'waterfall_id' => $waterfall_id,
-//                'guid' => $this->guid,
-//                'qeId' => $qe_id,
-//                'logIn' => 0,
-//                'gender' => 0,
-//                'accountId' => $create[1]['created_user']['pk'],
-//                'photo' => '',
-//                'biography' => '',
-//                'proxy' => $this->proxy,
-//                'userAgent' => $this->userAgent,
-//                'dateCreate' => '//now()//'
-//            ]);
-//        } elseif (empty($create[1])) {
-//            Users::add([
-//                'userName' => $this->username,
-//                'firstName' => $this->name,
-//                'email' => $email,
-//                'password' => $this->password,
-//                'deviceId' => $this->device_id,
-//                'phoneId' => $this->phone_id,
-//                'waterfall_id' => $waterfall_id,
-//                'guid' => $this->guid,
-//                'qeId' => $qe_id,
-//                'logIn' => 0,
-//                'gender' => 0,
-//                'accountId' => 0,
-//                'photo' => '',
-//                'biography' => '',
-//                'proxy' => $this->proxy,
-//                'userAgent' => $this->userAgent,
-//                'dateCreate' => '//now()//'
-//            ]);
-//        }
+        $result = @json_decode($result[1]);//{"account_created": true, "status": "ok"}
+        if (isset($result->account_created) && $result->account_created === true) {
+            Users::add([
+                'userName' => $this->username,
+                'firstName' => $this->name,
+                'email' => $email,
+                'password' => $this->password,
+                'deviceId' => $this->device_id,
+                'phoneId' => $this->phone_id,
+                'waterfall_id' => $waterfall_id,
+                'guid' => $this->guid,
+                'qeId' => $qe_id,
+                'logIn' => 0,
+                'gender' => 0,
+                'photo' => '',
+                'biography' => '',
+                'proxy' => $this->proxy,
+                'userAgent' => $this->userAgentMob,
+                'dateCreate' => '//now()//'
+            ]);
+        }
         
         return true;
-    }
-    
-    
-    /**
-     * @param $username
-     * @param $email
-     * @param $waterfall_id
-     *
-     * @return array
-     */
-    protected function usernameSuggestions($username, $email, $waterfall_id)
-    {
-        $data = json_encode([
-            '_csrftoken' => $this->csrftoken,
-            'name' => $username,
-            'email' => $email,
-            'waterfall_id' => $waterfall_id,
-        ]);
-        
-        return $this->request('accounts/username_suggestions/', $data);
-    }
-    
-    
-    /**
-     * @param $email
-     * @param $uuid
-     * @param $waterfall_id
-     *
-     * @return array
-     */
-    protected function checkEmail($email, $uuid, $waterfall_id)
-    {
-        $data = json_encode([
-            //'_csrftoken' => $this->csrftoken,
-            'email' => $email,
-            'qe_id' => $uuid,
-            'waterfall_id' => $waterfall_id,
-        ]);
-        
-        return $this->request('users/check_email/', $data);
     }
     
     
@@ -307,14 +244,14 @@ class IgApiWeb
         curl_setopt($ch, CURLOPT_COOKIEFILE, "/home/insta/cookies/" . $this->username . "-webcookies.dat");
         curl_setopt($ch, CURLOPT_COOKIEJAR, "/home/insta/cookies/" . $this->username . "-webcookies.dat");
         curl_setopt($ch, CURLOPT_USERAGENT, $this->userAgent);
-        //
-        //        $proxy = explode(";", $this->proxy);
-        //        curl_setopt($ch, CURLOPT_PROXY, $proxy[0]);
-        //        if (!empty($proxy[1])) {
-        //            curl_setopt($ch, CURLOPT_PROXYUSERPWD, $proxy[1]);
-        //        }
-        //        curl_setopt($ch, CURLOPT_PROXYTYPE, CURLPROXY_SOCKS5);
-        //        curl_setopt($ch, CURLOPT_PROXYTYPE, 7);
+    
+        $proxy = explode(";", $this->proxy);
+        curl_setopt($ch, CURLOPT_PROXY, $proxy[0]);
+        if (!empty($proxy[1])) {
+            curl_setopt($ch, CURLOPT_PROXYUSERPWD, $proxy[1]);
+        }
+        curl_setopt($ch, CURLOPT_PROXYTYPE, CURLPROXY_SOCKS5);
+        curl_setopt($ch, CURLOPT_PROXYTYPE, 7);
     
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_REFERER, ' https://www.instagram.com/');

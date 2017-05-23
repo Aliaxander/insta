@@ -10,6 +10,7 @@ namespace Acme\Console\Command;
 
 use OxApp\helpers\IgApi;
 
+use OxApp\helpers\IgApiWeb;
 use OxApp\models\Proxy;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -28,7 +29,7 @@ class CreateWeb extends Command
     protected function configure()
     {
         $this
-            ->setName('test:test')
+            ->setName('create:web')
             ->setDescription('Cron jobs');
     }
     
@@ -45,7 +46,7 @@ class CreateWeb extends Command
         for ($i = 0; $i < 30; $i++) {
             $proxy = Proxy::orderBy(['rand' => 'desc'])->limit([0 => 1])->find(['status' => 0]);
             
-            $api = new IgApi();
+            $api = new IgApiWeb();
             
             if ($proxy->count > 0) {
                 foreach ($proxy->rows as $row) {
