@@ -54,66 +54,6 @@ class IgApiWeb
         //        $this->userAgent = UserAgent::buildUserAgent('10.15.0', 'en_US', $device);
     }
     
-    public function start(){
-        
-        //$api->proxy()
-        $this->username = 'sdfsdfsf12321';
-        $this->userAgent = 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.4 (KHTML, like Gecko) Chrome/22.0.1229.94 Safari/537.4';
-        $result = $this->request('https://www.instagram.com/');
-        print_r($result);
-        preg_match('/{"csrf_token": "(.*?)", "viewer": null}/mis',
-            $result[1], $results);
-    
-        $token = $results[1];
-        $email = 'sdfsd4fsaaadf34@gmail.com';
-        $password = 'sdfsdfsdf34sdfsd';
-        $uname = 'sdfgkfjgo433';
-        $firstName = 'sdfsdfsdf34sdfsd';
-        $password = 'dfdg54fref';
-        
-        $email = 'sdfsdfsaaadf34@gmail.com';
-        $password = 'sdfsdfsdf34sdfsd';
-        $uname = 'sdfsdfsdf34sdfsd';
-        $firstName= 'sdfsdfsdf34sdfsd';
-        $password='dfdg54fref';
-        //sleep(3);
-        //$result = $api->request('https://www.instagram.com/accounts/web_create_ajax/', [
-        //    'email' => $email,
-        //    'first_name' => $firstName,
-        //    'password' => $password,
-        //    'name' => $uname
-        //],1);
-        //$result = $api->request('https://www.instagram.com/accounts/web_create_ajax/attempt/',
-        //    ['email' => $email, 'first_name' => '', 'password' => '', 'username' => '']);
-        //print_r($result);
-        //
-        //
-        ////sleep(3);
-        //$result = $api->request('https://www.instagram.com/accounts/web_create_ajax/attempt/',
-        //    ['email' => $email, 'first_name' => '', 'password' => '', 'username' => '']);
-        //print_r($result);
-        //
-        //sleep(3);
-        //$result = $api->request('https://www.instagram.com/accounts/web_create_ajax/attempt/',
-        //    ['email' => $email, 'first_name' => $firstName, 'password' => '', 'username' => $uname]);
-        //print_r($result);
-        //
-        //sleep(3);
-        //$result = $api->request('https://www.instagram.com/accounts/web_create_ajax/attempt/',
-        //    ['email' => $email, 'first_name' => $firstName, 'password' => $password, 'username' => $uname]);
-        //print_r($result);
-        //
-        //
-        $result = $api->request('https://www.instagram.com/accounts/web_create_ajax/', [
-            'email' => $email,
-            'first_name' => $firstName,
-            'password' => $password,
-            'name' => $uname
-        ],1);
-        print_r($result);
-    
-    }
-    
     /**
      * @return bool
      */
@@ -208,48 +148,97 @@ class IgApiWeb
         proxy: {$this->proxy}
         Start...
         ";
-       
-        if (isset($create[1]['created_user']['pk'])) {
-            Users::add([
-                'userName' => $this->username,
-                'firstName' => $this->name,
-                'email' => $email,
-                'password' => $this->password,
-                'deviceId' => $this->device_id,
-                'phoneId' => $this->phone_id,
-                'waterfall_id' => $waterfall_id,
-                'guid' => $this->guid,
-                'qeId' => $qe_id,
-                'logIn' => 0,
-                'gender' => 0,
-                'accountId' => $create[1]['created_user']['pk'],
-                'photo' => '',
-                'biography' => '',
-                'proxy' => $this->proxy,
-                'userAgent' => $this->userAgent,
-                'dateCreate' => '//now()//'
-            ]);
-        } elseif (empty($create[1])) {
-            Users::add([
-                'userName' => $this->username,
-                'firstName' => $this->name,
-                'email' => $email,
-                'password' => $this->password,
-                'deviceId' => $this->device_id,
-                'phoneId' => $this->phone_id,
-                'waterfall_id' => $waterfall_id,
-                'guid' => $this->guid,
-                'qeId' => $qe_id,
-                'logIn' => 0,
-                'gender' => 0,
-                'accountId' => 0,
-                'photo' => '',
-                'biography' => '',
-                'proxy' => $this->proxy,
-                'userAgent' => $this->userAgent,
-                'dateCreate' => '//now()//'
-            ]);
-        }
+    
+    
+        $this->userAgent = 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.4 (KHTML, like Gecko) Chrome/22.0.1229.94 Safari/537.4';
+    
+        $result = $this->request('https://www.instagram.com/');
+        print_r($result);
+        preg_match('/{"csrf_token": "(.*?)", "viewer": null}/mis',
+            $result[1], $results);
+    
+        $token = $results[1];
+    
+    
+        $result = $this->request('https://www.instagram.com/ajax/bz',
+            ['q'], $token);
+        print_r($result);
+        
+        
+        $uname = $this->username;
+        $firstName = $this->name;
+        $password = $this->password;
+        
+        $result = $this->request('https://www.instagram.com/accounts/web_create_ajax/attempt/',
+            ['email' => $email, 'first_name' => '', 'password' => '', 'username' => ''], $token);
+        print_r($result);
+    
+        //
+        sleep(3);
+        $result = $this->request('https://www.instagram.com/accounts/web_create_ajax/attempt/',
+            ['email' => $email, 'first_name' => '', 'password' => '', 'username' => ''], $token);
+        print_r($result);
+    
+        sleep(3);
+        $result = $this->request('https://www.instagram.com/accounts/web_create_ajax/attempt/',
+            ['email' => $email, 'first_name' => $firstName, 'password' => '', 'username' => $uname], $token);
+        print_r($result);
+    
+        sleep(3);
+        $result = $this->request('https://www.instagram.com/accounts/web_create_ajax/attempt/',
+            ['email' => $email, 'first_name' => $firstName, 'password' => $password, 'username' => $uname], $token);
+        print_r($result);
+    
+    
+        $result = $this->request('https://www.instagram.com/accounts/web_create_ajax/', [
+            'email' => $email,
+            'first_name' => $firstName,
+            'password' => $password,
+            'username' => $uname
+        ], $token);
+        print_r($result);
+//
+//        if (isset($create[1]['created_user']['pk'])) {
+//            Users::add([
+//                'userName' => $this->username,
+//                'firstName' => $this->name,
+//                'email' => $email,
+//                'password' => $this->password,
+//                'deviceId' => $this->device_id,
+//                'phoneId' => $this->phone_id,
+//                'waterfall_id' => $waterfall_id,
+//                'guid' => $this->guid,
+//                'qeId' => $qe_id,
+//                'logIn' => 0,
+//                'gender' => 0,
+//                'accountId' => $create[1]['created_user']['pk'],
+//                'photo' => '',
+//                'biography' => '',
+//                'proxy' => $this->proxy,
+//                'userAgent' => $this->userAgent,
+//                'dateCreate' => '//now()//'
+//            ]);
+//        } elseif (empty($create[1])) {
+//            Users::add([
+//                'userName' => $this->username,
+//                'firstName' => $this->name,
+//                'email' => $email,
+//                'password' => $this->password,
+//                'deviceId' => $this->device_id,
+//                'phoneId' => $this->phone_id,
+//                'waterfall_id' => $waterfall_id,
+//                'guid' => $this->guid,
+//                'qeId' => $qe_id,
+//                'logIn' => 0,
+//                'gender' => 0,
+//                'accountId' => 0,
+//                'photo' => '',
+//                'biography' => '',
+//                'proxy' => $this->proxy,
+//                'userAgent' => $this->userAgent,
+//                'dateCreate' => '//now()//'
+//            ]);
+//        }
         
         return true;
     }
@@ -301,7 +290,7 @@ class IgApiWeb
      *
      * @return array
      */
-    public function request($url, $data = null, $create = null)
+    public function request($url, $data = null, $token = null)
     {
         echo "Request: \n";
         echo $url . "\n";
@@ -330,9 +319,9 @@ class IgApiWeb
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_REFERER, ' https://www.instagram.com/');
     
-        if ($create) {
+        if ($token) {
             $headers = [
-                'X-CSRFToken: ' . $create,
+                'X-CSRFToken: ' . $token,
                 'X-Instagram-AJAX: 1',
                 'X-Requested-With: XMLHttpRequest',
                 'x-insight: activate'
@@ -359,12 +348,7 @@ class IgApiWeb
         $header = substr($resp, 0, $header_len);
         $body = substr($resp, $header_len);
         $info = curl_getinfo($ch);
-        // curl_close($ch);
-        echo "\n\nHeaders:\n";
-        print_r($info);
-        echo "\n\nBody:";
-        print_r($body);
-    
+        curl_close($ch);
         return [$header, $body];
     }
     
