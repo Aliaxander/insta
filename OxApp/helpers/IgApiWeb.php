@@ -146,48 +146,46 @@ class IgApiWeb
         proxy: {$this->proxy}
         Start...
         ";
-    
+        
         $userAgent = new RandomUserAgent();
         $this->userAgent = $userAgent->random_uagent();
-    
-    
+        
         $result = $this->request('https://www.instagram.com/');
         print_r($result);
         preg_match('/{"csrf_token": "(.*?)", "viewer": null}/mis',
             $result[1], $results);
-    
+        
         $token = $results[1];
-    
-    
+        
         $result = $this->request('https://www.instagram.com/ajax/bz',
             ['q'], $token);
         print_r($result);
-        
-        
+        sleep(rand(30, 60));
         $uname = $this->username;
         $firstName = $this->name;
         $password = $this->password;
         $result = $this->request('https://www.instagram.com/accounts/web_create_ajax/attempt/',
             ['email' => $email, 'first_name' => '', 'password' => '', 'username' => ''], $token);
         print_r($result);
-    
+        $result = json_decode($result[1]);
+        $uname = $result->username_suggestions[0];
+        echo 'Set uname ' . $uname . "\n";
         //
-        sleep(3);
+        sleep(rand(9, 30));
         $result = $this->request('https://www.instagram.com/accounts/web_create_ajax/attempt/',
             ['email' => $email, 'first_name' => '', 'password' => '', 'username' => ''], $token);
         print_r($result);
-    
-        sleep(3);
+        
+        sleep(rand(9, 30));
         $result = $this->request('https://www.instagram.com/accounts/web_create_ajax/attempt/',
             ['email' => $email, 'first_name' => $firstName, 'password' => '', 'username' => $uname], $token);
         print_r($result);
-    
-        sleep(3);
+        
+        sleep(rand(9, 30));
         $result = $this->request('https://www.instagram.com/accounts/web_create_ajax/attempt/',
             ['email' => $email, 'first_name' => $firstName, 'password' => $password, 'username' => $uname], $token);
         print_r($result);
-    
-    
+        
         $result = $this->request('https://www.instagram.com/accounts/web_create_ajax/', [
             'email' => $email,
             'first_name' => $firstName,
@@ -198,7 +196,7 @@ class IgApiWeb
         $result = @json_decode($result[1]);//{"account_created": true, "status": "ok"}
         if (isset($result->account_created) && $result->account_created === true) {
             Users::add([
-                'userName' => $this->username,
+                'userName' => $uname,
                 'firstName' => $this->name,
                 'email' => $email,
                 'password' => $this->password,
@@ -229,63 +227,74 @@ class IgApiWeb
      */
     public function request($url, $data = null, $token = null)
     {
-        echo "Request: \n";
-        echo $url . "\n";
-        print_r($data);
-        echo "\n\nResult: \n";
-        $ch = curl_init();
-        curl_setopt($ch, CURLINFO_HEADER_OUT, true);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-        curl_setopt($ch, CURLOPT_HEADER, true);
-        curl_setopt($ch, CURLOPT_VERBOSE, true);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-        curl_setopt($ch, CURLOPT_COOKIEFILE, "/home/insta/cookies/" . $this->username . "-webcookies.dat");
-        curl_setopt($ch, CURLOPT_COOKIEJAR, "/home/insta/cookies/" . $this->username . "-webcookies.dat");
-        curl_setopt($ch, CURLOPT_USERAGENT, $this->userAgent);
-    
-        $proxy = explode(";", $this->proxy);
-        curl_setopt($ch, CURLOPT_PROXY, $proxy[0]);
-        if (!empty($proxy[1])) {
-            curl_setopt($ch, CURLOPT_PROXYUSERPWD, $proxy[1]);
+        $result = '';
+        $count = 0;
+        while ($result == '') {
+            echo "Request: \n";
+            echo $url . "\n";
+            print_r($data);
+            echo "\n\nResult: \n";
+            $ch = curl_init();
+            curl_setopt($ch, CURLINFO_HEADER_OUT, true);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+            curl_setopt($ch, CURLOPT_HEADER, true);
+            curl_setopt($ch, CURLOPT_VERBOSE, true);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+            curl_setopt($ch, CURLOPT_COOKIEFILE, "/home/insta/cookies/" . $this->username . "-webcookies.dat");
+            curl_setopt($ch, CURLOPT_COOKIEJAR, "/home/insta/cookies/" . $this->username . "-webcookies.dat");
+            curl_setopt($ch, CURLOPT_USERAGENT, $this->userAgent);
+            
+            $proxy = explode(";", $this->proxy);
+            curl_setopt($ch, CURLOPT_PROXY, $proxy[0]);
+            if (!empty($proxy[1])) {
+                curl_setopt($ch, CURLOPT_PROXYUSERPWD, $proxy[1]);
+            }
+            curl_setopt($ch, CURLOPT_PROXYTYPE, CURLPROXY_SOCKS5);
+            curl_setopt($ch, CURLOPT_PROXYTYPE, 7);
+            
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_REFERER, ' https://www.instagram.com/');
+            
+            if ($token) {
+                $headers = [
+                    'X-CSRFToken: ' . $token,
+                    'X-Instagram-AJAX: 1',
+                    'X-Requested-With: XMLHttpRequest',
+                    'x-insight: activate'
+                ];
+                curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+                //            curl_setopt($ch, CURLOPT_ENCODING, "gzip");
+            }
+            
+            if ($data) {
+                //            if ($json) {
+                //                $data = json_encode($data);
+                //                curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+                //                        'Content-Type: application/json',
+                //                        'Content-Length: ' . strlen($data)
+                //                    )
+                //                );
+                //            }
+                curl_setopt($ch, CURLOPT_POST, true);
+                curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+            }
+            $resp = curl_exec($ch);
+            $header_len = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
+            $header = substr($resp, 0, $header_len);
+            $body = substr($resp, $header_len);
+            $info = curl_getinfo($ch);
+            curl_close($ch);
+            $result = $header;
+            if (empty($result)) {
+                $count++;
+            }
+            if ($count >= 4) {
+                exit();
+            }
         }
-        curl_setopt($ch, CURLOPT_PROXYTYPE, CURLPROXY_SOCKS5);
-        curl_setopt($ch, CURLOPT_PROXYTYPE, 7);
-    
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_REFERER, ' https://www.instagram.com/');
-    
-        if ($token) {
-            $headers = [
-                'X-CSRFToken: ' . $token,
-                'X-Instagram-AJAX: 1',
-                'X-Requested-With: XMLHttpRequest',
-                'x-insight: activate'
-            ];
-            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-            //            curl_setopt($ch, CURLOPT_ENCODING, "gzip");
-        }
-    
-        if ($data) {
-            //            if ($json) {
-            //                $data = json_encode($data);
-            //                curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-            //                        'Content-Type: application/json',
-            //                        'Content-Length: ' . strlen($data)
-            //                    )
-            //                );
-            //            }
-            curl_setopt($ch, CURLOPT_POST, true);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
         
-        }
-        $resp = curl_exec($ch);
-        $header_len = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
-        $header = substr($resp, 0, $header_len);
-        $body = substr($resp, $header_len);
-        $info = curl_getinfo($ch);
-        curl_close($ch);
         return [$header, $body];
     }
     
