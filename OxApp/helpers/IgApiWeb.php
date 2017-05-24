@@ -157,10 +157,10 @@ class IgApiWeb
         
         $token = $results[1];
         
-//        $result = $this->request('https://www.instagram.com/ajax/bz',
-//            ['q'], $token);
-//        print_r($result);
-//
+        $result = $this->request('https://www.instagram.com/ajax/bz',
+            ['q'], $token);
+        print_r($result);
+     sleep(rand(30,60));
         $uname = $this->username;
         $firstName = $this->name;
         $password = $this->password;
@@ -169,17 +169,17 @@ class IgApiWeb
         print_r($result);
         
         //
-        sleep(3);
+        sleep(rand(9,30));
         $result = $this->request('https://www.instagram.com/accounts/web_create_ajax/attempt/',
             ['email' => $email, 'first_name' => '', 'password' => '', 'username' => ''], $token);
         print_r($result);
-        
-        sleep(3);
+    
+        sleep(rand(9, 30));
         $result = $this->request('https://www.instagram.com/accounts/web_create_ajax/attempt/',
             ['email' => $email, 'first_name' => $firstName, 'password' => '', 'username' => $uname], $token);
         print_r($result);
-        
-        sleep(3);
+    
+        sleep(rand(9, 30));
         $result = $this->request('https://www.instagram.com/accounts/web_create_ajax/attempt/',
             ['email' => $email, 'first_name' => $firstName, 'password' => $password, 'username' => $uname], $token);
         print_r($result);
@@ -284,7 +284,7 @@ class IgApiWeb
             $body = substr($resp, $header_len);
             $info = curl_getinfo($ch);
             curl_close($ch);
-            $result = $body;
+            $result = $header;
             if (empty($result)) {
                 $count++;
             }
