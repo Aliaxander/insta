@@ -160,25 +160,27 @@ class IgApiWeb
         $result = $this->request('https://www.instagram.com/ajax/bz',
             ['q'], $token);
         print_r($result);
-     sleep(rand(30,60));
+        sleep(rand(30, 60));
         $uname = $this->username;
         $firstName = $this->name;
         $password = $this->password;
         $result = $this->request('https://www.instagram.com/accounts/web_create_ajax/attempt/',
             ['email' => $email, 'first_name' => '', 'password' => '', 'username' => ''], $token);
         print_r($result);
-        
+        $result = json_decode($result[1]);
+        $uname = $result->username_suggestions[0];
+        echo 'Set uname ' . $uname . "\n";
         //
-        sleep(rand(9,30));
+        sleep(rand(9, 30));
         $result = $this->request('https://www.instagram.com/accounts/web_create_ajax/attempt/',
             ['email' => $email, 'first_name' => '', 'password' => '', 'username' => ''], $token);
         print_r($result);
-    
+        
         sleep(rand(9, 30));
         $result = $this->request('https://www.instagram.com/accounts/web_create_ajax/attempt/',
             ['email' => $email, 'first_name' => $firstName, 'password' => '', 'username' => $uname], $token);
         print_r($result);
-    
+        
         sleep(rand(9, 30));
         $result = $this->request('https://www.instagram.com/accounts/web_create_ajax/attempt/',
             ['email' => $email, 'first_name' => $firstName, 'password' => $password, 'username' => $uname], $token);
@@ -194,7 +196,7 @@ class IgApiWeb
         $result = @json_decode($result[1]);//{"account_created": true, "status": "ok"}
         if (isset($result->account_created) && $result->account_created === true) {
             Users::add([
-                'userName' => $this->username,
+                'userName' => $uname,
                 'firstName' => $this->name,
                 'email' => $email,
                 'password' => $this->password,
