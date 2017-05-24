@@ -227,7 +227,7 @@ class IgApiWeb
     {
         $result = '';
         $count = 0;
-        while ($result = '') {
+        while ($result === '') {
             echo "Request: \n";
             echo $url . "\n";
             print_r($data);
