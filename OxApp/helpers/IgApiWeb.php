@@ -157,10 +157,10 @@ class IgApiWeb
         
         $token = $results[1];
         
-        $result = $this->request('https://www.instagram.com/ajax/bz',
-            ['q'], $token);
-        print_r($result);
-        
+//        $result = $this->request('https://www.instagram.com/ajax/bz',
+//            ['q'], $token);
+//        print_r($result);
+//
         $uname = $this->username;
         $firstName = $this->name;
         $password = $this->password;
