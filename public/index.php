@@ -6,6 +6,9 @@
  * Time: 10:34
  */
 
+use OxApp\helpers\FbWeb;
+use OxApp\helpers\RandomUserAgent;
+
 ini_set("allow_url_fopen", true);
 ini_set('display_errors', '1');
 date_default_timezone_set('Europe/Moscow');
@@ -18,3 +21,9 @@ header('Access-Control-Allow-Origin: *');
 $loader = require __DIR__ . '/../vendor/autoload.php';
 require(__DIR__ . "/../config.php");
 require(__DIR__ . "/../OxApp/Routes.php");
+
+//$api=new FbWeb();
+//print_r($api->create());
+//
+////$userAgent = new RandomUserAgent();
+////echo $userAgent->random_uagent();

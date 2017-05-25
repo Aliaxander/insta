@@ -15,7 +15,8 @@
     "ox/router": "@dev",
     "ox/fixer": "@dev",
     "ox/database": "@dev",
-    "fzaninotto/faker": "~1.6"
+    "fzaninotto/faker": "~1.6",
+    "campo/random-user-agent": "@dev"
   },
   "repositories": [
     {
