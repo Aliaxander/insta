@@ -152,7 +152,7 @@ class IgApiWeb
         
         $result = $this->request('https://www.instagram.com/');
         print_r($result);
-        preg_match('/{"csrf_token": "(.*?)", "viewer": null}/mis',
+        preg_match('/{"csrf_token": "(.*?)"/mis',
             $result[1], $results);
         
         $token = $results[1];
