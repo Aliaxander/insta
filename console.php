@@ -14,6 +14,7 @@ use Acme\Console\Command\FreenomWebReg;
 use Acme\Console\Command\HashTagParser;
 use Acme\Console\Command\Likes;
 use Acme\Console\Command\ParseBaseIg;
+use Acme\Console\Command\PreFollow;
 use Acme\Console\Command\PreParseBase;
 use Acme\Console\Command\ProxyChecker;
 use Acme\Console\Command\RestartTunnelControl;
@@ -54,6 +55,7 @@ $application->add(new AutoStartEdit());
 $application->add(new ProxyChecker());
 $application->add(new FilterBaseIg());
 $application->add(new CreateWeb());
+$application->add(new PreFollow());
 
 $application->addCommands(
     array(

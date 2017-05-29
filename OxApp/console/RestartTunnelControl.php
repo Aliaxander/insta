@@ -57,7 +57,7 @@ class RestartTunnelControl extends Command
             $tunnels = Tunnels::find(['serverIp' => $row->ip, 'status' => 4]);
             $users = Users::find([
                 'ban' => 0,
-                'userTask/!=' => 8,
+                'userTask/non in' => [8, 7],
                 'userGroup/!=' => 2,
                 'proxy/like' => $row->ip . ':%'
             ]);
@@ -66,7 +66,11 @@ class RestartTunnelControl extends Command
                 $tunnel = Tunnels::find(['serverIp' => $row->ip]);
                 if ($tunnel->count > 0) {
                     $tunnel = $tunnel->rows[0];
-                    Users::where(['proxy/like' => $tunnel->serverIp . ':%', 'userGroup' => 1, 'ban' => 0])->update(['userGroup'=>18]);
+                    Users::where([
+                        'proxy/like' => $tunnel->serverIp . ':%',
+                        'userGroup' => 1,
+                        'ban' => 0
+                    ])->update(['userGroup' => 18]);
                     $tunnelData = TechAccount::find(['id' => $tunnel->tunnelAccountId])->rows[0];
                     $tunel = new TunnelBroker();
                     $tunel->login($tunnelData->name, $tunnelData->password);

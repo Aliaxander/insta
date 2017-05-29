@@ -52,10 +52,15 @@ class TunnelsController extends App
             ->limit($paging)
             ->find()
             ->rows;
-
+        
         foreach ($tunels as $key => $item) {
             $tunels[$key]->accountcount = Users::selectBy(['count(id) as count'])
-                ->find(['proxy/like' => $item->serverIp . '%', 'ban' => 0, 'userGroup/not in' => [2]])
+                ->find([
+                    'proxy/like' => $item->serverIp . '%',
+                    'ban' => 0,
+                    'userGroup/not in' => [2],
+                    'userTask/!=' => 7
+                ])
                 ->rows[0]->count;
         }
         
