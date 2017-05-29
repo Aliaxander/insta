@@ -102,6 +102,7 @@ class PreFollow extends Command
             $array = $accounts->rows;
             
             $randUsers = mt_rand(8, 30);
+            $follows=0;
             for ($i = 0; $i < $randUsers; $i++) {
                 $rand = mt_rand(0, count($array));
                 $randUser = $array[$rand]->account;
@@ -111,11 +112,12 @@ class PreFollow extends Command
                 sleep(rand(60, 500));
                 if (rand(0, 1) == 1) {
                     print_r($api->follow($randUser));
+                    $follows++;
                 }
                 unset($array[$rand]);
                 sleep(rand(20, 40));
             }
-            Users::where(['id' => $user->id])->update(['requests' => 0, 'userTask' => 7]);
+            Users::where(['id' => $user->id])->update(['requests' => 0, 'userTask' => 7, 'follows' => $follows]);
         }
         
         return $output->writeln("Complite");
