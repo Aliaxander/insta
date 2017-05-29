@@ -63,6 +63,8 @@ class PreFollow extends Command
             $api->accountId = $user->accountId;
             $api->guid = $user->guid;
             $api->csrftoken = $user->csrftoken;
+            $login = $api->login($user->guid, $user->phoneId, $user->deviceId, $user->password);
+            Checkpoint::checkPoint($login, $user);
             if (!file_exists("/home/insta/cookies/" . $user->userName . "-cookies.dat") || $user->logIn === 2) {
                 echo "login account:";
                 $login = $api->login($user->guid, $user->phoneId, $user->deviceId, $user->password);
@@ -103,6 +105,7 @@ class PreFollow extends Command
             for ($i = 0; $i < $randUsers; $i++) {
                 $rand = mt_rand(0, count($array));
                 $randUser = $array[$rand]->account;
+                echo "\nSet account: $randUser";
                 $result = $api->getFeed($randUser->accountId);
                 print_r($result);
                 sleep(rand(60, 500));
