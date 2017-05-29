@@ -106,11 +106,11 @@ class PreFollow extends Command
                 $rand = mt_rand(0, count($array));
                 $randUser = $array[$rand]->account;
                 echo "\nSet account: $randUser";
-                $result = $api->getFeed($randUser->accountId);
+                $result = $api->getFeed($randUser);
                 print_r($result);
                 sleep(rand(60, 500));
                 if (rand(0, 1) == 1) {
-                    print_r($api->follow($randUser->accountId));
+                    print_r($api->follow($randUser));
                 }
                 unset($array[$rand]);
                 sleep(rand(20, 40));
