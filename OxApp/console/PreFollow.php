@@ -101,7 +101,7 @@ class PreFollow extends Command
             
             $array = $accounts->rows;
             
-            $randUsers = mt_rand(8, 30);
+            $randUsers = mt_rand(3, 8);
             $follows=0;
             for ($i = 0; $i < $randUsers; $i++) {
                 $rand = mt_rand(0, count($array));
