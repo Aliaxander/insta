@@ -533,6 +533,8 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
      */
     public function create()
     {
+        $this->fetchHeadersSingUp();
+        
         $domainMail = [
             'mail.com',
             'gmail.com',
@@ -605,8 +607,8 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
         $this->device_id = 'android-' . strtolower(substr($megaRandomHash, 16));
         $this->phone_id = strtolower($this->genUuid());
         $waterfall_id = strtolower($this->genUuid());
-        //$this->guid = strtolower($this->genUuid());
-        $this->guid = $qe_id = strtolower($this->genUuid());
+        $this->guid = strtolower($this->genUuid());
+        $qe_id = strtolower($this->genUuid());
         if (mt_rand(0, 3) == 3) {
             $this->name = '';
         }
@@ -625,8 +627,6 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
         proxy: {$this->proxy}
         Start...
         ";
-        
-       
         
         $checkEmail = $this->checkEmail($email, $qe_id, $waterfall_id);
         print_r($checkEmail);
@@ -772,27 +772,28 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
                 'userAgent' => $this->userAgent,
                 'dateCreate' => '//now()//'
             ]);
-        } elseif (empty($create[1])) {
-            Users::add([
-                'userName' => $this->username,
-                'firstName' => $this->name,
-                'email' => $email,
-                'password' => $this->password,
-                'deviceId' => $this->device_id,
-                'phoneId' => $this->phone_id,
-                'waterfall_id' => $waterfall_id,
-                'guid' => $this->guid,
-                'qeId' => $qe_id,
-                'logIn' => 0,
-                'gender' => 0,
-                'accountId' => 0,
-                'photo' => '',
-                'biography' => '',
-                'proxy' => $this->proxy,
-                'userAgent' => $this->userAgent,
-                'dateCreate' => '//now()//'
-            ]);
         }
+//        elseif (empty($create[1])) {
+//            Users::add([
+//                'userName' => $this->username,
+//                'firstName' => $this->name,
+//                'email' => $email,
+//                'password' => $this->password,
+//                'deviceId' => $this->device_id,
+//                'phoneId' => $this->phone_id,
+//                'waterfall_id' => $waterfall_id,
+//                'guid' => $this->guid,
+//                'qeId' => $qe_id,
+//                'logIn' => 0,
+//                'gender' => 0,
+//                'accountId' => 0,
+//                'photo' => '',
+//                'biography' => '',
+//                'proxy' => $this->proxy,
+//                'userAgent' => $this->userAgent,
+//                'dateCreate' => '//now()//'
+//            ]);
+//        }
         $this->sync();
         return true;
     }
