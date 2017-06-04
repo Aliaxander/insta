@@ -755,6 +755,7 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
         //
         
         if (isset($create[1]['created_user']['pk'])) {
+            $this->sync();
             Users::add([
                 'userName' => $this->username,
                 'firstName' => $this->name,
@@ -820,7 +821,7 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
 //                'dateCreate' => '//now()//'
 //            ]);
 //        }
-        $this->sync();
+     
         return true;
     }
     
