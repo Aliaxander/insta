@@ -534,8 +534,6 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
      */
     public function create()
     {
-        $this->fetchHeadersSingUp();
-        
         $domainMail = [
             'mail.com',
             'gmail.com',
@@ -628,7 +626,8 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
         proxy: {$this->proxy}
         Start...
         ";
-        
+        $this->fetchHeadersSingUp();
+    
         $checkEmail = $this->checkEmail($email, $qe_id, $waterfall_id);
         print_r($checkEmail);
         if($checkEmail[1]==""){
