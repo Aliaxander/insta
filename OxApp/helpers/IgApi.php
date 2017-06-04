@@ -225,12 +225,14 @@ class IgApi
                 //                echo "\nEND Limit fixer----------------------------------------\n";
                 if ($sync[1]['error_type'] === 'inactive user') {
                     Users::where([
+                        'userName' => $this->username,
                         'guid' => $guid,
                         'phoneId' => $phoneId,
                         'deviceId' => $device_id
                     ])->update(['ban' => 4]);
                 } else {
                     Users::where([
+                        'userName' => $this->username,
                         'guid' => $guid,
                         'phoneId' => $phoneId,
                         'deviceId' => $device_id
@@ -291,7 +293,12 @@ class IgApi
         if (@$newsInbox[1]['message'] === 'checkpoint_required') {
             Checkpoint::checkPoint($newsInbox, $this);
         } elseif (@$newsInbox[1]['message'] === 'login_required') {
-            Users::where(['guid' => $guid, 'phoneId' => $phoneId, 'deviceId' => $device_id])->update(['ban' => 1]);
+            Users::where([
+                'userName' => $this->username,
+                'guid' => $guid,
+                'phoneId' => $phoneId,
+                'deviceId' => $device_id
+            ])->update(['ban' => 1]);
         }
         
         return $resultLogin;
