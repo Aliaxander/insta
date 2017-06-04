@@ -60,8 +60,10 @@ class Checkpoint
                     //                    print_r($result);
                     if (!empty($user->id)) {
                         Users::where(['id' => $user->id])->update(['ban' => 3]);
-                    } else {
+                    } elseif(!empty($user->accountId)) {
                         Users::where(['accountId' => $user->accountId])->update(['ban' => 3]);
+                    }elseif(!empty($user->userName)){
+                        Users::where(['username' => $user->userName])->update(['ban' => 3]);
                     }
                     die("SMS BAN!");
                 } else {
