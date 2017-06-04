@@ -69,16 +69,20 @@ class Checkpoint
                 } else {
                     if (!empty($user->id)) {
                         Users::where(['id' => $user->id])->update(['ban' => 1]);
-                    } else {
+                    } elseif (!empty($user->accountId)) {
                         Users::where(['accountId' => $user->accountId])->update(['ban' => 1]);
+                    } elseif (!empty($user->userName)) {
+                        Users::where(['username' => $user->userName])->update(['ban' => 1]);
                     }
                     die("Checkpoint!");
                 }
             } else {
                 if (!empty($user->id)) {
                     Users::where(['id' => $user->id])->update(['ban' => 1]);
-                } else {
+                } elseif (!empty($user->accountId)) {
                     Users::where(['accountId' => $user->accountId])->update(['ban' => 1]);
+                } elseif (!empty($user->userName)) {
+                    Users::where(['username' => $user->userName])->update(['ban' => 1]);
                 }
                 die("Checkpoint!");
             }
