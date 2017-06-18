@@ -782,26 +782,26 @@ ken":"2pTCvhlokIZR8fOZ16nRK2MJKAL2rMii","username":"bagirus11","first_name":"abg
                 'dateCreate' => '//now()//',
                 'userTask'=>11
             ]);
-            sleep(rand(60, 300));
-            $accounts = PopularAccounts::find();
-            $array = $accounts->rows;
-    
-            $randUsers = mt_rand(3, 6);
-            $follows = 0;
-            for ($i = 0; $i < $randUsers; $i++) {
-                $rand = mt_rand(0, count($array));
-                $randUser = $array[$rand]->account;
-                echo "\nSet account: $randUser";
-                $result = $this->getFeed($randUser);
-                print_r($result);
-                sleep(rand(60, 500));
-                if (rand(0, 1) == 1) {
-                    print_r($this->follow($randUser));
-                    $follows++;
-                }
-                unset($array[$rand]);
-                sleep(rand(20, 40));
-            }
+//            sleep(rand(60, 300));
+//            $accounts = PopularAccounts::find();
+//            $array = $accounts->rows;
+//
+//            $randUsers = mt_rand(3, 6);
+//            $follows = 0;
+//            for ($i = 0; $i < $randUsers; $i++) {
+//                $rand = mt_rand(0, count($array));
+//                $randUser = $array[$rand]->account;
+//                echo "\nSet account: $randUser";
+//                $result = $this->getFeed($randUser);
+//                print_r($result);
+//                sleep(rand(60, 500));
+//                if (rand(0, 1) == 1) {
+//                    print_r($this->follow($randUser));
+//                    $follows++;
+//                }
+//                unset($array[$rand]);
+//                sleep(rand(20, 40));
+//            }
           
           
             Users::where(['userName' => $this->username])->update(['userTask' => 1, 'follows' => $follows]);
